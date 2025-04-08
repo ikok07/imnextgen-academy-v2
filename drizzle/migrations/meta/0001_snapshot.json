@@ -1,6 +1,6 @@
 {
-  "id": "28d60724-70bd-417c-8f66-5b266fa361a9",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "827effa5-b399-419a-bd14-48b2e099ab40",
+  "prevId": "28d60724-70bd-417c-8f66-5b266fa361a9",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -27,15 +27,15 @@
         "new_profiles_profile_id_profiles_id_fk": {
           "name": "new_profiles_profile_id_profiles_id_fk",
           "tableFrom": "new_profiles",
-          "tableTo": "profiles",
           "columnsFrom": [
             "profile_id"
           ],
+          "tableTo": "profiles",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -115,10 +115,10 @@
     }
   },
   "schemas": {},
+  "views": {},
   "sequences": {},
   "roles": {},
   "policies": {},
-  "views": {},
   "_meta": {
     "columns": {},
     "schemas": {},

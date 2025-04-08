@@ -5,8 +5,22 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1742043116729,
-      "tag": "0000_add-todo-table",
+      "when": 1744127117889,
+      "tag": "0000_add-profile-tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1744127131372,
+      "tag": "0001_add-new-profile-function",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1744127137980,
+      "tag": "0002_add-new-profile-trigger",
       "breakpoints": true
     }
   ]

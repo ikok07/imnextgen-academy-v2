@@ -1,7 +1,6 @@
 "use client"
 
 import {useAppUser} from "@/app/_hooks/auth/useUser";
-import Link from "next/link";
 import {UserButton} from "@clerk/nextjs";
 import {useAccess} from "@/app/_hooks/auth/useAccess";
 import {IoGlobeOutline, IoLinkOutline} from "react-icons/io5";
