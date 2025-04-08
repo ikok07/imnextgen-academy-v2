@@ -1,4 +1,15 @@
 {
+  "Config": {
+    "Themes": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "Languages": {
+      "en": "English",
+      "bg": "Bulgarian"
+    }
+  },
   "Homepage": {
     "title": "Homepage"
   }

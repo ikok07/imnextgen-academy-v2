@@ -1,6 +1,6 @@
 import {getRequestConfig} from "next-intl/server";
 import {cookies} from "next/headers";
-import {SUPPORTED_LANGS, SupportedLanguage} from "@/app/config/config";
+import {SUPPORTED_LANGS, SupportedLanguage} from "@/app/_config/config";
 
 export default getRequestConfig(async () => {
     const userCookies = cookies();

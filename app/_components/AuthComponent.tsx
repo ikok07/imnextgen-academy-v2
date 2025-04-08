@@ -1,75 +1,50 @@
 "use client"
 
-import {login, signUp} from "@/app/actions";
-import {useUser} from "@/app/_hooks/auth/useUser";
-import {useEffect} from "react";
-import useErrorMutation from "@/app/_hooks/useErrorMutation";
-import {toast} from "react-toastify";
+import {useAppUser} from "@/app/_hooks/auth/useUser";
+import {UserButton} from "@clerk/nextjs";
+import {useAccess} from "@/app/_hooks/auth/useAccess";
+import {IoGlobeOutline, IoLinkOutline} from "react-icons/io5";
+import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
+import ShadowButton from "@/app/_components/ui/buttons/ShadowButton";
 
 export default function AuthComponent() {
-
-    const {user, logout} = useUser();
-
-    const {mutate: signUpMethod, isLoading: isSigningUp, error: signUpError} = useErrorMutation({
-        mutationFn: signUp.bind(null, {email: "petkovk796@gmail.com", password: "123Prudni@"}),
+    const {authData, userObject} = useAppUser();
+    const {accessGranted, isLoading} = useAccess({
+        principal: {
+            id: userObject.user?.primaryEmailAddress?.emailAddress!,
+            roles: userObject.user?.publicMetadata["roles"] as string[]
+        },
+        resource: {
+            kind: "product",
+            id: "product_1"
+        },
+        action: "update",
+        enabled: !!userObject.user?.primaryEmailAddress?.emailAddress
     });
-
-    const {mutate: loginMethod, isLoading: isLoggingIn, error: loginError} = useErrorMutation({
-        mutationFn: login.bind(null, {email: "petkovk796@gmail.com", password: "123Prudni@"}),
-    });
-
-    function handleSignUp() {
-        signUpMethod();
-    }
-
-    function handleLogIn() {
-        loginMethod();
-    }
-
-    function handleLogOut() {
-        logout();
-    }
-
-    useEffect(() => {
-        if (signUpError) {
-            if (["user_already_exists"].includes(signUpError.id)) {
-                toast.error(signUpError.message);
-            } else {
-                toast.error("Something went wrong!");
-            }
-        }
-    }, [signUpError])
-
-    useEffect(() => {
-        if (loginError) {
-            if (["email_not_confirmed", "invalid_credentials"].includes(loginError.id)) {
-                toast.error(loginError.message);
-            } else {
-                toast.error("Something went wrong!");
-            }
-        }
-    }, [loginError])
 
     return <div>
-        <h1>Supabase Auth: {isSigningUp || isLoggingIn ? "IS LOADING..." : ""}</h1>
-        <div className="flex items-center gap-4">
-            <div className="flex gap-4 items-center">
-                <label>User ID:</label>
-                <p>{user && user.id}</p>
+        <h1 className="mb-3">Clerk Auth</h1>
+        {authData.isLoaded ?
+            <div className="flex items-center gap-4">
+                {!userObject.user ?
+                    <>
+                        <PrimaryButton href="/auth/sign-up">Sign Up</PrimaryButton>
+                        <ShadowButton href="/auth/sign-in">Log In</ShadowButton>
+                    </> :
+                    <>
+                        {/*<UserButton userProfileMode="navigation" userProfileUrl="/auth/profile"/>*/}
+                        <UserButton >
+                            <UserButton.UserProfilePage label="Test page" labelIcon={<IoGlobeOutline />} url="test">
+                                <h1>This is a test page</h1>
+                            </UserButton.UserProfilePage>
+                            <UserButton.UserProfileLink url="/" label="Test link" labelIcon={<IoLinkOutline />} />
+                        </UserButton>
+                        {accessGranted && <p className="text-red-500">Only admins should see this text</p>}
+                    </>
+                }
             </div>
-            <div className="flex gap-4 items-center">
-                <label>Authorized:</label>
-                <p>{user ? "true" : "false"}</p>
-            </div>
-            {!user ?
-                <>
-                    <button className="bg-gray-600 text-white px-3" onClick={handleSignUp}>Sign Up</button>
-                    <button className="bg-gray-600 text-white px-3" onClick={handleLogIn}>Log In</button>
-                </> :
-                <>
-                    <button className="bg-gray-600 text-white px-3" onClick={handleLogOut}>Log Out</button>
-                </>
-            }
-        </div>
+            :
+            <p>LOADING DATA...</p>
+        }
     </div>
 }

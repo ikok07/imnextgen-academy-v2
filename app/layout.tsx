@@ -5,7 +5,9 @@ import {getLocale, getMessages} from "next-intl/server";
 import {NextIntlClientProvider} from "next-intl";
 import AppStoreProvider from "@/app/_providers/AppStoreProvider";
 import AppQueryClientProvider from "@/app/_providers/AppQueryClientProvider";
-import {ToastContainer} from "react-toastify";
+import ThemeProvider from "@/app/_providers/ThemeProvider";
+import ClerkAuthProvider from "@/app/_providers/ClerkAuthProvider";
+import { Toaster } from "@/app/_components/ui/shadcn/sonner";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,13 +25,24 @@ export default async function RootLayout({
     const messages = await getMessages();
 
     return (
-        <html lang={locale}>
+        <html lang={locale} suppressHydrationWarning={true}>
         <NextIntlClientProvider messages={messages}>
             <AppStoreProvider>
                 <AppQueryClientProvider>
                     <body>
-                        {children}
-                        <ToastContainer />
+                        <ThemeProvider
+                            attribute="class"
+                            defaultTheme="system"
+                            enableSystem={true}
+                            disableTransitionOnChange={true}
+                        >
+                            <ClerkAuthProvider locale={locale}>
+                                {children}
+                                <Toaster
+                                    position="top-right"
+                                />
+                            </ClerkAuthProvider>
+                        </ThemeProvider>
                     </body>
                 </AppQueryClientProvider>
             </AppStoreProvider>

@@ -1,8 +1,13 @@
-import {Session, User, WeakPassword} from "@supabase/auth-js";
-import {AuthenticationServiceOptions} from "@/src/entities/models/auth/authentication.service.options";
+import {AuthObject, User} from "@clerk/backend";
+import { z } from "zod";
+
+export const getUserResponseSchema = z.object({
+    user: z.custom<User>().nullable(),
+    auth: z.custom<AuthObject>(),
+})
+
+export type GetUserResponse = z.infer<typeof getUserResponseSchema>;
 
 export interface IAuthenticationService {
-    getUser(): Promise<User>;
-    login(opts: AuthenticationServiceOptions): Promise<{ user: User, session: Session, weakPassword?: WeakPassword}>;
-    signup(opts: AuthenticationServiceOptions): Promise<{ user: User | null, session: Session | null}>;
+    getUser(): Promise<GetUserResponse>;
 }

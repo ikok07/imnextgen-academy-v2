@@ -1,26 +1,13 @@
-import useErrorQuery from "@/app/_hooks/useErrorQuery";
-import {getUser} from "@/app/_utils/actions/auth";
-import {createClient} from "@/app/_utils/supabase/supabase_client";
-import {useRouter} from "next/navigation";
+"use client"
 
-export function useUser() {
-    const supabase = createClient();
-    const router = useRouter();
+import {useAuth, useUser} from "@clerk/nextjs";
 
-    const {data: user, isLoading, error, refetch} = useErrorQuery({
-        queryFn: () => getUser(),
-    })
-
-    async function logout() {
-        await supabase.auth.signOut({scope: "local"});
-        router.refresh();
-    }
+export function useAppUser() {
+    const authData = useAuth();
+    const userObject = useUser();
 
     return {
-        user: user?.success ? user.value : null,
-        isLoading,
-        error,
-        logout,
-        refetch
+        authData,
+        userObject
     }
 }

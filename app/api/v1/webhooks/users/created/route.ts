@@ -1,0 +1,61 @@
+import {z} from "zod";
+import {NextResponse} from "next/server";
+import {clerkWebhookProtect} from "@/app/api/v1/webhooks/protect";
+import {getInjection} from "@/di/container";
+import axios from "axios";
+
+const requestBodySchema = z.object({
+    type: z.literal("user.created"),
+    data: z.object({
+        id: z.string(),
+        email_addresses: z.array(z.object({
+            email_address: z.string().email(),
+        })),
+        phone_numbers: z.array(z.object({
+            phone_number: z.string()
+        })),
+        first_name: z.string().min(1),
+        last_name: z.string().min(1),
+        image_url: z.string().url().nullable()
+    })
+});
+
+export async function POST(req: Request) {
+    try {
+        const rawBody = await req.text();
+        const protectResponse = clerkWebhookProtect(process.env.CLERK_USER_CREATED_WEBHOOK_SECRET!, rawBody, req.headers);
+        if (protectResponse) return protectResponse;
+
+        const {data: body, error: bodyError} = requestBodySchema.safeParse(JSON.parse(rawBody));
+        if (bodyError) {
+            console.error(bodyError);
+            return NextResponse.json({status: "fail", error: "Invalid body!"}, {status: 400});
+        }
+
+        await axios.patch(`https://api.clerk.com/v1/users/${body.data.id}/metadata`, {
+            public_metadata: {
+                roles: ["user"]
+            }
+        }, {
+            headers: {
+                Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`
+            }
+        })
+
+        const createProfileController = getInjection("ICreateProfileController");
+        await createProfileController({
+            id: body.data.id,
+            name: `${body.data.first_name} ${body.data.last_name}`,
+            email: body.data.email_addresses[0].email_address,
+            phone: body.data.phone_numbers[0].phone_number,
+            image_url: body.data.image_url,
+            access: "free",
+            configured: false,
+        });
+
+        return NextResponse.json({status: "success"});
+    } catch(e) {
+        console.error(e);
+        return NextResponse.json({status: "fail", error: "Something went wrong!"}, {status: 500})
+    }
+}
