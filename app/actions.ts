@@ -1,10 +1,11 @@
 "use server"
 
 import {getInjection} from "@/di/container";
-import {CheckUserAccessOptions} from "@/src/application/services/auth/authorization.service.interface";
+import {
+    CheckResourceOptions,
+    CheckUserAccessOptions
+} from "@/src/application/services/auth/authorization.service.interface";
 import {createServerAction} from "@/app/_utils/createServerAction";
-import {TodoInsert} from "@/drizzle/schema/todo";
-import {AuthenticationError} from "@/src/entities/errors/auth/authentication";
 
 export const checkAccess = createServerAction((async (opts: Partial<CheckUserAccessOptions>) => {
     try {
@@ -15,16 +16,11 @@ export const checkAccess = createServerAction((async (opts: Partial<CheckUserAcc
     }
 }));
 
-export const getTodos = createServerAction(async () => {
+export const checkMultipleResourcesAccess = createServerAction((async (opts: Partial<CheckResourceOptions>) => {
     try {
-        const getTodosController = getInjection("IGetTodosController");
-        return await getTodosController();
+        const checkResourcesAccessController = getInjection("ICheckResourcesAccessController");
+        return await checkResourcesAccessController(opts);
     } catch(e) {
-        if (!(e instanceof AuthenticationError)) throw e;
+        return false;
     }
-})
-
-export const createTodo = createServerAction(async (todo: Partial<TodoInsert>) => {
-    const createTodoController = getInjection("ICreateTodoController");
-    return await createTodoController(todo);
-})
+}));

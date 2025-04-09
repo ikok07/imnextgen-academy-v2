@@ -5,7 +5,6 @@ import {UserButton} from "@clerk/nextjs";
 import {useAccess} from "@/app/_hooks/auth/useAccess";
 import {IoGlobeOutline, IoLinkOutline} from "react-icons/io5";
 import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
-import ShadowButton from "@/app/_components/ui/buttons/ShadowButton";
 import SecondaryButton from "@/app/_components/ui/buttons/SecondaryButton";
 
 export default function AuthComponent() {
