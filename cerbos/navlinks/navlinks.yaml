@@ -9,5 +9,5 @@ resourcePolicy:
         - user
       condition:
         match:
-          expr: resource.id.startsWith("admin")
+          expr: navlink.id.startsWith("admin")
       effect: EFFECT_DENY
