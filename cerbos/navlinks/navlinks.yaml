@@ -1,0 +1,13 @@
+apiVersion: api.cerbos.dev/v1
+resourcePolicy:
+  resource: navlink
+  version: default
+  rules:
+    - name: user_deny_access_to_admin_navlinks
+      actions: ["select"]
+      roles:
+        - user
+      condition:
+        match:
+          expr: resource.id.startsWith("admin")
+      effect: EFFECT_DENY

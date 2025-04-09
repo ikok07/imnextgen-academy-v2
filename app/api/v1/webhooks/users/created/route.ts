@@ -34,7 +34,7 @@ export async function POST(req: Request) {
 
         await axios.patch(`https://api.clerk.com/v1/users/${body.data.id}/metadata`, {
             public_metadata: {
-                roles: ["user"]
+                roles: ["user"],
             }
         }, {
             headers: {
@@ -49,8 +49,6 @@ export async function POST(req: Request) {
             email: body.data.email_addresses[0].email_address,
             phone: body.data.phone_numbers[0].phone_number,
             image_url: body.data.image_url,
-            access: "free",
-            configured: false,
         });
 
         return NextResponse.json({status: "success"});

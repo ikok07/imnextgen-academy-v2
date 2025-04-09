@@ -13,13 +13,26 @@ import {
 import {LuGlobe} from "react-icons/lu";
 import {useTranslations} from "use-intl";
 import ClientMountedComponent from "@/app/_components/ui/ClientMountedComponent";
+import {useUser} from "@clerk/nextjs";
 
 export default function LanguageSelector() {
     const router = useRouter();
     const t = useTranslations("Config.Languages");
+    const {user} = useUser();
 
     function handleSelectLanguage(lang: SupportedLanguage) {
+        const prevLang = Cookies.get("NEXT_INTL") ?? "en";
         Cookies.set("NEXT_INTL", lang);
+        if (user) {
+            user.update({
+                unsafeMetadata: {
+                    locale: lang
+                }
+            }).catch(() => {
+                Cookies.set("NEXT_INTL", prevLang);
+                router.refresh();
+            })
+        }
         router.refresh();
     }
 

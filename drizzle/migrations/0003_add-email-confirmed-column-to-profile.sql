@@ -1,0 +1,1 @@
+ALTER TABLE "profiles" ADD COLUMN "email_confirmed" boolean DEFAULT false NOT NULL;

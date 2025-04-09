@@ -19,6 +19,7 @@ export class BrevoEmailService implements IEmailService {
                 }
             })
         } catch (e) {
+            console.log(e)
             throw new EmailError(`Failed to send email: ${(e as Error).message}`);
         }
     }

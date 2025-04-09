@@ -1,6 +1,6 @@
-import {Profile} from "@/drizzle/schema/profiles";
+import {Profile, ProfileInsert} from "@/drizzle/schema/profiles";
 
 export interface IProfilesRepository {
-    createProfile(data: Profile): Promise<Profile>
+    createProfile(data: ProfileInsert): Promise<Profile>
     deleteProfileById(id: string): Promise<void>
 }

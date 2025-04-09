@@ -6,6 +6,7 @@ import {useAccess} from "@/app/_hooks/auth/useAccess";
 import {IoGlobeOutline, IoLinkOutline} from "react-icons/io5";
 import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
 import ShadowButton from "@/app/_components/ui/buttons/ShadowButton";
+import SecondaryButton from "@/app/_components/ui/buttons/SecondaryButton";
 
 export default function AuthComponent() {
     const {authData, userObject} = useAppUser();
@@ -29,7 +30,7 @@ export default function AuthComponent() {
                 {!userObject.user ?
                     <>
                         <PrimaryButton href="/auth/sign-up">Sign Up</PrimaryButton>
-                        <ShadowButton href="/auth/sign-in">Log In</ShadowButton>
+                        <SecondaryButton href="/auth/sign-in">Log In</SecondaryButton>
                     </> :
                     <>
                         {/*<UserButton userProfileMode="navigation" userProfileUrl="/auth/profile"/>*/}
