@@ -9,5 +9,5 @@ resourcePolicy:
         - user
       condition:
         match:
-          expr: request.resource.id.startsWith("admin")
-      effect: EFFECT_DENY
+          expr: principal.roles.some(r => request.resource.attr.disallowedRoles.indexOf(r) == -1)
+      effect: EFFECT_ALLOW
