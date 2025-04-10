@@ -20,7 +20,7 @@ import { useMultipleAccess } from "@/app/_hooks/auth/useMultipleAccess";
 export default function DashboardSidebar() {
     const {userObject} = useAppUser();
     const [isLoading, setIsLoading] = useState(false);
-    console.log(getNavlinkAuthResources())
+
     const {} = useMultipleAccess({
         principal: {
             id: userObject.user?.id!,

@@ -31,7 +31,8 @@ export class CerbosService implements IAuthorizationService {
                     actions: result.actions
                 })
             }
-            
+            console.log(opts);
+            console.log(actions);
             return actions;
         } catch(e) {
             console.error(e);

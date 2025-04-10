@@ -9,7 +9,7 @@ export function useMultipleAccess(opts: Partial<CheckResourceOptions> & {enabled
         enabled: opts.enabled
     });
 
-    console.log(data);
+    console.log(data?.success ? data.value : {});
 
     return {
         isLoading
