@@ -9,5 +9,5 @@ resourcePolicy:
         - user
       condition:
         match:
-          expr: has(principal.roles) && request.resource.attr.disallowedRoles.exists(d, d in principal.roles) == false
+          expr: has(request.principal.roles) && request.resource.attr.disallowedRoles.exists(d, d in request.principal.roles) == false
       effect: EFFECT_ALLOW
