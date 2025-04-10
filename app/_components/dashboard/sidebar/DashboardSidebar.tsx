@@ -10,23 +10,23 @@ import {
 import Image from "next/image";
 import DashboardSidebarAccountDropdownMenu
     from "@/app/_components/dashboard/sidebar/DashboardSidebarAccountDropdownMenu";
-import {getNavLinks} from "@/app/_utils/nav/navlinks";
+import {getNavlinkAuthResources, getNavLinks} from "@/app/_utils/nav/navlinks";
 import DashboardSidebarGroupContent from "@/app/_components/dashboard/sidebar/DashboardSidebarGroupContent";
 import {useState} from "react";
 import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
-import {useMultipleAccess} from "@/app/_hooks/auth/useMultipleAccess";
 import {useAppUser} from "@/app/_hooks/auth/useUser";
+import { useMultipleAccess } from "@/app/_hooks/auth/useMultipleAccess";
 
 export default function DashboardSidebar() {
     const {userObject} = useAppUser();
     const [isLoading, setIsLoading] = useState(false);
-
+    console.log(getNavlinkAuthResources())
     const {} = useMultipleAccess({
         principal: {
             id: userObject.user?.id!,
             roles: userObject.user?.publicMetadata["roles"] as string[]
         },
-        // resources: getNavLinks().flatMap((group, index) => group.)
+        resources: getNavlinkAuthResources(),
         enabled: !!userObject.user
     })
 
