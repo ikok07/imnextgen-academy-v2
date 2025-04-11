@@ -8,6 +8,7 @@ export function useAppUser() {
 
     return {
         authData,
-        userObject
+        userObject,
+        emailConfirmed: userObject.user?.emailAddresses[0]?.verification?.status === "verified"
     }
 }

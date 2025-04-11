@@ -6,8 +6,10 @@ type DashboardWrapperProps = {
 }
 
 export default function DashboardWrapper({children}: DashboardWrapperProps) {
-    return <div>
+    return <div className={`grid grid-cols-[auto_1fr] md:grid-cols-[16rem_1fr]`}>
         <DashboardSidebar />
-        {children}
+        <div className="relative">
+            {children}
+        </div>
     </div>
 }

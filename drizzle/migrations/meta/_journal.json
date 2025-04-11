@@ -29,6 +29,20 @@
       "when": 1744137898144,
       "tag": "0003_add-email-confirmed-column-to-profile",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1744394798896,
+      "tag": "0004_add-setup-questions",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1744398775708,
+      "tag": "0005_add-profile-id-to-user-questions",
+      "breakpoints": true
     }
   ]
 }

@@ -9,9 +9,10 @@ export function useMultipleAccess(opts: Partial<CheckResourceOptions> & {enabled
         enabled: opts.enabled
     });
 
-    console.log(data?.success ? data.value : {});
+    const results = data?.success ? data.value : [];
 
     return {
+        results,
         isLoading
     }
 }

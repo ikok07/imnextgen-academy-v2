@@ -5,23 +5,29 @@ import {
     SidebarContent, SidebarFooter, SidebarGroupContent,
     SidebarGroupLabel,
     SidebarHeader, SidebarMenu,
-    SidebarProvider
+    SidebarProvider, useSidebar
 } from "@/app/_components/ui/shadcn/sidebar";
 import Image from "next/image";
 import DashboardSidebarAccountDropdownMenu
     from "@/app/_components/dashboard/sidebar/DashboardSidebarAccountDropdownMenu";
 import {getNavlinkAuthResources, getNavLinks} from "@/app/_utils/nav/navlinks";
 import DashboardSidebarGroupContent from "@/app/_components/dashboard/sidebar/DashboardSidebarGroupContent";
-import {useState} from "react";
 import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
 import {useAppUser} from "@/app/_hooks/auth/useUser";
 import { useMultipleAccess } from "@/app/_hooks/auth/useMultipleAccess";
+import {IoMenuOutline} from "react-icons/io5";
 
 export default function DashboardSidebar() {
-    const {userObject} = useAppUser();
-    const [isLoading, setIsLoading] = useState(false);
+    return <SidebarProvider>
+        <InnerContent />
+    </SidebarProvider>
+}
 
-    const {} = useMultipleAccess({
+export function InnerContent() {
+    const {userObject} = useAppUser();
+    const {openMobile, setOpenMobile} = useSidebar();
+
+    const {results, isLoading} = useMultipleAccess({
         principal: {
             id: userObject.user?.id!,
             roles: userObject.user?.publicMetadata["roles"] as string[]
@@ -30,7 +36,7 @@ export default function DashboardSidebar() {
         enabled: !!userObject.user
     })
 
-    return <SidebarProvider>
+    return <div className="flex">
         <Sidebar
             variant="inset"
         >
@@ -42,16 +48,18 @@ export default function DashboardSidebar() {
             <SidebarContent>
                 <SidebarContent>
                     {getNavLinks().map((group, index) => {
-                        return <div key={index}>
-                            <SidebarGroupLabel>
-                                {isLoading ? <Skeleton className="h-2 w-[7rem]" /> : group.label}
-                            </SidebarGroupLabel>
-                            <SidebarGroupContent>
-                                <SidebarMenu>
-                                    <DashboardSidebarGroupContent group={group} isLoading={isLoading}/>
-                                </SidebarMenu>
-                            </SidebarGroupContent>
-                        </div>
+                        if (isLoading || results.some(res => res.resourceId === group.id && res.actions["select"] === "EFFECT_ALLOW")) {
+                            return <div key={index}>
+                                <SidebarGroupLabel>
+                                    {isLoading ? <Skeleton className="h-2 w-[7rem]" /> : group.label}
+                                </SidebarGroupLabel>
+                                <SidebarGroupContent className="px-2">
+                                    <SidebarMenu>
+                                        <DashboardSidebarGroupContent group={group} results={results} isLoading={isLoading}/>
+                                    </SidebarMenu>
+                                </SidebarGroupContent>
+                            </div>
+                        }
                     })}
                 </SidebarContent>
             </SidebarContent>
@@ -59,5 +67,6 @@ export default function DashboardSidebar() {
                 <DashboardSidebarAccountDropdownMenu />
             </SidebarFooter>
         </Sidebar>
-    </SidebarProvider>
+        <button className="visible md:hidden text-3xl ml-3 mt-3 h-max" onClick={() => setOpenMobile(!openMobile)}><IoMenuOutline /></button>
+    </div>
 }

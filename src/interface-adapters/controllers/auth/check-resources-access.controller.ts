@@ -14,5 +14,5 @@ export const checkResourcesAccessController = (
     const {data: parsedOptions, error} = checkResourcesOptionsSchema.safeParse(opts);
     if (error) throw new InputParseError(`Invalid check resources options! ${error}`);
 
-    await checkResourcesAccessUseCase(parsedOptions);
+    return await checkResourcesAccessUseCase(parsedOptions);
 }

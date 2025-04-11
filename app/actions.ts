@@ -21,6 +21,6 @@ export const checkMultipleResourcesAccess = createServerAction((async (opts: Par
         const checkResourcesAccessController = getInjection("ICheckResourcesAccessController");
         return await checkResourcesAccessController(opts);
     } catch(e) {
-        return false;
+        return [];
     }
 }));

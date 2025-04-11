@@ -4,7 +4,7 @@ import {IoCalendar, IoDocumentLock, IoDocumentText, IoPeople, IoSchool} from "re
 export type NavGroup = {
     id: string,
     label: string,
-    items: NavSubGroup[] | Navlink[],
+    items: NavSubGroup[] | NavLink[],
     disallowedRoles?: string[]
 }
 
@@ -13,11 +13,11 @@ export type NavSubGroup = {
     id: string,
     Icon: IconType,
     label: string,
-    items: Navlink[],
+    items: NavLink[],
     disallowedRoles?: string[]
 }
 
-export type Navlink = {
+export type NavLink = {
     type: "link"
     id: string,
     Icon: IconType,
@@ -70,7 +70,6 @@ export function getNavLinks(): NavGroup[] {
                     id: "users",
                     Icon: IoPeople,
                     label: "Потребители",
-                    disallowedRoles: ["subgroup"],
                     items: [
                         {
                             type: "link",
@@ -78,7 +77,6 @@ export function getNavLinks(): NavGroup[] {
                             Icon: IoDocumentText,
                             label: "Всички потребители",
                             href: "/dashboard/admin/users",
-                            disallowedRoles: ["link"],
                         }
                     ]
                 }

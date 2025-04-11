@@ -1,0 +1,2 @@
+ALTER TABLE "user_setup_questions" ADD COLUMN "profile_id" text NOT NULL;--> statement-breakpoint
+ALTER TABLE "user_setup_questions" ADD CONSTRAINT "user_setup_questions_profile_id_profiles_id_fk" FOREIGN KEY ("profile_id") REFERENCES "public"."profiles"("id") ON DELETE cascade ON UPDATE cascade;

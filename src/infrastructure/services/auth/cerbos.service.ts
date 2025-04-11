@@ -23,17 +23,16 @@ export class CerbosService implements IAuthorizationService {
     async checkResources(opts: CheckResourceOptions): Promise<DecisionResults> {
         try {
             const decision = await this.cerbos.checkResources(opts);
-            const actions: DecisionResults = [];
+            const results: DecisionResults = [];
 
             for (const result of decision.results) {
-                actions.push({
+                results.push({
                     resourceId: result.resource.id,
                     actions: result.actions
                 })
             }
-            console.log(opts.resources.map(r => r.resource));
-            console.log(actions);
-            return actions;
+
+            return results;
         } catch(e) {
             console.error(e);
             throw new AuthorizationError(`Failed to check if user has access to resources! ${e}`);

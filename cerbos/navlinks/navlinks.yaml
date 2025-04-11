@@ -3,10 +3,11 @@ resourcePolicy:
   resource: navlink
   version: default
   rules:
-    - name: user_deny_access_to_admin_navlinks
+    - name: deny_access_to_disallowed_roles
       actions: ["select"]
       roles:
         - user
+        - admin
       condition:
         match:
           expr: "request.resource.attr.disallowedRoles.size() == 0 || !(request.principal.roles.exists(r, r in request.resource.attr.disallowedRoles))"

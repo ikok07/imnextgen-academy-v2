@@ -5,11 +5,13 @@ import {cn} from "@/app/_utils/cn";
 import {DropdownMenuItem} from "@/app/_components/ui/shadcn/dropdown-menu";
 import {LoadingSpinner} from "@/app/_components/ui/shadcn/loading-spinner";
 import PrimaryLoader from "@/app/_components/ui/loaders/PrimaryLoader";
+import {ReactNode} from "react";
 
 type DropdownMenuItemRowLink = {
     type: "link"
     Icon?: IconType,
     label: string,
+    additionalContent?: ReactNode,
     href: string,
     isLoading?: boolean,
     className?: string,
@@ -19,6 +21,7 @@ type DropdownMenuItemRowButton = {
     type: "button"
     Icon?: IconType,
     label: string,
+    additionalContent?: ReactNode,
     onClick: () => void,
     isLoading?: boolean,
     className?: string,
@@ -35,7 +38,7 @@ export default function DropdownMenuItemRow(props: DropdownMenuItemRowProps) {
     );
 
     const iconClassName = cn(
-        "text-primary/50 group-hover:text-accent",
+        "text-primary/50 group-hover:text-accent dark:group-hover:text-white",
         props.iconClassName
     )
 
@@ -44,18 +47,24 @@ export default function DropdownMenuItemRow(props: DropdownMenuItemRowProps) {
 
     if (props.type === "link") {
         return <DropdownMenuItem className="cursor-pointer group">
-            <Link href={props.href} className={className}>
-                {Icon}
-                {Label}
-            </Link>
+            <div className="flex items-center justify-between w-full">
+                <Link href={props.href} className={className}>
+                    {Icon}
+                    {Label}
+                </Link>
+                {props.additionalContent}
+            </div>
         </DropdownMenuItem>
     }
 
     return <DropdownMenuItem className="cursor-pointer group" onClick={props.onClick}>
-        <button className={className}>
-            {Icon}
-            {Label}
-        </button>
+        <div className="flex items-center justify-between w-full">
+            <button className={className}>
+                {Icon}
+                {Label}
+            </button>
+            {props.additionalContent}
+        </div>
     </DropdownMenuItem>
 
 }
