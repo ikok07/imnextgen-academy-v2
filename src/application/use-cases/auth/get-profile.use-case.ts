@@ -1,4 +1,4 @@
-import {IProfilesRepository} from "@/src/application/repositories/profiles.repository.interface";
+import {IProfilesRepository} from "@/src/application/repositories/auth/profiles.repository.interface";
 
 export type IGetProfileUseCase = ReturnType<typeof getProfileUseCase>;
 

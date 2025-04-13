@@ -1,5 +1,5 @@
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
-import {ISetupQuestionsRepository} from "@/src/application/repositories/setup-questions.repository.interface";
+import {ISetupQuestionsRepository} from "@/src/application/repositories/setup/setup-questions.repository.interface";
 import { SetupQuestion } from "@/drizzle/schema/setup_questions";
 import { DatabaseError } from "@/src/entities/errors/db/database";
 import {

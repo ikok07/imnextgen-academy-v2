@@ -1,4 +1,4 @@
-import {ISetupQuestionsRepository} from "@/src/application/repositories/setup-questions.repository.interface";
+import {ISetupQuestionsRepository} from "@/src/application/repositories/setup/setup-questions.repository.interface";
 
 export type IGetSetupQuestionsUseCase = ReturnType<typeof getSetupQuestionsUseCase>;
 

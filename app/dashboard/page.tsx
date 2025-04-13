@@ -1,3 +1,7 @@
+import ModuleBox from "@/app/_components/dashboard/classroom/ModuleBox";
+
 export default function Page() {
-    return <div></div>
+    return <div>
+        <ModuleBox />
+    </div>
 }

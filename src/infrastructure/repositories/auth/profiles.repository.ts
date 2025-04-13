@@ -1,5 +1,5 @@
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
-import {IProfilesRepository} from "@/src/application/repositories/profiles.repository.interface";
+import {IProfilesRepository} from "@/src/application/repositories/auth/profiles.repository.interface";
 import {Profile, ProfileInsert, profilesTable} from "@/drizzle/schema/profiles";
 import { DatabaseError } from "@/src/entities/errors/db/database";
 import {eq} from "drizzle-orm";

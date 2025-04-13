@@ -4,6 +4,7 @@ import {AUTHORIZATION_RETURN_TYPES, AUTHORIZATION_SYMBOLS} from "@/di/types/auth
 import {TODOS_RETURN_TYPES, TODOS_SYMBOLS} from "@/di/types/todos.types";
 import {PROFILE_RETURN_TYPES, PROFILE_SYMBOLS} from "@/di/types/profiles.types";
 import {SETUP_QUESTIONS_RETURN_TYPES, SETUP_QUESTIONS_SYMBOLS} from "@/di/types/setup-questions.types";
+import {CLASSROOM_MODULES_RETURN_TYPES, CLASSROOM_MODULES_SYMBOLS} from "@/di/types/classroom-modules.types";
 
 export const DI_SYMBOLS = {
     ...AUTH_SYMBOLS,
@@ -11,7 +12,8 @@ export const DI_SYMBOLS = {
     ...EMAIL_SYMBOLS,
     ...TODOS_SYMBOLS,
     ...PROFILE_SYMBOLS,
-    ...SETUP_QUESTIONS_SYMBOLS
+    ...SETUP_QUESTIONS_SYMBOLS,
+    ...CLASSROOM_MODULES_SYMBOLS
 };
 
 export interface DI_RETURN_TYPES extends
@@ -20,5 +22,6 @@ export interface DI_RETURN_TYPES extends
     EMAIL_RETURN_TYPES,
     TODOS_RETURN_TYPES,
     PROFILE_RETURN_TYPES,
-    SETUP_QUESTIONS_RETURN_TYPES
+    SETUP_QUESTIONS_RETURN_TYPES,
+    CLASSROOM_MODULES_RETURN_TYPES
 {}

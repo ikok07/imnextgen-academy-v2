@@ -1,6 +1,7 @@
 import * as profiles from "../../../drizzle/schema/profiles"
 import * as setupQuestions from "../../../drizzle/schema/setup_questions"
 import * as userSetupQuestions from "../../../drizzle/schema/user_setup_questions"
+import * as modules from "../../../drizzle/schema/modules"
 
 import ws from "ws"
 
@@ -14,7 +15,8 @@ export class BaseRepository {
     schema = {
         ...profiles,
         ...setupQuestions,
-        ...userSetupQuestions
+        ...userSetupQuestions,
+        ...modules
     };
     constructor(authenticationService: IAuthenticationService) {
         this.authService = authenticationService;

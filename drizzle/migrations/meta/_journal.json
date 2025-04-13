@@ -50,6 +50,13 @@
       "when": 1744562672363,
       "tag": "0006_remove-profile-email-confirmed-field",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1744567151090,
+      "tag": "0007_add-modules",
+      "breakpoints": true
     }
   ]
 }
