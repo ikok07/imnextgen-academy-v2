@@ -2,9 +2,11 @@ import * as profiles from "../../../drizzle/schema/profiles"
 import * as setupQuestions from "../../../drizzle/schema/setup_questions"
 import * as userSetupQuestions from "../../../drizzle/schema/user_setup_questions"
 
+import ws from "ws"
+
 import {IAuthenticationService} from "@/src/application/services/auth/authentication.service.interface";
-import {drizzle, NeonHttpDatabase} from "drizzle-orm/neon-http";
-import {neon, NeonQueryFunction} from "@neondatabase/serverless";
+import {drizzle, NeonDatabase} from "drizzle-orm/neon-serverless";
+import {neonConfig, NeonQueryFunction, Pool} from "@neondatabase/serverless";
 
 export class BaseRepository {
     authService: IAuthenticationService
@@ -20,13 +22,15 @@ export class BaseRepository {
     }
 
     protected async queryDB<T>(callback: (db: Omit<
-        NeonHttpDatabase<typeof this.schema> & { $client: NeonQueryFunction<false, false> },
+        NeonDatabase<typeof this.schema> & { $client: NeonQueryFunction<false, false> },
         "_" | "$withAuth" | "batch" | "$with" | "$client"
     >) => Promise<T>) {
-        const sql = neon(process.env.DATABASE_URL!);
+        neonConfig.webSocketConstructor = ws;
+        neonConfig.poolQueryViaFetch = true;
 
-        const db = drizzle({
-            client: sql,
+        const pool = new Pool({connectionString: process.env.DATABASE_URL!});
+
+        const db = drizzle(pool, {
             schema: this.schema
         })
 

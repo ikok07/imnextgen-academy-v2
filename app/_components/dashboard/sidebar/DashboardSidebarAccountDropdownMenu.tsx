@@ -14,7 +14,7 @@ import DropdownMenuItemRow from "@/app/_components/ui/dropdown/DropdownMenuItemR
 import {useState} from "react";
 import {useTheme} from "next-themes";
 import PrimarySwitch from "@/app/_components/ui/toggles/PrimarySwitch";
-import {useAppUser} from "@/app/_hooks/auth/useUser";
+import {useAppUser} from "@/app/_hooks/auth/useAppUser";
 
 export default function DashboardSidebarAccountDropdownMenu() {
     const clerk = useClerk();

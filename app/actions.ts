@@ -7,6 +7,11 @@ import {
 } from "@/src/application/services/auth/authorization.service.interface";
 import {createServerAction} from "@/app/_utils/createServerAction";
 
+export const getDbProfile = createServerAction(async (userId: string | undefined) => {
+    const getProfileController = getInjection("IGetProfileController");
+    return await getProfileController(userId);
+})
+
 export const checkAccess = createServerAction((async (opts: Partial<CheckUserAccessOptions>) => {
     try {
         const checkAccessController = getInjection("ICheckAccessController");

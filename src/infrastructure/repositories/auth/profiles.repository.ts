@@ -5,6 +5,18 @@ import { DatabaseError } from "@/src/entities/errors/db/database";
 import {eq} from "drizzle-orm";
 
 export class ProfilesRepository extends BaseRepository implements IProfilesRepository {
+    async getProfileById(id: string): Promise<Profile> {
+        try {
+            const result = await this.queryDB(async (db) => {
+                return db.query.profilesTable.findFirst({where: eq(profilesTable.id, id)});
+            });
+            if (!result) throw new Error("Could not find profile with this ID!");
+
+            return result;
+        } catch(e) {
+            throw new DatabaseError(`Failed to get profile: ${e}`);
+        }
+    }
     async createProfile(data: ProfileInsert): Promise<Profile> {
         try {
             return this.queryDB(async (db) => {

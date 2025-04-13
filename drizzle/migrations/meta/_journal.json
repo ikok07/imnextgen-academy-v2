@@ -43,6 +43,13 @@
       "when": 1744398775708,
       "tag": "0005_add-profile-id-to-user-questions",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1744562672363,
+      "tag": "0006_remove-profile-email-confirmed-field",
+      "breakpoints": true
     }
   ]
 }

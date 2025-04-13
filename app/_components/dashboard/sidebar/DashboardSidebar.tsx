@@ -13,7 +13,7 @@ import DashboardSidebarAccountDropdownMenu
 import {getNavlinkAuthResources, getNavLinks} from "@/app/_utils/nav/navlinks";
 import DashboardSidebarGroupContent from "@/app/_components/dashboard/sidebar/DashboardSidebarGroupContent";
 import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
-import {useAppUser} from "@/app/_hooks/auth/useUser";
+import {useAppUser} from "@/app/_hooks/auth/useAppUser";
 import { useMultipleAccess } from "@/app/_hooks/auth/useMultipleAccess";
 import {IoMenuOutline} from "react-icons/io5";
 

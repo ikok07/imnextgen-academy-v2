@@ -1,6 +1,6 @@
 "use client"
 
-import {useAppUser} from "@/app/_hooks/auth/useUser";
+import {useAppUser} from "@/app/_hooks/auth/useAppUser";
 import {UserButton} from "@clerk/nextjs";
 import {useAccess} from "@/app/_hooks/auth/useAccess";
 import {IoGlobeOutline, IoLinkOutline} from "react-icons/io5";
@@ -8,7 +8,7 @@ import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
 import SecondaryButton from "@/app/_components/ui/buttons/SecondaryButton";
 
 export default function AuthComponent() {
-    const {authData, userObject} = useAppUser();
+    const {authData, userObject, dbProfile} = useAppUser();
     const {accessGranted, isLoading} = useAccess({
         principal: {
             id: userObject.user?.primaryEmailAddress?.emailAddress!,

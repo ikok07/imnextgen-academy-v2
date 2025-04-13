@@ -1,8 +1,16 @@
 import {getInjection} from "@/di/container";
 import SetupForm from "@/app/_components/account/setup/SetupForm";
 import Image from "next/image";
+import {redirect} from "next/navigation";
+import {Routes} from "@/app/_utils/nav/routes";
 
 export default async function Page() {
+
+    const getUserController = getInjection("IGetUserController");
+    const {dbProfile} = await getUserController();
+
+    if (!dbProfile || dbProfile.configured) redirect(Routes.dashboard.base);
+
     const getSetupQuestionsController = getInjection("IGetSetupQuestionController");
     const setupQuestions = await getSetupQuestionsController();
 

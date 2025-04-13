@@ -12,7 +12,6 @@ export class ClerkService implements IAuthenticationService {
                 auth: authObject
             };
         } catch(e) {
-
             throw new AuthenticationError(`Failed to get user! ${e}`);
         }
     }

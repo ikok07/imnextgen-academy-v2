@@ -1,7 +1,7 @@
 "use client"
 
 import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
-import {useAppUser} from "@/app/_hooks/auth/useUser";
+import {useAppUser} from "@/app/_hooks/auth/useAppUser";
 import PrimaryInput from "@/app/_components/ui/inputs/PrimaryInput";
 import {
     AlertDialog, AlertDialogAction, AlertDialogCancel,
@@ -22,7 +22,7 @@ import {toast} from "sonner";
 
 export default function TodosComponent() {
     const queryClient = useQueryClient();
-    const {authData} = useAppUser();
+    const {auth} = useAppUser();
     const [content, setContent] = useState<string | null>(null);
     const [errors, setErrors] = useState<string[]>([]);
 
@@ -33,7 +33,7 @@ export default function TodosComponent() {
 
     const {mutate: createTodoMethod, isLoading: isCreatingTodo, error: createTodoError} = useErrorMutation({
         mutationFn: () => createTodo({
-            userId: authData.userId ?? undefined,
+            userId: auth.userId ?? undefined,
             content: content ?? undefined
         }),
         onSuccess(data) {
@@ -56,7 +56,7 @@ export default function TodosComponent() {
         });
     }, [createTodoError]);
 
-    if (!authData.isSignedIn) return;
+    if (!auth.isSignedIn) return;
 
     return <div>
         <h1>TODOS:</h1>

@@ -13,7 +13,7 @@ export function createAuthenticationModule() {
 
     authModule
         .bind(DI_SYMBOLS.IGetUserUseCase)
-        .toHigherOrderFunction(getUserUseCase, [DI_SYMBOLS.IAuthenticationService]);
+        .toHigherOrderFunction(getUserUseCase, [DI_SYMBOLS.IAuthenticationService, DI_SYMBOLS.ProfilesRepository]);
 
     authModule
         .bind(DI_SYMBOLS.IGetUserController)

@@ -7,6 +7,11 @@ import {ChangeEvent, useState} from "react";
 import {z} from "zod";
 import PrimaryButton from "../../ui/buttons/PrimaryButton";
 import {useRouter} from "next/navigation";
+import useErrorMutation from "@/app/_hooks/useErrorMutation";
+import {setUserSetupQuestions} from "@/app/account/setup/actions";
+import {useAppUser} from "@/app/_hooks/auth/useAppUser";
+import { UserSetupAnswer } from "@/src/entities/setup/user-setup-answers";
+import {Routes} from "@/app/_utils/nav/routes";
 
 type SetupFormProps = {
     setupQuestions: SetupQuestion[]
@@ -14,8 +19,16 @@ type SetupFormProps = {
 
 export default function SetupForm({setupQuestions}: SetupFormProps) {
     const [errors, setErrors] = useState<string[]>([]);
-    const [answers, setAnswers] = useState<{id: string, text: string | null}[]>(setupQuestions.map(q => ({id: q.id, text: null})));
+    const [answers, setAnswers] = useState<UserSetupAnswer[]>(setupQuestions.map(q => ({id: q.id, text: null})));
+    const {userObject} = useAppUser();
     const router = useRouter();
+
+    const {mutate: setUserSetupQuestionsMethod, isLoading} = useErrorMutation({
+        mutationFn: () => setUserSetupQuestions(userObject.user?.id, answers),
+        onSuccess() {
+            router.push(Routes.dashboard.base);
+        }
+    })
 
     return <>
         <div className="space-y-4">
@@ -50,6 +63,8 @@ export default function SetupForm({setupQuestions}: SetupFormProps) {
         <PrimaryButton
             className="mt-10"
             disabled={errors.length > 0}
+            loading={isLoading}
+            onClick={() => setUserSetupQuestionsMethod()}
         >
             Потвърждаване
         </PrimaryButton>

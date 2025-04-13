@@ -1,9 +1,16 @@
 import {IAuthenticationService} from "@/src/application/services/auth/authentication.service.interface";
+import {IProfilesRepository} from "@/src/application/repositories/profiles.repository.interface";
 
 export type IGetUserUseCase = ReturnType<typeof getUserUseCase>;
 
 export const getUserUseCase = (
-    authenticationService: IAuthenticationService
+    authenticationService: IAuthenticationService,
+    profilesRepository: IProfilesRepository
 )=> async () => {
-    return await authenticationService.getUser();
+    const userObject = await authenticationService.getUser();
+
+    return {
+        ...userObject,
+        dbProfile: userObject.user?.id ? await profilesRepository.getProfileById(userObject.user?.id) : null
+    };
 }

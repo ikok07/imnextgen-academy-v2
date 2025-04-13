@@ -1,10 +1,11 @@
 import {ISetupQuestionsRepository} from "@/src/application/repositories/setup-questions.repository.interface";
-import {UserSetupQuestionInsert} from "@/drizzle/schema/user_setup_questions";
+import {UserSetupAnswer} from "@/src/entities/setup/user-setup-answers";
 
 export type ISetUserSetupQuestionsUseCase = ReturnType<typeof setUserSetupQuestionsUseCase>;
 
 export const setUserSetupQuestionsUseCase = (
     setupQuestionsRepository: ISetupQuestionsRepository
-) => async (userId: string, answers: UserSetupQuestionInsert[]) => {
-    return setupQuestionsRepository.setUserSetupQuestions(userId, answers)
+) => async (userId: string, answers: UserSetupAnswer[]) => {
+    const insertAnswers = answers.map(a => ({question_id: a.id, profile_id: userId, answer: a.text}));
+    return setupQuestionsRepository.setUserSetupQuestions(userId, insertAnswers)
 }

@@ -13,7 +13,6 @@ export const profilesTable = pgTable("profiles", {
     name: text("name").notNull(),
     email: text("email").notNull(),
     phone: text("phone").notNull(),
-    email_confirmed: boolean().notNull().default(false),
     configured: boolean("configured").notNull().default(false),
     image_url: text("image_url"),
     access: profileAccessEnum().notNull().default("free")
