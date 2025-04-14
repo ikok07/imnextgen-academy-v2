@@ -9,7 +9,8 @@ export const modulesTable = pgTable("modules", {
     title: text("title").notNull(),
     description: text("description").notNull(),
     access: profileAccessEnum().notNull().default("free"),
-    order_number: integer("order_number").notNull()
+    order_number: integer("order_number").notNull(),
+    image_url: text("image_url")
 })
 
 export const modulesTableSchema = createSelectSchema(modulesTable);

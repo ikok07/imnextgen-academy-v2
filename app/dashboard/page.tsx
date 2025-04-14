@@ -1,7 +1,10 @@
-import ModuleBox from "@/app/_components/dashboard/classroom/ModuleBox";
+import DashboardPageTitle from "@/app/_components/dashboard/DashboardPageTitle";
+import ModulesGrid from "@/app/_components/dashboard/classroom/ModulesGrid";
 
-export default function Page() {
+export default async function Page() {
+
     return <div>
-        <ModuleBox />
+        <DashboardPageTitle>Класна стая</DashboardPageTitle>
+        <ModulesGrid />
     </div>
 }
