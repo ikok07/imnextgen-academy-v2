@@ -1,5 +1,5 @@
 import {Module, modulesTable} from "@/drizzle/schema/modules";
-import {IModulesRepository} from "@/src/application/repositories/media/modules.repository.interface";
+import {IModulesRepository} from "@/src/application/repositories/media/modules/modules.repository.interface";
 import { DatabaseError } from "@/src/entities/errors/db/database";
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
 import { eq } from "drizzle-orm";

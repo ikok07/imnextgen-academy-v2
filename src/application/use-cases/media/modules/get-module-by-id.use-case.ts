@@ -1,4 +1,4 @@
-import {IModulesRepository} from "@/src/application/repositories/media/modules.repository.interface";
+import {IModulesRepository} from "@/src/application/repositories/media/modules/modules.repository.interface";
 
 export type IGetModuleByIdUseCase = ReturnType<typeof getModuleByIdUseCase>;
 

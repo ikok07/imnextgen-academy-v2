@@ -64,6 +64,20 @@
       "when": 1744633320838,
       "tag": "0008_add-module-image-url",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1744640355596,
+      "tag": "0009_add-sections-videos-and-finished-videos",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1744648178376,
+      "tag": "0010_add-video-descriptions-and-resources",
+      "breakpoints": true
     }
   ]
 }

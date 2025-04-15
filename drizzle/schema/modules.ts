@@ -1,4 +1,4 @@
-import {pgTable, text, integer} from "drizzle-orm/pg-core";
+import {pgTable, text, integer, check} from "drizzle-orm/pg-core";
 import {sql} from "drizzle-orm";
 import {profileAccessEnum} from "@/drizzle/schema/profiles";
 import {createInsertSchema, createSelectSchema} from "drizzle-zod";
@@ -11,7 +11,9 @@ export const modulesTable = pgTable("modules", {
     access: profileAccessEnum().notNull().default("free"),
     order_number: integer("order_number").notNull(),
     image_url: text("image_url")
-})
+}, (table) => [
+    check("order_number_check", sql`${table.order_number} > -1`)
+])
 
 export const modulesTableSchema = createSelectSchema(modulesTable);
 export type Module = z.infer<typeof modulesTableSchema>;

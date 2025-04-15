@@ -2,6 +2,9 @@ import * as profiles from "../../../drizzle/schema/profiles"
 import * as setupQuestions from "../../../drizzle/schema/setup_questions"
 import * as userSetupQuestions from "../../../drizzle/schema/user_setup_questions"
 import * as modules from "../../../drizzle/schema/modules"
+import * as sections from "../../../drizzle/schema/sections"
+import * as videos from "../../../drizzle/schema/videos"
+import * as finishedVideos from "../../../drizzle/schema/finished_videos"
 
 import ws from "ws"
 
@@ -16,7 +19,10 @@ export class BaseRepository {
         ...profiles,
         ...setupQuestions,
         ...userSetupQuestions,
-        ...modules
+        ...modules,
+        ...sections,
+        ...videos,
+        ...finishedVideos,
     };
     constructor(authenticationService: IAuthenticationService) {
         this.authService = authenticationService;

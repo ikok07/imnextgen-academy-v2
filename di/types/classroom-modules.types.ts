@@ -1,4 +1,4 @@
-import { IModulesRepository } from "@/src/application/repositories/media/modules.repository.interface";
+import { IModulesRepository } from "@/src/application/repositories/media/modules/modules.repository.interface";
 import {IGetModulesController} from "@/src/interface-adapters/controllers/media/modules/get-modules.controller";
 import {IGetModulesUseCase} from "@/src/application/use-cases/media/modules/get-modules.use-case";
 import {IGetModuleByIdController} from "@/src/interface-adapters/controllers/media/modules/get-module-by-id.controller";
