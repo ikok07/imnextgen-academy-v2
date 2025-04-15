@@ -8,6 +8,11 @@ export const getAllModules = createServerAction(async () => {
     return getModulesController();
 });
 
+export const getModuleById = createServerAction(async (id: string | undefined | null) => {
+    const getModuleByIdController= getInjection("IGetModuleByIdController");
+    return getModuleByIdController(id);
+})
+
 export const getSectionsForModule = createServerAction(async (moduleId: string | undefined | null) => {
     const getSectionsForModuleController = getInjection("IGetSectionsForModuleController");
     return getSectionsForModuleController(moduleId);

@@ -4,6 +4,7 @@ import DashboardEmailConfirmMessage from "@/app/_components/dashboard/DashboardE
 import {getInjection} from "@/di/container";
 import {redirect} from "next/navigation";
 import {Routes} from "@/app/_utils/nav/routes";
+import DashboardClientWrapper from "@/app/_components/dashboard/DashboardClientWrapper";
 
 type LayoutProps = {
     children: ReactNode
@@ -19,6 +20,8 @@ export default async function Layout({children}: LayoutProps) {
 
     return <DashboardWrapper>
         {user.emailAddresses[0].verification?.status !== "verified" && <DashboardEmailConfirmMessage />}
-        {children}
+        <DashboardClientWrapper>
+            {children}
+        </DashboardClientWrapper>
     </DashboardWrapper>
 }

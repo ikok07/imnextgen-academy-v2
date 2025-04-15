@@ -9,9 +9,9 @@ import {
 } from "@/app/_components/ui/shadcn/sidebar";
 import Image from "next/image";
 import DashboardSidebarAccountDropdownMenu
-    from "@/app/_components/dashboard/sidebar/DashboardSidebarAccountDropdownMenu";
+    from "@/app/_components/dashboard/nav/sidebar/DashboardSidebarAccountDropdownMenu";
 import {getNavlinkAuthResources, getNavLinks} from "@/app/_utils/nav/navlinks";
-import DashboardSidebarGroupContent from "@/app/_components/dashboard/sidebar/DashboardSidebarGroupContent";
+import DashboardSidebarGroupContent from "@/app/_components/dashboard/nav/sidebar/DashboardSidebarGroupContent";
 import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
 import {useAppUser} from "@/app/_hooks/auth/useAppUser";
 import { useMultipleAccess } from "@/app/_hooks/auth/useMultipleAccess";

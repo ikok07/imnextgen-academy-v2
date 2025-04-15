@@ -11,6 +11,7 @@ export default async function ModulesGrid() {
             return <ModuleBox key={index} module={module} />
         })
     } catch(e) {
+        console.error(e);
         return <PrimaryErrorMessage
             Icon={IoCloudOffline}
             title="Възникна грешка"

@@ -5,7 +5,7 @@ export type IGetModuleByIdController = ReturnType<typeof getModuleByIdController
 
 export const getModuleByIdController = (
     getModuleByIdUseCase: IGetModuleByIdUseCase
-) => async (id: string | undefined) => {
+) => async (id: string | undefined | null) => {
 
     if (!id) throw new InputParseError("Invalid module id!");
 

@@ -24,7 +24,7 @@ export default function DashboardSidebarGroupContent({group, results, isLoading}
         {group.items.map((item, index) => {
             if (results.some(res => res.resourceId === item.id && res.actions["select"] === "EFFECT_ALLOW")) {
                 if (item.type === "group") {
-                    return <Collapsible className="w-full" onOpenChange={(v) => {
+                    return <Collapsible key={index} className="w-full" onOpenChange={(v) => {
                         if (v) setOpenedSubMenus(ids => [...ids, item.id])
                         else setOpenedSubMenus(ids => ids.filter(id => id !== item.id))
                     }}>
@@ -64,13 +64,13 @@ export default function DashboardSidebarGroupContent({group, results, isLoading}
                     </Collapsible>
                 }
 
-                return <SidebarMenuButton asChild={true} className={checkLinkActive(item.href, window.location.pathname) ? "bg-main-gradient text-white hover:text-white" : ""}>
-                    <Link href={item.href} key={index}>
+                return <SidebarMenuButton key={index} asChild={true} className={checkLinkActive(item.href, window.location.pathname) ? "bg-main-gradient text-white hover:text-white" : ""}>
+                    <Link href={item.href}>
                         <item.Icon />
                         <span>{item.label}</span>
                     </Link>
                 </SidebarMenuButton>
-            } else if (isLoading) return <SidebarMenuSkeleton showIcon={true} />
+            } else if (isLoading) return <SidebarMenuSkeleton showIcon={true} key={index}/>
         })}
     </>
 }
