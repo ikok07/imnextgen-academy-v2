@@ -10,6 +10,8 @@ import {useAppUser} from "@/app/_hooks/auth/useAppUser";
 import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
 import {useEffect, useState} from "react";
 import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
+import {useRouter} from "next/navigation";
+import {Routes} from "@/app/_utils/nav/routes";
 
 type ModuleBoxProps = {
     module: Module,
@@ -18,6 +20,7 @@ type ModuleBoxProps = {
 export default function ModuleBox({module}: ModuleBoxProps) {
     const {viewLoaded} = useViewLoaded();
     const [buttonLoading, setButtonLoading] = useState(true);
+    const router = useRouter();
 
     const {userObject} = useAppUser();
     const {data: finishedVideosQuery, isLoading: isLoadingFinishedVideos} = useErrorQuery({
@@ -27,6 +30,10 @@ export default function ModuleBox({module}: ModuleBoxProps) {
     });
 
     const modulePercentage = finishedVideosQuery?.success ? finishedVideosQuery.value.percentage : 0;
+
+    function handleClick() {
+        router.push(Routes.dashboard.module(module.id));
+    }
 
     useEffect(() => {
         if (viewLoaded) {
@@ -44,7 +51,7 @@ export default function ModuleBox({module}: ModuleBoxProps) {
             {!viewLoaded || buttonLoading || isLoadingFinishedVideos || !module ?
                 <Skeleton className="w-full h-8 aspect-video mt-6" />
                 :
-                modulePercentage > 0 ? <PrimaryButton className="mt-6 w-full">Продължаване ({Math.round(modulePercentage)}%)</PrimaryButton> : <SecondaryButton className="mt-6 w-full">Стартиране</SecondaryButton>
+                modulePercentage > 0 ? <PrimaryButton className="mt-6 w-full" onClick={handleClick}>Продължаване ({Math.round(modulePercentage)}%)</PrimaryButton> : <SecondaryButton className="mt-6 w-full" onClick={handleClick}>Стартиране</SecondaryButton>
             }
         </div>
     </div>

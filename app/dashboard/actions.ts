@@ -8,6 +8,16 @@ export const getAllModules = createServerAction(async () => {
     return getModulesController();
 });
 
+export const getSectionsForModule = createServerAction(async (moduleId: string | undefined | null) => {
+    const getSectionsForModuleController = getInjection("IGetSectionsForModuleController");
+    return getSectionsForModuleController(moduleId);
+})
+
+export const getVideosForSection = createServerAction(async (sectionId: string) => {
+    const getVideosForSectionController = getInjection("IGetVideosForSectionController");
+    return getVideosForSectionController(sectionId);
+})
+
 export const getFinishedVideos = createServerAction((moduleId: string | undefined | null, userId: string | undefined | null) => {
     const getFinishedVideosController = getInjection("IGetFinishedVideosController");
     return getFinishedVideosController(moduleId, userId);

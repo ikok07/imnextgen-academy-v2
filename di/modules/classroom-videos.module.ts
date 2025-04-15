@@ -5,6 +5,12 @@ import {getVideosForModuleUseCase} from "@/src/application/use-cases/media/video
 import {
     getVideosForModuleController
 } from "@/src/interface-adapters/controllers/media/videos/get-videos-for-module.controller";
+import {getVideosForSectionUseCase} from "@/src/application/use-cases/media/videos/get-videos-for-section.use-case";
+import {
+    getVideosForSectionController
+} from "@/src/interface-adapters/controllers/media/videos/get-videos-for-section.controller";
+import {getVideoByIdUseCase} from "@/src/application/use-cases/media/videos/get-video-by-id.use-case";
+import {getVideoByIdController} from "@/src/interface-adapters/controllers/media/videos/get-video-by-id.controller";
 
 export function createVideosModule() {
     const videosModule = createModule();
@@ -20,6 +26,22 @@ export function createVideosModule() {
     videosModule
         .bind(DI_SYMBOLS.IGetVideosForModuleController)
         .toHigherOrderFunction(getVideosForModuleController, [DI_SYMBOLS.IGetVideosForModuleUseCase])
+
+    videosModule
+        .bind(DI_SYMBOLS.IGetVideosForSectionUseCase)
+        .toHigherOrderFunction(getVideosForSectionUseCase, [DI_SYMBOLS.IVideosRepository]);
+
+    videosModule
+        .bind(DI_SYMBOLS.IGetVideosForSectionController)
+        .toHigherOrderFunction(getVideosForSectionController, [DI_SYMBOLS.IGetVideosForSectionUseCase]);
+
+    videosModule
+        .bind(DI_SYMBOLS.IGetVideoByIdUseCase)
+        .toHigherOrderFunction(getVideoByIdUseCase, [DI_SYMBOLS.IVideosRepository]);
+
+    videosModule
+        .bind(DI_SYMBOLS.IGetVideoByIdController)
+        .toHigherOrderFunction(getVideoByIdController, [DI_SYMBOLS.IGetVideoByIdUseCase]);
 
     return videosModule;
 }

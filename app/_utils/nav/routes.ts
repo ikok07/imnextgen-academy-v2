@@ -8,6 +8,7 @@ export const Routes = {
         signUp: "/sign-up",
     },
     dashboard: {
-        base: "/dashboard"
+        base: "/dashboard",
+        module: (id: string) => `/dashboard/module/${id}`
     }
 }

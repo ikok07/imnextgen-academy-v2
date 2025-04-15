@@ -11,7 +11,7 @@ export class SectionsRepository extends BaseRepository implements ISectionsRepos
             return this.queryDB(async db => {
                 return (await db.select({sections: sectionsTable})
                     .from(sectionsTable)
-                    .innerJoin(modulesTable, eq(modulesTable, sectionsTable.module_id))
+                    .innerJoin(modulesTable, eq(modulesTable.id, sectionsTable.module_id))
                     .where(eq(modulesTable.id, moduleId))
                     .execute()).map(r => r.sections);
             })
