@@ -11,6 +11,7 @@ import {
 } from "@/app/_components/ui/shadcn/breadcrumb";
 import Link from "next/link";
 import {cn} from "@/app/_utils/cn";
+import {useWindowWidth} from "@react-hook/window-size";
 
 type CustomBreadcrumbProps = {
     customStaticLabels?: Record<string, string>,
@@ -19,8 +20,10 @@ type CustomBreadcrumbProps = {
 
 export default function CustomBreadcrumb({customStaticLabels, className}: CustomBreadcrumbProps) {
     const pathname = usePathname();
-    const {segments, addSegment, clearSegments, isLoaded, setIsLoaded, setHydrationLabels} = useBreadcrumb();
+    const {segments, addSegment, isLoaded, setIsLoaded, clearSegments} = useBreadcrumb();
     const [reInitTrigger, setReInitTrigger] = useState<boolean>(false);
+
+    const width = useWindowWidth();
 
     useEffect(() => {
         const routes = pathname.split('/').filter(v => v !== '');
@@ -57,14 +60,16 @@ export default function CustomBreadcrumb({customStaticLabels, className}: Custom
         }
     }, [pathname]);
 
+    if (segments.length <= 1) return;
+
     return <div className={cn(className)}>
         <Breadcrumb>
             <BreadcrumbList>
                 {segments.map((segment, index) => {
-                    if (segments.length - index > 2 && index != 0) return <BreadcrumbEllipsis key={index}/>;
+                    if (segments.length - index > (width > 400 ? 2 : 1) && index != 0) return <BreadcrumbEllipsis key={index}/>;
                     return <>
                         <BreadcrumbItem key={index}>
-                            <BreadcrumbLink><Link href={segment.href}>{segment.label ?? "<uuid-with-no-label>"}</Link></BreadcrumbLink>
+                            <BreadcrumbLink><Link href={segment.href} className="max-w-[10rem] md:max-w-auto block truncate">{segment.label ?? "<uuid-with-no-label>"}</Link></BreadcrumbLink>
                         </BreadcrumbItem>
                         {index + 1 != segments.length && <BreadcrumbSeparator key={index}/>}
                     </>
