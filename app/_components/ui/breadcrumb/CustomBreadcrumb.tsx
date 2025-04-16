@@ -12,6 +12,8 @@ import {
 import Link from "next/link";
 import {cn} from "@/app/_utils/cn";
 import {useWindowWidth} from "@react-hook/window-size";
+import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
+import BreadcrumbSkeleton from "@/app/_components/ui/breadcrumb/BreadcrumbSkeleton";
 
 type CustomBreadcrumbProps = {
     customStaticLabels?: Record<string, string>,
@@ -22,6 +24,7 @@ export default function CustomBreadcrumb({customStaticLabels, className}: Custom
     const pathname = usePathname();
     const {segments, addSegment, isLoaded, setIsLoaded, clearSegments} = useBreadcrumb();
     const [reInitTrigger, setReInitTrigger] = useState<boolean>(false);
+    const {viewLoaded} = useViewLoaded();
 
     const width = useWindowWidth();
 
@@ -59,6 +62,8 @@ export default function CustomBreadcrumb({customStaticLabels, className}: Custom
             setReInitTrigger(v => !v);
         }
     }, [pathname]);
+
+    if (!viewLoaded) return <BreadcrumbSkeleton />
 
     if (segments.length <= 1) return;
 

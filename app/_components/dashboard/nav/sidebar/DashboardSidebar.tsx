@@ -5,8 +5,7 @@ import {
     SidebarContent, SidebarFooter, SidebarGroupContent,
     SidebarGroupLabel,
     SidebarHeader, SidebarMenu,
-    SidebarProvider, useSidebar
-} from "@/app/_components/ui/shadcn/sidebar";
+} from "@/app/_components/ui/shadcn/sidebar/sidebar";
 import Image from "next/image";
 import DashboardSidebarAccountDropdownMenu
     from "@/app/_components/dashboard/nav/sidebar/DashboardSidebarAccountDropdownMenu";
@@ -16,6 +15,7 @@ import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
 import {useAppUser} from "@/app/_hooks/auth/useAppUser";
 import { useMultipleAccess } from "@/app/_hooks/auth/useMultipleAccess";
 import {IoMenuOutline} from "react-icons/io5";
+import {SidebarProvider, useSidebar} from "@/app/_components/ui/shadcn/sidebar/sidebar-provider";
 
 export default function DashboardSidebar() {
     return <SidebarProvider>

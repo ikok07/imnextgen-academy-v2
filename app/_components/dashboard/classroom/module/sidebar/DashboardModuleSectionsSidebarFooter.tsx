@@ -2,7 +2,7 @@
 
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/app/_components/ui/shadcn/tooltip";
 import {Progress} from "@/app/_components/ui/shadcn/progress";
-import {SidebarFooter} from "@/app/_components/ui/shadcn/sidebar";
+import {SidebarFooter} from "@/app/_components/ui/shadcn/sidebar/sidebar";
 import useErrorQuery from "@/app/_hooks/useErrorQuery";
 import {getFinishedVideos} from "@/app/dashboard/actions";
 import {useAppUser} from "@/app/_hooks/auth/useAppUser";
@@ -21,12 +21,12 @@ export default function DashboardModuleSectionsSidebarFooter({moduleId}: Dashboa
         queryFn: () => getFinishedVideos(moduleId, userObject.user!.id),
         queryKey: [`finishedVideos-${moduleId}`],
         enabled: !!userObject.user
-    })
+    });
 
     const showLoading = isLoading || isFetching || !viewLoaded;
     const progress = finishedVideosQuery?.success ? finishedVideosQuery.value.percentage : 0;
 
-    return <SidebarFooter className="relative p-0">
+    return <SidebarFooter className="relative px-0 py-3">
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger className="cursor-help">

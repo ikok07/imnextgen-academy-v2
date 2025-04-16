@@ -6,13 +6,14 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarMenuSub, SidebarMenuSubItem
-} from "@/app/_components/ui/shadcn/sidebar";
+} from "@/app/_components/ui/shadcn/sidebar/sidebar";
 import {IoChevronDown} from "react-icons/io5";
 import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/app/_components/ui/shadcn/collapsible";
 import {useState} from "react";
 import {VideosForModuleResponse} from "@/src/application/repositories/media/videos/videos.repository.interface";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/app/_components/ui/shadcn/tooltip";
 import {useModule} from "@/app/_providers/ModuleProvider";
+import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
 
 type DashboardModuleSectionsSidebarContentProps = {
     videosForModule: VideosForModuleResponse
@@ -21,13 +22,16 @@ type DashboardModuleSectionsSidebarContentProps = {
 export default function DashboardModuleSectionsSidebarContent({videosForModule}: DashboardModuleSectionsSidebarContentProps) {
     const {activeVideoId, selectVideo} = useModule();
     const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
+    const {viewLoaded} = useViewLoaded();
 
     return <SidebarContent
         className="flex-1 max-h-full overflow-y-auto pb-[5rem] scrollbar-hide"
     >
-        <SidebarMenu className="space-y-1">
+        {viewLoaded && <SidebarMenu className="space-y-1">
             {videosForModule.map((sectionObject, index) => {
-                return <Collapsible open={activeSectionId === sectionObject.section.id} onOpenChange={v => setActiveSectionId(v ? sectionObject.section.id : null)} key={index}>
+                return <Collapsible open={activeSectionId === sectionObject.section.id}
+                                    onOpenChange={v => setActiveSectionId(v ? sectionObject.section.id : null)}
+                                    key={index}>
                     <CollapsibleTrigger asChild={true}>
                         <SidebarMenuItem>
                             <SidebarMenuButton>
@@ -38,7 +42,8 @@ export default function DashboardModuleSectionsSidebarContent({videosForModule}:
                                                 <p>{index + 1}.</p>
                                                 <p className="max-w-[10.5rem] truncate">{sectionObject.section.title}</p>
                                             </div>
-                                            <IoChevronDown className={`text-lg text-gray-400 ${activeSectionId === sectionObject.section.id ? "rotate-180" : ""} transition-all duration-200 ease-in-out`} />
+                                            <IoChevronDown
+                                                className={`text-lg text-gray-400 ${activeSectionId === sectionObject.section.id ? "rotate-180" : ""} transition-all duration-200 ease-in-out`}/>
                                         </TooltipTrigger>
                                         {sectionObject.section.title.length > 18 && <TooltipContent>
                                             <p>{sectionObject.section.title}</p>
@@ -76,6 +81,6 @@ export default function DashboardModuleSectionsSidebarContent({videosForModule}:
                     </CollapsibleContent>
                 </Collapsible>
             })}
-        </SidebarMenu>
+        </SidebarMenu>}
     </SidebarContent>
 }

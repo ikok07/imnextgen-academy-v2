@@ -4,7 +4,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem, SidebarMenuSkeleton,
     SidebarMenuSub
-} from "@/app/_components/ui/shadcn/sidebar";
+} from "@/app/_components/ui/shadcn/sidebar/sidebar";
 import {IoChevronForward} from "react-icons/io5";
 import {checkLinkActive, NavGroup} from "@/app/_utils/nav/navlinks";
 import Link from "next/link";

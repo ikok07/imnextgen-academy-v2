@@ -19,6 +19,7 @@ export const getSectionsForModule = createServerAction(async (moduleId: string |
 })
 
 export const getVideosForSection = createServerAction(async (sectionId: string) => {
+
     const getVideosForSectionController = getInjection("IGetVideosForSectionController");
     return getVideosForSectionController(sectionId);
 })

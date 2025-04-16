@@ -7,6 +7,9 @@ import {z} from "zod";
 import {redirect} from "next/navigation";
 import DashboardModuleSectionsSidebar
     from "@/app/_components/dashboard/classroom/module/sidebar/DashboardModuleSectionsSidebar";
+import {Suspense} from "react";
+import DashboardModuleSidebarSkeleton
+    from "@/app/_components/dashboard/classroom/module/sidebar/DashboardModuleSidebarSkeleton";
 
 const propsSchema = z.object({
     params: z.object({
@@ -14,7 +17,15 @@ const propsSchema = z.object({
     })
 })
 
-export default async function Page(props: z.infer<typeof propsSchema>) {
+export default function Page(props: z.infer<typeof propsSchema>) {
+    return <Suspense
+        fallback={<DashboardModuleSidebarSkeleton />}
+    >
+        <InnerContent {...props} />
+    </Suspense>
+}
+
+export async function InnerContent(props: z.infer<typeof propsSchema>) {
     try {
         const {data: safeProps, error} = propsSchema.safeParse(props);
         if (error) redirect(Routes.dashboard.base);
