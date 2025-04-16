@@ -63,7 +63,6 @@ export function BreadcrumbProvider({children}: BreadcrumbProviderProps) {
     }
 
     useEffect(() => {
-        console.log("CHECK", hydrationLabels, segments, isLoaded)
         if (hydrationLabels.length > 0 && isLoaded) {
             for (const labelObj of hydrationLabels) {
                 const foundSegment = segments.find(s => s.id === labelObj.segmentId);

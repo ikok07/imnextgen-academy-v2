@@ -5,6 +5,8 @@ import { Routes } from "@/app/_utils/nav/routes";
 import DashboardModuleClientWrapper from "@/app/_components/dashboard/classroom/module/DashboardModuleClientWrapper";
 import {z} from "zod";
 import {redirect} from "next/navigation";
+import DashboardModuleSectionsSidebar
+    from "@/app/_components/dashboard/classroom/module/sidebar/DashboardModuleSectionsSidebar";
 
 const propsSchema = z.object({
     params: z.object({
@@ -25,7 +27,9 @@ export default async function Page(props: z.infer<typeof propsSchema>) {
         if (!moduleResult.success) throw new Error("Module result wasn't successful!");
 
         return <DashboardModuleClientWrapper module={moduleResult.value}>
-            <h1>Test</h1>
+            <div className="grid grid-cols-[16rem_1fr]">
+                <DashboardModuleSectionsSidebar moduleId={moduleResult.value.id} moduleTitle={moduleResult.value.title} />
+            </div>
         </DashboardModuleClientWrapper>
 
     } catch(e) {

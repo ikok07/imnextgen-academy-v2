@@ -3,49 +3,7 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
-        <entry key="$USER_HOME$/Downloads/modules.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="$USER_HOME$/Downloads/section_id_map.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="$USER_HOME$/Downloads/sections.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="$USER_HOME$/Downloads/sections_rows.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="$USER_HOME$/Downloads/sections_rows_cleaned.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="$USER_HOME$/Downloads/video_descriptions 16.11.16.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="$USER_HOME$/Downloads/video_descriptions.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -59,35 +17,14 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="$USER_HOME$/Downloads/video_descriptions_rows_old.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="$USER_HOME$/Downloads/video_rows_final.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="$USER_HOME$/Downloads/video_rows_new_mapped.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="$USER_HOME$/Downloads/videos_rows.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="/docs/data/modules.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/docs/data/sections.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

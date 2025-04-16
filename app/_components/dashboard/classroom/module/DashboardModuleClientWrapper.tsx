@@ -13,7 +13,6 @@ export default function DashboardModuleClientWrapper({module, children}: Dashboa
     const {hydrationLabels, setHydrationLabels, isLoaded} = useBreadcrumb();
 
     useEffect(() => {
-        console.log("CHECK", "WRAPPER", isLoaded)
         if (isLoaded) {
             if (hydrationLabels.some(l => l.segmentId === "module")) return;
 
