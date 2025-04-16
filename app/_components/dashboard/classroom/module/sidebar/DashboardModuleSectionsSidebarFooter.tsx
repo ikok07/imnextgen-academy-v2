@@ -26,7 +26,7 @@ export default function DashboardModuleSectionsSidebarFooter({moduleId}: Dashboa
     const showLoading = isLoading || isFetching || !viewLoaded;
     const progress = finishedVideosQuery?.success ? finishedVideosQuery.value.percentage : 0;
 
-    return <SidebarFooter className="p-0">
+    return <SidebarFooter className="relative p-0">
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger className="cursor-help">
@@ -51,5 +51,6 @@ export default function DashboardModuleSectionsSidebarFooter({moduleId}: Dashboa
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>
+        <div className="absolute w-full h-[5rem] bottom-[100%] bg-gradient-to-t from-background to-transparent"/>
     </SidebarFooter>
 }

@@ -1,4 +1,4 @@
-import {getModuleById, getSectionsForModule, getVideosForSection} from "@/app/dashboard/actions";
+import {getModuleById, getVideosForModule} from "@/app/dashboard/actions";
 import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
 import {IoCloudOffline} from "react-icons/io5";
 import { Routes } from "@/app/_utils/nav/routes";
@@ -20,15 +20,19 @@ export default async function Page(props: z.infer<typeof propsSchema>) {
         if (error) redirect(Routes.dashboard.base);
 
         const modulePromise = getModuleById(safeProps.params.id);
-        // const sectionsPromise = getSectionsForModule("6c9d5807-fc77-483e-a0da-b67aa151626e");
-        // const videosPromise = getVideosForSection("b0ab7cfc-ff3f-4939-ab86-6ee10085dc4b");
-        const [moduleResult] = await Promise.all([modulePromise]);
+        const videosPromise = getVideosForModule(safeProps.params.id);
+        const [moduleResult, videosResult] = await Promise.all([modulePromise, videosPromise]);
 
         if (!moduleResult.success) throw new Error("Module result wasn't successful!");
+        if (!videosResult.success) throw new Error("Videos for module could not be loaded");
 
         return <DashboardModuleClientWrapper module={moduleResult.value}>
             <div className="grid grid-cols-[16rem_1fr]">
-                <DashboardModuleSectionsSidebar moduleId={moduleResult.value.id} moduleTitle={moduleResult.value.title} />
+                <DashboardModuleSectionsSidebar
+                    moduleId={moduleResult.value.id}
+                    moduleTitle={moduleResult.value.title}
+                    videosForModule={videosResult.value}
+                />
             </div>
         </DashboardModuleClientWrapper>
 

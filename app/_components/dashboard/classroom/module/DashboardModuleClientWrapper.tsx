@@ -3,6 +3,7 @@
 import {ReactNode, useEffect} from "react";
 import {useBreadcrumb} from "@/app/_providers/BreadcrumbProvider";
 import {Module} from "@/drizzle/schema/modules";
+import ModuleProvider from "@/app/_providers/ModuleProvider";
 
 type DashboardModuleClientWrapperProps = {
     module: Module
@@ -24,5 +25,7 @@ export default function DashboardModuleClientWrapper({module, children}: Dashboa
         }
     }, [isLoaded]);
 
-    return children;
+    return <ModuleProvider>
+        {children}
+    </ModuleProvider>;
 }

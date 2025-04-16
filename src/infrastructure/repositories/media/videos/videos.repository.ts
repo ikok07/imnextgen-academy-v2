@@ -1,8 +1,11 @@
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
-import {IVideosRepository} from "@/src/application/repositories/media/videos/videos.repository.interface";
+import {
+    IVideosRepository,
+    VideosForModuleResponse
+} from "@/src/application/repositories/media/videos/videos.repository.interface";
 import {Video, videosTable} from "@/drizzle/schema/videos";
 import { DatabaseError } from "@/src/entities/errors/db/database";
-import {sectionsTable} from "@/drizzle/schema/sections";
+import {Section, sectionsTable} from "@/drizzle/schema/sections";
 import {eq} from "drizzle-orm";
 import {modulesTable} from "@/drizzle/schema/modules";
 
@@ -19,11 +22,12 @@ export class VideosRepository extends BaseRepository implements IVideosRepositor
             throw new DatabaseError(`Failed to get video! ${e}`)
         }
     }
-    getVideosForModule(moduleId: string): Promise<Video[]> {
+    getVideosForModule(moduleId: string): Promise<VideosForModuleResponse> {
         try {
             return this.queryDB(async db => {
                 const res = await db.select({
-                    videos: videosTable
+                    video: videosTable,
+                    section: sectionsTable
                 })
                     .from(videosTable)
                     .innerJoin(sectionsTable, eq(sectionsTable.id, videosTable.section_id))
@@ -31,7 +35,24 @@ export class VideosRepository extends BaseRepository implements IVideosRepositor
                     .where(eq(modulesTable.id, moduleId))
                     .execute();
 
-                return res.map(r => r.videos);
+                const sectionMap = new Map<string, {section: Section, videos: Video[]}>();
+
+                res.forEach(row => {
+
+                    const {section, video} = row;
+
+                    if (sectionMap.has(section.id)) {
+                        sectionMap.get(section.id)?.videos.push(video);
+                        return;
+                    }
+
+                    sectionMap.set(section.id, {
+                        section,
+                        videos: [row.video]
+                    });
+                });
+
+                return Array.from(sectionMap.values());
             })
         } catch(e) {
             throw new DatabaseError(`Failed to get videos for module! ${e}`)

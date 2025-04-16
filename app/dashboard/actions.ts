@@ -23,6 +23,11 @@ export const getVideosForSection = createServerAction(async (sectionId: string) 
     return getVideosForSectionController(sectionId);
 })
 
+export const getVideosForModule = createServerAction(async (moduleId: string) => {
+    const getVideosForModuleController = getInjection("IGetVideosForModuleController");
+    return getVideosForModuleController(moduleId);
+})
+
 export const getFinishedVideos = createServerAction((moduleId: string | undefined | null, userId: string | undefined | null) => {
     const getFinishedVideosController = getInjection("IGetFinishedVideosController");
     return getFinishedVideosController(moduleId, userId);

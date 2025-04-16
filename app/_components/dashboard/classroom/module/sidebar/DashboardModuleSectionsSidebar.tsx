@@ -2,8 +2,6 @@
 
 import {
     Sidebar,
-    SidebarContent,
-    SidebarFooter,
     SidebarHeader,
     SidebarProvider
 } from "@/app/_components/ui/shadcn/sidebar";
@@ -12,10 +10,14 @@ import DashboardModuleSectionsSidebarFooter
     from "@/app/_components/dashboard/classroom/module/sidebar/DashboardModuleSectionsSidebarFooter";
 import Link from "next/link";
 import {Routes} from "@/app/_utils/nav/routes";
+import DashboardModuleSectionsSidebarContent
+    from "@/app/_components/dashboard/classroom/module/sidebar/DashboardModuleSectionsSidebarContent";
+import {VideosForModuleResponse} from "@/src/application/repositories/media/videos/videos.repository.interface";
 
 type DashboardModuleSectionsSidebarProps = {
     moduleId: string,
-    moduleTitle: string
+    moduleTitle: string,
+    videosForModule: VideosForModuleResponse
 }
 
 export default function DashboardModuleSectionsSidebar(props: DashboardModuleSectionsSidebarProps) {
@@ -24,7 +26,7 @@ export default function DashboardModuleSectionsSidebar(props: DashboardModuleSec
     </SidebarProvider>
 }
 
-function InnerContent({moduleId, moduleTitle}: DashboardModuleSectionsSidebarProps) {
+function InnerContent({moduleId, moduleTitle, videosForModule}: DashboardModuleSectionsSidebarProps) {
     return <Sidebar
         className="relative w-full h-full"
     >
@@ -36,11 +38,7 @@ function InnerContent({moduleId, moduleTitle}: DashboardModuleSectionsSidebarPro
                 </div>
             </Link>
         </SidebarHeader>
-        <SidebarContent
-            className="flex-1 max-h-full overflow-y-auto"
-        >
-
-        </SidebarContent>
+        <DashboardModuleSectionsSidebarContent videosForModule={videosForModule}/>
         <DashboardModuleSectionsSidebarFooter moduleId={moduleId} />
     </Sidebar>
 }
