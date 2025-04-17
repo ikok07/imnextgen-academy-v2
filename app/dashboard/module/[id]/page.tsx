@@ -14,6 +14,7 @@ import {getInjection} from "@/di/container";
 import DashboardModuleVideoColumn from "@/app/_components/dashboard/classroom/module/video/DashboardModuleVideoColumn";
 import DashboardModuleVideoInfoSkeleton
     from "@/app/_components/dashboard/classroom/module/video/DashboardModuleVideoInfoSkeleton";
+import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
 
 const propsSchema = z.object({
     params: z.object({
@@ -24,10 +25,13 @@ const propsSchema = z.object({
 export default function Page(props: z.infer<typeof propsSchema>) {
     return <Suspense
         fallback={
-            <div className="dashboard-module-grid">
+            <div className="dashboard-module-grid video-column-width">
                 <DashboardModuleSidebarSkeleton />
-                <div className="dashboard-module-video-info">
-                    <DashboardModuleVideoInfoSkeleton />
+                <div className="h-full overflow-scroll">
+                    <Skeleton className="max-w-[50rem] w-full mx-auto aspect-video" />
+                    <div className="dashboard-module-video-info">
+                        <DashboardModuleVideoInfoSkeleton />
+                    </div>
                 </div>
             </div>
         }
@@ -58,7 +62,7 @@ export async function InnerContent(props: z.infer<typeof propsSchema>) {
             videosForModule={videosResult.value}
             finishedVideos={finishedVideosResult.value.finishedVideos}
         >
-            <div className="dashboard-module-grid">
+            <div className="dashboard-module-grid video-column-width">
                 <DashboardModuleSectionsSidebar
                     moduleTitle={moduleResult.value.title}
                     videosForModule={videosResult.value}

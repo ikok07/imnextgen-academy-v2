@@ -9,6 +9,7 @@ import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/app/_
 import DashboardModuleVideoInfo from "@/app/_components/dashboard/classroom/module/video/DashboardModuleVideoInfo";
 import DashboardModuleVideoInfoSkeleton
     from "@/app/_components/dashboard/classroom/module/video/DashboardModuleVideoInfoSkeleton";
+import LoomVideoPlayer from "@/app/_components/ui/players/LoomVideoPlayer";
 
 type DashboardModuleVideoColumnProps = {
     videos: VideosForModuleResponse
@@ -24,7 +25,8 @@ export default function DashboardModuleVideoColumn({videos}: DashboardModuleVide
 
     const activeVideo = videos.flatMap(obj => obj.videos).find(v => v.id === activeVideoId)!;
 
-    return <div className="">
+    return <div className="h-full overflow-scroll video-column-width scrollbar-hide pb-5">
+        {activeVideo.url && <LoomVideoPlayer videoUrl={activeVideo.url}/>}
         <DashboardModuleVideoInfo
             title={activeVideo.title}
             descriptionMarkdown={videos.flatMap(obj => obj.descriptions).find(d => d.id === activeVideo.description_id)?.markdown ?? ""}

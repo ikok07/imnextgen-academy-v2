@@ -39,7 +39,7 @@ export default function DashboardModuleSectionsSidebarContent({videosForModule, 
                                     <Tooltip>
                                         <TooltipTrigger className="w-full flex items-center justify-between">
                                             <div className="flex items-center gap-2">
-                                                <p>{index + 1}.</p>
+                                                <p>{sectionObject.section.order_number}.</p>
                                                 <p className="max-w-[10.5rem] truncate">{sectionObject.section.title}</p>
                                             </div>
                                             <IoChevronDown
@@ -66,7 +66,7 @@ export default function DashboardModuleSectionsSidebarContent({videosForModule, 
                                                 <TooltipTrigger className="w-full">
                                                     <div className="flex items-center justify-between">
                                                         <div className="flex items-center gap-2 text-left">
-                                                            <p>{index + 1}.</p>
+                                                            <p>{video.order_number}.</p>
                                                             <p className="max-w-[9rem] truncate">{video.title}</p>
                                                         </div>
                                                         {finishedVideos.some(v => v.video_id === video.id) && <IoCheckmarkCircle className={`${activeVideoId === video.id ? "text-white" : "text-cta"} text-lg w-[1rem] text-right`} />}

@@ -1,8 +1,8 @@
 "use client"
 
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/app/_components/ui/shadcn/card";
-import Markdown from "markdown-to-jsx";
-import {ComponentProps} from "react";
+import DashboardModuleVideoDescription
+    from "@/app/_components/dashboard/classroom/module/video/DashboardModuleVideoDescription";
 
 type DashboardModuleVideoInfoProps = {
     title: string
@@ -20,15 +20,7 @@ export default function DashboardModuleVideoInfo({title, descriptionMarkdown}: D
             </CardDescription>
         </CardHeader>
         <CardContent>
-            <Markdown
-                options={{
-                    overrides: {
-                        a: (props: ComponentProps<"a">) => <a target="_blank" {...props} />
-                    }
-                }}
-            >
-                {descriptionMarkdown}
-            </Markdown>
+            <DashboardModuleVideoDescription description={descriptionMarkdown}/>
         </CardContent>
     </Card>
 }

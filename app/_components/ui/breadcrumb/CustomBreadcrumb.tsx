@@ -63,7 +63,7 @@ export default function CustomBreadcrumb({customStaticLabels, className}: Custom
         }
     }, [pathname]);
 
-    if (!viewLoaded) return <BreadcrumbSkeleton />
+    if (!viewLoaded || segments.some(s => s.label == null)) return <BreadcrumbSkeleton />
 
     if (segments.length <= 1) return;
 

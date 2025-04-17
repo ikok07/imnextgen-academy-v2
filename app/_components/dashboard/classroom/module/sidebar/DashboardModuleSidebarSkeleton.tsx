@@ -1,4 +1,5 @@
 import {
+    SidebarHeader,
     SidebarMenu,
     SidebarMenuItem,
     SidebarMenuSkeleton, SidebarMenuSub, SidebarMenuSubItem
@@ -7,9 +8,12 @@ import {SIDEBAR_WIDTH} from "@/app/_components/ui/shadcn/sidebar/sidebar-provide
 import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
 
 export default function DashboardModuleSidebarSkeleton() {
-    return <div className="flex flex-col justify-between">
-        <div>
-            <SidebarMenu className="hidden md:block border-r border-sidebar-border mt-10" style={{width: SIDEBAR_WIDTH}}>
+    return <div className="hidden md:flex flex-col justify-between">
+        <div className="mt-3">
+            <SidebarHeader>
+                <Skeleton className="w-[70%] h-[2rem]" />
+            </SidebarHeader>
+            <SidebarMenu className=" border-r border-sidebar-border" style={{width: SIDEBAR_WIDTH}}>
                 {Array.from({length: 2}).map((_, index) => {
                     return <>
                         <SidebarMenuItem key={index}>

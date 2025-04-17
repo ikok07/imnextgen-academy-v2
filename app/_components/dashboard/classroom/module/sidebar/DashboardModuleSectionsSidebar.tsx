@@ -26,7 +26,7 @@ type DashboardModuleSectionsSidebarProps = {
 }
 
 export default function DashboardModuleSectionsSidebar(props: DashboardModuleSectionsSidebarProps) {
-    return <SidebarProvider className="min-h-auto md:h-[calc(100vh-3.2rem)]">
+    return <SidebarProvider className="min-h-auto video-column-width">
         <InnerContent {...props} />
     </SidebarProvider>
 }

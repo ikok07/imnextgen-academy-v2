@@ -125,4 +125,8 @@ button {
       @apply text-cta hover:opacity-80 transition-all duration-200
     }
   }
+
+  .video-column-width {
+    @apply md:h-[calc(100vh-3.2rem)]
+  }
 }
