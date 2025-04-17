@@ -20,19 +20,18 @@ import SecondaryButton from "@/app/_components/ui/buttons/SecondaryButton";
 import {FinishedVideosResponse} from "@/src/application/repositories/media/videos/finished-videos.repository.interface";
 
 type DashboardModuleSectionsSidebarProps = {
-    moduleId: string,
     moduleTitle: string,
     videosForModule: VideosForModuleResponse,
     finishedVideos: FinishedVideosResponse
 }
 
 export default function DashboardModuleSectionsSidebar(props: DashboardModuleSectionsSidebarProps) {
-    return <SidebarProvider className="min-h-auto h-[calc(100vh-3.2rem)]">
+    return <SidebarProvider className="min-h-auto md:h-[calc(100vh-3.2rem)]">
         <InnerContent {...props} />
     </SidebarProvider>
 }
 
-function InnerContent({moduleId, moduleTitle, videosForModule, finishedVideos}: DashboardModuleSectionsSidebarProps) {
+function InnerContent({moduleTitle, videosForModule, finishedVideos}: DashboardModuleSectionsSidebarProps) {
     const {setOpenMobile} = useSidebar();
     const {viewLoaded} = useViewLoaded();
 

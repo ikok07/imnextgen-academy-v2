@@ -25,9 +25,9 @@ export default function DashboardModuleSidebarSkeleton() {
                     </>
                 })}
             </SidebarMenu>
-            <Skeleton className="md:hidden w-[5.6rem] h-[2rem] mt-10" />
+            <Skeleton className="md:hidden w-[5.6rem] h-[2rem]" />
         </div>
-        <div className="space-y-1 py-3 w-full">
+        <div className="hidden md:block space-y-1 py-3 w-full">
             <div className="flex items-center justify-between">
                 <Skeleton className="w-[4.5rem] h-[0.9rem]" />
                 <Skeleton className="w-[2rem] h-[0.9rem]" />

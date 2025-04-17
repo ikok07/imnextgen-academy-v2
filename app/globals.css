@@ -110,3 +110,19 @@ button {
     @apply bg-gradient-to-b from-white to-gray-100 dark:from-white dark:to-gray-200
   }
 }
+
+@layer base {
+  .dashboard-module-grid {
+    @apply grid grid-rows-[auto_1fr] md:grid-rows-[auto_auto] md:grid-cols-[16rem_1fr] gap-3
+  }
+
+  .dashboard-module-video-info {
+    @apply max-w-[40rem] w-[97%] md:mx-auto
+  }
+
+  .markdown {
+    a {
+      @apply text-cta hover:opacity-80 transition-all duration-200
+    }
+  }
+}

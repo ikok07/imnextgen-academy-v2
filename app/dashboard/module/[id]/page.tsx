@@ -11,6 +11,9 @@ import {Suspense} from "react";
 import DashboardModuleSidebarSkeleton
     from "@/app/_components/dashboard/classroom/module/sidebar/DashboardModuleSidebarSkeleton";
 import {getInjection} from "@/di/container";
+import DashboardModuleVideoColumn from "@/app/_components/dashboard/classroom/module/video/DashboardModuleVideoColumn";
+import DashboardModuleVideoInfoSkeleton
+    from "@/app/_components/dashboard/classroom/module/video/DashboardModuleVideoInfoSkeleton";
 
 const propsSchema = z.object({
     params: z.object({
@@ -21,8 +24,11 @@ const propsSchema = z.object({
 export default function Page(props: z.infer<typeof propsSchema>) {
     return <Suspense
         fallback={
-            <div className="grid grid-cols-[16rem_1fr]">
+            <div className="dashboard-module-grid">
                 <DashboardModuleSidebarSkeleton />
+                <div className="dashboard-module-video-info">
+                    <DashboardModuleVideoInfoSkeleton />
+                </div>
             </div>
         }
     >
@@ -47,14 +53,18 @@ export async function InnerContent(props: z.infer<typeof propsSchema>) {
         if (!videosResult.success) throw new Error("Videos for module could not be loaded!");
         if (!finishedVideosResult.success) throw new Error("Finished videos for module could not be loaded!");
 
-        return <DashboardModuleClientWrapper module={moduleResult.value}>
-            <div className="grid grid-cols-[16rem_1fr]">
+        return <DashboardModuleClientWrapper
+            module={moduleResult.value}
+            videosForModule={videosResult.value}
+            finishedVideos={finishedVideosResult.value.finishedVideos}
+        >
+            <div className="dashboard-module-grid">
                 <DashboardModuleSectionsSidebar
-                    moduleId={moduleResult.value.id}
                     moduleTitle={moduleResult.value.title}
                     videosForModule={videosResult.value}
                     finishedVideos={finishedVideosResult.value}
                 />
+                <DashboardModuleVideoColumn videos={videosResult.value}/>
             </div>
         </DashboardModuleClientWrapper>
 

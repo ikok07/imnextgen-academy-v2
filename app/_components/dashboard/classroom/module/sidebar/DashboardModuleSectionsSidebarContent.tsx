@@ -9,7 +9,6 @@ import {
 } from "@/app/_components/ui/shadcn/sidebar/sidebar";
 import {IoCheckmarkCircle, IoChevronDown} from "react-icons/io5";
 import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/app/_components/ui/shadcn/collapsible";
-import {useEffect, useState} from "react";
 import {VideosForModuleResponse} from "@/src/application/repositories/media/videos/videos.repository.interface";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/app/_components/ui/shadcn/tooltip";
 import {useModule} from "@/app/_providers/ModuleProvider";
@@ -22,23 +21,8 @@ type DashboardModuleSectionsSidebarContentProps = {
 }
 
 export default function DashboardModuleSectionsSidebarContent({videosForModule, finishedVideos}: DashboardModuleSectionsSidebarContentProps) {
-    const lastFinishedVideo = finishedVideos.sort((a, b) => a.created_at - b.created_at)[finishedVideos.length - 1];
-
-    const rawVideosForModule = videosForModule.flatMap(obj => obj.videos);
-    const firstModuleVideo = rawVideosForModule.sort((a, b) => a.order_number - b.order_number).at(0);
-    const lastVideo = rawVideosForModule.find(v => v.id === lastFinishedVideo?.video_id);
-
-    const {activeVideoId, selectVideo} = useModule();
-    const [activeSectionId, setActiveSectionId] = useState<string | null>(lastVideo?.section_id ?? firstModuleVideo?.section_id ?? null);
+    const {activeSectionId, selectSection, activeVideoId, selectVideo} = useModule();
     const {viewLoaded} = useViewLoaded();
-
-    useEffect(() => {
-        if (lastVideo) {
-            selectVideo(lastVideo.id);
-            return;
-        }
-        if (firstModuleVideo) selectVideo(firstModuleVideo.id);
-    }, []);
 
     return <SidebarContent
         className="flex-1 max-h-full overflow-y-auto pb-[5rem] scrollbar-hide"
@@ -46,7 +30,7 @@ export default function DashboardModuleSectionsSidebarContent({videosForModule, 
         {viewLoaded && <SidebarMenu className="space-y-1">
             {videosForModule.map((sectionObject, index) => {
                 return <Collapsible open={activeSectionId === sectionObject.section.id}
-                                    onOpenChange={v => setActiveSectionId(v ? sectionObject.section.id : null)}
+                                    onOpenChange={v => selectSection(v ? sectionObject.section.id : null)}
                                     key={index}>
                     <CollapsibleTrigger asChild={true}>
                         <SidebarMenuItem>

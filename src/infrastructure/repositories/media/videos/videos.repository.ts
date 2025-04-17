@@ -8,6 +8,7 @@ import { DatabaseError } from "@/src/entities/errors/db/database";
 import {Section, sectionsTable} from "@/drizzle/schema/sections";
 import {eq} from "drizzle-orm";
 import {modulesTable} from "@/drizzle/schema/modules";
+import {VideoDescription, videoDescriptionsTable} from "@/drizzle/schema/video_descriptions";
 
 export class VideosRepository extends BaseRepository implements IVideosRepository {
     getVideoById(id: string): Promise<Video> {
@@ -27,28 +28,32 @@ export class VideosRepository extends BaseRepository implements IVideosRepositor
             return this.queryDB(async db => {
                 const res = await db.select({
                     video: videosTable,
-                    section: sectionsTable
+                    section: sectionsTable,
+                    description: videoDescriptionsTable
                 })
                     .from(videosTable)
                     .innerJoin(sectionsTable, eq(sectionsTable.id, videosTable.section_id))
                     .innerJoin(modulesTable, eq(modulesTable.id, sectionsTable.module_id))
+                    .innerJoin(videoDescriptionsTable, eq(videoDescriptionsTable.id, videosTable.description_id))
                     .where(eq(modulesTable.id, moduleId))
                     .execute();
 
-                const sectionMap = new Map<string, {section: Section, videos: Video[]}>();
+                const sectionMap = new Map<string, {section: Section, videos: Video[], descriptions: VideoDescription[]}>();
 
                 res.forEach(row => {
-
-                    const {section, video} = row;
+                    const {section, video, description} = row;
 
                     if (sectionMap.has(section.id)) {
-                        sectionMap.get(section.id)?.videos.push(video);
+                        const item = sectionMap.get(section.id);
+                        item?.videos.push(video);
+                        item?.descriptions.push(description);
                         return;
                     }
 
                     sectionMap.set(section.id, {
                         section,
-                        videos: [row.video]
+                        videos: [row.video],
+                        descriptions: [description]
                     });
                 });
 

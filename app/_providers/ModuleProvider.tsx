@@ -4,6 +4,8 @@ import {createContext, ReactNode, useContext, useState} from "react";
 import {z} from "zod";
 
 export const moduleStateSchema = z.object({
+    activeSectionId: z.custom<string | null>(),
+    selectSection: z.custom<(sectionId: string | null) => void>(),
     activeVideoId: z.custom<string | null>(),
     selectVideo: z.custom<(videoId: string) => void>()
 });
@@ -17,13 +19,20 @@ type ModuleProviderProps = {
 }
 
 export default function ModuleProvider({children}: ModuleProviderProps) {
+    const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
     const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
+
+    function selectSection(sectionId: string | null) {
+        setActiveSectionId(sectionId);
+    }
 
     function selectVideo(videoId: string) {
         setActiveVideoId(videoId);
     }
 
     return <ModuleProviderContext.Provider value={{
+        activeSectionId,
+        selectSection,
         activeVideoId,
         selectVideo
     }}>
