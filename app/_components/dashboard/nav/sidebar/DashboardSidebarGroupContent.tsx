@@ -1,8 +1,10 @@
+"use client"
+
 import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/app/_components/ui/shadcn/collapsible";
 import {
     SidebarMenuBadge,
     SidebarMenuButton,
-    SidebarMenuItem, SidebarMenuSkeleton,
+    SidebarMenuItem,
     SidebarMenuSub
 } from "@/app/_components/ui/shadcn/sidebar/sidebar";
 import {IoChevronForward} from "react-icons/io5";
@@ -14,10 +16,9 @@ import {DecisionResults} from "@/src/application/services/auth/authorization.ser
 type DashboardSidebarNavLinkContentProps = {
     group: NavGroup,
     results: DecisionResults,
-    isLoading: boolean
 }
 
-export default function DashboardSidebarGroupContent({group, results, isLoading}: DashboardSidebarNavLinkContentProps) {
+export default function DashboardSidebarGroupContent({group, results}: DashboardSidebarNavLinkContentProps) {
     const [openedSubMenus, setOpenedSubMenus] = useState<string[]>([]);
 
     return <>
@@ -30,32 +31,24 @@ export default function DashboardSidebarGroupContent({group, results, isLoading}
                     }}>
                         <SidebarMenuItem className="w-full">
                             <CollapsibleTrigger className="w-full">
-                                {isLoading ?
-                                    <SidebarMenuSkeleton showIcon={true}/>
-                                    :
-                                    <SidebarMenuButton className="w-full">
-                                        <div className="flex items-center gap-3">
-                                            {item.Icon && <item.Icon />}
-                                            <span>{item.label}</span>
-                                        </div>
-                                        <SidebarMenuBadge><IoChevronForward className={`text-lg text-gray-400 ${openedSubMenus.some(id => id === item.id) ? "rotate-90" : ""} transition-all duration-200`}/></SidebarMenuBadge>
-                                    </SidebarMenuButton>
-                                }
+                                <SidebarMenuButton className="w-full">
+                                    <div className="flex items-center gap-3">
+                                        {item.Icon && <item.Icon />}
+                                        <span>{item.label}</span>
+                                    </div>
+                                    <SidebarMenuBadge><IoChevronForward className={`text-lg text-gray-400 ${openedSubMenus.some(id => id === item.id) ? "rotate-90" : ""} transition-all duration-200`}/></SidebarMenuBadge>
+                                </SidebarMenuButton>
                             </CollapsibleTrigger>
                             <CollapsibleContent className="w-full">
                                 {item.items.map((link, index) => {
                                    if (results.some(res => res.resourceId === link.id && res.actions["select"] === "EFFECT_ALLOW")) {
                                        return <SidebarMenuSub>
-                                           {isLoading ?
-                                               <SidebarMenuSkeleton showIcon={true}/>
-                                               :
-                                               <SidebarMenuButton asChild={true} className={`${checkLinkActive(link.href, window.location.pathname) ? "bg-main-gradient text-white hover:text-white" : ""}`}>
-                                                   <Link href={link.href} key={index}>
-                                                       <link.Icon />
-                                                       <span>{link.label}</span>
-                                                   </Link>
-                                               </SidebarMenuButton>
-                                           }
+                                           <SidebarMenuButton asChild={true} className={`${checkLinkActive(link.href, window.location.pathname) ? "bg-main-gradient text-white hover:text-white" : ""}`}>
+                                               <Link href={link.href} key={index}>
+                                                   <link.Icon />
+                                                   <span>{link.label}</span>
+                                               </Link>
+                                           </SidebarMenuButton>
                                        </SidebarMenuSub>
                                    }
                                 })}
@@ -70,7 +63,7 @@ export default function DashboardSidebarGroupContent({group, results, isLoading}
                         <span>{item.label}</span>
                     </Link>
                 </SidebarMenuButton>
-            } else if (isLoading) return <SidebarMenuSkeleton showIcon={true} key={index}/>
+            }
         })}
     </>
 }
