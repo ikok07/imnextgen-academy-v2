@@ -7,22 +7,38 @@ import {
     SidebarMenuItem,
     SidebarMenuSub, SidebarMenuSubItem
 } from "@/app/_components/ui/shadcn/sidebar/sidebar";
-import {IoChevronDown} from "react-icons/io5";
+import {IoCheckmarkCircle, IoChevronDown} from "react-icons/io5";
 import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/app/_components/ui/shadcn/collapsible";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {VideosForModuleResponse} from "@/src/application/repositories/media/videos/videos.repository.interface";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/app/_components/ui/shadcn/tooltip";
 import {useModule} from "@/app/_providers/ModuleProvider";
 import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
+import {FinishedVideo} from "@/drizzle/schema/finished_videos";
 
 type DashboardModuleSectionsSidebarContentProps = {
-    videosForModule: VideosForModuleResponse
+    videosForModule: VideosForModuleResponse,
+    finishedVideos: FinishedVideo[]
 }
 
-export default function DashboardModuleSectionsSidebarContent({videosForModule}: DashboardModuleSectionsSidebarContentProps) {
+export default function DashboardModuleSectionsSidebarContent({videosForModule, finishedVideos}: DashboardModuleSectionsSidebarContentProps) {
+    const lastFinishedVideo = finishedVideos.sort((a, b) => a.created_at - b.created_at)[finishedVideos.length - 1];
+
+    const rawVideosForModule = videosForModule.flatMap(obj => obj.videos);
+    const firstModuleVideo = rawVideosForModule.sort((a, b) => a.order_number - b.order_number).at(0);
+    const lastVideo = rawVideosForModule.find(v => v.id === lastFinishedVideo?.video_id);
+
     const {activeVideoId, selectVideo} = useModule();
-    const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
+    const [activeSectionId, setActiveSectionId] = useState<string | null>(lastVideo?.section_id ?? firstModuleVideo?.section_id ?? null);
     const {viewLoaded} = useViewLoaded();
+
+    useEffect(() => {
+        if (lastVideo) {
+            selectVideo(lastVideo.id);
+            return;
+        }
+        if (firstModuleVideo) selectVideo(firstModuleVideo.id);
+    }, []);
 
     return <SidebarContent
         className="flex-1 max-h-full overflow-y-auto pb-[5rem] scrollbar-hide"
@@ -63,10 +79,13 @@ export default function DashboardModuleSectionsSidebarContent({videosForModule}:
                                     >
                                         <TooltipProvider>
                                             <Tooltip>
-                                                <TooltipTrigger>
-                                                    <div className="flex items-center gap-2 text-left">
-                                                        <p>{index + 1}.</p>
-                                                        <p className="max-w-[10.5rem] truncate">{video.title}</p>
+                                                <TooltipTrigger className="w-full">
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex items-center gap-2 text-left">
+                                                            <p>{index + 1}.</p>
+                                                            <p className="max-w-[9rem] truncate">{video.title}</p>
+                                                        </div>
+                                                        {finishedVideos.some(v => v.video_id === video.id) && <IoCheckmarkCircle className={`${activeVideoId === video.id ? "text-white" : "text-cta"} text-lg w-[1rem] text-right`} />}
                                                     </div>
                                                 </TooltipTrigger>
                                                 {video.title.length > 18 && <TooltipContent>

@@ -1,4 +1,4 @@
-import { pgTable, text } from "drizzle-orm/pg-core";
+import { pgTable, text, integer} from "drizzle-orm/pg-core";
 import {sql} from "drizzle-orm";
 import {profilesTable} from "@/drizzle/schema/profiles";
 import {videosTable} from "@/drizzle/schema/videos";
@@ -15,6 +15,7 @@ export const finishedVideosTable = pgTable("finished_videos", {
         onDelete: "cascade",
         onUpdate: "cascade"
     }),
+    created_at: integer("created_at").notNull().default(sql`extract(epoch from now())`)
 });
 
 export const finishedVideoSchema = createSelectSchema(finishedVideosTable);

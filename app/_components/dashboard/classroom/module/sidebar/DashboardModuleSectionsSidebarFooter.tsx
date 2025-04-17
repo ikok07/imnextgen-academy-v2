@@ -10,21 +10,13 @@ import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
 import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
 
 type DashboardModuleSectionsSidebarFooterProps = {
-    moduleId: string
+    progress: number
 }
 
-export default function DashboardModuleSectionsSidebarFooter({moduleId}: DashboardModuleSectionsSidebarFooterProps) {
-    const {userObject} = useAppUser();
+export default function DashboardModuleSectionsSidebarFooter({progress}: DashboardModuleSectionsSidebarFooterProps) {
     const {viewLoaded} = useViewLoaded()
 
-    const {data: finishedVideosQuery, isLoading, isFetching} = useErrorQuery({
-        queryFn: () => getFinishedVideos(moduleId, userObject.user!.id),
-        queryKey: [`finishedVideos-${moduleId}`],
-        enabled: !!userObject.user
-    });
-
-    const showLoading = isLoading || isFetching || !viewLoaded;
-    const progress = finishedVideosQuery?.success ? finishedVideosQuery.value.percentage : 0;
+    if (!viewLoaded) return;
 
     return <SidebarFooter className="relative px-0 py-3">
         <TooltipProvider>
@@ -32,18 +24,14 @@ export default function DashboardModuleSectionsSidebarFooter({moduleId}: Dashboa
                 <TooltipTrigger className="cursor-help">
                     <div className="space-y-1 hover:bg-secondary px-2 py-1 rounded-md transition-all duration-200">
                         <div className="flex items-center justify-between text-[0.9rem]">
-                            {showLoading ? <Skeleton className="w-[4.5rem] h-[0.9rem]" /> : <label>Прогрес:</label>}
-                            {showLoading ? <Skeleton className="w-[2rem] h-[0.9rem]" /> : <span>{progress}%</span>}
+                            <label>Прогрес:</label>
+                            <span>{progress}%</span>
                         </div>
-                        {showLoading ?
-                            <Skeleton className="w-full h-[0.5rem]"/>
-                            :
-                            <Progress
-                                value={progress}
-                                className=""
-                                sliderClassName="bg-main-gradient"
-                            />
-                        }
+                        <Progress
+                            value={progress}
+                            className=""
+                            sliderClassName="bg-main-gradient"
+                        />
                     </div>
                 </TooltipTrigger>
                 <TooltipContent>

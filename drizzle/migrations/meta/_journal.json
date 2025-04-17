@@ -78,6 +78,13 @@
       "when": 1744648178376,
       "tag": "0010_add-video-descriptions-and-resources",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1744887708777,
+      "tag": "0011_add-create-to-finished-videos",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "finished_videos" ADD COLUMN "created_at" integer DEFAULT extract(epoch from now()) NOT NULL;

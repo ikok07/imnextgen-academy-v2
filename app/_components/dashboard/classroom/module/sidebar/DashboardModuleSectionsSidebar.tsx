@@ -17,11 +17,13 @@ import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
 import DashboardModuleSidebarSkeleton
     from "@/app/_components/dashboard/classroom/module/sidebar/DashboardModuleSidebarSkeleton";
 import SecondaryButton from "@/app/_components/ui/buttons/SecondaryButton";
+import {FinishedVideosResponse} from "@/src/application/repositories/media/videos/finished-videos.repository.interface";
 
 type DashboardModuleSectionsSidebarProps = {
     moduleId: string,
     moduleTitle: string,
-    videosForModule: VideosForModuleResponse
+    videosForModule: VideosForModuleResponse,
+    finishedVideos: FinishedVideosResponse
 }
 
 export default function DashboardModuleSectionsSidebar(props: DashboardModuleSectionsSidebarProps) {
@@ -30,7 +32,7 @@ export default function DashboardModuleSectionsSidebar(props: DashboardModuleSec
     </SidebarProvider>
 }
 
-function InnerContent({moduleId, moduleTitle, videosForModule}: DashboardModuleSectionsSidebarProps) {
+function InnerContent({moduleId, moduleTitle, videosForModule, finishedVideos}: DashboardModuleSectionsSidebarProps) {
     const {setOpenMobile} = useSidebar();
     const {viewLoaded} = useViewLoaded();
 
@@ -48,8 +50,8 @@ function InnerContent({moduleId, moduleTitle, videosForModule}: DashboardModuleS
                     </div>
                 </Link>
             </SidebarHeader>
-            <DashboardModuleSectionsSidebarContent videosForModule={videosForModule}/>
-            <DashboardModuleSectionsSidebarFooter moduleId={moduleId} />
+            <DashboardModuleSectionsSidebarContent videosForModule={videosForModule} finishedVideos={finishedVideos.finishedVideos} />
+            <DashboardModuleSectionsSidebarFooter progress={finishedVideos.percentage} />
         </Sidebar>
         <SecondaryButton className="md:hidden" onClick={() => setOpenMobile(true)}>
             <IoList />
