@@ -7,6 +7,7 @@ export class ClerkService implements IAuthenticationService {
     async getUser(): Promise<{user: User | null, auth: AuthObject}> {
         try {
             const authObject = await auth();
+
             return {
                 user: await currentUser(),
                 auth: authObject

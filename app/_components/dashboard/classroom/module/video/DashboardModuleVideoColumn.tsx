@@ -10,6 +10,7 @@ import DashboardModuleVideoInfo from "@/app/_components/dashboard/classroom/modu
 import DashboardModuleVideoInfoSkeleton
     from "@/app/_components/dashboard/classroom/module/video/DashboardModuleVideoInfoSkeleton";
 import LoomVideoPlayer from "@/app/_components/ui/players/LoomVideoPlayer";
+import SelfHostedVideoPlayer from "@/app/_components/ui/players/SelfHostedVideoPlayer";
 
 type DashboardModuleVideoColumnProps = {
     videos: VideosForModuleResponse
@@ -26,7 +27,10 @@ export default function DashboardModuleVideoColumn({videos}: DashboardModuleVide
     const activeVideo = videos.flatMap(obj => obj.videos).find(v => v.id === activeVideoId)!;
 
     return <div className="h-full overflow-scroll video-column-width scrollbar-hide pb-5">
-        {activeVideo.url && <LoomVideoPlayer videoUrl={activeVideo.url}/>}
+        {/*{activeVideo.url && <LoomVideoPlayer videoUrl={activeVideo.url}/>}*/}
+        <SelfHostedVideoPlayer
+            url="/api/v1/videos?path=test-video.mp4"
+        />
         <DashboardModuleVideoInfo
             title={activeVideo.title}
             descriptionMarkdown={videos.flatMap(obj => obj.descriptions).find(d => d.id === activeVideo.description_id)?.markdown ?? ""}

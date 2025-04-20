@@ -14,6 +14,7 @@ import {cn} from "@/app/_utils/cn";
 import {useWindowWidth} from "@react-hook/window-size";
 import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
 import BreadcrumbSkeleton from "@/app/_components/ui/breadcrumb/BreadcrumbSkeleton";
+import React from "react";
 
 type CustomBreadcrumbProps = {
     customStaticLabels?: Record<string, string>,
@@ -72,12 +73,12 @@ export default function CustomBreadcrumb({customStaticLabels, className}: Custom
             <BreadcrumbList>
                 {segments.map((segment, index) => {
                     if (segments.length - index > (width > 400 ? 2 : 1) && index != 0) return <BreadcrumbEllipsis key={index}/>;
-                    return <>
-                        <BreadcrumbItem key={index}>
-                            <BreadcrumbLink><Link href={segment.href} className="max-w-[10rem] md:max-w-auto block truncate">{segment.label ?? "<uuid-with-no-label>"}</Link></BreadcrumbLink>
+                    return <React.Fragment key={index}>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink asChild={true}><Link href={segment.href} className="max-w-[10rem] md:max-w-auto block truncate">{segment.label ?? "<uuid-with-no-label>"}</Link></BreadcrumbLink>
                         </BreadcrumbItem>
-                        {index + 1 != segments.length && <BreadcrumbSeparator key={index}/>}
-                    </>
+                        {index + 1 != segments.length && <BreadcrumbSeparator />}
+                    </React.Fragment>
                 })}
             </BreadcrumbList>
         </Breadcrumb>

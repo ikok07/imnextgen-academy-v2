@@ -6,6 +6,7 @@ import {
 } from "@/app/_components/ui/shadcn/sidebar/sidebar";
 import {SIDEBAR_WIDTH} from "@/app/_components/ui/shadcn/sidebar/sidebar-provider";
 import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
+import React from "react";
 
 export default function DashboardModuleSidebarSkeleton() {
     return <div className="hidden md:flex flex-col justify-between">
@@ -15,8 +16,8 @@ export default function DashboardModuleSidebarSkeleton() {
             </SidebarHeader>
             <SidebarMenu className=" border-r border-sidebar-border" style={{width: SIDEBAR_WIDTH}}>
                 {Array.from({length: 2}).map((_, index) => {
-                    return <>
-                        <SidebarMenuItem key={index}>
+                    return <React.Fragment key={index}>
+                        <SidebarMenuItem>
                             <SidebarMenuSkeleton />
                         </SidebarMenuItem>
                         <SidebarMenuSub>
@@ -26,7 +27,7 @@ export default function DashboardModuleSidebarSkeleton() {
                                 </SidebarMenuSubItem>
                             })}
                         </SidebarMenuSub>
-                    </>
+                    </React.Fragment>
                 })}
             </SidebarMenu>
             <Skeleton className="md:hidden w-[5.6rem] h-[2rem]" />
