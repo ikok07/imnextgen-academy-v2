@@ -7,7 +7,7 @@ export default async function ModulesGrid() {
     try {
         const res = await getAllModules();
 
-        return res.success && res.value.map((module, index) => {
+        return res.success && res.value.sort((a, b) => a.order_number - b.order_number).map((module, index) => {
             return <ModuleBox key={index} module={module} />
         })
     } catch(e) {

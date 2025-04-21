@@ -21,7 +21,6 @@ import {FinishedVideosResponse} from "@/src/application/repositories/media/video
 import useErrorQuery from "@/app/_hooks/useErrorQuery";
 import {getFinishedVideos} from "@/app/dashboard/actions";
 import {ServerActionResult} from "@/app/_utils/createServerAction";
-import {finishedVideosTable} from "@/drizzle/schema/finished_videos";
 
 type DashboardModuleSectionsSidebarProps = {
     userId: string,
@@ -32,7 +31,7 @@ type DashboardModuleSectionsSidebarProps = {
 }
 
 export default function DashboardModuleSectionsSidebar(props: DashboardModuleSectionsSidebarProps) {
-    return <SidebarProvider className="min-h-auto video-column-width">
+    return <SidebarProvider className="min-h-auto video-column-width" sidebarWidth="10rem">
         <InnerContent {...props} />
     </SidebarProvider>
 }

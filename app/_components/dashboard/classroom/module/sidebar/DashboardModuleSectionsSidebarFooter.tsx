@@ -3,10 +3,6 @@
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/app/_components/ui/shadcn/tooltip";
 import {Progress} from "@/app/_components/ui/shadcn/progress";
 import {SidebarFooter} from "@/app/_components/ui/shadcn/sidebar/sidebar";
-import useErrorQuery from "@/app/_hooks/useErrorQuery";
-import {getFinishedVideos} from "@/app/dashboard/actions";
-import {useAppUser} from "@/app/_hooks/auth/useAppUser";
-import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
 import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
 
 type DashboardModuleSectionsSidebarFooterProps = {
@@ -35,7 +31,7 @@ export default function DashboardModuleSectionsSidebarFooter({progress}: Dashboa
                     </div>
                 </TooltipTrigger>
                 <TooltipContent>
-                    <p>Процентът се обновява след края на всяко видео или при ръчно отбелязване</p>
+                    <p>Процентът се обновява при отбелязване на видео като изгледано</p>
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>

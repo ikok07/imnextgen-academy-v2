@@ -67,7 +67,7 @@ export default function DashboardModuleSectionsSidebarContent({videosForModule, 
                                                     <div className="flex items-center justify-between">
                                                         <div className="flex items-center gap-2 text-left">
                                                             <p>{video.order_number}.</p>
-                                                            <p className="max-w-[9rem] truncate">{video.title}</p>
+                                                            <p className="max-w-[8.5rem] truncate">{video.title}</p>
                                                         </div>
                                                         {finishedVideos.some(v => v.video_id === video.id) && <IoCheckmarkCircle className={`${activeVideoId === video.id ? "text-white" : "text-cta"} text-lg w-[1rem] text-right`} />}
                                                     </div>

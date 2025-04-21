@@ -37,7 +37,8 @@ export const SidebarProvider = React.forwardRef<
     React.ComponentProps<"div"> & {
     defaultOpen?: boolean
     open?: boolean
-    onOpenChange?: (open: boolean) => void
+    onOpenChange?: (open: boolean) => void,
+    sidebarWidth?: string
 }
 >(
     (
@@ -45,6 +46,7 @@ export const SidebarProvider = React.forwardRef<
             defaultOpen = true,
             open: openProp,
             onOpenChange: setOpenProp,
+            sidebarWidth,
             className,
             style,
             children,
@@ -120,7 +122,7 @@ export const SidebarProvider = React.forwardRef<
             <div
                 style={
         {
-            "--sidebar-width": SIDEBAR_WIDTH,
+            "--sidebar-width": sidebarWidth ?? SIDEBAR_WIDTH,
             "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
         ...style,
         } as React.CSSProperties
