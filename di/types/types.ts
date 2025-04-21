@@ -11,6 +11,7 @@ import {
 } from "@/di/types/classroom-finished-videos.types";
 import {CLASSROOM_VIDEOS_RETURN_TYPES, CLASSROOM_VIDEOS_SYMBOLS} from "@/di/types/classroom-videos.types";
 import {CLASSROOM_SECTIONS_RETURN_TYPES, CLASSROOM_SECTIONS_SYMBOLS} from "@/di/types/classroom-sections.types";
+import {JWT_RETURN_TYPES, JWT_SYMBOLS} from "@/di/types/jwt.types";
 
 export const DI_SYMBOLS = {
     ...AUTH_SYMBOLS,
@@ -22,7 +23,8 @@ export const DI_SYMBOLS = {
     ...CLASSROOM_MODULES_SYMBOLS,
     ...CLASSROOM_SECTIONS_SYMBOLS,
     ...CLASSROOM_VIDEOS_SYMBOLS,
-    ...CLASSROOM_FINISHED_VIDEOS_SYMBOLS
+    ...CLASSROOM_FINISHED_VIDEOS_SYMBOLS,
+    ...JWT_SYMBOLS
 };
 
 export interface DI_RETURN_TYPES extends
@@ -35,5 +37,6 @@ export interface DI_RETURN_TYPES extends
     CLASSROOM_MODULES_RETURN_TYPES,
     CLASSROOM_SECTIONS_RETURN_TYPES,
     CLASSROOM_VIDEOS_RETURN_TYPES,
-    CLASSROOM_FINISHED_VIDEOS_RETURN_TYPES
+    CLASSROOM_FINISHED_VIDEOS_RETURN_TYPES,
+    JWT_RETURN_TYPES
 {}

@@ -1,8 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit/react";
+import {placeholderRedurcer} from "@/app/_store/slices/placeholder";
 
 export const makeStore = () => {
     return configureStore({
-        reducer: {}
+        reducer: {
+            placeholder: placeholderRedurcer
+        }
     })
 }
 

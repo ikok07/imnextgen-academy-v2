@@ -40,4 +40,16 @@ export class FinishedVideosRepository extends BaseRepository implements IFinishe
             throw new DatabaseError(`Failed to get finished videos! ${e}`)
         }
     }
+    addFinishedVideo(videoId: string, userId: string): Promise<FinishedVideo> {
+        try {
+            return this.queryDB(async db => {
+                return (await db.insert(finishedVideosTable).values({
+                    video_id: videoId,
+                    profile_id: userId
+                }).returning())[0]
+            })
+        } catch(e) {
+            throw new DatabaseError(`Failed to add finished video! ${e}`)
+        }
+    }
 }

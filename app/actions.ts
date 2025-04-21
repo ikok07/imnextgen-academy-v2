@@ -29,3 +29,11 @@ export const checkMultipleResourcesAccess = createServerAction((async (opts: Par
         return [];
     }
 }));
+
+export const generateJwtToken = createServerAction(async (data: object, expiresInSeconds: number) => {
+    return getInjection("IGenerateJwtController")(data, expiresInSeconds);
+});
+
+export const validateJwtToken = createServerAction(async (token: string) => {
+    return getInjection("IValidateJwtController")(token);
+});

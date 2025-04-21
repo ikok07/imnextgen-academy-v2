@@ -10,6 +10,7 @@ import {createClassroomModulesModule} from "@/di/modules/classroom-modules.modul
 import {createClassroomFinishedVideosModule} from "@/di/modules/classroom-finished-videos.module";
 import {createVideosModule} from "@/di/modules/classroom-videos.module";
 import {createClassroomSectionsModule} from "@/di/modules/classroom-sections.module";
+import {createJwtModule} from "@/di/modules/jwt.module";
 
 const ApplicationContainer = createContainer();
 
@@ -23,6 +24,7 @@ ApplicationContainer.load(Symbol("ClassroomModulesModule"), createClassroomModul
 ApplicationContainer.load(Symbol("ClassroomSectionsModule"), createClassroomSectionsModule());
 ApplicationContainer.load(Symbol("ClassroomVideosModule"), createVideosModule());
 ApplicationContainer.load(Symbol("ClassroomFinishedVideosModule"), createClassroomFinishedVideosModule());
+ApplicationContainer.load(Symbol("JwtModule"), createJwtModule());
 
 export function getInjection<K extends keyof typeof DI_SYMBOLS>(symbol: K): DI_RETURN_TYPES[K] {
     return ApplicationContainer.get(DI_SYMBOLS[symbol]);

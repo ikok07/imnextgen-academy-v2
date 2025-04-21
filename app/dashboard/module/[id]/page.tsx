@@ -15,6 +15,7 @@ import DashboardModuleVideoColumn from "@/app/_components/dashboard/classroom/mo
 import DashboardModuleVideoInfoSkeleton
     from "@/app/_components/dashboard/classroom/module/video/DashboardModuleVideoInfoSkeleton";
 import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
+import {generateJwtToken} from "@/app/actions";
 
 const propsSchema = z.object({
     params: z.object({
@@ -51,6 +52,7 @@ export async function InnerContent(props: z.infer<typeof propsSchema>) {
         const modulePromise = getModuleById(safeProps.params.id);
         const videosPromise = getVideosForModule(safeProps.params.id);
         const finishedVideosPromise = getFinishedVideos(safeProps.params.id, user!.id);
+
         const [moduleResult, videosResult, finishedVideosResult] = await Promise.all([modulePromise, videosPromise, finishedVideosPromise]);
 
         if (!moduleResult.success) throw new Error("Module result wasn't successful!");
@@ -68,7 +70,7 @@ export async function InnerContent(props: z.infer<typeof propsSchema>) {
                     videosForModule={videosResult.value}
                     finishedVideos={finishedVideosResult.value}
                 />
-                <DashboardModuleVideoColumn videos={videosResult.value}/>
+                <DashboardModuleVideoColumn videos={videosResult.value} />
             </div>
         </DashboardModuleClientWrapper>
 

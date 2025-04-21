@@ -9,5 +9,6 @@ export const finishedVideosResponseSchema = z.object({
 export type FinishedVideosResponse = z.infer<typeof finishedVideosResponseSchema>;
 
 export interface IFinishedVideosRepository {
-    getFinishedVideosForModule(moduleId: string, userId: string): Promise<FinishedVideosResponse>
+    getFinishedVideosForModule(moduleId: string, userId: string): Promise<FinishedVideosResponse>;
+    addFinishedVideo(videoId: string, userId: string): Promise<FinishedVideo>;
 }

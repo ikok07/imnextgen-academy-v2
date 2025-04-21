@@ -5,6 +5,10 @@ import {getFinishedVideosUseCase} from "@/src/application/use-cases/media/videos
 import {
     getFinishedVideosController
 } from "@/src/interface-adapters/controllers/media/videos/get-finished-videos.controller";
+import {addFinishedVideoUseCase} from "@/src/application/use-cases/media/videos/add-finished-video.use-case";
+import {
+    addFinishedVideoController
+} from "@/src/interface-adapters/controllers/media/videos/add-finished-video.controller";
 
 export function createClassroomFinishedVideosModule() {
     const classroomFinishedVideosModule = createModule();
@@ -20,6 +24,14 @@ export function createClassroomFinishedVideosModule() {
     classroomFinishedVideosModule
         .bind(DI_SYMBOLS.IGetFinishedVideosController)
         .toHigherOrderFunction(getFinishedVideosController, [DI_SYMBOLS.IGetFinishedVideosUseCase]);
+
+    classroomFinishedVideosModule
+        .bind(DI_SYMBOLS.IAddFinishedVideoUseCase)
+        .toHigherOrderFunction(addFinishedVideoUseCase, [DI_SYMBOLS.IFinishedVideosRepository]);
+
+    classroomFinishedVideosModule
+        .bind(DI_SYMBOLS.IAddFinishedVideoController)
+        .toHigherOrderFunction(addFinishedVideoController, [DI_SYMBOLS.IAddFinishedVideoUseCase]);
 
     return classroomFinishedVideosModule;
 }

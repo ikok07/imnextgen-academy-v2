@@ -1,6 +1,8 @@
 import {NextResponse} from "next/server";
 import {GetObjectCommand, S3Client} from "@aws-sdk/client-s3";
 import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
+import {JsonWebTokenError} from "jsonwebtoken"
+import {auth} from "@clerk/nextjs/server";
 
 const s3 = new S3Client({
     region: "auto",
@@ -12,14 +14,22 @@ const s3 = new S3Client({
 })
 
 export async function GET(req: Request, res: Response) {
-    const url = new URL(req.url);
-    const path = url.searchParams.get("path");
-    if (!path) return NextResponse.json({error: "Invalid path"}, {status: 400});
+    try {
+        const url = new URL(req.url);
+        const path = url.searchParams.get("path");
+        if (!path) return NextResponse.json({error: "Invalid path"}, {status: 400});
 
-    const command = new GetObjectCommand({
-        Bucket: "test",
-        Key: path
-    });
+        const authObject = await auth();
+        if (!authObject.userId) return NextResponse.json({error: "Unauthorized!"}, {status: 401});
 
-    return await fetch(await getSignedUrl(s3, command, {expiresIn: 60}));
+        const command = new GetObjectCommand({
+            Bucket: "test",
+            Key: path
+        });
+
+        return await fetch(await getSignedUrl(s3, command, {expiresIn: 60}));
+    } catch(e) {
+        if (e instanceof JsonWebTokenError) return NextResponse.json({error: "Unauthorized!"}, {status: 401});
+        return NextResponse.json({error: "Unexpected error!"}, {status: 500});
+    }
 }
