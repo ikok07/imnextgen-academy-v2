@@ -63,7 +63,8 @@ const config: Config = {
   			}
   		},
   		screens: {
-  			xs: '380px'
+  			xs: '380px',
+			mdlg: "900px"
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

@@ -15,6 +15,7 @@ export default function SecondaryButton({children, href, onClick, disabled, load
         className={
             cn(
                 secondaryControlBackground(className),
+                "truncate",
                 {
                     "cursor-not-allowed opacity-50": loading || disabled
                 }

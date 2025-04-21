@@ -35,6 +35,14 @@ export const getFinishedVideos = createServerAction((moduleId: string | undefine
     return getFinishedVideosController(moduleId, userId);
 });
 
+export const checkFinishedVideo = createServerAction((videoId: string | undefined, userId: string | undefined) => {
+    return getInjection("ICheckFinishedVideoController")(videoId, userId);
+})
+
 export const addFinishedVideo = createServerAction((videoId: string | undefined, userId: string | undefined) => {
     return getInjection("IAddFinishedVideoController")(videoId, userId);
+});
+
+export const removeFinishedVideo = createServerAction((videoId: string | undefined, userId: string | undefined) => {
+    return getInjection("IRemoveFinishedVideoController")(videoId, userId);
 });

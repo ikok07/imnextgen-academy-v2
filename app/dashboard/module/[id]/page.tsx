@@ -13,7 +13,7 @@ import DashboardModuleSidebarSkeleton
 import {getInjection} from "@/di/container";
 import DashboardModuleVideoColumn from "@/app/_components/dashboard/classroom/module/video/DashboardModuleVideoColumn";
 import DashboardModuleVideoInfoSkeleton
-    from "@/app/_components/dashboard/classroom/module/video/DashboardModuleVideoInfoSkeleton";
+    from "@/app/_components/dashboard/classroom/module/video/skeletons/DashboardModuleVideoInfoSkeleton";
 import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
 import {generateJwtToken} from "@/app/actions";
 
@@ -57,20 +57,26 @@ export async function InnerContent(props: z.infer<typeof propsSchema>) {
 
         if (!moduleResult.success) throw new Error("Module result wasn't successful!");
         if (!videosResult.success) throw new Error("Videos for module could not be loaded!");
-        if (!finishedVideosResult.success) throw new Error("Finished videos for module could not be loaded!");
 
         return <DashboardModuleClientWrapper
             module={moduleResult.value}
             videosForModule={videosResult.value}
-            finishedVideos={finishedVideosResult.value.finishedVideos}
+            finishedVideos={finishedVideosResult?.success ? finishedVideosResult.value.finishedVideos : []}
         >
             <div className="dashboard-module-grid video-column-width">
                 <DashboardModuleSectionsSidebar
+                    userId={user.id}
+                    moduleId={moduleResult.value.id}
                     moduleTitle={moduleResult.value.title}
                     videosForModule={videosResult.value}
-                    finishedVideos={finishedVideosResult.value}
+                    finishedVideosResult={finishedVideosResult}
                 />
-                <DashboardModuleVideoColumn videos={videosResult.value} />
+                <DashboardModuleVideoColumn
+                    moduleId={moduleResult.value.id}
+                    userId={user.id}
+                    videos={videosResult.value}
+                    finishedVideosResult={finishedVideosResult}
+                />
             </div>
         </DashboardModuleClientWrapper>
 

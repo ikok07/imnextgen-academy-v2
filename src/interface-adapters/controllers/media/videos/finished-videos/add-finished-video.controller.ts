@@ -1,4 +1,4 @@
-import {IAddFinishedVideoUseCase} from "@/src/application/use-cases/media/videos/add-finished-video.use-case";
+import {IAddFinishedVideoUseCase} from "@/src/application/use-cases/media/videos/finished-videos/add-finished-video.use-case";
 import {InputParseError} from "@/src/entities/errors/common";
 
 export type IAddFinishedVideoController = ReturnType<typeof addFinishedVideoController>;

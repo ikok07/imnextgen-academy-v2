@@ -18,11 +18,17 @@ import DashboardModuleSidebarSkeleton
     from "@/app/_components/dashboard/classroom/module/sidebar/DashboardModuleSidebarSkeleton";
 import SecondaryButton from "@/app/_components/ui/buttons/SecondaryButton";
 import {FinishedVideosResponse} from "@/src/application/repositories/media/videos/finished-videos.repository.interface";
+import useErrorQuery from "@/app/_hooks/useErrorQuery";
+import {getFinishedVideos} from "@/app/dashboard/actions";
+import {ServerActionResult} from "@/app/_utils/createServerAction";
+import {finishedVideosTable} from "@/drizzle/schema/finished_videos";
 
 type DashboardModuleSectionsSidebarProps = {
+    userId: string,
+    moduleId: string,
     moduleTitle: string,
     videosForModule: VideosForModuleResponse,
-    finishedVideos: FinishedVideosResponse
+    finishedVideosResult: ServerActionResult<FinishedVideosResponse>
 }
 
 export default function DashboardModuleSectionsSidebar(props: DashboardModuleSectionsSidebarProps) {
@@ -31,9 +37,18 @@ export default function DashboardModuleSectionsSidebar(props: DashboardModuleSec
     </SidebarProvider>
 }
 
-function InnerContent({moduleTitle, videosForModule, finishedVideos}: DashboardModuleSectionsSidebarProps) {
+function InnerContent({userId, moduleId, moduleTitle, videosForModule, finishedVideosResult}: DashboardModuleSectionsSidebarProps) {
     const {setOpenMobile} = useSidebar();
     const {viewLoaded} = useViewLoaded();
+
+    const {data: finishedVideosQuery} = useErrorQuery({
+        queryFn: () => getFinishedVideos(moduleId, userId),
+        queryKey: ["finished-videos"],
+        initialData: finishedVideosResult
+    });
+
+    const finishedVideos = finishedVideosQuery?.success ? finishedVideosQuery.value.finishedVideos : [];
+    const percentage = finishedVideosQuery?.success ? finishedVideosQuery.value.percentage : 0;
 
     if (!viewLoaded) return <DashboardModuleSidebarSkeleton />
 
@@ -49,8 +64,8 @@ function InnerContent({moduleTitle, videosForModule, finishedVideos}: DashboardM
                     </div>
                 </Link>
             </SidebarHeader>
-            <DashboardModuleSectionsSidebarContent videosForModule={videosForModule} finishedVideos={finishedVideos.finishedVideos} />
-            <DashboardModuleSectionsSidebarFooter progress={finishedVideos.percentage} />
+            <DashboardModuleSectionsSidebarContent videosForModule={videosForModule} finishedVideos={finishedVideos} />
+            <DashboardModuleSectionsSidebarFooter progress={percentage} />
         </Sidebar>
         <SecondaryButton className="md:hidden" onClick={() => setOpenMobile(true)}>
             <IoList />

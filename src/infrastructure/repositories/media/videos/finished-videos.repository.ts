@@ -40,6 +40,18 @@ export class FinishedVideosRepository extends BaseRepository implements IFinishe
             throw new DatabaseError(`Failed to get finished videos! ${e}`)
         }
     }
+
+    // Currently not used
+    checkFinishedVideo(videoId: string, userId: string): Promise<boolean> {
+        try {
+            return this.queryDB(async db => {
+                const [{count: videosCount}] = await db.select({count: count()}).from(finishedVideosTable).where(and(eq(finishedVideosTable.video_id, videoId), eq(finishedVideosTable.profile_id, userId)));
+                return videosCount > 0;
+            })
+        } catch(e) {
+            throw new DatabaseError(`Failed to check finished video! ${e}`)
+        }
+    }
     addFinishedVideo(videoId: string, userId: string): Promise<FinishedVideo> {
         try {
             return this.queryDB(async db => {
@@ -50,6 +62,15 @@ export class FinishedVideosRepository extends BaseRepository implements IFinishe
             })
         } catch(e) {
             throw new DatabaseError(`Failed to add finished video! ${e}`)
+        }
+    }
+    async removeFinishedVideo(videoId: string, userId: string): Promise<void> {
+        try {
+            await this.queryDB(db => {
+                return db.delete(finishedVideosTable).where(and(eq(finishedVideosTable.video_id, videoId), eq(finishedVideosTable.profile_id, userId)))
+            })
+        } catch(e) {
+            throw new DatabaseError(`Failed to remove finished video! ${e}`)
         }
     }
 }

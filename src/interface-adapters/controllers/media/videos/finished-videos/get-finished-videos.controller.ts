@@ -1,4 +1,4 @@
-import {IGetFinishedVideosUseCase} from "@/src/application/use-cases/media/videos/get-finished-videos.use-case";
+import {IGetFinishedVideosUseCase} from "@/src/application/use-cases/media/videos/finished-videos/get-finished-videos.use-case";
 import {InputParseError} from "@/src/entities/errors/common";
 
 export type IGetFinishedVideosController = ReturnType<typeof getFinishedVideosController>;

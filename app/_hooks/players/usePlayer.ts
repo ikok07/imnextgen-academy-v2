@@ -16,7 +16,7 @@ export function usePlayer({videoUrl}:  Options) {
     useEffect(() => {
         const timeout = setTimeout(() => {
             if (isLoading) setIsInvalid(true);
-        }, 1000 * 10) // 10 seconds
+        }, 1000 * 30) // 30 seconds
         return () => {
             clearTimeout(timeout);
         }

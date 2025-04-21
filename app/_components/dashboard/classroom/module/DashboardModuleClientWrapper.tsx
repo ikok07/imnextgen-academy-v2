@@ -23,7 +23,7 @@ export default function DashboardModuleClientWrapper(props: DashboardModuleClien
 function InnerContent({module, videosForModule, finishedVideos, children}: DashboardModuleClientWrapperProps) {
     const {hydrationLabels, setHydrationLabels, isLoaded} = useBreadcrumb();
     const {selectSection, selectVideo} = useModule();
-    const lastFinishedVideo = finishedVideos.sort((a, b) => a.created_at - b.created_at)[finishedVideos.length - 1];
+    const lastFinishedVideo = finishedVideos.sort((a, b) => b.created_at - a.created_at)[finishedVideos.length - 1];
 
     const rawVideosForModule = videosForModule.flatMap(obj => obj.videos);
     const firstModuleVideo = rawVideosForModule.sort((a, b) => a.order_number - b.order_number).at(0);

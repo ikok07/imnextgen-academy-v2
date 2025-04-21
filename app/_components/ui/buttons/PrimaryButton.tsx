@@ -11,7 +11,7 @@ type PrimaryButtonProps = {
 } & ComponentProps<"button">
 
 export default function PrimaryButton({children, href, onClick, disabled, loading, loadingText, className, ...props}: PrimaryButtonProps) {
-    const defaultGradient = "from-purple-500 to-cta hover:from-purple-600 hover:to-cta dark:from-purple-600 dark:to-cta dark:text-white dark:hover:from-purple-500 dark:hover:to-cta";
+    const defaultGradient = "bg-main-gradient";
 
     const button = <Button
         className={

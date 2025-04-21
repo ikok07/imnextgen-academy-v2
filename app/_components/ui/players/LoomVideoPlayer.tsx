@@ -1,9 +1,5 @@
 import {cn} from "@/app/_utils/cn";
-import {useEffect, useState} from "react";
 import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
-import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
-import {IoVideocamOff} from "react-icons/io5";
-import {Card} from "@/app/_components/ui/shadcn/card";
 import PlayerVideoError from "@/app/_components/ui/players/PlayerVideoError";
 import {usePlayer} from "@/app/_hooks/players/usePlayer";
 
