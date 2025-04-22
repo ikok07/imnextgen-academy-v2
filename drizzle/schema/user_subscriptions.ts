@@ -15,6 +15,9 @@ export const userSubscriptionTable = pgTable("user_subscriptions", {
     subscription_tier: subscriptionTierEnum().notNull()
 });
 
+export const subscriptionTier = createSelectSchema(subscriptionTierEnum);
+export type SubscriptionTier = z.infer<typeof subscriptionTier>;
+
 export const userSubscriptionSchema = createSelectSchema(userSubscriptionTable);
 export type UserSubscription = z.infer<typeof userSubscriptionSchema>;
 

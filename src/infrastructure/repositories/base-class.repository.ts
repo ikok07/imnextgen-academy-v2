@@ -5,6 +5,8 @@ import * as modules from "../../../drizzle/schema/modules"
 import * as sections from "../../../drizzle/schema/sections"
 import * as videos from "../../../drizzle/schema/videos"
 import * as finishedVideos from "../../../drizzle/schema/finished_videos"
+import * as userSubscription from "../../../drizzle/schema/user_subscriptions"
+import * as userBoughtModules from "../../../drizzle/schema/user_bought_modules"
 
 import ws from "ws"
 
@@ -23,6 +25,8 @@ export class BaseRepository {
         ...sections,
         ...videos,
         ...finishedVideos,
+        ...userSubscription,
+        ...userBoughtModules
     };
     constructor(authenticationService: IAuthenticationService) {
         this.authService = authenticationService;
