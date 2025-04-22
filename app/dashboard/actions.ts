@@ -2,7 +2,10 @@
 
 import {createServerAction} from "@/app/_utils/createServerAction";
 import {getInjection} from "@/di/container";
-import {cookies} from "next/headers";
+
+export const getUser = createServerAction(() => {
+    return getInjection("IGetUserController")();
+})
 
 export const getAllModules = createServerAction(async () => {
     const getModulesController = getInjection("IGetModulesController");

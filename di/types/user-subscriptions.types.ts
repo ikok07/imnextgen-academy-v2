@@ -4,16 +4,16 @@ import {
 } from "@/src/application/use-cases/payments/subscriptions/add-user-subscriptions.use-case";
 import {
     IAddUserSubscriptionsController
-} from "@/src/interface-adapters/controllers/payments/add-user-subscriptions.controller";
+} from "@/src/interface-adapters/controllers/payments/subscriptions/add-user-subscriptions.controller";
 import {
     IUpdateUserSubscriptionTierUseCase
 } from "@/src/application/use-cases/payments/subscriptions/update-user-subscription-tier.use-case";
 import {
     IUpdateUserSubscriptionTierController
-} from "@/src/interface-adapters/controllers/payments/update-user-subscription-tier.controller";
+} from "@/src/interface-adapters/controllers/payments/subscriptions/update-user-subscription-tier.controller";
 import {
     IGetUserSubscriptionsController
-} from "@/src/interface-adapters/controllers/payments/get-user-subscriptions.controller";
+} from "@/src/interface-adapters/controllers/payments/subscriptions/get-user-subscriptions.controller";
 import {
     IGetUserSubscriptionsUseCase
 } from "@/src/application/use-cases/payments/subscriptions/get-user-subscriptions.use-case";

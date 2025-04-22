@@ -12,13 +12,13 @@ import {
 } from "@/src/application/use-cases/payments/subscriptions/update-user-subscription-tier.use-case";
 import {
     getUserSubscriptionsController
-} from "@/src/interface-adapters/controllers/payments/get-user-subscriptions.controller";
+} from "@/src/interface-adapters/controllers/payments/subscriptions/get-user-subscriptions.controller";
 import {
     addUserSubscriptionsController
-} from "@/src/interface-adapters/controllers/payments/add-user-subscriptions.controller";
+} from "@/src/interface-adapters/controllers/payments/subscriptions/add-user-subscriptions.controller";
 import {
     updateUserSubscriptionTierController
-} from "@/src/interface-adapters/controllers/payments/update-user-subscription-tier.controller";
+} from "@/src/interface-adapters/controllers/payments/subscriptions/update-user-subscription-tier.controller";
 
 export function createUserSubscriptionsModule() {
     const userSubscriptionsModule = createModule();

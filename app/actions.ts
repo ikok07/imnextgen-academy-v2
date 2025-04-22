@@ -30,6 +30,14 @@ export const checkMultipleResourcesAccess = createServerAction((async (opts: Par
     }
 }));
 
+export const getUserSubscription = createServerAction((userId: string | undefined) => {
+    return getInjection("IGetUserSubscriptionsController")(userId);
+})
+
+export const getUserBoughtModules = createServerAction((userId: string | undefined) => {
+    return getInjection("IGetUserBoughtModulesController")(userId);
+})
+
 export const generateJwtToken = createServerAction(async (data: object, expiresInSeconds: number) => {
     return getInjection("IGenerateJwtController")(data, expiresInSeconds);
 });

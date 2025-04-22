@@ -15,7 +15,6 @@ import DashboardModuleVideoColumn from "@/app/_components/dashboard/classroom/mo
 import DashboardModuleVideoInfoSkeleton
     from "@/app/_components/dashboard/classroom/module/video/skeletons/DashboardModuleVideoInfoSkeleton";
 import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
-import {generateJwtToken} from "@/app/actions";
 
 const propsSchema = z.object({
     params: z.object({
