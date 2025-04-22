@@ -1,0 +1,37 @@
+apiVersion: api.cerbos.dev/v1
+resourcePolicy:
+  resource: module
+  version: default
+  rules:
+    - name: give_full_access_to_non_users
+      actions: ["select", "insert", "update", "delete"]
+      roles:
+        - admin
+      effect: EFFECT_ALLOW
+
+    - name: allow_free_modules_to_everyone
+      actions: ["select"]
+      roles:
+        - user
+      condition:
+        match:
+          expr: "request.resource.attr.moduleAccess == 'free'"
+      effect: EFFECT_ALLOW
+
+    - name: allow_subscription_modules_to_subscription_users
+      actions: ["select"]
+      roles:
+        - user
+      condition:
+        match:
+          expr: "request.resource.attr.moduleAccess == 'subscription' && request.principal.attr.access == 'subscription'"
+      effect: EFFECT_ALLOW
+
+    - name: allow_paid_module_to_user
+      actions: ["select"]
+      roles:
+        - user
+      condition:
+        match:
+          expr: "request.resource.attr.moduleAccess == 'paid' && request.resource.id.exists(m, m in request.principal.attr.paid_modules)"
+      effect: EFFECT_ALLOW

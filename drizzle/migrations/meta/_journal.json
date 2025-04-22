@@ -85,6 +85,13 @@
       "when": 1744887708777,
       "tag": "0011_add-create-to-finished-videos",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1745326066596,
+      "tag": "0012_add-user-subscriptions-and-bought-products-tables",
+      "breakpoints": true
     }
   ]
 }
