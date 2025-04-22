@@ -21,7 +21,9 @@ export default async function ModulesGrid() {
                 id: userObject.value.user.id,
                 roles: userObject.value.user.publicMetadata["roles"] as string[],
                 attr: {
-                    access: subscriptionResponse.value ? "subscription" : "free"
+                    access: subscriptionResponse.value
+                    &&
+                    subscriptionResponse.value.subscription_tier != "inactive" ? "subscription" : "free"
                 }
             },
             resources: modulesResponse.value.map(m => ({
@@ -37,8 +39,6 @@ export default async function ModulesGrid() {
         });
 
         if (!accessResponse.success) throw new Error("Check multiple resources server action was not successful!");
-
-        console.log(accessResponse.value.map(r => ({id: r.resourceId, actions: JSON.stringify(r.actions)})));
 
         return modulesResponse.value.sort((a, b) => a.order_number - b.order_number).map((module, index) => {
             return <ModuleBox key={index} module={module} />
