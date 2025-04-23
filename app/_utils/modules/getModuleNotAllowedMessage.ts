@@ -54,7 +54,7 @@ export function getModuleNotAllowedMessage({moduleId, moduleAccess}: GetModuleNo
         case "private":
             return {
                 description: "Модулът е недостъпен за момента",
-                buttons: []
+                buttons: undefined
             }
     }
 }

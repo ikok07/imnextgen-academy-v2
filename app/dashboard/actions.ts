@@ -7,35 +7,28 @@ export const getUser = createServerAction(() => {
     return getInjection("IGetUserController")();
 })
 
-export const getAllModules = createServerAction(async () => {
-    const getModulesController = getInjection("IGetModulesController");
-    return getModulesController();
+export const getAllModules = createServerAction(() => {
+    return getInjection("IGetModulesController")();
 });
 
-export const getModuleById = createServerAction(async (id: string | undefined | null) => {
-    const getModuleByIdController= getInjection("IGetModuleByIdController");
-    return getModuleByIdController(id);
+export const getModuleById = createServerAction((id: string | undefined | null) => {
+    return getInjection("IGetModuleByIdController")(id);
 });
 
-export const getSectionsForModule = createServerAction(async (moduleId: string | undefined | null) => {
-    const getSectionsForModuleController = getInjection("IGetSectionsForModuleController");
-    return getSectionsForModuleController(moduleId);
+export const getSectionsForModule = createServerAction((moduleId: string | undefined | null) => {
+    return getInjection("IGetSectionsForModuleController")(moduleId);
 });
 
-export const getVideosForSection = createServerAction(async (sectionId: string) => {
-
-    const getVideosForSectionController = getInjection("IGetVideosForSectionController");
-    return getVideosForSectionController(sectionId);
+export const getVideosForSection = createServerAction((sectionId: string) => {
+    return getInjection("IGetVideosForSectionController")(sectionId);
 });
 
-export const getVideosForModule = createServerAction(async (moduleId: string) => {
-    const getVideosForModuleController = getInjection("IGetVideosForModuleController");
-    return getVideosForModuleController(moduleId);
+export const getVideosForModule = createServerAction((moduleId: string) => {
+    return getInjection("IGetVideosForModuleController")(moduleId);
 });
 
 export const getFinishedVideos = createServerAction((moduleId: string | undefined | null, userId: string | undefined | null) => {
-    const getFinishedVideosController = getInjection("IGetFinishedVideosController");
-    return getFinishedVideosController(moduleId, userId);
+    return getInjection("IGetFinishedVideosController")(moduleId, userId);
 });
 
 export const checkFinishedVideo = createServerAction((videoId: string | undefined, userId: string | undefined) => {

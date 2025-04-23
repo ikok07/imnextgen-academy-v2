@@ -36,6 +36,9 @@ export default function DashboardModuleVideoInfo({videoId, moduleId, title, desc
         mutationFn: () => addFinishedVideo(videoId, userId),
         onSuccess() {
             queryClient.invalidateQueries(["finished-videos"]);
+        },
+        onError() {
+            toast.error("Видеото не беше отбелязано като изгледано успешно!");
         }
     });
 
@@ -43,6 +46,9 @@ export default function DashboardModuleVideoInfo({videoId, moduleId, title, desc
         mutationFn: () => removeFinishedVideo(videoId, userId),
         onSuccess() {
             queryClient.invalidateQueries(["finished-videos"]);
+        },
+        onError() {
+            toast.error("Видеото не беше премахнато от изгледани успешно!");
         }
     });
 

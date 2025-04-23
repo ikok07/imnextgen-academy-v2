@@ -15,6 +15,10 @@ import DashboardModuleVideoColumn from "@/app/_components/dashboard/classroom/mo
 import DashboardModuleVideoInfoSkeleton
     from "@/app/_components/dashboard/classroom/module/video/skeletons/DashboardModuleVideoInfoSkeleton";
 import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
+import {serverCheckModuleAllowed,} from "@/app/_utils/modules/serverCheckModulesAllowed";
+import {getUserBoughtModules, getUserSubscription} from "@/app/actions";
+import RedirectComponent from "@/app/_components/ui/RedirectComponent";
+import DashboardModuleNoVideos from "@/app/_components/dashboard/classroom/module/DashboardModuleNoVideos";
 
 const propsSchema = z.object({
     params: z.object({
@@ -43,40 +47,61 @@ export default function Page(props: z.infer<typeof propsSchema>) {
 export async function InnerContent(props: z.infer<typeof propsSchema>) {
     try {
         const {data: safeProps, error} = propsSchema.safeParse(props);
-        if (error) redirect(Routes.dashboard.base);
+        if (error) throw new Error("Invalid page params!");
 
         const {user} = await getInjection("IGetUserController")();
         if (!user) throw new Error("User was not found!");
 
-        const modulePromise = getModuleById(safeProps.params.id);
-        const videosPromise = getVideosForModule(safeProps.params.id);
-        const finishedVideosPromise = getFinishedVideos(safeProps.params.id, user!.id);
-
-        const [moduleResult, videosResult, finishedVideosResult] = await Promise.all([modulePromise, videosPromise, finishedVideosPromise]);
+        const [moduleResult, videosResult, finishedVideosResult, subscriptionResponse, boughtModulesResponse] = await Promise.all([
+            getModuleById(safeProps.params.id),
+            getVideosForModule(safeProps.params.id),
+            getFinishedVideos(safeProps.params.id, user!.id),
+            getUserSubscription(user.id),
+            getUserBoughtModules(user.id)
+        ]);
 
         if (!moduleResult.success) throw new Error("Module result wasn't successful!");
         if (!videosResult.success) throw new Error("Videos for module could not be loaded!");
+        if (!subscriptionResponse.success) throw new Error("Get subscription server action was not successful!");
+        if (!boughtModulesResponse.success) throw new Error("Get bought modules server action was not successful!");
+
+        const accessResponse = await serverCheckModuleAllowed({
+            userId: user.id,
+            roles: user.publicMetadata["roles"] as string[],
+            subscription_tier: subscriptionResponse.value?.subscription_tier,
+            paid_modules: boughtModulesResponse.value.map(v => v.module_id),
+            moduleId: moduleResult.value.id,
+            moduleAccess: moduleResult.value.access,
+        });
+
+        if (!accessResponse.success) throw new Error("Check multiple resources server action was not successful!");
+
+        if (!accessResponse.value) return <RedirectComponent path={Routes.dashboard.base} />
 
         return <DashboardModuleClientWrapper
             module={moduleResult.value}
             videosForModule={videosResult.value}
             finishedVideos={finishedVideosResult?.success ? finishedVideosResult.value.finishedVideos : []}
         >
-            <div className="dashboard-module-grid video-column-width">
-                <DashboardModuleSectionsSidebar
-                    userId={user.id}
-                    moduleId={moduleResult.value.id}
-                    moduleTitle={moduleResult.value.title}
-                    videosForModule={videosResult.value}
-                    finishedVideosResult={finishedVideosResult}
-                />
-                <DashboardModuleVideoColumn
-                    moduleId={moduleResult.value.id}
-                    userId={user.id}
-                    videos={videosResult.value}
-                    finishedVideosResult={finishedVideosResult}
-                />
-            </div>
+            {videosResult.value.length === 0 ?
+                <DashboardModuleNoVideos />
+                :
+                <div className="dashboard-module-grid video-column-width">
+                    <DashboardModuleSectionsSidebar
+                        userId={user.id}
+                        moduleId={moduleResult.value.id}
+                        moduleTitle={moduleResult.value.title}
+                        videosForModule={videosResult.value}
+                        finishedVideosResult={finishedVideosResult}
+                    />
+                    <DashboardModuleVideoColumn
+                        moduleId={moduleResult.value.id}
+                        userId={user.id}
+                        videos={videosResult.value}
+                        finishedVideosResult={finishedVideosResult}
+                    />
+                </div>
+            }
         </DashboardModuleClientWrapper>
 
     } catch(e) {
