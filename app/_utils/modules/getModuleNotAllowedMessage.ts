@@ -1,6 +1,4 @@
 import {z} from "zod";
-import {UserSubscription} from "@/drizzle/schema/user_subscriptions";
-import {UserBoughtModule} from "@/drizzle/schema/user_bought_modules";
 import {moduleAccessEnumSchema} from "@/drizzle/schema/modules";
 import {ModuleNotAllowedOptions} from "@/app/_components/dashboard/classroom/ModuleLockedMessage";
 

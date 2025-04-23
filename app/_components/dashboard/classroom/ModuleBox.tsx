@@ -35,7 +35,7 @@ export default function ModuleBox({module, moduleAllowed}: ModuleBoxProps) {
     const modulePercentage = finishedVideosQuery?.success ? finishedVideosQuery.value.percentage : 0;
 
     function handleClick() {
-        router.push(Routes.dashboard.module(module.id));
+        router.push(Routes.dashboard.classroom.module(module.id));
     }
 
     useEffect(() => {

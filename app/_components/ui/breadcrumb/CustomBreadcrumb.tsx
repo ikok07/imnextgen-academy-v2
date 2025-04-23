@@ -18,10 +18,11 @@ import React from "react";
 
 type CustomBreadcrumbProps = {
     customStaticLabels?: Record<string, string>,
-    className?: string
+    className?: string,
+    firstExcludedSegments?: number
 }
 
-export default function CustomBreadcrumb({customStaticLabels, className}: CustomBreadcrumbProps) {
+export default function CustomBreadcrumb({customStaticLabels, className, firstExcludedSegments}: CustomBreadcrumbProps) {
     const pathname = usePathname();
     const {segments, addSegment, isLoaded, setIsLoaded, clearSegments} = useBreadcrumb();
     const [reInitTrigger, setReInitTrigger] = useState<boolean>(false);
@@ -30,7 +31,9 @@ export default function CustomBreadcrumb({customStaticLabels, className}: Custom
     const width = useWindowWidth();
 
     useEffect(() => {
-        const routes = pathname.split('/').filter(v => v !== '');
+        const rawRoutes = pathname.split('/').filter(v => v != '');
+        const excludedRoutesURI = [...rawRoutes].slice(0, firstExcludedSegments ? -(rawRoutes.length - firstExcludedSegments) : 0).join('/');
+        const routes = [...rawRoutes].slice(firstExcludedSegments ?? 0);
 
         for (let i = 0; i < routes.length; i++) {
             if (uuid.validate(routes[i])) continue; // skip uuid segments
@@ -39,13 +42,13 @@ export default function CustomBreadcrumb({customStaticLabels, className}: Custom
                 addSegment({
                     id: routes[i],
                     label: null,
-                    href: `/${routes.slice(0, i + 2).join('/')}`
+                    href: `/${excludedRoutesURI}/${routes.slice(0, i + 2).join('/')}`
                 })
             } else {
                 addSegment({
                     id: routes[i],
                     label: customStaticLabels && customStaticLabels[routes[i]] ? customStaticLabels[routes[i]] : routes[i],
-                    href: `/${routes.slice(0, i + 1).join('/')}`
+                    href: `/${excludedRoutesURI}/${routes.slice(0, i + 1).join('/')}`
                 })
             }
         }

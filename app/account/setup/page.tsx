@@ -9,7 +9,7 @@ export default async function Page() {
     const getUserController = getInjection("IGetUserController");
     const {dbProfile} = await getUserController();
 
-    if (!dbProfile || dbProfile.configured) redirect(Routes.dashboard.base);
+    if (!dbProfile || dbProfile.configured) redirect(Routes.dashboard.classroom.base);
 
     const getSetupQuestionsController = getInjection("IGetSetupQuestionController");
     const setupQuestions = await getSetupQuestionsController();

@@ -26,7 +26,7 @@ export default function SetupForm({setupQuestions}: SetupFormProps) {
     const {mutate: setUserSetupQuestionsMethod, isLoading} = useErrorMutation({
         mutationFn: () => setUserSetupQuestions(userObject.user?.id, answers),
         onSuccess() {
-            router.push(Routes.dashboard.base);
+            router.push(Routes.dashboard.classroom.base);
         }
     })
 

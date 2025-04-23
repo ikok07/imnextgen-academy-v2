@@ -1,5 +1,6 @@
 import {IconType} from "react-icons";
 import {IoCalendar, IoDocumentLock, IoDocumentText, IoPeople, IoSchool} from "react-icons/io5";
+import {Routes} from "@/app/_utils/nav/routes";
 
 export type NavGroup = {
     id: string,
@@ -49,14 +50,14 @@ export function getNavLinks(): NavGroup[] {
                     id: "classroom",
                     Icon: IoSchool,
                     label: "Класна стая",
-                    href: "/dashboard"
+                    href: Routes.dashboard.classroom.base
                 },
                 {
                     type: "link",
-                    id: "calendar",
+                    id: "events",
                     Icon: IoCalendar,
                     label: "Календар",
-                    href: "/dashboard/calendar"
+                    href: Routes.dashboard.events.base()
                 }
             ]
         },

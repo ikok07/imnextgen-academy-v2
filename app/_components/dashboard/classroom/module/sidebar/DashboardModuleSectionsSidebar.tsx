@@ -56,7 +56,7 @@ function InnerContent({userId, moduleId, moduleTitle, videosForModule, finishedV
             className="relative w-full h-full"
         >
             <SidebarHeader className="mt-3 my-1 md:mt-0">
-                <Link href={Routes.dashboard.base}>
+                <Link href={Routes.dashboard.classroom.base}>
                     <div className="cursor-pointer flex items-center gap-2 group/header h-max text-primary/70 hover:text-primary transition-all duration-200">
                         <IoChevronBack className="text-lg"/>
                         <h3 className="">{moduleTitle}</h3>

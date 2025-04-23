@@ -76,7 +76,7 @@ export async function InnerContent(props: z.infer<typeof propsSchema>) {
 
         if (!accessResponse.success) throw new Error("Check multiple resources server action was not successful!");
 
-        if (!accessResponse.value) return <RedirectComponent path={Routes.dashboard.base} />
+        if (!accessResponse.value) return <RedirectComponent path={Routes.dashboard.classroom.base} />
 
         return <DashboardModuleClientWrapper
             module={moduleResult.value}
@@ -112,7 +112,7 @@ export async function InnerContent(props: z.infer<typeof propsSchema>) {
                 title="Възникна грешка"
                 message="Модулът не беше зареден. Моля, опитай отново!"
                 className="col-span-full max-w-[20rem] mx-auto"
-                backURI={Routes.dashboard.base}
+                backURI={Routes.dashboard.classroom.base}
             />
         </div>
     }

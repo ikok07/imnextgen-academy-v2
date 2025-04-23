@@ -7,6 +7,6 @@ export default function DashboardModuleNoVideos() {
         <LucideClapperboard className="mx-auto text-cta mb-3" width="4rem" height="4rem"/>
         <h1 className="text-2xl font-extrabold">Очаквай скоро</h1>
         <p className="text-primary/70 mb-5">За съжаление този модул все още се разработва. Очаквай в най-скоро време повече информация</p>
-        <PrimaryButton href={Routes.dashboard.base}>Връщане назад</PrimaryButton>
+        <PrimaryButton href={Routes.dashboard.classroom.base}>Връщане назад</PrimaryButton>
     </div>
 }

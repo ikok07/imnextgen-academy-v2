@@ -11,7 +11,11 @@ type DashboardClientWrapperProps = {
 
 export default function DashboardClientWrapper({children}: DashboardClientWrapperProps) {
     return <BreadcrumbProvider>
-        <CustomBreadcrumb customStaticLabels={BREADCRUMB_LABELS} className="my-4"/>
+        <CustomBreadcrumb
+            customStaticLabels={BREADCRUMB_LABELS}
+            firstExcludedSegments={1} // exclude the /dashboard part of the URI
+            className="my-4"
+        />
         {children}
     </BreadcrumbProvider>
 }

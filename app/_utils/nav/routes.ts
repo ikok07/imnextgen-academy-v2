@@ -9,6 +9,12 @@ export const Routes = {
     },
     dashboard: {
         base: "/dashboard",
-        module: (id: string) => `/dashboard/module/${id}`
+        classroom: {
+            base: "/dashboard/classroom",
+            module: (id: string) => `${Routes.dashboard.classroom.base}/module/${id}`,
+        },
+        events: {
+            base: () => `${Routes.dashboard.base}/events`
+        }
     }
 }

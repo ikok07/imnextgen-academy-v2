@@ -22,7 +22,7 @@ type ModuleLockedMessageProps = {
 
 export default function ModuleLockedMessage({options}: ModuleLockedMessageProps) {
     return <div className="absolute inset-0 z-20 px-3 py-2 pb-3">
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-100 to-white z-10"/>
+        <div className="absolute inset-0 bg-background z-10"/>
         <div className="relative w-full h-full flex flex-col justify-between z-20">
             <div className="flex flex-1 flex-col items-center justify-center text-center">
                 <IoDocumentLock className="text-3xl text-cta"/>
