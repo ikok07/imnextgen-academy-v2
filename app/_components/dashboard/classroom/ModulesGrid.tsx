@@ -39,9 +39,13 @@ export default async function ModulesGrid() {
         });
 
         if (!accessResponse.success) throw new Error("Check multiple resources server action was not successful!");
-
+        console.log(accessResponse.value.map(obj => ({id: obj.resourceId, actions: JSON.stringify(obj.actions)})));
         return modulesResponse.value.sort((a, b) => a.order_number - b.order_number).map((module, index) => {
-            return <ModuleBox key={index} module={module} />
+            return <ModuleBox
+                key={index}
+                module={module}
+                moduleAllowed={accessResponse.value.some((obj) => obj.resourceId === module.id && obj.actions["select"] === "EFFECT_ALLOW")}
+            />
         })
     } catch(e) {
         console.error(e);

@@ -3,6 +3,7 @@ import {ComponentProps} from "react";
 import Link from "next/link";
 import {Loader2} from "lucide-react";
 import { cn } from "@/app/_utils/cn";
+import {primaryControlBackground} from "@/app/_components/ui/backgrounds/primaryControlBackground";
 
 type PrimaryButtonProps = {
     href?: string,
@@ -11,12 +12,10 @@ type PrimaryButtonProps = {
 } & ComponentProps<"button">
 
 export default function PrimaryButton({children, href, onClick, disabled, loading, loadingText, className, ...props}: PrimaryButtonProps) {
-    const defaultGradient = "bg-main-gradient";
-
     const button = <Button
         className={
             cn(
-                `py-1.5 px-3 bg-gradient-to-b !duration-300 ${defaultGradient}`,
+                primaryControlBackground(className),
                 className,
                 {
                     "cursor-not-allowed from-gray-400 to-gray-600 dark:from-gray-500 dark:to-gray-700 dark:text-white dark:hover:from-gray-400 dark:hover:to-gray-600": loading || disabled

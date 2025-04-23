@@ -3,7 +3,8 @@ import {sql} from "drizzle-orm";
 import {createInsertSchema, createSelectSchema} from "drizzle-zod";
 import {z} from "zod";
 
-export const moduleAccessEnum = pgEnum("module_access_enum", ["free", "subscription", "paid", "private"]);
+export const moduleAccessEnum = pgEnum("module_access_enum", ["free", "subscription", "paid", "subscription-or-paid", "private"]);
+export const moduleAccessEnumSchema = createSelectSchema(moduleAccessEnum);
 
 export const modulesTable = pgTable("modules", {
     id: text("id").notNull().primaryKey().default(sql`gen_random_uuid()`),

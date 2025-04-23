@@ -1,0 +1,1 @@
+ALTER TYPE "public"."module_access_enum" ADD VALUE 'subscription-or-paid' BEFORE 'private';

@@ -92,6 +92,13 @@
       "when": 1745326066596,
       "tag": "0012_add-user-subscriptions-and-bought-products-tables",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1745395276685,
+      "tag": "0013_add-subscription-or-paid-module-access",
+      "breakpoints": true
     }
   ]
 }

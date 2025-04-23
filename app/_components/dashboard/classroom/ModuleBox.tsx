@@ -12,12 +12,15 @@ import {useEffect, useState} from "react";
 import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
 import {useRouter} from "next/navigation";
 import {Routes} from "@/app/_utils/nav/routes";
+import ModuleLockedMessage from "@/app/_components/dashboard/classroom/ModuleLockedMessage";
+import {getModuleNotAllowedMessage} from "@/app/_utils/modules/getModuleNotAllowedMessage";
 
 type ModuleBoxProps = {
     module: Module,
+    moduleAllowed: boolean
 }
 
-export default function ModuleBox({module}: ModuleBoxProps) {
+export default function ModuleBox({module, moduleAllowed}: ModuleBoxProps) {
     const {viewLoaded} = useViewLoaded();
     const [buttonLoading, setButtonLoading] = useState(true);
     const router = useRouter();
@@ -43,7 +46,15 @@ export default function ModuleBox({module}: ModuleBoxProps) {
 
     return <div className="rounded-lg shadow-xl border border-border w-[95%] md:w-full">
         {module.image_url && <div className="relative w-full aspect-video"><Image alt={module.title} src={module.image_url} fill className="rounded-t-lg"/></div>}
-        <div className="px-2 py-3">
+        <div className="relative px-2 py-3">
+            {(module.access != "free" && !moduleAllowed) &&
+                <ModuleLockedMessage
+                    options={getModuleNotAllowedMessage({
+                        moduleId: module.id,
+                        moduleAccess: module.access
+                    })}
+                />
+            }
             <div className="h-[7.5rem] overflow-auto">
                 <h2 className="text-lg font-bold mb-1">{module.title}</h2>
                 <p className="text-[0.8rem] text-primary/50">{module.description}</p>

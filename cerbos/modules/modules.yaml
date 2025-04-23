@@ -33,5 +33,5 @@ resourcePolicy:
         - user
       condition:
         match:
-          expr: "request.resource.attr.moduleAccess == 'paid' && request.resource.id in request.principal.attr.paid_modules"
+          expr: "(request.resource.attr.moduleAccess == 'paid' || request.resource.attr.moduleAccess == 'subscription-or-paid') && request.resource.id in request.principal.attr.paid_modules"
       effect: EFFECT_ALLOW
