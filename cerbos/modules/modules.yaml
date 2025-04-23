@@ -33,5 +33,13 @@ resourcePolicy:
         - user
       condition:
         match:
-          expr: "(request.resource.attr.moduleAccess == 'paid' || request.resource.attr.moduleAccess == 'subscription-or-paid') && request.resource.id in request.principal.attr.paid_modules"
+          expr: "request.resource.attr.moduleAccess == 'paid' && request.resource.id in request.principal.attr.paid_modules"
+      effect: EFFECT_ALLOW
+    - name: allow_paid_or_subscription_module_to_user
+      actions: [ "select" ]
+      roles:
+        - user
+      condition:
+        match:
+          expr: "request.resource.attr.moduleAccess == 'subscription-or-paid' && (request.resource.id in request.principal.attr.paid_modules || request.principal.attr.access == 'subscription')"
       effect: EFFECT_ALLOW
