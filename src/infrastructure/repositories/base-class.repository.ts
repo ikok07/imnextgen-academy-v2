@@ -7,6 +7,10 @@ import * as videos from "../../../drizzle/schema/videos"
 import * as finishedVideos from "../../../drizzle/schema/finished_videos"
 import * as userSubscription from "../../../drizzle/schema/user_subscriptions"
 import * as userBoughtModules from "../../../drizzle/schema/user_bought_modules"
+import * as meetings from "../../../drizzle/schema/meetings"
+import * as meetingRepeatDays from "../../../drizzle/schema/meeting_repeat_days"
+import * as meetingExcludedDates from "../../../drizzle/schema/meeting_excluded_dates"
+import * as meetingDates from "../../../drizzle/schema/meeting_dates"
 
 import ws from "ws"
 
@@ -26,7 +30,11 @@ export class BaseRepository {
         ...videos,
         ...finishedVideos,
         ...userSubscription,
-        ...userBoughtModules
+        ...userBoughtModules,
+        ...meetings,
+        ...meetingRepeatDays,
+        ...meetingExcludedDates,
+        ...meetingDates
     };
     constructor(authenticationService: IAuthenticationService) {
         this.authService = authenticationService;
