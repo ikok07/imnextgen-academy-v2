@@ -1,5 +1,5 @@
 import {SignUp} from "@clerk/nextjs";
-import {serverGetLocale} from "@/src/entities/utils/serverGetLocale";
+import {serverGetLocale} from "@/src/entities/utils/server-get-locale.util";
 import Image from "next/image";
 
 export default async function Page() {

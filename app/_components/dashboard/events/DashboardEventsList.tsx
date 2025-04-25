@@ -4,10 +4,29 @@ import DashboardEventsListItem from "@/app/_components/dashboard/events/Dashboar
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/app/_components/ui/shadcn/card";
 import {useDashboardEvents} from "@/app/_providers/DashboardEventsProvider";
 import { format } from "date-fns";
+import useErrorQuery from "@/app/_hooks/useErrorQuery";
+import {getFullMeetingsForDate} from "@/app/dashboard/events/actions";
+import {useCallback} from "react";
 
 export default function DashboardEventsList() {
     const {selectedDate} = useDashboardEvents();
-    console.log(new Date(selectedDate).getDay())
+
+    const {data: fullMeetingsQuery, isLoading, isError} = useErrorQuery({
+        queryFn: () => getFullMeetingsForDate(selectedDate),
+        queryKey: `full-meetings-${selectedDate}`
+    });
+
+    const meetingsListItems = useCallback(() => {
+        if (isLoading) return <h1>LOADING...</h1>
+
+        if (isError || !fullMeetingsQuery || !fullMeetingsQuery?.success) return <h1>ERROR...</h1>
+
+        if (!fullMeetingsQuery.value) return <h1>NO ITEMS...</h1>
+
+        return fullMeetingsQuery.value.map((fullMeeting, index) => {
+            return <DashboardEventsListItem fullMeeting={fullMeeting} key={index} />
+        })
+    }, [selectedDate, isLoading]);
 
     return <Card className="relative flex flex-col w-full h-[35rem] pb-2">
         <div className="absolute w-full h-[10rem] bottom-0 bg-gradient-to-t from-background to-transparent"/>
@@ -16,7 +35,7 @@ export default function DashboardEventsList() {
             <CardDescription>{format(selectedDate, "dd.MM.yyyy")}</CardDescription>
         </CardHeader>
         <CardContent className="overflow-scroll space-y-2 pb-[10rem]">
-            <DashboardEventsListItem />
+            {meetingsListItems()}
         </CardContent>
     </Card>
 }

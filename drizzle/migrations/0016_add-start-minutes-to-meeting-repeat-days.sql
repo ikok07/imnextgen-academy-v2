@@ -1,0 +1,1 @@
+ALTER TABLE "meeting_repeat_days" ADD COLUMN "start_minutes_utc" integer NOT NULL;

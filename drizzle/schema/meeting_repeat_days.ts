@@ -12,6 +12,7 @@ export const meetingRepeatDayTable = pgTable("meeting_repeat_days", {
     }),
     day_of_week: integer("day_of_week").notNull(),
     start_hour_utc: integer("start_hour_utc").notNull(),
+    start_minutes_utc: integer("start_minutes_utc").notNull(),
     duration_minutes: integer("duration_minutes").notNull(),
     valid_until: integer("valid_until")
 });

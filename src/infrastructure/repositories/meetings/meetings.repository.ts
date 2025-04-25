@@ -1,8 +1,12 @@
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
-import {IMeetingsRepository} from "@/src/application/repositories/meetings/meetings.repository.interface";
+import {
+    GetMultipleFullMeetingsByIdOptions,
+    GetSingleFullMeetingByIdOptions,
+    IMeetingsRepository
+} from "@/src/application/repositories/meetings/meetings.repository.interface";
 import {FullMeeting, Meeting, MeetingInsert, meetingsTable} from "@/drizzle/schema/meetings";
 import { DatabaseError } from "@/src/entities/errors/db/database";
-import {eq} from "drizzle-orm";
+import {eq, inArray} from "drizzle-orm";
 import {meetingRepeatDayTable} from "@/drizzle/schema/meeting_repeat_days";
 import {meetingExcludedDateTable} from "@/drizzle/schema/meeting_excluded_dates";
 import {meetingDateTable} from "@/drizzle/schema/meeting_dates";
@@ -18,7 +22,7 @@ export class MeetingsRepository extends BaseRepository implements IMeetingsRepos
         }
     }
 
-    getFullMeetingById(id: string): Promise<FullMeeting | undefined> {
+    getFullMeetingById(options: GetSingleFullMeetingByIdOptions | GetMultipleFullMeetingsByIdOptions): Promise<FullMeeting | FullMeeting[] | undefined> {
         try {
             return this.queryDB(async db => {
                 const results = await db
@@ -29,23 +33,37 @@ export class MeetingsRepository extends BaseRepository implements IMeetingsRepos
                         meeting_date: meetingDateTable
                     })
                     .from(meetingsTable)
-                    .where(eq(meetingsTable.id, id))
-                    .leftJoin(meetingRepeatDayTable, eq(meetingRepeatDayTable.meeting_id, id))
-                    .leftJoin(meetingExcludedDateTable, eq(meetingExcludedDateTable.meeting_id, id))
-                    .leftJoin(meetingDateTable, eq(meetingDateTable.meeting_id, id));
+                    .where(
+                        options.type === "single" ? eq(meetingsTable.id, options.id) : inArray(meetingsTable.id, options.ids)
+                    )
+                    .leftJoin(meetingRepeatDayTable, eq(meetingRepeatDayTable.meeting_id, meetingsTable.id))
+                    .leftJoin(meetingExcludedDateTable, eq(meetingExcludedDateTable.meeting_id, meetingsTable.id))
+                    .leftJoin(meetingDateTable, eq(meetingDateTable.meeting_id, meetingsTable.id));
 
-                if (results.length === 0) return undefined;
+                if (results.length === 0) return options.type === "single" ? undefined : [];
 
-                const repeatDays = results.map(r => r.repeat_day).filter(r => !!r);
-                const excludedDates = results.map(r => r.excluded_date).filter(r => !!r);
-                const meetingDates = results.map(r => r.meeting_date).filter(r => !!r);
+                const fullMeetings = new Map<string, FullMeeting>();
 
-                return {
-                    ...results[0].meeting,
-                    repeat_days: repeatDays,
-                    excluded_dates: excludedDates,
-                    meeting_dates: meetingDates
+                for (const result of results) {
+                    if (!fullMeetings.has(result.meeting.id)) {
+                        fullMeetings.set(result.meeting.id, {
+                            ...result.meeting,
+                            meeting_dates: [],
+                            repeat_days: [],
+                            excluded_dates: []
+                        });
+                    }
+
+                    const fullMeeting = fullMeetings.get(result.meeting.id)!;
+
+                    if (result.meeting_date) fullMeeting.meeting_dates.push(result.meeting_date);
+                    if (result.excluded_date) fullMeeting.excluded_dates.push(result.excluded_date);
+                    if (result.repeat_day) fullMeeting.repeat_days.push(result.repeat_day);
                 }
+
+
+                const fullMeetingsArr = Array.from(fullMeetings.values());
+                return options.type === "single" ? fullMeetingsArr[0] : fullMeetingsArr;
             })
         } catch(e) {
             throw new DatabaseError(`Failed to get full meeting by id: ${e}`);

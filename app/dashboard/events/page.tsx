@@ -2,12 +2,8 @@ import SetActiveLinkComponent from "@/app/_components/dashboard/nav/SetActiveLin
 import DashboardEventsCalendarColumn from "@/app/_components/dashboard/events/calendar-column/DashboardEventsCalendarColumn";
 import DashboardEventsProvider from "@/app/_providers/DashboardEventsProvider";
 import DashboardEventsList from "@/app/_components/dashboard/events/DashboardEventsList";
-import {getMeetingsForDate} from "@/app/dashboard/events/actions";
 
-export default async function Page() {
-
-    await getMeetingsForDate(Date.now());
-
+export default function Page() {
     return <SetActiveLinkComponent linkId="events">
         <DashboardEventsProvider>
             <div className="w-full min-h-[100vh] grid place-content-center">
