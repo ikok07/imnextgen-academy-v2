@@ -9,6 +9,9 @@ import {MeetingDate} from "@/drizzle/schema/meeting_dates";
 export const meetingAccessEnum = pgEnum("meeting_access_enum", ["free", "premium"]);
 export const meetingPlatformEnum = pgEnum("meeting_platform_enum", ["zoom"])
 
+export const meetingPlatformEnumSchema = createSelectSchema(meetingPlatformEnum);
+export type MeetingPlatform = z.infer<typeof meetingPlatformEnumSchema>;
+
 export const meetingsTable = pgTable("meetings", {
     id: text("id").notNull().primaryKey().default(sql`gen_random_uuid()`),
     access: meetingAccessEnum().notNull().default("free"),

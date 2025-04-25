@@ -76,7 +76,7 @@ button {
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
-    --cta: 253 100% 58.4%;
+    --cta: 253 100% 68.4%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -107,7 +107,7 @@ button {
   }
 
   .bg-secondary-gradient {
-    @apply bg-gradient-to-b from-white to-gray-100 dark:from-white dark:to-gray-200
+    @apply bg-gradient-to-b from-white to-gray-100 dark:from-gray-800 dark:to-gray-900 hover:dark:from-gray-700 hover:dark:to-gray-800
   }
 }
 

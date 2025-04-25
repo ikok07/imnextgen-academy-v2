@@ -14,7 +14,7 @@ export default function DashboardEventsCalendar() {
         required={true}
         onSelect={(d) => d && setSelectedDate(d.getTime())}
         // disabled={d => [0, 6].includes(d.getDay())}
-        fromMonth={addMonths(new Date(), -1)}
+        fromMonth={new Date()}
         toMonth={addMonths(new Date(), 1)}
         locale={bg}
     />

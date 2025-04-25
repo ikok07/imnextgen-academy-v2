@@ -2,42 +2,53 @@
 
 import Image from "next/image";
 import {Card} from "@/app/_components/ui/shadcn/card";
-import {IoTime} from "react-icons/io5";
+import {IoInformationCircle, IoTime} from "react-icons/io5";
 import SecondaryButton from "@/app/_components/ui/buttons/SecondaryButton";
 import {FullMeeting} from "@/drizzle/schema/meetings";
 import {getFullMeetingStartTime} from "@/src/entities/utils/meetings/get-full-meeting-start-time.util";
 import {useDashboardEvents} from "@/app/_providers/DashboardEventsProvider";
 import {useMemo} from "react";
+import {getMeetingPlatformIcon} from "@/app/_utils/meetings/getMeetingPlatformIcon";
 
 type DashboardEventsListItemProps = {
-    fullMeeting: FullMeeting
+    fullMeeting: FullMeeting,
+    index: number,
+    allItemsCount: number
 }
 
-export default function DashboardEventsListItem({fullMeeting}: DashboardEventsListItemProps) {
-
+export default function DashboardEventsListItem({fullMeeting, index, allItemsCount}: DashboardEventsListItemProps) {
     const {selectedDate} = useDashboardEvents();
 
     const startTime = useMemo(() => getFullMeetingStartTime(fullMeeting, selectedDate), [selectedDate])
+    const platformImage = getMeetingPlatformIcon(fullMeeting.platform);
 
-    return <Card className="flex gap-3 h-[8rem]">
-        <div className="relative w-[30%] h-full rounded-l-xl overflow-hidden">
-            <Image
-                alt="test image"
-                src={fullMeeting.image_url}
-                className="object-cover"
-                fill
-            />
-        </div>
-        <div className="p-2">
-            <h2 className="font-bold">{fullMeeting.title}</h2>
-            <p className="text-sm text-primary/70">{fullMeeting.description}</p>
-            <div className="mt-2 flex items-center justify-between">
-                <div className="flex items-center gap-1">
-                    <IoTime className="text-cta text-lg"/>
-                    <span className="text-cta font-bold">{startTime ? `${startTime.hours}:${startTime.minutes}` : "-"}</span>
-                </div>
-                <SecondaryButton className="text-[0.8rem]">Повече информация</SecondaryButton>
+    return <div className={`${allItemsCount > 3 && index + 1 === allItemsCount ? "pb-[10rem]" : ""}`}>
+        <Card className="cursor-pointer flex gap-3 h-[6.5rem] group hover:translate-x-1.5 hover:bg-secondary/70 dark:hover:bg-border/50 transition-all duration-200 ease-in-out">
+            <div className="relative w-[30%] h-full rounded-l-xl overflow-hidden">
+                <Image
+                    alt="test image"
+                    src={fullMeeting.image_url}
+                    className="object-cover"
+                    fill
+                />
             </div>
-        </div>
-    </Card>
+            <div className="p-2 flex-1 overflow-hidden">
+                <h2 className="font-bold">{fullMeeting.title}</h2>
+                <p className="w-full text-sm text-primary/70 truncate">{fullMeeting.description}</p>
+                <div className="mt-2 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-1">
+                            <IoTime className="text-primary/70 text-lg"/>
+                            <span className="text-primary/70 font-bold text-sm">{startTime ? `${startTime.hours}:${startTime.minutes.toString().padStart(2, '0')}` : "-"}</span>
+                        </div>
+                        <Image alt={fullMeeting.platform} src={platformImage.path} width={platformImage.width} height={20} />
+                    </div>
+                    <SecondaryButton className="text-[0.8rem] gap-1 group-hover:text-cta">
+                        <IoInformationCircle className="text-neutral-500 group-hover:text-cta" />
+                        Повече
+                    </SecondaryButton>
+                </div>
+            </div>
+        </Card>
+    </div>
 }
