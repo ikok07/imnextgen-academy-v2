@@ -51,7 +51,25 @@ export default function DashboardEventsList({userId, userRoles, subscriptionTier
         }),
         enabled: !!fullMeetingsQuery?.success && fullMeetingsQuery.value.length != 0
     })
-    console.log(accessDataQuery?.value);
+    console.log({
+        principal: {
+            id: userId,
+            roles: userRoles,
+            attr: {
+                access: subscriptionTier && subscriptionTier != "inactive" ? "subscription" : "free"
+            }
+        },
+        resources: fullMeetingsQuery?.success ? fullMeetingsQuery.value.map(fullMeeting => ({
+            resource: {
+                id: fullMeeting.id,
+                kind: "meeting",
+                attr: {
+                    access: fullMeeting.access
+                }
+            },
+            actions: ["select"]
+        })) : []
+    });
     const meetingsListItems = useCallback(() => {
         if (isLoading || isLoadingAccessData) return Array.from({length: 3}).map((_, index) => {
             return <DashboardEventsListItemSkeleton key={index} />
