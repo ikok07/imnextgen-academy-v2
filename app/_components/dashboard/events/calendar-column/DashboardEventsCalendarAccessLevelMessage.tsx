@@ -15,7 +15,7 @@ export default function DashboardEventsCalendarAccessLevelMessage({restricted}: 
     return <TooltipProvider>
         <Tooltip>
             <TooltipTrigger>
-                <div className="p-2 mt-3 lg:mt-0 mx-3 mb-3 items-center gap-3 text-left hover:bg-border/50 rounded-lg">
+                <div className="p-2 mt-3 lg:mt-0 mx-3 mb-3 flex flex-col gap-2 text-left hover:bg-border/50 rounded-lg">
                     <Icon width={`${width < 500 ? 1.75 : 2.25}rem`} height={`${width < 500 ? 1.75 : 2.25}rem`} className={`${restricted ? "text-primary/70" : "text-cta"}`} />
                     <div>
                         <h1 className="text-[0.9rem] font-bold">{restricted ? "Ограничен достъп" : "Неограничен достъп"}</h1>

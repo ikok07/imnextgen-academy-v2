@@ -12,7 +12,6 @@ import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage
 import {IoCloudOffline, IoSearch} from "react-icons/io5";
 import DashboardEventsListItemSkeleton from "@/app/_components/dashboard/events/DashboardEventsListItemSkeleton";
 import {checkMultipleResourcesAccess} from "@/app/actions";
-import { User } from "@clerk/nextjs/server";
 import {SubscriptionTier} from "@/drizzle/schema/user_subscriptions";
 
 type DashboardEventsListProps = {
@@ -50,26 +49,8 @@ export default function DashboardEventsList({userId, userRoles, subscriptionTier
             })) : []
         }),
         enabled: !!fullMeetingsQuery?.success && fullMeetingsQuery.value.length != 0
-    })
-    console.log({
-        principal: {
-            id: userId,
-            roles: userRoles,
-            attr: {
-                access: subscriptionTier && subscriptionTier != "inactive" ? "subscription" : "free"
-            }
-        },
-        resources: fullMeetingsQuery?.success ? fullMeetingsQuery.value.map(fullMeeting => ({
-            resource: {
-                id: fullMeeting.id,
-                kind: "meeting",
-                attr: {
-                    access: fullMeeting.access
-                }
-            },
-            actions: ["select"]
-        })) : []
     });
+
     const meetingsListItems = useCallback(() => {
         if (isLoading || isLoadingAccessData) return Array.from({length: 3}).map((_, index) => {
             return <DashboardEventsListItemSkeleton key={index} />

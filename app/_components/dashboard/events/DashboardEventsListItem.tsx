@@ -9,6 +9,7 @@ import {getFullMeetingStartTime} from "@/src/entities/utils/meetings/get-full-me
 import {useDashboardEvents} from "@/app/_providers/DashboardEventsProvider";
 import {useMemo} from "react";
 import {getMeetingPlatformIcon} from "@/app/_utils/meetings/getMeetingPlatformIcon";
+import {useTheme} from "next-themes";
 
 type DashboardEventsListItemProps = {
     hasAccess: boolean,
@@ -19,6 +20,7 @@ type DashboardEventsListItemProps = {
 
 export default function DashboardEventsListItem({hasAccess, fullMeeting, index, allItemsCount}: DashboardEventsListItemProps) {
     const {selectedDate} = useDashboardEvents();
+    const {resolvedTheme} = useTheme();
 
     const startTime = useMemo(() => getFullMeetingStartTime(fullMeeting, selectedDate), [selectedDate])
     const platformImage = getMeetingPlatformIcon(fullMeeting.platform);
@@ -42,7 +44,13 @@ export default function DashboardEventsListItem({hasAccess, fullMeeting, index, 
                             <IoTime className="text-primary/70 text-lg"/>
                             <span className="text-primary/70 font-bold text-sm">{startTime ? `${startTime.hours}:${startTime.minutes.toString().padStart(2, '0')}` : "-"}</span>
                         </div>
-                        <Image alt={fullMeeting.platform} src={platformImage.path} width={platformImage.width} height={20} className="hidden lg:block"/>
+                        <Image
+                            alt={fullMeeting.platform}
+                            src={resolvedTheme === "dark" ? platformImage.pathDark : platformImage.path}
+                            width={platformImage.width}
+                            height={20}
+                            className="hidden lg:block"
+                        />
                     </div>
                     <SecondaryButton className="text-[0.8rem] gap-1 group-hover:text-cta">
                         {hasAccess ?
