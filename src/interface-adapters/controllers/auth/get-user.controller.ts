@@ -4,6 +4,6 @@ export type IGetUserController = ReturnType<typeof getUserController>;
 
 export const getUserController = (
     getUserUseCase: IGetUserUseCase
-)=> async () => {
-    return await getUserUseCase();
+)=> async (options: {excludeDbProfile?: boolean} | undefined) => {
+    return await getUserUseCase(options?.excludeDbProfile);
 }

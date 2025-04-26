@@ -2,14 +2,14 @@ import SetActiveLinkComponent from "@/app/_components/dashboard/nav/SetActiveLin
 import DashboardEventsCalendarColumn from "@/app/_components/dashboard/events/calendar-column/DashboardEventsCalendarColumn";
 import DashboardEventsProvider from "@/app/_providers/DashboardEventsProvider";
 import DashboardEventsList from "@/app/_components/dashboard/events/DashboardEventsList";
-import {auth} from "@clerk/nextjs/server";
 import {getUserSubscription} from "@/app/actions";
 import DashboardPageTitle from "@/app/_components/dashboard/DashboardPageTitle";
+import {getInjection} from "@/di/container";
 
 export default async function Page() {
 
-    const authObject = await auth();
-    if (!authObject.userId) throw new Error("User not logged in!");
+    const {user, auth: authObject} = await getInjection("IGetUserController")({excludeDbProfile: true});
+    if (!authObject.userId || !user) throw new Error("User not logged in!");
 
     const subscriptionResponse = await getUserSubscription(authObject.userId);
     if (!subscriptionResponse.success) throw new Error("User's subscription is not available!")
@@ -20,7 +20,11 @@ export default async function Page() {
                 <DashboardPageTitle>Събития</DashboardPageTitle>
                 <div className="mx-auto mt-5 grid mdlg:grid-cols-[1fr_2fr] grid-rows-[auto_1fr] w-[95%] max-w-[50rem] gap-x-4 gap-y-4">
                     <DashboardEventsCalendarColumn subscriptionTier={subscriptionResponse.value?.subscription_tier} />
-                    <DashboardEventsList />
+                    <DashboardEventsList
+                        userId={user.id}
+                        userRoles={user.publicMetadata["roles"] as string[]}
+                        subscriptionTier={subscriptionResponse.value?.subscription_tier}
+                    />
                 </div>
             </div>
         </DashboardEventsProvider>

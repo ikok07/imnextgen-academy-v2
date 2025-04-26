@@ -11,8 +11,17 @@ import {getFullMeetingStartTime} from "@/src/entities/utils/meetings/get-full-me
 import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
 import {IoCloudOffline, IoSearch} from "react-icons/io5";
 import DashboardEventsListItemSkeleton from "@/app/_components/dashboard/events/DashboardEventsListItemSkeleton";
+import {checkMultipleResourcesAccess} from "@/app/actions";
+import { User } from "@clerk/nextjs/server";
+import {SubscriptionTier} from "@/drizzle/schema/user_subscriptions";
 
-export default function DashboardEventsList() {
+type DashboardEventsListProps = {
+    userId: string,
+    userRoles: string[],
+    subscriptionTier: SubscriptionTier | undefined
+}
+
+export default function DashboardEventsList({userId, userRoles, subscriptionTier}: DashboardEventsListProps) {
     const {selectedDate} = useDashboardEvents();
 
     const {data: fullMeetingsQuery, isLoading, isError} = useErrorQuery({
@@ -20,12 +29,35 @@ export default function DashboardEventsList() {
         queryKey: `full-meetings-${selectedDate}`
     });
 
+    const {data: accessDataQuery, isLoading: isLoadingAccessData, isError: accessDataError} = useErrorQuery({
+        queryFn: () => checkMultipleResourcesAccess({
+            principal: {
+                id: userId,
+                roles: userRoles,
+                attr: {
+                    access: subscriptionTier && subscriptionTier != "inactive" ? "subscription" : "free"
+                }
+            },
+            resources: fullMeetingsQuery?.success ? fullMeetingsQuery.value.map(fullMeeting => ({
+                resource: {
+                    id: fullMeeting.id,
+                    kind: "meeting",
+                    attr: {
+                        access: fullMeeting.access
+                    }
+                },
+                actions: ["select"]
+            })) : []
+        }),
+        enabled: !!fullMeetingsQuery?.success && fullMeetingsQuery.value.length != 0
+    })
+    console.log(accessDataQuery?.value);
     const meetingsListItems = useCallback(() => {
-        if (isLoading) return Array.from({length: 3}).map((_, index) => {
+        if (isLoading || isLoadingAccessData) return Array.from({length: 3}).map((_, index) => {
             return <DashboardEventsListItemSkeleton key={index} />
         });
 
-        if (isError || !fullMeetingsQuery || !fullMeetingsQuery?.success) return <PrimaryErrorMessage
+        if (isError || accessDataError || !fullMeetingsQuery || !fullMeetingsQuery?.success) return <PrimaryErrorMessage
             Icon={IoCloudOffline}
             message="Събитията за избраната дата не можаха да бъдат заредени"
             title="Възникна грешка"
@@ -47,14 +79,14 @@ export default function DashboardEventsList() {
             return aStartTime.hours - bStartTime.hours !== 0 ? aStartTime.hours - bStartTime.hours : aStartTime.minutes - bStartTime.minutes;
         }).map((fullMeeting, index) => {
             return <DashboardEventsListItem
-                hasAccess={false}
+                hasAccess={!!accessDataQuery && accessDataQuery.success && accessDataQuery.value.some(v => v.resourceId === fullMeeting.id && v.actions["select"] === "EFFECT_ALLOW")}
                 fullMeeting={fullMeeting}
                 index={index}
                 allItemsCount={fullMeetingsQuery.value.length}
                 key={index}
             />
         })
-    }, [selectedDate, isLoading]);
+    }, [selectedDate, isLoading, isLoadingAccessData]);
 
     return <Card className="relative flex flex-col w-full h-[35rem] pb-2">
         <div className="pointer-events-none absolute w-full h-[10rem] bottom-0 bg-gradient-to-t from-background to-transparent"/>

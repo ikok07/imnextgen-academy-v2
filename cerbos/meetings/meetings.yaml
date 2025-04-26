@@ -1,0 +1,28 @@
+apiVersion: api.cerbos.dev/v1
+resourcePolicy:
+  resource: meeting
+  version: default
+  rules:
+    - name: give_full_access_to_non_users
+      actions: [ "select", "insert", "update", "delete" ]
+      roles:
+        - admin
+      effect: EFFECT_ALLOW
+
+    - name: give_anyone_access_to_free_meetings
+      actions: ["select"]
+      roles:
+        - users
+      condition:
+        match:
+          expr: "request.resource.attr.access == 'free'"
+      effect: EFFECT_ALLOW
+
+    - name: give_access_to_subscribed_users
+      actions: ["select"]
+      roles:
+        - users
+      condition:
+        match:
+          expr: "request.resource.attr.access == 'premium' && request.principal.attr.access == 'subscription'"
+      effect: EFFECT_ALLOW

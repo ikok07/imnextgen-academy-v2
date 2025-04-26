@@ -7,7 +7,7 @@ export const removeMeetingController = (
     removeMeetingUseCase: IRemoveMeetingUseCase
 ) => (id: string | undefined) => {
 
-    if (!id) throw new InputParseError("Invalid meeting id!");
+    if (!id) throw new InputParseError("Invalid meetings id!");
 
     return removeMeetingUseCase(id)
 }
