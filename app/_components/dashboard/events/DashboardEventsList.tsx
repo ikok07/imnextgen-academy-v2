@@ -62,7 +62,7 @@ export default function DashboardEventsList() {
             <CardTitle className="text-xl">Налични срещи</CardTitle>
             <CardDescription>{format(selectedDate, "dd.MM.yyyy")}</CardDescription>
         </CardHeader>
-        <CardContent className="overflow-scroll space-y-2 mt-4">
+        <CardContent className="w-full flex flex-col overflow-scroll space-y-2 mt-4">
             {meetingsListItems()}
         </CardContent>
     </Card>

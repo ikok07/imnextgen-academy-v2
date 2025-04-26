@@ -34,15 +34,15 @@ export default function DashboardEventsListItem({hasAccess, fullMeeting, index, 
                 />
             </div>
             <div className="p-2 flex-1 overflow-hidden">
-                <h2 className="font-bold">{fullMeeting.title}</h2>
-                <p className="w-full text-sm text-primary/70 truncate">{fullMeeting.description}</p>
+                <h2 className="max-w-[15rem] font-bold truncate">{fullMeeting.title}</h2>
+                <p className="max-w-[15rem] text-sm text-primary/70 truncate">{fullMeeting.description}</p>
                 <div className="mt-2 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="flex items-center gap-1">
                             <IoTime className="text-primary/70 text-lg"/>
                             <span className="text-primary/70 font-bold text-sm">{startTime ? `${startTime.hours}:${startTime.minutes.toString().padStart(2, '0')}` : "-"}</span>
                         </div>
-                        <Image alt={fullMeeting.platform} src={platformImage.path} width={platformImage.width} height={20} />
+                        <Image alt={fullMeeting.platform} src={platformImage.path} width={platformImage.width} height={20} className="hidden lg:block"/>
                     </div>
                     <SecondaryButton className="text-[0.8rem] gap-1 group-hover:text-cta">
                         {hasAccess ?

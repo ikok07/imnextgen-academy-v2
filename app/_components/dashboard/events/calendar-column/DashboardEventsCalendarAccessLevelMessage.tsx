@@ -2,22 +2,23 @@
 
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/app/_components/ui/shadcn/tooltip"
 import {LucideKeyRound, LucideShieldCheck} from "lucide-react";
+import {useWindowWidth} from "@react-hook/window-size";
 
 type DashboardEventsCalendarAccessLevelMessageProps = {
     restricted: boolean
 }
 
 export default function DashboardEventsCalendarAccessLevelMessage({restricted}: DashboardEventsCalendarAccessLevelMessageProps) {
-
+    const width = useWindowWidth();
     const Icon = restricted ? LucideKeyRound : LucideShieldCheck;
 
     return <TooltipProvider>
         <Tooltip>
             <TooltipTrigger>
-                <div className="p-2 mx-3 mb-3 flex items-center gap-3 text-left hover:bg-border/50 rounded-lg">
-                    <Icon width="2.5rem" height="2.5rem" className={`${restricted ? "text-primary/70" : "text-cta"}`} />
+                <div className="p-2 mt-3 lg:mt-0 mx-3 mb-3 items-center gap-3 text-left hover:bg-border/50 rounded-lg">
+                    <Icon width={`${width < 500 ? 1.75 : 2.25}rem`} height={`${width < 500 ? 1.75 : 2.25}rem`} className={`${restricted ? "text-primary/70" : "text-cta"}`} />
                     <div>
-                        <h1 className="font-bold">{restricted ? "Ограничен достъп" : "Неограничен достъп"}</h1>
+                        <h1 className="text-[0.9rem] font-bold">{restricted ? "Ограничен достъп" : "Неограничен достъп"}</h1>
                         <p className="text-sm text-primary/70">{restricted ? "Можеш да достъпваш само безплатни срещи" : "При проблем се свържи с екипа ни"}</p>
                     </div>
                 </div>
