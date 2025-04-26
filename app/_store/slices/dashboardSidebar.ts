@@ -3,13 +3,17 @@ import {z} from "zod";
 import {Routes} from "@/app/_utils/nav/routes";
 
 export const dashboardSidebarStateSchema = z.object({
-    activeLinkId: z.string()
+    activeLinkId: z.string(),
+    sidebarLoaded: z.boolean(),
+    dashboardMobileSidebarOpen: z.boolean()
 });
 
 export type DashboardSidebarState = z.infer<typeof dashboardSidebarStateSchema>;
 
 const initialState: DashboardSidebarState = {
-    activeLinkId: Routes.home
+    activeLinkId: Routes.home,
+    sidebarLoaded: false,
+    dashboardMobileSidebarOpen: false
 }
 
 const dashboardSidebar = createSlice({
@@ -17,11 +21,15 @@ const dashboardSidebar = createSlice({
     reducerPath: "dashboardSidebar",
     initialState,
     reducers: {
-        setActiveLink(state: DashboardSidebarState, action: PayloadAction<string>) {state.activeLinkId = action.payload}
+        setActiveLink(state: DashboardSidebarState, action: PayloadAction<string>) {state.activeLinkId = action.payload},
+        setDashboardLoaded(state: DashboardSidebarState, action: PayloadAction<boolean>) {state.sidebarLoaded = action.payload},
+        setDashboardMobileSidebarOpen(state: DashboardSidebarState, action: PayloadAction<boolean>) {state.dashboardMobileSidebarOpen = action.payload}
     }
 });
 
 export const dashboardSidebarReducer = dashboardSidebar.reducer;
 export const {
-    setActiveLink
+    setActiveLink,
+    setDashboardLoaded,
+    setDashboardMobileSidebarOpen
 } = dashboardSidebar.actions;

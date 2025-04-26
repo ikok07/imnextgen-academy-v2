@@ -14,7 +14,7 @@ export default function DashboardClientWrapper({children}: DashboardClientWrappe
         <CustomBreadcrumb
             customStaticLabels={BREADCRUMB_LABELS}
             firstExcludedSegments={1} // exclude the /dashboard part of the URI
-            className="my-4"
+            className="mb-4 md:mt-4"
         />
         {children}
     </BreadcrumbProvider>

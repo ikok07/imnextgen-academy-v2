@@ -2,7 +2,7 @@ import {getAllModules} from "@/app/dashboard/actions";
 import ModuleBox from "@/app/_components/dashboard/classroom/ModuleBox";
 import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
 import {IoCloudOffline} from "react-icons/io5";
-import {checkMultipleResourcesAccess, getUserBoughtModules, getUserSubscription} from "@/app/actions";
+import {getUserBoughtModules, getUserSubscription} from "@/app/actions";
 import {getUser} from "@/app/_utils/actions/auth";
 import {serverCheckMultipleModulesAllowed} from "@/app/_utils/modules/serverCheckModulesAllowed";
 

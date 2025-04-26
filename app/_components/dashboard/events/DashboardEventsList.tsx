@@ -87,7 +87,7 @@ export default function DashboardEventsList({userId, userRoles, subscriptionTier
         })
     }, [selectedDate, isLoading, isLoadingAccessData]);
 
-    return <Card className="relative flex flex-col w-full h-[35rem] pb-2">
+    return <Card className="relative flex flex-col w-full h-[35rem] pb-2 mb-5 md:mb-0">
         <div className="pointer-events-none absolute w-full h-[10rem] bottom-0 bg-gradient-to-t from-background to-transparent"/>
         <CardHeader className="py-3">
             <CardTitle className="text-xl">Налични срещи</CardTitle>

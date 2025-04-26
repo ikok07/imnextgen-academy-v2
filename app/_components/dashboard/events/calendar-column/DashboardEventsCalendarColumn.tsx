@@ -55,7 +55,9 @@ export default function DashboardEventsCalendarColumn({subscriptionTier}: Dashbo
         </Card>
     }
 
-    return <Drawer open={mobileDrawerOpen}>
+    return <Drawer open={mobileDrawerOpen} onOpenChange={(v) => {
+        if (mobileDrawerOpen != v) setMobileDrawerOpen(v);
+    }}>
         <DrawerTrigger asChild={true}>
             <SecondaryButton onClick={() => setMobileDrawerOpen(true)}>
                 <IoCalendarOutline />

@@ -27,7 +27,7 @@ export default function DashboardEventsListItem({hasAccess, fullMeeting, index, 
 
     return <div className={`${allItemsCount > 3 && index + 1 === allItemsCount ? "pb-[10rem]" : ""}`}>
         <Card className="cursor-pointer flex gap-3 h-[6.5rem] group hover:translate-x-1.5 hover:bg-secondary/70 dark:hover:bg-border/50 transition-all duration-200 ease-in-out">
-            <div className="relative w-[30%] h-full rounded-l-xl overflow-hidden">
+            <div className="relative hidden xs:block w-[30%] h-full rounded-l-xl overflow-hidden">
                 <Image
                     alt="test image"
                     src={fullMeeting.image_url}

@@ -1,7 +1,6 @@
 "use client"
 
 import {SidebarProvider, useSidebar} from "@/app/_components/ui/shadcn/sidebar/sidebar-provider";
-import {IoMenuOutline} from "react-icons/io5";
 import {
     Sidebar,
     SidebarContent, SidebarFooter,
@@ -17,6 +16,9 @@ import DashboardSidebarAccountDropdownMenu
 import {DecisionResults} from "@/src/application/services/auth/authorization.service.interface";
 import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
 import DashboardSidebarSkeleton from "@/app/_components/dashboard/nav/sidebar/DashboardSidebarSkeleton";
+import {useEffect} from "react";
+import {useAppDispatch, useAppSelector} from "@/app/_hooks/redux";
+import {setDashboardLoaded, setDashboardMobileSidebarOpen} from "@/app/_store/slices/dashboardSidebar";
 
 type DashboardSidebarClientWrapperProps = {
     results: DecisionResults
@@ -29,8 +31,28 @@ export default function DashboardSidebarClient(props: DashboardSidebarClientWrap
 }
 
 export function InnerContent({results}: DashboardSidebarClientWrapperProps) {
-    const {viewLoaded} = useViewLoaded();
+    const {dashboardMobileSidebarOpen} = useAppSelector(state => state.dashboardSidebar);
+    const dispatch = useAppDispatch();
+
+    const {viewLoaded} = useViewLoaded({
+        onLoaded() {
+            dispatch(setDashboardLoaded(true));
+        }
+    });
+
     const {openMobile, setOpenMobile} = useSidebar();
+
+    useEffect(() => {
+        if (openMobile != dashboardMobileSidebarOpen) {
+            setOpenMobile(dashboardMobileSidebarOpen);
+        }
+    }, [dashboardMobileSidebarOpen]);
+
+    useEffect(() => {
+        if (openMobile != dashboardMobileSidebarOpen) {
+            dispatch(setDashboardMobileSidebarOpen(openMobile));
+        }
+    }, [openMobile]);
 
     if (!viewLoaded) return <DashboardSidebarSkeleton />
 
@@ -65,6 +87,5 @@ export function InnerContent({results}: DashboardSidebarClientWrapperProps) {
                 <DashboardSidebarAccountDropdownMenu />
             </SidebarFooter>
         </Sidebar>
-        <button className="visible md:hidden text-3xl ml-3 mt-3 h-max" onClick={() => setOpenMobile(!openMobile)}><IoMenuOutline /></button>
     </div>
 }
