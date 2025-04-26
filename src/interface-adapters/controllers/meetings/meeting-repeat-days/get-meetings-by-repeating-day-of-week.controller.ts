@@ -9,7 +9,7 @@ export const getMeetingsByRepeatingDayOfWeekController = (
     getMeetingsByRepeatingDayOfWeekUseCase: IGetMeetingsByRepeatingDayOfWeekUseCase
 ) => (dayOfWeek: number | undefined) => {
 
-    if (!dayOfWeek || dayOfWeek < 0 || dayOfWeek > 6) throw new InputParseError("Invalid day of week!");
+    if (dayOfWeek === undefined || dayOfWeek < 0 || dayOfWeek > 6) throw new InputParseError("Invalid day of week!");
 
     return getMeetingsByRepeatingDayOfWeekUseCase(dayOfWeek);
 }

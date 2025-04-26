@@ -8,6 +8,9 @@ import useErrorQuery from "@/app/_hooks/useErrorQuery";
 import {getFullMeetingsForDate} from "@/app/dashboard/events/actions";
 import {useCallback} from "react";
 import {getFullMeetingStartTime} from "@/src/entities/utils/meetings/get-full-meeting-start-time.util";
+import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
+import {IoCloudOffline, IoSearch} from "react-icons/io5";
+import DashboardEventsListItemSkeleton from "@/app/_components/dashboard/events/DashboardEventsListItemSkeleton";
 
 export default function DashboardEventsList() {
     const {selectedDate} = useDashboardEvents();
@@ -18,11 +21,22 @@ export default function DashboardEventsList() {
     });
 
     const meetingsListItems = useCallback(() => {
-        if (isLoading) return <h1>LOADING...</h1>
+        if (isLoading) return Array.from({length: 3}).map((_, index) => {
+            return <DashboardEventsListItemSkeleton key={index} />
+        });
 
-        if (isError || !fullMeetingsQuery || !fullMeetingsQuery?.success) return <h1>ERROR...</h1>
+        if (isError || !fullMeetingsQuery || !fullMeetingsQuery?.success) return <PrimaryErrorMessage
+            Icon={IoCloudOffline}
+            message="Събитията за избраната дата не можаха да бъдат заредени"
+            title="Възникна грешка"
+            iconClassName="text-4xl"
+        />
 
-        if (!fullMeetingsQuery.value) return <h1>NO ITEMS...</h1>
+        if (!fullMeetingsQuery.value || fullMeetingsQuery.value.length === 0) return <PrimaryErrorMessage
+            Icon={IoSearch}
+            message="За избраната дата не бяха намерени събития"
+            title="Няма събития"
+        />
 
         return fullMeetingsQuery.value.sort((a, b) => {
             const aStartTime = getFullMeetingStartTime(a, selectedDate);
@@ -33,6 +47,7 @@ export default function DashboardEventsList() {
             return aStartTime.hours - bStartTime.hours !== 0 ? aStartTime.hours - bStartTime.hours : aStartTime.minutes - bStartTime.minutes;
         }).map((fullMeeting, index) => {
             return <DashboardEventsListItem
+                hasAccess={false}
                 fullMeeting={fullMeeting}
                 index={index}
                 allItemsCount={fullMeetingsQuery.value.length}
@@ -47,7 +62,7 @@ export default function DashboardEventsList() {
             <CardTitle className="text-xl">Налични срещи</CardTitle>
             <CardDescription>{format(selectedDate, "dd.MM.yyyy")}</CardDescription>
         </CardHeader>
-        <CardContent className="overflow-scroll space-y-2">
+        <CardContent className="overflow-scroll space-y-2 mt-4">
             {meetingsListItems()}
         </CardContent>
     </Card>

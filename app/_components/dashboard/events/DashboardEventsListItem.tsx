@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import {Card} from "@/app/_components/ui/shadcn/card";
-import {IoInformationCircle, IoTime} from "react-icons/io5";
+import {IoInformationCircle, IoLockClosed, IoTime} from "react-icons/io5";
 import SecondaryButton from "@/app/_components/ui/buttons/SecondaryButton";
 import {FullMeeting} from "@/drizzle/schema/meetings";
 import {getFullMeetingStartTime} from "@/src/entities/utils/meetings/get-full-meeting-start-time.util";
@@ -11,12 +11,13 @@ import {useMemo} from "react";
 import {getMeetingPlatformIcon} from "@/app/_utils/meetings/getMeetingPlatformIcon";
 
 type DashboardEventsListItemProps = {
+    hasAccess: boolean,
     fullMeeting: FullMeeting,
     index: number,
     allItemsCount: number
 }
 
-export default function DashboardEventsListItem({fullMeeting, index, allItemsCount}: DashboardEventsListItemProps) {
+export default function DashboardEventsListItem({hasAccess, fullMeeting, index, allItemsCount}: DashboardEventsListItemProps) {
     const {selectedDate} = useDashboardEvents();
 
     const startTime = useMemo(() => getFullMeetingStartTime(fullMeeting, selectedDate), [selectedDate])
@@ -44,8 +45,17 @@ export default function DashboardEventsListItem({fullMeeting, index, allItemsCou
                         <Image alt={fullMeeting.platform} src={platformImage.path} width={platformImage.width} height={20} />
                     </div>
                     <SecondaryButton className="text-[0.8rem] gap-1 group-hover:text-cta">
-                        <IoInformationCircle className="text-neutral-500 group-hover:text-cta" />
-                        Повече
+                        {hasAccess ?
+                            <>
+                                <IoInformationCircle className="text-neutral-500 group-hover:text-cta" />
+                                Повече
+                            </>
+                            :
+                            <>
+                                <IoLockClosed className="text-neutral-500 group-hover:text-cta" />
+                                Заключен
+                            </>
+                        }
                     </SecondaryButton>
                 </div>
             </div>
