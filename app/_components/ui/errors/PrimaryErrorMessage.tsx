@@ -8,10 +8,12 @@ type PrimaryErrorMessageProps = {
     message: string,
     backURI?: string
     className?: string,
-    iconClassName?: string
+    iconClassName?: string,
+    titleClassName?: string,
+    descriptionClassName?: string
 }
 
-export default function PrimaryErrorMessage({Icon, title, message, backURI, className, iconClassName}: PrimaryErrorMessageProps) {
+export default function PrimaryErrorMessage({Icon, title, message, backURI, className, iconClassName, titleClassName, descriptionClassName}: PrimaryErrorMessageProps) {
     return <div className={cn(
         "flex flex-col items-center justify-center text-center",
         className
@@ -20,8 +22,16 @@ export default function PrimaryErrorMessage({Icon, title, message, backURI, clas
             "text-5xl text-cta",
             iconClassName
         )} />
-        <h1 className="text-2xl font-bold">{title}</h1>
-        <p className="text-sm text-primary/50">{message}</p>
+        <h1 className={
+            cn(
+                "text-2xl font-bold",
+                titleClassName
+            )
+        }>{title}</h1>
+        <p className={cn(
+            "text-sm text-primary/50",
+            descriptionClassName
+        )}>{message}</p>
         {backURI && <PrimaryButton href={backURI} className="mt-5">Връщане назад</PrimaryButton>}
     </div>
 }

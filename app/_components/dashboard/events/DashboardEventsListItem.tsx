@@ -10,6 +10,8 @@ import {useDashboardEvents} from "@/app/_providers/DashboardEventsProvider";
 import {useMemo} from "react";
 import {getMeetingPlatformIcon} from "@/app/_utils/meetings/getMeetingPlatformIcon";
 import {useTheme} from "next-themes";
+import {Dialog, DialogTrigger} from "@/app/_components/ui/shadcn/dialog";
+import DashboardEventsMeetingModal from "@/app/_components/dashboard/events/meeting-modal/DashboardEventsMeetingModal";
 
 type DashboardEventsListItemProps = {
     hasAccess: boolean,
@@ -22,11 +24,11 @@ export default function DashboardEventsListItem({hasAccess, fullMeeting, index, 
     const {selectedDate} = useDashboardEvents();
     const {resolvedTheme} = useTheme();
 
-    const startTime = useMemo(() => getFullMeetingStartTime(fullMeeting, selectedDate), [selectedDate])
+    const startTime = useMemo(() => getFullMeetingStartTime(fullMeeting, selectedDate), [selectedDate]);
     const platformImage = getMeetingPlatformIcon(fullMeeting.platform);
 
-    return <div className={`${allItemsCount > 3 && index + 1 === allItemsCount ? "pb-[10rem]" : ""}`}>
-        <Card className="cursor-pointer flex gap-3 h-[6.5rem] group hover:translate-x-1.5 hover:bg-secondary/70 dark:hover:bg-border/50 transition-all duration-200 ease-in-out">
+    const item = <div className={`${allItemsCount > 3 && index + 1 === allItemsCount ? "pb-[10rem]" : ""} text-left`}>
+        <Card className={`${hasAccess ? "cursor-pointer" : "cursor-not-allowed"} flex gap-3 h-[6.5rem] group hover:translate-x-1.5 hover:bg-secondary/70 dark:hover:bg-border/50 transition-all duration-200 ease-in-out`}>
             <div className="relative hidden xs:block w-[30%] h-full rounded-l-xl overflow-hidden">
                 <Image
                     alt="test image"
@@ -36,8 +38,8 @@ export default function DashboardEventsListItem({hasAccess, fullMeeting, index, 
                 />
             </div>
             <div className="p-2 flex-1 overflow-hidden">
-                <h2 className="max-w-[15rem] font-bold truncate">{fullMeeting.title}</h2>
-                <p className="max-w-[15rem] text-sm text-primary/70 truncate">{fullMeeting.description}</p>
+                <h2 className="max-w-[10rem] xs:max-w-[15rem] font-bold truncate">{fullMeeting.title}</h2>
+                <p className="max-w-[10rem] xs:max-w-[15rem] text-sm text-primary/70 truncate">{fullMeeting.description}</p>
                 <div className="mt-2 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="flex items-center gap-1">
@@ -52,7 +54,7 @@ export default function DashboardEventsListItem({hasAccess, fullMeeting, index, 
                             className="hidden lg:block"
                         />
                     </div>
-                    <SecondaryButton className="text-[0.8rem] gap-1 group-hover:text-cta">
+                    <SecondaryButton className={`${hasAccess ? "cursor-pointer" : "cursor-not-allowed"} text-[0.8rem] gap-1 group-hover:text-cta`}>
                         {hasAccess ?
                             <>
                                 <IoInformationCircle className="text-neutral-500 group-hover:text-cta" />
@@ -69,4 +71,13 @@ export default function DashboardEventsListItem({hasAccess, fullMeeting, index, 
             </div>
         </Card>
     </div>
+
+    if (!hasAccess) return item;
+
+    return <Dialog>
+        <DialogTrigger>
+            {item}
+        </DialogTrigger>
+        <DashboardEventsMeetingModal fullMeeting={fullMeeting} />
+    </Dialog>
 }
