@@ -15,6 +15,9 @@ export const Routes = {
         },
         events: {
             base: () => `${Routes.dashboard.base}/events`
+        },
+        shop: {
+            base: () => `${Routes.dashboard.base}/shop`
         }
     }
 }

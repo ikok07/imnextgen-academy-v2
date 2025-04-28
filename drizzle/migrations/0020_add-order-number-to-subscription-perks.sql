@@ -1,0 +1,1 @@
+ALTER TABLE "subscription_perks" ADD COLUMN "order_number" integer DEFAULT 0 NOT NULL;

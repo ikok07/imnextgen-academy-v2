@@ -1,0 +1,1 @@
+ALTER TABLE "subscription_tiers" DROP COLUMN "stripe_price_id";

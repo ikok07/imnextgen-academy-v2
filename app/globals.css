@@ -109,6 +109,14 @@ button {
   .bg-secondary-gradient {
     @apply bg-gradient-to-b from-white to-gray-100 dark:from-gray-800 dark:to-gray-900 hover:dark:from-gray-700 hover:dark:to-gray-800
   }
+
+  .bg-inactive-gradient {
+    @apply bg-gradient-to-b from-gray-100 to-gray-300 dark:from-gray-800 dark:to-gray-900 hover:dark:from-gray-700 hover:dark:to-gray-800
+  }
+
+  .bg-success-gradient {
+    @apply bg-gradient-to-b from-green-400 to-green-600
+  }
 }
 
 @layer base {

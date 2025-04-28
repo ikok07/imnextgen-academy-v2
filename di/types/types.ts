@@ -12,9 +12,10 @@ import {
 import {CLASSROOM_VIDEOS_RETURN_TYPES, CLASSROOM_VIDEOS_SYMBOLS} from "@/di/types/classroom-videos.types";
 import {CLASSROOM_SECTIONS_RETURN_TYPES, CLASSROOM_SECTIONS_SYMBOLS} from "@/di/types/classroom-sections.types";
 import {JWT_RETURN_TYPES, JWT_SYMBOLS} from "@/di/types/jwt.types";
-import {USER_SUBSCRIPTIONS_RETURN_TYPES, USER_SUBSCRIPTIONS_SYMBOLS} from "@/di/types/user-subscriptions.types";
+import {SUBSCRIPTIONS_RETURN_TYPES, SUBSCRIPTIONS_SYMBOLS} from "@/di/types/subscriptions.types";
 import {USER_BOUGHT_MODULES_RETURN_TYPES, USER_BOUGHT_MODULES_SYMBOLS} from "@/di/types/user-bought-modules.types";
 import {MEETINGS_RETURN_TYPES, MEETINGS_SYMBOLS} from "@/di/types/meetings.types";
+import {PAYMENTS_RETURN_TYPES, PAYMENTS_SYMBOLS} from "@/di/types/payments.types";
 
 export const DI_SYMBOLS = {
     ...AUTH_SYMBOLS,
@@ -28,9 +29,10 @@ export const DI_SYMBOLS = {
     ...CLASSROOM_VIDEOS_SYMBOLS,
     ...CLASSROOM_FINISHED_VIDEOS_SYMBOLS,
     ...JWT_SYMBOLS,
-    ...USER_SUBSCRIPTIONS_SYMBOLS,
+    ...SUBSCRIPTIONS_SYMBOLS,
     ...USER_BOUGHT_MODULES_SYMBOLS,
-    ...MEETINGS_SYMBOLS
+    ...MEETINGS_SYMBOLS,
+    ...PAYMENTS_SYMBOLS
 };
 
 export interface DI_RETURN_TYPES extends
@@ -45,7 +47,8 @@ export interface DI_RETURN_TYPES extends
     CLASSROOM_VIDEOS_RETURN_TYPES,
     CLASSROOM_FINISHED_VIDEOS_RETURN_TYPES,
     JWT_RETURN_TYPES,
-    USER_SUBSCRIPTIONS_RETURN_TYPES,
+    SUBSCRIPTIONS_RETURN_TYPES,
     USER_BOUGHT_MODULES_RETURN_TYPES,
-    MEETINGS_RETURN_TYPES
+    MEETINGS_RETURN_TYPES,
+    PAYMENTS_RETURN_TYPES
 {}

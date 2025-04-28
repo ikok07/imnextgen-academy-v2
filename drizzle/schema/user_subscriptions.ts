@@ -11,7 +11,10 @@ export const userSubscriptionTable = pgTable("user_subscriptions", {
         onDelete: "cascade",
         onUpdate: "cascade"
     }).unique(),
-    tier_id: text("tier_id").notNull().references(() => subscriptionTiersTable.id)
+    tier_id: text("tier_id").notNull().references(() => subscriptionTiersTable.id, {
+        onDelete: "cascade",
+        onUpdate: "cascade"
+    })
 });
 
 export const userSubscriptionSchema = createSelectSchema(userSubscriptionTable);

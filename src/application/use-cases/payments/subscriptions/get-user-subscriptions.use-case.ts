@@ -1,12 +1,12 @@
 import {
-    IUserSubscriptionsRepository
+    ISubscriptionsRepository
 } from "@/src/application/repositories/payments/user-subscriptions.repository.interface";
 import {UserFullSubscription} from "@/src/entities/models/payments/user-full-subscription";
 
 export type IGetUserSubscriptionsUseCase = ReturnType<typeof getUserSubscriptionsUseCase>;
 
 export const getUserSubscriptionsUseCase = (
-    userSubscriptionsRepository: IUserSubscriptionsRepository
+    userSubscriptionsRepository: ISubscriptionsRepository
 ) => async (userId: string) => {
     const rawSubscriptionResults =  await userSubscriptionsRepository.getUserSubscription(userId);
     if (!rawSubscriptionResults) return undefined;
@@ -19,12 +19,12 @@ export const getUserSubscriptionsUseCase = (
                 ...result.subscription,
                 tier: {
                     ...result.tier,
-                    perks: [result.perk]
+                    perks: []
                 }
             }
         }
 
-        fullSubscription.tier.perks.push(result.perk);
+        if (result.perk) fullSubscription.tier.perks.push(result.perk);
     }
 
     return fullSubscription;

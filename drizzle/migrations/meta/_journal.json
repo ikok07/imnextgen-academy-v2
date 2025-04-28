@@ -134,6 +134,41 @@
       "when": 1745841080878,
       "tag": "0018_make-user-subscriptions-unique",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1745849629598,
+      "tag": "0019_add-order-number-to-subscription-tiers",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1745849828771,
+      "tag": "0020_add-order-number-to-subscription-perks",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1745850949706,
+      "tag": "0021_add-stripe-fields-to-subscription-tiers",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1745851085150,
+      "tag": "0022_cascade-changes-to-tables-referencing-subscription-tiers",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1745853816253,
+      "tag": "0023_remove-price-id-from-subscription-tiers",
+      "breakpoints": true
     }
   ]
 }
