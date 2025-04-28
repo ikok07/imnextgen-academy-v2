@@ -4,7 +4,6 @@ import {IoCloudOffline} from "react-icons/io5";
 import { Routes } from "@/app/_utils/nav/routes";
 import DashboardModuleClientWrapper from "@/app/_components/dashboard/classroom/module/DashboardModuleClientWrapper";
 import {z} from "zod";
-import {redirect} from "next/navigation";
 import DashboardModuleSectionsSidebar
     from "@/app/_components/dashboard/classroom/module/sidebar/DashboardModuleSectionsSidebar";
 import {Suspense} from "react";
@@ -68,7 +67,7 @@ export async function InnerContent(props: z.infer<typeof propsSchema>) {
         const accessResponse = await serverCheckModuleAllowed({
             userId: user.id,
             roles: user.publicMetadata["roles"] as string[],
-            subscription_tier: subscriptionResponse.value?.subscription_tier,
+            subscription_tier: subscriptionResponse.value?.tier,
             paid_modules: boughtModulesResponse.value.map(v => v.module_id),
             moduleId: moduleResult.value.id,
             moduleAccess: moduleResult.value.access,

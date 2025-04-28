@@ -19,11 +19,11 @@ export default async function Page() {
             <div className="w-full min-h-[100vh]">
                 <DashboardPageTitle>Събития</DashboardPageTitle>
                 <div className="mx-auto mt-5 grid mdlg:grid-cols-[1fr_2fr] grid-rows-[auto_1fr] w-[95%] max-w-[50rem] gap-x-4 gap-y-4">
-                    <DashboardEventsCalendarColumn subscriptionTier={subscriptionResponse.value?.subscription_tier} />
+                    <DashboardEventsCalendarColumn subscriptionTier={subscriptionResponse.value?.tier} />
                     <DashboardEventsList
                         userId={user.id}
                         userRoles={user.publicMetadata["roles"] as string[]}
-                        subscriptionTier={subscriptionResponse.value?.subscription_tier}
+                        subscriptionTier={subscriptionResponse.value?.tier}
                     />
                 </div>
             </div>

@@ -9,11 +9,11 @@ import {
 } from "@/app/_components/ui/shadcn/sidebar/sidebar";
 import {IoCheckmarkCircle, IoChevronDown} from "react-icons/io5";
 import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/app/_components/ui/shadcn/collapsible";
-import {VideosForModuleResponse} from "@/src/application/repositories/media/videos/videos.repository.interface";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/app/_components/ui/shadcn/tooltip";
 import {useModule} from "@/app/_providers/ModuleProvider";
 import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
 import {FinishedVideo} from "@/drizzle/schema/finished_videos";
+import {VideosForModuleResponse} from "@/src/application/use-cases/media/videos/get-videos-for-module.use-case";
 
 type DashboardModuleSectionsSidebarContentProps = {
     videosForModule: VideosForModuleResponse,

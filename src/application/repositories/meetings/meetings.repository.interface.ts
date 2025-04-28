@@ -1,5 +1,8 @@
-import {FullMeeting, Meeting, MeetingInsert} from "@/drizzle/schema/meetings";
+import {FullMeeting, Meeting, MeetingInsert, meetingSchema} from "@/drizzle/schema/meetings";
 import {z} from "zod";
+import {meetingRepeatDaySchema} from "@/drizzle/schema/meeting_repeat_days";
+import {meetingExcludedDateSchema} from "@/drizzle/schema/meeting_excluded_dates";
+import {meetingDateSchema} from "@/drizzle/schema/meeting_dates";
 
 
 export const getSingleFullMeetingByIdOptionsSchema = z.object({
@@ -17,9 +20,18 @@ export const getFullMeetingByIdOptionsSchema = getSingleFullMeetingByIdOptionsSc
 export type GetSingleFullMeetingByIdOptions = z.infer<typeof getSingleFullMeetingByIdOptionsSchema>;
 export type GetMultipleFullMeetingsByIdOptions = z.infer<typeof getMultipleFullMeetingsByIdOptionsSchema>;
 
+export const getFullMeetingByIdResultsSchema = z.array(z.object({
+    meeting: meetingSchema,
+    repeat_day: meetingRepeatDaySchema.nullable(),
+    excluded_date: meetingExcludedDateSchema.nullable(),
+    meeting_date: meetingDateSchema.nullable()
+}));
+
+export type GetFullMeetingByIdResults = z.infer<typeof getFullMeetingByIdResultsSchema>;
+
 export interface IMeetingsRepository {
     getMeetings(): Promise<Meeting[]>;
-    getFullMeetingById(options: GetSingleFullMeetingByIdOptions | GetMultipleFullMeetingsByIdOptions): Promise<FullMeeting | FullMeeting[] | undefined>;
+    getFullMeetingById(options: GetSingleFullMeetingByIdOptions | GetMultipleFullMeetingsByIdOptions): Promise<GetFullMeetingByIdResults | undefined>;
     getMeetingById(id: string): Promise<Meeting | undefined>;
     addMeeting(meeting: MeetingInsert): Promise<Meeting[]>;
     removeMeetingById(id: string): Promise<Meeting[]>;

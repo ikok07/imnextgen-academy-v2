@@ -2,13 +2,13 @@
 
 import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
 import {useModule} from "@/app/_providers/ModuleProvider";
-import {VideosForModuleResponse} from "@/src/application/repositories/media/videos/videos.repository.interface";
 import DashboardModuleVideoInfo from "@/app/_components/dashboard/classroom/module/video/DashboardModuleVideoInfo";
 import DashboardModuleVideoInfoSkeleton
     from "@/app/_components/dashboard/classroom/module/video/skeletons/DashboardModuleVideoInfoSkeleton";
 import LoomVideoPlayer from "@/app/_components/ui/players/LoomVideoPlayer";
 import {ServerActionResult} from "@/app/_utils/createServerAction";
 import {FinishedVideosResponse} from "@/src/application/repositories/media/videos/finished-videos.repository.interface";
+import {VideosForModuleResponse} from "@/src/application/use-cases/media/videos/get-videos-for-module.use-case";
 
 type DashboardModuleVideoColumnProps = {
     moduleId: string,

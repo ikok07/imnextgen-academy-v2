@@ -12,7 +12,7 @@ import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage
 import {IoCloudOffline, IoSearch} from "react-icons/io5";
 import DashboardEventsListItemSkeleton from "@/app/_components/dashboard/events/DashboardEventsListItemSkeleton";
 import {checkMultipleResourcesAccess} from "@/app/actions";
-import {SubscriptionTier} from "@/drizzle/schema/user_subscriptions";
+import {SubscriptionTier} from "@/drizzle/schema/subscription_tiers";
 
 type DashboardEventsListProps = {
     userId: string,
@@ -25,7 +25,7 @@ export default function DashboardEventsList({userId, userRoles, subscriptionTier
 
     const {data: fullMeetingsQuery, isLoading, isError} = useErrorQuery({
         queryFn: () => getFullMeetingsForDate(selectedDate),
-        queryKey: `full-meetings-${selectedDate}`
+        queryKey: `full-meetings-${selectedDate}`,
     });
 
     const {data: accessDataQuery, isLoading: isLoadingAccessData, isError: accessDataError} = useErrorQuery({
@@ -34,7 +34,7 @@ export default function DashboardEventsList({userId, userRoles, subscriptionTier
                 id: userId,
                 roles: userRoles,
                 attr: {
-                    access: subscriptionTier && subscriptionTier != "inactive" ? "subscription" : "free"
+                    access: subscriptionTier ? "subscription" : "free"
                 }
             },
             resources: fullMeetingsQuery?.success ? fullMeetingsQuery.value.map(fullMeeting => ({
@@ -48,6 +48,7 @@ export default function DashboardEventsList({userId, userRoles, subscriptionTier
                 actions: ["select"]
             })) : []
         }),
+        queryKey: [`meetings-access-${selectedDate}`],
         enabled: !!fullMeetingsQuery?.success && fullMeetingsQuery.value.length != 0
     });
 

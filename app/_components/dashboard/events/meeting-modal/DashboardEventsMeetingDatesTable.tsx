@@ -38,7 +38,7 @@ export default function DashboardEventsMeetingDatesTable({meetingDates}: Dashboa
             {filteredMeetingDates.map((date, index) => {
                 return <TableRow key={index}>
                     <TableCell>{format(date.start_date * 1000, "dd.MM.yyyy")}</TableCell>
-                    <TableCell className="capitalize">{getHours(new UTCDate(date.start_date * 1000)) + millisecondsToHours(getTimezoneOffset("Europe/Sofia"))}:{getMinutes(date.start_date * 1000)}</TableCell>
+                    <TableCell className="capitalize">{getHours(new UTCDate(date.start_date * 1000)) + millisecondsToHours(getTimezoneOffset("Europe/Sofia"))}:{getMinutes(date.start_date * 1000).toString().padStart(2, '0')}</TableCell>
                     <TableCell className="capitalize">{(date.end_date - date.start_date) / 60} мин.</TableCell>
                 </TableRow>
             })}

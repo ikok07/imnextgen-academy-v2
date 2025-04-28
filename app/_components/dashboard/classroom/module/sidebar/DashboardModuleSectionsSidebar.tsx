@@ -11,7 +11,6 @@ import Link from "next/link";
 import {Routes} from "@/app/_utils/nav/routes";
 import DashboardModuleSectionsSidebarContent
     from "@/app/_components/dashboard/classroom/module/sidebar/DashboardModuleSectionsSidebarContent";
-import {VideosForModuleResponse} from "@/src/application/repositories/media/videos/videos.repository.interface";
 import {SidebarProvider, useSidebar} from "@/app/_components/ui/shadcn/sidebar/sidebar-provider";
 import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
 import DashboardModuleSidebarSkeleton
@@ -21,6 +20,7 @@ import {FinishedVideosResponse} from "@/src/application/repositories/media/video
 import useErrorQuery from "@/app/_hooks/useErrorQuery";
 import {getFinishedVideos} from "@/app/dashboard/actions";
 import {ServerActionResult} from "@/app/_utils/createServerAction";
+import {VideosForModuleResponse} from "@/src/application/use-cases/media/videos/get-videos-for-module.use-case";
 
 type DashboardModuleSectionsSidebarProps = {
     userId: string,

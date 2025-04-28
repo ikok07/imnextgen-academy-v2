@@ -1,43 +1,30 @@
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
 import {
-    IUserSubscriptionsRepository
+    IUserSubscriptionsRepository, RawUserSubscriptionResults
 } from "@/src/application/repositories/payments/user-subscriptions.repository.interface";
-import {UserSubscription, SubscriptionTier, userSubscriptionTable} from "@/drizzle/schema/user_subscriptions";
+import {userSubscriptionTable} from "@/drizzle/schema/user_subscriptions";
 import { DatabaseError } from "@/src/entities/errors/db/database";
 import {eq} from "drizzle-orm";
+import {subscriptionTiersTable} from "@/drizzle/schema/subscription_tiers";
+import { subscriptionPerksTable } from "@/drizzle/schema/subscription_perks";
 
 export class UserSubscriptionsRepository extends BaseRepository implements IUserSubscriptionsRepository {
-    getUserSubscription(userId: string): Promise<UserSubscription | undefined> {
+    getUserSubscription(userId: string): Promise<RawUserSubscriptionResults | undefined> {
         try {
             return this.queryDB(db => {
-                return db.query.userSubscriptionTable.findFirst({where: eq(userSubscriptionTable.profile_id, userId)});
+                return db
+                    .select({
+                        subscription: userSubscriptionTable,
+                        tier: subscriptionTiersTable,
+                        perk: subscriptionPerksTable
+                    })
+                    .from(userSubscriptionTable)
+                    .where(eq(userSubscriptionTable.profile_id, userId))
+                    .innerJoin(subscriptionTiersTable, eq(subscriptionTiersTable.id, userSubscriptionTable.tier_id))
+                    .innerJoin(subscriptionPerksTable, eq(subscriptionPerksTable.tier_id, subscriptionTiersTable.id));
             })
         } catch(e) {
             throw new DatabaseError(`Failed to get user subscription: ${e}`);
         }
     }
-    addUserSubscription(userId: string, tier: SubscriptionTier): Promise<UserSubscription> {
-        try {
-            return this.queryDB(async db => {
-                return (await db.insert(userSubscriptionTable).values({
-                    profile_id: userId,
-                    subscription_tier: tier
-                }).returning())[0];
-            })
-        } catch(e) {
-            throw new DatabaseError(`Failed to add user subscription: ${e}`);
-        }
-    }
-    updateUserSubscriptionTier(userId: string, tier: SubscriptionTier): Promise<UserSubscription> {
-        try {
-            return this.queryDB(async db => {
-                return (await db.update(userSubscriptionTable).set({
-                    subscription_tier: tier
-                }).where(eq(userSubscriptionTable.profile_id, userId)).returning())[0];
-            })
-        } catch(e) {
-            throw new DatabaseError(`Failed to update user subscription tier: ${e}`);
-        }
-    }
-
 }

@@ -24,7 +24,7 @@ export default async function ModulesGrid() {
         const accessResponse = await serverCheckMultipleModulesAllowed({
             userId: userObject.value.user.id,
             roles: userObject.value.user.publicMetadata["roles"] as string[],
-            subscription_tier: subscriptionResponse.value?.subscription_tier,
+            subscription_tier: subscriptionResponse.value?.tier,
             paid_modules: boughtModulesResponse.value.map(v => v.module_id),
             modules: modulesResponse.value
         });

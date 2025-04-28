@@ -1,10 +1,11 @@
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
 import {
+    GetFullMeetingByIdResults,
     GetMultipleFullMeetingsByIdOptions,
     GetSingleFullMeetingByIdOptions,
     IMeetingsRepository
 } from "@/src/application/repositories/meetings/meetings.repository.interface";
-import {FullMeeting, Meeting, MeetingInsert, meetingsTable} from "@/drizzle/schema/meetings";
+import {Meeting, MeetingInsert, meetingsTable} from "@/drizzle/schema/meetings";
 import { DatabaseError } from "@/src/entities/errors/db/database";
 import {eq, inArray} from "drizzle-orm";
 import {meetingRepeatDayTable} from "@/drizzle/schema/meeting_repeat_days";
@@ -22,7 +23,7 @@ export class MeetingsRepository extends BaseRepository implements IMeetingsRepos
         }
     }
 
-    getFullMeetingById(options: GetSingleFullMeetingByIdOptions | GetMultipleFullMeetingsByIdOptions): Promise<FullMeeting | FullMeeting[] | undefined> {
+    getFullMeetingById(options: GetSingleFullMeetingByIdOptions | GetMultipleFullMeetingsByIdOptions): Promise<GetFullMeetingByIdResults | undefined> {
         try {
             return this.queryDB(async db => {
                 const results = await db
@@ -42,28 +43,7 @@ export class MeetingsRepository extends BaseRepository implements IMeetingsRepos
 
                 if (results.length === 0) return options.type === "single" ? undefined : [];
 
-                const fullMeetings = new Map<string, FullMeeting>();
-
-                for (const result of results) {
-                    if (!fullMeetings.has(result.meeting.id)) {
-                        fullMeetings.set(result.meeting.id, {
-                            ...result.meeting,
-                            meeting_dates: [],
-                            repeat_days: [],
-                            excluded_dates: []
-                        });
-                    }
-
-                    const fullMeeting = fullMeetings.get(result.meeting.id)!;
-
-                    if (result.meeting_date) fullMeeting.meeting_dates.push(result.meeting_date);
-                    if (result.excluded_date) fullMeeting.excluded_dates.push(result.excluded_date);
-                    if (result.repeat_day) fullMeeting.repeat_days.push(result.repeat_day);
-                }
-
-
-                const fullMeetingsArr = Array.from(fullMeetings.values());
-                return options.type === "single" ? fullMeetingsArr[0] : fullMeetingsArr;
+                return results;
             })
         } catch(e) {
             throw new DatabaseError(`Failed to get full meeting by id: ${e}`);

@@ -1,14 +1,14 @@
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
 import {
     IVideosRepository,
-    VideosForModuleResponse
+    VideosForModuleResults
 } from "@/src/application/repositories/media/videos/videos.repository.interface";
 import {Video, videosTable} from "@/drizzle/schema/videos";
 import { DatabaseError } from "@/src/entities/errors/db/database";
-import {Section, sectionsTable} from "@/drizzle/schema/sections";
+import {sectionsTable} from "@/drizzle/schema/sections";
 import {eq} from "drizzle-orm";
 import {modulesTable} from "@/drizzle/schema/modules";
-import {VideoDescription, videoDescriptionsTable} from "@/drizzle/schema/video_descriptions";
+import {videoDescriptionsTable} from "@/drizzle/schema/video_descriptions";
 
 export class VideosRepository extends BaseRepository implements IVideosRepository {
     getVideoById(id: string): Promise<Video> {
@@ -23,10 +23,10 @@ export class VideosRepository extends BaseRepository implements IVideosRepositor
             throw new DatabaseError(`Failed to get video! ${e}`)
         }
     }
-    getVideosForModule(moduleId: string): Promise<VideosForModuleResponse> {
+    getVideosForModule(moduleId: string): Promise<VideosForModuleResults> {
         try {
-            return this.queryDB(async db => {
-                const res = await db.select({
+            return this.queryDB(db => {
+                return db.select({
                     video: videosTable,
                     section: sectionsTable,
                     description: videoDescriptionsTable
@@ -37,27 +37,6 @@ export class VideosRepository extends BaseRepository implements IVideosRepositor
                     .innerJoin(videoDescriptionsTable, eq(videoDescriptionsTable.id, videosTable.description_id))
                     .where(eq(modulesTable.id, moduleId))
                     .execute();
-
-                const sectionMap = new Map<string, {section: Section, videos: Video[], descriptions: VideoDescription[]}>();
-
-                res.forEach(row => {
-                    const {section, video, description} = row;
-
-                    if (sectionMap.has(section.id)) {
-                        const item = sectionMap.get(section.id);
-                        item?.videos.push(video);
-                        item?.descriptions.push(description);
-                        return;
-                    }
-
-                    sectionMap.set(section.id, {
-                        section,
-                        videos: [row.video],
-                        descriptions: [description]
-                    });
-                });
-
-                return Array.from(sectionMap.values());
             })
         } catch(e) {
             throw new DatabaseError(`Failed to get videos for module! ${e}`)

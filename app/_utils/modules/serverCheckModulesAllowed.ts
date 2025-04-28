@@ -1,7 +1,7 @@
 import {checkAccess, checkMultipleResourcesAccess} from "@/app/actions";
 import {z} from "zod";
-import {subscriptionTierSchema} from "@/drizzle/schema/user_subscriptions";
 import {Module, moduleAccessEnumSchema} from "@/drizzle/schema/modules";
+import {subscriptionTierSchema} from "@/drizzle/schema/subscription_tiers";
 
 export const serverCheckMultipleModulesAllowedOptionsSchema = z.object({
     userId: z.string(),
@@ -25,7 +25,7 @@ export async function serverCheckMultipleModulesAllowed({userId, roles, subscrip
             id: userId,
             roles: roles,
             attr: {
-                access: !!subscription_tier && subscription_tier != "inactive" ? "subscription" : "free",
+                access: !!subscription_tier ? "subscription" : "free",
                 paid_modules
             }
         },
@@ -48,7 +48,7 @@ export async function serverCheckModuleAllowed({userId, roles, subscription_tier
             id: userId,
             roles: roles,
             attr: {
-                access: !!subscription_tier && subscription_tier != "inactive" ? "subscription" : "free",
+                access: !!subscription_tier ? "subscription" : "free",
                 paid_modules
             }
         },

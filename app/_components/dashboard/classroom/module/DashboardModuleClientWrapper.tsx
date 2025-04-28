@@ -4,8 +4,8 @@ import {ReactNode, useEffect} from "react";
 import {useBreadcrumb} from "@/app/_providers/BreadcrumbProvider";
 import {Module} from "@/drizzle/schema/modules";
 import ModuleProvider, {useModule} from "@/app/_providers/ModuleProvider";
-import {VideosForModuleResponse} from "@/src/application/repositories/media/videos/videos.repository.interface";
 import {FinishedVideo} from "@/drizzle/schema/finished_videos";
+import {VideosForModuleResponse} from "@/src/application/use-cases/media/videos/get-videos-for-module.use-case";
 
 type DashboardModuleClientWrapperProps = {
     module: Module,

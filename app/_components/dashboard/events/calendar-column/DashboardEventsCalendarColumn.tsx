@@ -14,12 +14,12 @@ import {
 } from "@/app/_components/ui/shadcn/drawer";
 import {IoCalendarOutline} from "react-icons/io5";
 import SecondaryButton from "@/app/_components/ui/buttons/SecondaryButton";
-import {SubscriptionTier} from "@/drizzle/schema/user_subscriptions";
 import {useWindowWidth} from "@react-hook/window-size";
 import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
 import DashboardEventsCalendarColumnSkeleton
     from "@/app/_components/dashboard/events/calendar-column/skeleton/DashboardEventsCalendarColumnSkeleton";
 import {useState} from "react";
+import { SubscriptionTier } from "@/drizzle/schema/subscription_tiers";
 
 type DashboardEventsCalendarColumnProps = {
     subscriptionTier: SubscriptionTier | undefined
@@ -36,7 +36,7 @@ export default function DashboardEventsCalendarColumn({subscriptionTier}: Dashbo
         <DashboardEventsCalendar onSelect={() => setMobileDrawerOpen(false)}/>
         <DashboardEventsCalendarAccessLevelMessage
             restricted={
-                !subscriptionTier || subscriptionTier == "inactive"
+                !subscriptionTier
             }
         />
     </>
