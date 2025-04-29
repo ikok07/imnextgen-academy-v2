@@ -169,6 +169,20 @@
       "when": 1745853816253,
       "tag": "0023_remove-price-id-from-subscription-tiers",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1745934504124,
+      "tag": "0024_add-stripe-product-id-to-modules",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1745946605266,
+      "tag": "0025_add-payment-customer-id-to-profiles",
+      "breakpoints": true
     }
   ]
 }

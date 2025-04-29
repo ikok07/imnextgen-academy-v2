@@ -1,0 +1,34 @@
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/app/_components/ui/shadcn/card";
+import Image from "next/image";
+import {Module} from "@/drizzle/schema/modules";
+import DashboardShopModuleBoxPriceWrapper
+    from "@/app/_components/dashboard/shop/module-box/DashboardShopModuleBoxPriceWrapper";
+import DashboardShopModuleBoxClientWrapper
+    from "@/app/_components/dashboard/shop/module-box/DashboardShopModuleBoxClientWrapper";
+import {FullBoughtModule} from "@/src/entities/models/media/modules/full-bought-module";
+
+type DashboardShopModuleBoxProps = {
+    module: Omit<Module, "stripe_product_id"> & {stripe_product_id: string},
+    boughtModules: FullBoughtModule[]
+}
+
+export default function DashboardShopModuleBox({module, boughtModules}: DashboardShopModuleBoxProps) {
+    return <DashboardShopModuleBoxClientWrapper moduleId={module.id} stripeProductId={module.stripe_product_id} boughtModules={boughtModules}>
+        <Card className="cursor-pointer flex flex-col justify-between hover:bg-secondary/70 dark:hover:bg-border/50">
+            <div className="relative w-full aspect-video rounded-t-lg overflow-hidden">
+                <Image alt="test" src="https://ozwkuahulnwluilmnjjr.supabase.co/storage/v1/object/public/Application%20Images/modules/first-row-2.png" fill />
+            </div>
+            <CardHeader className="pt-3 pb-0">
+                <CardTitle>{module.title}</CardTitle>
+                <CardDescription className="line-clamp-2">{module.description}</CardDescription>
+            </CardHeader>
+            <CardContent className="mt-3">
+                <DashboardShopModuleBoxPriceWrapper
+                    moduleId={module.id}
+                    stripeProductId={module.stripe_product_id}
+                    boughtModules={boughtModules}
+                />
+            </CardContent>
+        </Card>
+    </DashboardShopModuleBoxClientWrapper>
+}

@@ -5,6 +5,8 @@ import {getModulesUseCase} from "@/src/application/use-cases/media/modules/get-m
 import {getModulesController} from "@/src/interface-adapters/controllers/media/modules/get-modules.controller";
 import {getModuleByIdUseCase} from "@/src/application/use-cases/media/modules/get-module-by-id.use-case";
 import {getModuleByIdController} from "@/src/interface-adapters/controllers/media/modules/get-module-by-id.controller";
+import {getPaidModulesUseCase} from "@/src/application/use-cases/media/modules/get-paid-modules.use-case";
+import {getPaidModulesController} from "@/src/interface-adapters/controllers/media/modules/get-paid-modules.controller";
 
 export function createClassroomModulesModule() {
     const classroomModulesModule = createModule();
@@ -28,6 +30,14 @@ export function createClassroomModulesModule() {
     classroomModulesModule
         .bind(DI_SYMBOLS.IGetModuleByIdController)
         .toHigherOrderFunction(getModuleByIdController, [DI_SYMBOLS.IGetModuleByIdUseCase]);
+
+    classroomModulesModule
+        .bind(DI_SYMBOLS.IGetPaidModulesUseCase)
+        .toHigherOrderFunction(getPaidModulesUseCase, [DI_SYMBOLS.IModulesRepository]);
+
+    classroomModulesModule
+        .bind(DI_SYMBOLS.IGetPaidModulesController)
+        .toHigherOrderFunction(getPaidModulesController, [DI_SYMBOLS.IGetPaidModulesUseCase]);
 
     return classroomModulesModule;
 }

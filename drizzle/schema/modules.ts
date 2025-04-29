@@ -12,6 +12,7 @@ export const modulesTable = pgTable("modules", {
     description: text("description").notNull(),
     access: moduleAccessEnum().notNull().default("free"),
     order_number: integer("order_number").notNull(),
+    stripe_product_id: text("stripe_product_id"),
     image_url: text("image_url")
 }, (table) => [
     check("order_number_check", sql`${table.order_number} > -1`)

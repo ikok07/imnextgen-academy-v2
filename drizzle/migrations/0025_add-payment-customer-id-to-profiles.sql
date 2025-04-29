@@ -1,0 +1,1 @@
+ALTER TABLE "profiles" ADD COLUMN "payment_customer_id" text;

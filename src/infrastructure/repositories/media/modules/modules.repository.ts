@@ -2,7 +2,7 @@ import {Module, modulesTable} from "@/drizzle/schema/modules";
 import {IModulesRepository} from "@/src/application/repositories/media/modules/modules.repository.interface";
 import { DatabaseError } from "@/src/entities/errors/db/database";
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
-import { eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 
 export class ModulesRepository extends BaseRepository implements IModulesRepository {
     getModules(): Promise<Module[]> {
@@ -11,7 +11,17 @@ export class ModulesRepository extends BaseRepository implements IModulesReposit
                 return db.query.modulesTable.findMany();
             })
         } catch(e) {
-            throw new DatabaseError(`Failed to get modules! ${e}`)
+            throw new DatabaseError(`Failed to get modules! ${e}`);
+        }
+    }
+
+    getPaidModules(): Promise<Module[]> {
+        try {
+            return this.queryDB(db => {
+                return db.query.modulesTable.findMany({where: or(eq(modulesTable.access, "subscription-or-paid"), eq(modulesTable.access, "subscription"))});
+            })
+        } catch (e) {
+            throw new DatabaseError(`Failed to get paid modules! ${e}`);
         }
     }
 

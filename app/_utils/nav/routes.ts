@@ -17,7 +17,8 @@ export const Routes = {
             base: () => `${Routes.dashboard.base}/events`
         },
         shop: {
-            base: () => `${Routes.dashboard.base}/shop`
+            base: () => `${Routes.dashboard.base}/shop`,
+            payment: (productIds: string[], hasSubscription: boolean) => `${Routes.dashboard.shop.base()}/payment?productIds=${productIds}&hasSubscription=${hasSubscription}`
         }
     }
 }

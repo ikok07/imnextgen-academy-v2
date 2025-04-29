@@ -117,6 +117,10 @@ button {
   .bg-success-gradient {
     @apply bg-gradient-to-b from-green-400 to-green-600
   }
+
+  .bg-black-gradient {
+    @apply bg-gradient-to-b from-gray-600 to-gray-900
+  }
 }
 
 @layer base {

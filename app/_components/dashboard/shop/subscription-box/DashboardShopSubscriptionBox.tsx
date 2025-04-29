@@ -1,13 +1,11 @@
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "../../../ui/shadcn/card";
-import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
-import {IoCart, IoCheckmarkCircle} from "react-icons/io5";
+import {IoCheckmarkCircle} from "react-icons/io5";
 import {FullSubscriptionTier} from "@/src/entities/models/payments/full-subscription-tier";
-import DashboardShopSubscriptionBoxPrice
-    from "@/app/_components/dashboard/shop/subscription-box/DashboardShopSubscriptionBoxPrice";
 import DashboardShopSubscriptionBoxClientWrapper
     from "@/app/_components/dashboard/shop/subscription-box/DashboardShopSubscriptionBoxClientWrapper";
-import {UserSubscription} from "@/drizzle/schema/user_subscriptions";
 import {UserFullSubscription} from "@/src/entities/models/payments/user-full-subscription";
+import DashboardShopSubscriptionBoxPriceWrapper
+    from "@/app/_components/dashboard/shop/subscription-box/DashboardShopSubscriptionBoxPriceWrapper";
 
 type DashboardShopSubscriptionBoxProps = {
     userSubscription: UserFullSubscription | undefined,
@@ -34,7 +32,10 @@ export default function DashboardShopSubscriptionBox({userSubscription, fullTier
                         </li>
                     })}
                 </ul>
-                <DashboardShopSubscriptionBoxPrice userSubscription={userSubscription} fullTier={fullTier}/>
+                <DashboardShopSubscriptionBoxPriceWrapper
+                    userSubscription={userSubscription}
+                    fullTier={fullTier}
+                />
             </CardContent>
         </Card>
     </DashboardShopSubscriptionBoxClientWrapper>

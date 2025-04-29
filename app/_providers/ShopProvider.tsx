@@ -7,6 +7,8 @@ import {FullSubscriptionTier} from "@/src/entities/models/payments/full-subscrip
 const shopState = z.object({
     selectedSubscriptionTier: z.custom<FullSubscriptionTier>().nullable(),
     setSelectedSubscriptionTier: z.custom<Dispatch<SetStateAction<FullSubscriptionTier | null>>>(),
+    selectedProductIds: z.set(z.string()),
+    setSelectedProductIds: z.custom<Dispatch<SetStateAction<Set<string>>>>(),
     errorProductIds: z.set(z.string()),
     setErrorProductIds: z.custom<Dispatch<SetStateAction<Set<string>>>>()
 });
@@ -21,12 +23,14 @@ type ShopProviderProps = {
 
 export function ShopProvider({children}: ShopProviderProps) {
     const [selectedSubscriptionTier, setSelectedSubscriptionTier] = useState<FullSubscriptionTier | null>(null);
+    const [selectedProductIds, setSelectedProductIds] = useState<Set<string>>(new Set());
     const [errorProductIds, setErrorProductIds] = useState<Set<string>>(new Set());
-
 
     return <ShopContext.Provider value={{
         selectedSubscriptionTier,
         setSelectedSubscriptionTier,
+        selectedProductIds,
+        setSelectedProductIds,
         errorProductIds,
         setErrorProductIds
     }}>
