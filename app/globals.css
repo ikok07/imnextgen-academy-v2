@@ -119,7 +119,7 @@ button {
   }
 
   .bg-black-gradient {
-    @apply bg-gradient-to-b from-gray-600 to-gray-900
+    @apply bg-gradient-to-b from-gray-600 to-gray-900 dark:from-gray-50 dark:to-gray-200
   }
 }
 
