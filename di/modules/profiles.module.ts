@@ -7,6 +7,8 @@ import {deleteProfileUseCase} from "@/src/application/use-cases/auth/delete-prof
 import {deleteProfileController} from "@/src/interface-adapters/controllers/auth/delete-profile.controller";
 import {getProfileUseCase} from "@/src/application/use-cases/auth/get-profile.use-case";
 import {getProfileController} from "@/src/interface-adapters/controllers/auth/get-profile.controller";
+import {getProfileByEmailUseCase} from "@/src/application/use-cases/auth/get-profile-by-email.use-case";
+import { getProfileByEmailController } from "@/src/interface-adapters/controllers/auth/get-profile-by-email.controller";
 
 export function createProfilesModule() {
     const profilesModule = createModule();
@@ -22,6 +24,14 @@ export function createProfilesModule() {
     profilesModule
         .bind(DI_SYMBOLS.IGetProfileController)
         .toHigherOrderFunction(getProfileController, [DI_SYMBOLS.IGetProfileUseCase]);
+
+    profilesModule
+        .bind(DI_SYMBOLS.IGetProfileByEmailUseCase)
+        .toHigherOrderFunction(getProfileByEmailUseCase, [DI_SYMBOLS.ProfilesRepository]);
+
+    profilesModule
+        .bind(DI_SYMBOLS.IGetProfileByEmailController)
+        .toHigherOrderFunction(getProfileByEmailController, [DI_SYMBOLS.IGetProfileByEmailUseCase]);
 
     profilesModule
         .bind(DI_SYMBOLS.ICreateProfileUseCase)

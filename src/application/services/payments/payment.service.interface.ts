@@ -9,6 +9,7 @@ export const createCheckoutSessionOptionsSchema = z.object({
     locale: z.enum(["bg"]),
     mode: z.enum(["subscription", "payment"]),
     returnUrl: z.string(),
+    subscriptionMetadata: z.record(z.string()).optional(),
     metadata: z.record(z.string()).optional()
 });
 
@@ -16,5 +17,8 @@ export type CreateCheckoutSessionOptions = z.infer<typeof createCheckoutSessionO
 
 export interface IPaymentService {
     getProduct(productId: string): Promise<PaymentProduct>
+    getSubscription(subscriptionId: string): Promise<Stripe.Response<Stripe.Subscription>>
+    getCustomer(customerId: string): Promise<Stripe.Response<Stripe.Customer | Stripe.DeletedCustomer>>
     createCheckoutSession(opts: CreateCheckoutSessionOptions): Promise<Stripe.Response<Stripe.Checkout.Session>>
+    validateWebhook(rawBody: string, signature: string, secret: string): Stripe.Event
 }

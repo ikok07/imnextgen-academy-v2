@@ -27,13 +27,13 @@ export class UserBoughtModulesRepository extends BaseRepository implements IUser
             throw new DatabaseError(`Failed to get bought modules: ${e}`);
         }
     }
-    addBoughtModule(userId: string, moduleId: string): Promise<UserBoughtModule[]> {
+    addBoughtModules(userId: string, moduleIds: string[]): Promise<UserBoughtModule[]> {
         try {
             return this.queryDB(db => {
-                return db.insert(userBoughtModuleTable).values({
+                return db.insert(userBoughtModuleTable).values(moduleIds.map(moduleId => ({
                     profile_id: userId,
                     module_id: moduleId
-                }).returning();
+                }))).returning();
             });
         } catch (e) {
             throw new DatabaseError(`Failed to add bought module: ${e}`);

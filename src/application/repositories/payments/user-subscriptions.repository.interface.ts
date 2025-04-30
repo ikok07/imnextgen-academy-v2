@@ -1,4 +1,4 @@
-import {UserSubscription} from "@/drizzle/schema/user_subscriptions";
+import {UserSubscription, UserSubscriptionInsert} from "@/drizzle/schema/user_subscriptions";
 import {SubscriptionTier} from "@/drizzle/schema/subscription_tiers";
 import {SubscriptionPerk} from "@/drizzle/schema/subscription_perks";
 import {z} from "zod";
@@ -21,4 +21,7 @@ export type RawSubscriptionTiersResults = z.infer<typeof rawSubscriptionTiersRes
 export interface ISubscriptionsRepository {
     getUserSubscription(userId: string): Promise<RawUserSubscriptionResults | undefined>
     getSubscriptionTiers(): Promise<RawSubscriptionTiersResults>
+    getSubscriptionTiersByProductIds(productIds: string[]): Promise<RawSubscriptionTiersResults>
+    createUserSubscription(subscription: UserSubscriptionInsert): Promise<void>
+    removeUserSubscription(userId: string): Promise<void>
 }

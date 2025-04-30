@@ -4,7 +4,7 @@ import {UserBoughtModulesRepository} from "@/src/infrastructure/repositories/pay
 import {
     getUserBoughtModulesUseCase
 } from "@/src/application/use-cases/payments/user-bought-modules/get-user-bought-modules.use-case";
-import { addUserBoughtModuleUseCase } from "@/src/application/use-cases/payments/user-bought-modules/add-user-bought-module.use-case";
+import { addUserBoughtModulesUseCase } from "@/src/application/use-cases/payments/user-bought-modules/add-user-bought-modules.use-case";
 import {
     removeUserBoughtModuleUseCase
 } from "@/src/application/use-cases/payments/user-bought-modules/remove-user-bought-module.use-case";
@@ -12,8 +12,8 @@ import {
     removeUserBoughtModuleController
 } from "@/src/interface-adapters/controllers/payments/user-bought-modules/remove-user-bought-module.controller";
 import {
-    addUserBoughtModuleController
-} from "@/src/interface-adapters/controllers/payments/user-bought-modules/add-user-bought-module.controller";
+    addUserBoughtModulesController
+} from "@/src/interface-adapters/controllers/payments/user-bought-modules/add-user-bought-modules.controller";
 import {
     getUserBoughtModulesController
 } from "@/src/interface-adapters/controllers/payments/user-bought-modules/get-user-bought-modules.controller";
@@ -34,12 +34,12 @@ export function createUserBoughtModulesModule() {
         .toHigherOrderFunction(getUserBoughtModulesController, [DI_SYMBOLS.IGetUserBoughtModulesUseCase]);
 
     userBoughtModulesModule
-        .bind(DI_SYMBOLS.IAddUserBoughtModuleUseCase)
-        .toHigherOrderFunction(addUserBoughtModuleUseCase, [DI_SYMBOLS.IUserBoughtModulesRepository]);
+        .bind(DI_SYMBOLS.IAddUserBoughtModulesUseCase)
+        .toHigherOrderFunction(addUserBoughtModulesUseCase, [DI_SYMBOLS.IUserBoughtModulesRepository]);
 
     userBoughtModulesModule
-        .bind(DI_SYMBOLS.IAddUserBoughtModuleController)
-        .toHigherOrderFunction(addUserBoughtModuleController, [DI_SYMBOLS.IAddUserBoughtModuleUseCase]);
+        .bind(DI_SYMBOLS.IAddUserBoughtModulesController)
+        .toHigherOrderFunction(addUserBoughtModulesController, [DI_SYMBOLS.IAddUserBoughtModulesUseCase]);
 
     userBoughtModulesModule
         .bind(DI_SYMBOLS.IRemoveUserBoughtModuleController)

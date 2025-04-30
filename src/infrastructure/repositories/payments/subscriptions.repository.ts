@@ -2,11 +2,11 @@ import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repos
 import {
     ISubscriptionsRepository, RawSubscriptionTiersResults, RawUserSubscriptionResults
 } from "@/src/application/repositories/payments/user-subscriptions.repository.interface";
-import {userSubscriptionTable} from "@/drizzle/schema/user_subscriptions";
-import { DatabaseError } from "@/src/entities/errors/db/database";
-import {eq} from "drizzle-orm";
+import {UserSubscriptionInsert, userSubscriptionTable} from "@/drizzle/schema/user_subscriptions";
+import {DatabaseError} from "@/src/entities/errors/db/database";
+import {eq, inArray} from "drizzle-orm";
 import {subscriptionTiersTable} from "@/drizzle/schema/subscription_tiers";
-import { subscriptionPerksTable } from "@/drizzle/schema/subscription_perks";
+import {subscriptionPerksTable} from "@/drizzle/schema/subscription_perks";
 
 export class SubscriptionsRepository extends BaseRepository implements ISubscriptionsRepository {
     getUserSubscription(userId: string): Promise<RawUserSubscriptionResults | undefined> {
@@ -41,6 +41,53 @@ export class SubscriptionsRepository extends BaseRepository implements ISubscrip
             })
         } catch(e) {
             throw new DatabaseError(`Failed to get subscription tiers: ${e}`);
+        }
+    }
+
+    getSubscriptionTiersByProductIds(productIds: string[]): Promise<RawSubscriptionTiersResults> {
+        try {
+            return this.queryDB(db => {
+                return db
+                    .select({
+                        tier: subscriptionTiersTable,
+                        perk: subscriptionPerksTable
+                    })
+                    .from(subscriptionTiersTable)
+                    .leftJoin(subscriptionPerksTable, eq(subscriptionPerksTable.tier_id, subscriptionTiersTable.id))
+                    .where(inArray(subscriptionTiersTable.stripe_product_id, productIds));
+            })
+        } catch(e) {
+            throw new DatabaseError(`Failed to get subscription tiers: ${e}`);
+        }
+    }
+
+    async createUserSubscription(subscription: UserSubscriptionInsert): Promise<void> {
+        try {
+            await this.queryDB(db => {
+                return db
+                    .insert(userSubscriptionTable)
+                    .values(subscription)
+                    .onConflictDoUpdate({
+                        target: userSubscriptionTable.profile_id,
+                        set: {
+                            tier_id: subscription.tier_id
+                        }
+                    })
+            });
+        } catch(e) {
+            throw new DatabaseError(`Failed to create subscription: ${e}`);
+        }
+    }
+
+    async removeUserSubscription(userId: string): Promise<void> {
+        try {
+            await this.queryDB(db => {
+                return db
+                    .delete(userSubscriptionTable)
+                    .where(eq(userSubscriptionTable.profile_id, userId));
+            });
+        } catch(e) {
+            throw new DatabaseError(`Failed to create subscription: ${e}`);
         }
     }
 }

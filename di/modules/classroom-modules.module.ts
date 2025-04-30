@@ -7,6 +7,12 @@ import {getModuleByIdUseCase} from "@/src/application/use-cases/media/modules/ge
 import {getModuleByIdController} from "@/src/interface-adapters/controllers/media/modules/get-module-by-id.controller";
 import {getPaidModulesUseCase} from "@/src/application/use-cases/media/modules/get-paid-modules.use-case";
 import {getPaidModulesController} from "@/src/interface-adapters/controllers/media/modules/get-paid-modules.controller";
+import {
+    getModulesByProductIdsUseCase
+} from "@/src/application/use-cases/media/modules/get-modules-by-product-ids.use-case";
+import {
+    getModulesByProductIdsController
+} from "@/src/interface-adapters/controllers/media/modules/get-modules-by-product-ids.controller";
 
 export function createClassroomModulesModule() {
     const classroomModulesModule = createModule();
@@ -22,6 +28,14 @@ export function createClassroomModulesModule() {
     classroomModulesModule
         .bind(DI_SYMBOLS.IGetModulesController)
         .toHigherOrderFunction(getModulesController, [DI_SYMBOLS.IGetModulesUseCase]);
+
+    classroomModulesModule
+        .bind(DI_SYMBOLS.IGetModulesByProductIdsUseCase)
+        .toHigherOrderFunction(getModulesByProductIdsUseCase, [DI_SYMBOLS.IModulesRepository]);
+
+    classroomModulesModule
+        .bind(DI_SYMBOLS.IGetModulesByProductIdsController)
+        .toHigherOrderFunction(getModulesByProductIdsController, [DI_SYMBOLS.IGetModulesByProductIdsUseCase]);
 
     classroomModulesModule
         .bind(DI_SYMBOLS.IGetModuleByIdUseCase)

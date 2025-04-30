@@ -17,6 +17,17 @@ export class ProfilesRepository extends BaseRepository implements IProfilesRepos
             throw new DatabaseError(`Failed to get profile: ${e}`);
         }
     }
+    async getProfileByEmail(email: string): Promise<Profile> {
+        try {
+            return this.queryDB(async db => {
+                const result = await db.query.profilesTable.findFirst({where: eq(profilesTable.email, email)});
+                if (!result) throw new Error("Could not find profile with this email address!");
+                return result;
+            })
+        } catch(e) {
+            throw new DatabaseError(`Failed to get profile by email: ${e}`);
+        }
+    }
     async createProfile(data: ProfileInsert): Promise<Profile> {
         try {
             return this.queryDB(async (db) => {

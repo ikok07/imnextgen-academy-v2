@@ -10,6 +10,7 @@ import {getUserBoughtModules, getUserSubscription} from "@/app/actions";
 import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
 import {IoCloudOffline} from "react-icons/io5";
 import RedirectComponent from "@/app/_components/ui/RedirectComponent";
+import {getInjection} from "@/di/container";
 
 const searchParamsSchema = z.object({
     searchParams: z.object({
@@ -63,9 +64,11 @@ export async function InnerContent(props: z.infer<typeof searchParamsSchema>) {
             customerEmail: userResponse.value.user.emailAddresses[0].emailAddress,
             locale: "bg",
             mode: !alreadyPurchasedSubscription && parsedProps.searchParams.hasSubscription === "true" ? "subscription" : "payment",
-            returnUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${Routes.dashboard.shop.base()}`
+            returnUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${Routes.dashboard.shop.base()}`,
+            subscriptionMetadata: !alreadyPurchasedSubscription && parsedProps.searchParams.hasSubscription === "true" ? {
+                tier_id: (await getInjection("IGetFullSubscriptionTiersByProductIdsController")(productIds))[0].id
+            } : undefined
         });
-
         if (!checkoutSession.success) throw new Error("Checkout session is not available!");
 
         return <>
@@ -77,6 +80,7 @@ export async function InnerContent(props: z.infer<typeof searchParamsSchema>) {
             </div>
         </>
     } catch(e) {
+        console.error(e);
         return <PrimaryErrorMessage
             Icon={IoCloudOffline}
             message="Формата за плащане не можа да бъде заредена"

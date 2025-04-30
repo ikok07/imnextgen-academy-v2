@@ -32,7 +32,23 @@ export class StripeService implements IPaymentService {
         }
     }
 
-    async createCheckoutSession({productIds, customerId, customerEmail, locale, returnUrl, mode, metadata}: CreateCheckoutSessionOptions): Promise<Stripe.Response<Stripe.Checkout.Session>> {
+    async getSubscription(subscriptionId: string): Promise<Stripe.Response<Stripe.Subscription>> {
+        try {
+            return this.stripeClient.subscriptions.retrieve(subscriptionId);
+        } catch(e) {
+            throw new PaymentError("Failed to get subscription from payment service!");
+        }
+    }
+
+    async getCustomer(customerId: string): Promise<Stripe.Response<Stripe.Customer | Stripe.DeletedCustomer>> {
+        try {
+            return this.stripeClient.customers.retrieve(customerId);
+        } catch(e) {
+            throw new PaymentError("Failed to get customer from payment service!");
+        }
+    }
+
+    async createCheckoutSession({productIds, customerId, customerEmail, locale, returnUrl, mode, subscriptionMetadata, metadata}: CreateCheckoutSessionOptions): Promise<Stripe.Response<Stripe.Checkout.Session>> {
         const products = (await Promise.all(productIds.map(id => this.stripeClient.products.retrieve(id)))).filter(p => !!p.default_price);
 
         try {
@@ -50,10 +66,21 @@ export class StripeService implements IPaymentService {
                 mode,
                 ui_mode: "embedded",
                 return_url: returnUrl,
+                subscription_data: {
+                    metadata: subscriptionMetadata
+                },
                 metadata: metadata
             })
         } catch(e) {
             throw new PaymentError("Failed to create checkout session!");
+        }
+    }
+
+    validateWebhook(rawBody: string, signature: string, secret: string): Stripe.Event {
+        try {
+            return this.stripeClient.webhooks.constructEvent(rawBody, signature, secret);
+        } catch(e) {
+            throw new PaymentError("Failed to validate webhook!");
         }
     }
 }

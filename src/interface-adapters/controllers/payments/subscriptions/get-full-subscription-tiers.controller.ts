@@ -1,6 +1,6 @@
 import {
     IGetFullSubscriptionTiersUseCase
-} from "@/src/application/use-cases/payments/subscriptions/get-subscription-tiers.use-case";
+} from "@/src/application/use-cases/payments/subscriptions/get-full-subscription-tiers.use-case";
 
 export type IGetFullSubscriptionTiersController = ReturnType<typeof getFullSubscriptionTiersController>;
 

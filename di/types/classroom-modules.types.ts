@@ -7,12 +7,19 @@ import { IGetPaidModulesUseCase } from "@/src/application/use-cases/media/module
 import {
     IGetPaidModulesController
 } from "@/src/interface-adapters/controllers/media/modules/get-paid-modules.controller";
+import { IGetModulesByProductIdsController } from "@/src/interface-adapters/controllers/media/modules/get-modules-by-product-ids.controller";
+import {
+    IGetModulesByProductIdsUseCase
+} from "@/src/application/use-cases/media/modules/get-modules-by-product-ids.use-case";
 
 export const CLASSROOM_MODULES_SYMBOLS = {
     IModulesRepository: Symbol.for("IModulesRepository"),
 
     IGetModulesUseCase: Symbol.for("IGetModulesUseCase"),
     IGetModulesController: Symbol.for("IGetModulesController"),
+
+    IGetModulesByProductIdsUseCase: Symbol.for("IGetModulesByProductIdsUseCase"),
+    IGetModulesByProductIdsController: Symbol.for("IGetModulesByProductIdsController"),
 
     IGetModuleByIdUseCase: Symbol.for("IGetModuleByIdUseCase"),
     IGetModuleByIdController: Symbol.for("IGetModuleByIdController"),
@@ -26,6 +33,9 @@ export interface CLASSROOM_MODULES_RETURN_TYPES {
 
     IGetModulesUseCase: IGetModulesUseCase,
     IGetModulesController: IGetModulesController,
+
+    IGetModulesByProductIdsUseCase: IGetModulesByProductIdsUseCase,
+    IGetModulesByProductIdsController: IGetModulesByProductIdsController
 
     IGetModuleByIdUseCase: IGetModuleByIdUseCase,
     IGetModuleByIdController: IGetModuleByIdController,

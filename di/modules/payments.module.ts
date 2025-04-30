@@ -7,6 +7,12 @@ import {createCheckoutSessionUseCase} from "@/src/application/use-cases/payments
 import {
     createCheckoutSessionController
 } from "@/src/interface-adapters/controllers/payments/create-checkout-session.controller";
+import {validateWebhookUseCase} from "@/src/application/use-cases/payments/validate-webhook.use-case";
+import {validateWebhookController} from "@/src/interface-adapters/controllers/payments/validate-webhook.controller";
+import {getCustomerUseCase} from "@/src/application/use-cases/payments/get-customer.use-case";
+import {getCustomerController} from "@/src/interface-adapters/controllers/payments/get-customer.controller";
+import {getSubscriptionUseCase} from "@/src/application/use-cases/payments/get-subscription.use-case";
+import {getSubscriptionController} from "@/src/interface-adapters/controllers/payments/get-subscription.controller";
 
 export function createPaymentsModule() {
     const paymentsModule = createModule();
@@ -24,12 +30,36 @@ export function createPaymentsModule() {
         .toHigherOrderFunction(getProductController, [DI_SYMBOLS.IGetProductUseCase]);
 
     paymentsModule
+        .bind(DI_SYMBOLS.IGetSubscriptionUseCase)
+        .toHigherOrderFunction(getSubscriptionUseCase, [DI_SYMBOLS.IPaymentService]);
+
+    paymentsModule
+        .bind(DI_SYMBOLS.IGetSubscriptionController)
+        .toHigherOrderFunction(getSubscriptionController, [DI_SYMBOLS.IGetSubscriptionUseCase]);
+
+    paymentsModule
         .bind(DI_SYMBOLS.ICreateCheckoutSessionUseCase)
         .toHigherOrderFunction(createCheckoutSessionUseCase, [DI_SYMBOLS.IPaymentService]);
 
     paymentsModule
         .bind(DI_SYMBOLS.ICreateCheckoutSessionController)
         .toHigherOrderFunction(createCheckoutSessionController, [DI_SYMBOLS.ICreateCheckoutSessionUseCase]);
+
+    paymentsModule
+        .bind(DI_SYMBOLS.IValidateWebhookUseCase)
+        .toHigherOrderFunction(validateWebhookUseCase, [DI_SYMBOLS.IPaymentService]);
+
+    paymentsModule
+        .bind(DI_SYMBOLS.IValidateWebhookController)
+        .toHigherOrderFunction(validateWebhookController, [DI_SYMBOLS.IValidateWebhookUseCase]);
+
+    paymentsModule
+        .bind(DI_SYMBOLS.IGetCustomerUseCase)
+        .toHigherOrderFunction(getCustomerUseCase, [DI_SYMBOLS.IPaymentService]);
+
+    paymentsModule
+        .bind(DI_SYMBOLS.IGetCustomerController)
+        .toHigherOrderFunction(getCustomerController, [DI_SYMBOLS.IGetCustomerUseCase]);
 
     return paymentsModule;
 }

@@ -4,6 +4,6 @@ import {Profile} from "@/drizzle/schema/profiles";
 
 export interface IUserBoughtModulesRepository {
     getBoughtModules(userId: string): Promise<{ bought_module: UserBoughtModule, profile: Profile, module: Module }[]>
-    addBoughtModule(userId: string, moduleId: string): Promise<UserBoughtModule[]>
+    addBoughtModules(userId: string, moduleIds: string[]): Promise<UserBoughtModule[]>
     removeBoughtModule(userId: string, moduleId: string): Promise<UserBoughtModule[]>
 }
