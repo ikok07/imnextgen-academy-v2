@@ -10,7 +10,8 @@ const shopState = z.object({
     selectedProductIds: z.set(z.string()),
     setSelectedProductIds: z.custom<Dispatch<SetStateAction<Set<string>>>>(),
     errorProductIds: z.set(z.string()),
-    setErrorProductIds: z.custom<Dispatch<SetStateAction<Set<string>>>>()
+    setErrorProductIds: z.custom<Dispatch<SetStateAction<Set<string>>>>(),
+    clearCart: z.custom<() => void>()
 });
 
 export type ShopState = z.infer<typeof shopState>;
@@ -26,13 +27,19 @@ export function ShopProvider({children}: ShopProviderProps) {
     const [selectedProductIds, setSelectedProductIds] = useState<Set<string>>(new Set());
     const [errorProductIds, setErrorProductIds] = useState<Set<string>>(new Set());
 
+    function clearCart() {
+        setSelectedSubscriptionTier(null);
+        setSelectedProductIds(new Set());
+    }
+
     return <ShopContext.Provider value={{
         selectedSubscriptionTier,
         setSelectedSubscriptionTier,
         selectedProductIds,
         setSelectedProductIds,
         errorProductIds,
-        setErrorProductIds
+        setErrorProductIds,
+        clearCart
     }}>
         {children}
     </ShopContext.Provider>

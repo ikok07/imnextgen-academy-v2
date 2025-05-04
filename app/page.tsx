@@ -5,7 +5,8 @@ import ThemeSelector from "@/app/_components/ui/theme/ThemeSelector";
 
 // DONE: 1. Add payment options to profile settings
 // DONE: 1.1 Add modules to user's bought modules
-// TODO: 1.2 Add payment success page
+// DONE: 1.2 Add payment payment-success page
+// TODO: 1.3 Refactor Stripe's payment sheet
 // TODO: 2. Add global 404 and error pages
 // TODO: 3. Integrate DSK Payments
 // TODO: 4. Full user test

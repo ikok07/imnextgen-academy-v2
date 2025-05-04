@@ -64,7 +64,7 @@ export class StripeService implements IPaymentService {
                 customer: customerId,
                 locale,
                 mode,
-                ui_mode: "embedded",
+                ui_mode: "custom",
                 return_url: returnUrl,
                 subscription_data: {
                     metadata: subscriptionMetadata

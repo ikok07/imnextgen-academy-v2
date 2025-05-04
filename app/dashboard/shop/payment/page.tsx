@@ -73,7 +73,7 @@ export async function InnerContent(props: z.infer<typeof searchParamsSchema>) {
             customerEmail: userResponse.value.user.emailAddresses[0].emailAddress,
             locale: "bg",
             mode: !userHasSubscription && parsedProps.searchParams.hasSubscription === "true" ? "subscription" : "payment",
-            returnUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${Routes.dashboard.shop.base()}`,
+            returnUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${Routes.dashboard.shop.paymentSuccess()}`,
             subscriptionMetadata: !userHasSubscription && parsedProps.searchParams.hasSubscription === "true" ? {
                 tier_id: (await getInjection("IGetFullSubscriptionTiersByProductIdsController")(productIds))[0].id
             } : undefined
@@ -85,7 +85,10 @@ export async function InnerContent(props: z.infer<typeof searchParamsSchema>) {
                 <h1>DSK BANK</h1>
             </div>
             <div>
-                <StripePaymentSheet clientSecret={checkoutSession.value.client_secret} />
+                <StripePaymentSheet
+                    clientSecret={checkoutSession.value.client_secret}
+                    userEmail={userResponse.value.user.emailAddresses[0].emailAddress}
+                />
             </div>
         </>
     } catch(e) {
