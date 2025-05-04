@@ -9,15 +9,20 @@ import {
 import {secondaryControlBackground} from "@/app/_components/ui/backgrounds/secondaryControlBackground";
 import Image from "next/image";
 import {IoAlertCircle, IoChevronUp, IoExit, IoMoon, IoSettings} from "react-icons/io5";
-import {useClerk, useUser} from "@clerk/nextjs";
+import {useClerk} from "@clerk/nextjs";
 import DropdownMenuItemRow from "@/app/_components/ui/dropdown/DropdownMenuItemRow";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {useTheme} from "next-themes";
 import PrimarySwitch from "@/app/_components/ui/toggles/PrimarySwitch";
 import {useAppUser} from "@/app/_hooks/auth/useAppUser";
+import {setSettingsOpened} from "@/app/_store/slices/settings";
+import {useAppDispatch, useAppSelector} from "@/app/_hooks/redux";
+import {setDashboardMobileSidebarOpen} from "@/app/_store/slices/dashboardSidebar";
 
 export default function DashboardSidebarAccountDropdownMenu() {
     const clerk = useClerk();
+    const dispatch = useAppDispatch();
+
     const {theme, setTheme} = useTheme();
     const {userObject, emailConfirmed} = useAppUser();
 
@@ -61,7 +66,10 @@ export default function DashboardSidebarAccountDropdownMenu() {
                     Icon={IoSettings}
                     label="Настройки"
                     additionalContent={!emailConfirmed && <IoAlertCircle className="text-red-500 text-lg"/>}
-                    onClick={() => clerk.openUserProfile()}
+                    onClick={() => {
+                        dispatch(setDashboardMobileSidebarOpen(false));
+                        dispatch(setSettingsOpened(true));
+                    }}
                 />
                 <DropdownMenuItemRow
                     Icon={IoMoon}

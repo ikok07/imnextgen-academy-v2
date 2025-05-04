@@ -1,9 +1,7 @@
-import {IoSettings} from "react-icons/io5";
 import {IconType} from "react-icons";
 import Link from "next/link";
 import {cn} from "@/app/_utils/cn";
 import {DropdownMenuItem} from "@/app/_components/ui/shadcn/dropdown-menu";
-import {LoadingSpinner} from "@/app/_components/ui/shadcn/loading-spinner";
 import PrimaryLoader from "@/app/_components/ui/loaders/PrimaryLoader";
 import {ReactNode} from "react";
 
@@ -28,9 +26,24 @@ type DropdownMenuItemRowButton = {
     iconClassName?: string,
 }
 
-type DropdownMenuItemRowProps = DropdownMenuItemRowLink | DropdownMenuItemRowButton;
+type DropdownMenuItemRowCustomeButton = {
+    type: "custom-button",
+    children: ReactNode,
+    additionalContent?: ReactNode,
+}
+
+type DropdownMenuItemRowProps = DropdownMenuItemRowLink | DropdownMenuItemRowButton | DropdownMenuItemRowCustomeButton;
 
 export default function DropdownMenuItemRow(props: DropdownMenuItemRowProps) {
+
+    if (props.type === "custom-button") {
+        return <DropdownMenuItem className="cursor-pointer group">
+            <div className="flex items-center justify-between w-full">
+                {props.children}
+                {props.additionalContent}
+            </div>
+        </DropdownMenuItem>;
+    }
 
     const className = cn(
         "flex items-center gap-3 w-full",
@@ -66,5 +79,4 @@ export default function DropdownMenuItemRow(props: DropdownMenuItemRowProps) {
             {props.additionalContent}
         </div>
     </DropdownMenuItem>
-
 }

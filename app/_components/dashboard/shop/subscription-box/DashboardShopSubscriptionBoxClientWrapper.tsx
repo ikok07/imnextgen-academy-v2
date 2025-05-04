@@ -15,7 +15,7 @@ type DashboardShopSubscriptionBoxClientWrapperProps = {
 export default function DashboardShopSubscriptionBoxClientWrapper({userSubscription, fullTier, children}: DashboardShopSubscriptionBoxClientWrapperProps) {
     const {selectedSubscriptionTier, setSelectedSubscriptionTier, errorProductIds} = useShop();
 
-    const alreadySubscribed = useMemo(() => userSubscription?.tier.id === fullTier.id, []);
+    const alreadySubscribed = !!userSubscription;
 
     if (alreadySubscribed) {
         return <TooltipProvider>
@@ -24,7 +24,7 @@ export default function DashboardShopSubscriptionBoxClientWrapper({userSubscript
                     {children}
                 </TooltipTrigger>
                 <TooltipContent>
-                    <p>Вече притежаваш този абонамент</p>
+                    <p>Вече имаш активен абонамент. В случай, че искаш да го промениш, е необходимо да го прекратиш преди да закупиш нов.</p>
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>

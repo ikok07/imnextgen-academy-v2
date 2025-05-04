@@ -14,11 +14,13 @@ type DashboardShopSubscriptionBoxPriceWrapperProps = {
 export default function DashboardShopSubscriptionBoxPriceWrapper({userSubscription, fullTier}: DashboardShopSubscriptionBoxPriceWrapperProps) {
     const {selectedSubscriptionTier} = useShop();
     const selected = useMemo(() => selectedSubscriptionTier?.id === fullTier.id, [selectedSubscriptionTier]);
-    const alreadySubscribed = useMemo(() => userSubscription?.tier.id === fullTier.id, []);
+    const hasSubscription = !!userSubscription;
+    const subscribedToTheSamePlan = useMemo(() => userSubscription?.tier.id === fullTier.id, []);
 
     return <DashboardShopBoxPrice
         stripe_product_id={fullTier.stripe_product_id}
         selected={selected}
-        isAcquired={alreadySubscribed}
+        isAcquired={subscribedToTheSamePlan}
+        isDisabled={hasSubscription && !subscribedToTheSamePlan}
     />
 }

@@ -17,6 +17,18 @@ button {
   max-height: var(--radix-dropdown-menu-content-available-height);
 }
 
+.settings-modal {
+  .cl-rootBox {
+    @apply w-[95vw] md:w-auto h-full md:h-auto m-auto
+  }
+  .cl-cardBox {
+    @apply w-full h-full max-w-full md:h-[44rem] max-h-[85vh]
+  }
+  .cl-profileSectionItem {
+    flex-wrap: wrap;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -115,7 +127,11 @@ button {
   }
 
   .bg-success-gradient {
-    @apply bg-gradient-to-b from-green-400 to-green-600
+    @apply bg-gradient-to-b from-green-400 to-green-600 hover:from-green-500 hover:to-green-700
+  }
+
+  .bg-red-gradient {
+    @apply bg-gradient-to-b from-red-400 to-red-600 hover:from-red-500 hover:to-red-700
   }
 
   .bg-black-gradient {

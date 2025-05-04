@@ -1,6 +1,6 @@
 import DashboardPageTitle from "@/app/_components/dashboard/DashboardPageTitle";
 import StripePaymentSheet from "@/app/_components/dashboard/shop/payment/StripePaymentSheet";
-import {createCheckoutSession} from "@/app/dashboard/shop/actions";
+import {createCheckoutSession, getFullSubscriptionTiers} from "@/app/dashboard/shop/actions";
 import {z} from "zod";
 import {getUser} from "@/app/dashboard/actions";
 import { Routes } from "@/app/_utils/nav/routes";
@@ -38,20 +38,29 @@ export async function InnerContent(props: z.infer<typeof searchParamsSchema>) {
         const userResponse = await getUser();
         if (!userResponse.success || !userResponse.value.user || !userResponse.value.dbProfile) throw new Error("User is not available!");
 
-        const [userSubscriptionResponse, boughtModulesResponse] = await Promise.all([
+        const [userSubscriptionResponse, fullSubscriptionsResponse, boughtModulesResponse] = await Promise.all([
             getUserSubscription(userResponse.value.user.id),
+            getFullSubscriptionTiers(),
             getUserBoughtModules(userResponse.value.user.id),
         ]);
 
         if (!userSubscriptionResponse.success) throw new Error("User subscription is not available!");
+        if (!fullSubscriptionsResponse.success) throw new Error("Full subscription tiers are not available!");
         if (!boughtModulesResponse.success) throw new Error("Bought modules are not available!");
 
+        const userHasSubscription = !!userSubscriptionResponse.value;
         let productIds = parsedProps.searchParams.productIds.split(',')
-        const alreadyPurchasedSubscription = productIds.some(productId => userSubscriptionResponse.value?.tier?.stripe_product_id == productId);
 
+        // Remove subscription product id if user is already subscribed
+        if (userHasSubscription) {
+            productIds = productIds.filter(productId => {
+                return !fullSubscriptionsResponse.value.some(s => s.stripe_product_id === productId)
+            });
+        }
+
+        // Remove already bought product ids.
         productIds = productIds.filter(productId => {
-            return userSubscriptionResponse.value?.tier?.stripe_product_id != productId &&
-                !boughtModulesResponse.value.some(v => {
+            return !boughtModulesResponse.value.some(v => {
                     return v.module.stripe_product_id === productId;
                 })
         });
@@ -63,9 +72,9 @@ export async function InnerContent(props: z.infer<typeof searchParamsSchema>) {
             customerId: userResponse.value.dbProfile.payment_customer_id || undefined,
             customerEmail: userResponse.value.user.emailAddresses[0].emailAddress,
             locale: "bg",
-            mode: !alreadyPurchasedSubscription && parsedProps.searchParams.hasSubscription === "true" ? "subscription" : "payment",
+            mode: !userHasSubscription && parsedProps.searchParams.hasSubscription === "true" ? "subscription" : "payment",
             returnUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${Routes.dashboard.shop.base()}`,
-            subscriptionMetadata: !alreadyPurchasedSubscription && parsedProps.searchParams.hasSubscription === "true" ? {
+            subscriptionMetadata: !userHasSubscription && parsedProps.searchParams.hasSubscription === "true" ? {
                 tier_id: (await getInjection("IGetFullSubscriptionTiersByProductIdsController")(productIds))[0].id
             } : undefined
         });

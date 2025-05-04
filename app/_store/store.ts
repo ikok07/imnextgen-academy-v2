@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit/react";
 import {dashboardSidebarReducer} from "@/app/_store/slices/dashboardSidebar";
+import {settingsReducer} from "@/app/_store/slices/settings";
 
 export const makeStore = () => {
     return configureStore({
         reducer: {
-            dashboardSidebar: dashboardSidebarReducer
+            dashboardSidebar: dashboardSidebarReducer,
+            settings: settingsReducer
         }
     })
 }

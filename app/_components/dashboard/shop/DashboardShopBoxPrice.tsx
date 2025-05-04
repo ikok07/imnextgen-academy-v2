@@ -8,14 +8,16 @@ import {toast} from "sonner";
 import {useShop} from "@/app/_providers/ShopProvider";
 import DashboardShopBoxPriceSkeleton
     from "@/app/_components/dashboard/shop/skeletons/DashboardShopBoxPriceSkeleton";
+import {useMemo} from "react";
 
 type DashboardShopBoxPriceProps = {
     stripe_product_id: string,
     selected: boolean,
-    isAcquired: boolean
+    isAcquired: boolean,
+    isDisabled: boolean,
 }
 
-export default function DashboardShopBoxPrice({stripe_product_id, selected, isAcquired}: DashboardShopBoxPriceProps) {
+export default function DashboardShopBoxPrice({stripe_product_id, selected, isAcquired, isDisabled}: DashboardShopBoxPriceProps) {
     const {setErrorProductIds} = useShop();
 
     const {data: paymentProductQuery, isLoading, isError} = useErrorQuery({
@@ -27,6 +29,16 @@ export default function DashboardShopBoxPrice({stripe_product_id, selected, isAc
         }
     });
 
+    let buttonIcon = useMemo(() => {
+        if (isDisabled) {
+            return <IoCloseCircle />
+        }
+        if (selected || isAcquired) {
+            return <IoCheckmarkCircle />
+        }
+        return <IoCart/>;
+    }, [isDisabled, selected, isAcquired]);
+
     if (isLoading) return <DashboardShopBoxPriceSkeleton />
 
     if (!paymentProductQuery?.success || isError || !paymentProductQuery.value.price) return <div className="flex items-center gap-1 text-red-500">
@@ -37,9 +49,9 @@ export default function DashboardShopBoxPrice({stripe_product_id, selected, isAc
     return <div className="flex items-center justify-between flex-wrap">
         <h1 className="flex items-end"><span className="text-2xl font-black">{Math.floor(paymentProductQuery.value.price / 100)}</span> <span className="text-sm font-normal pb-1">.{(paymentProductQuery.value.price % 100).toString().padStart(2, '0')} лв.</span></h1>
         <PrimaryButton
-            className={`${isAcquired ? "bg-success-gradient" : selected ? "bg-inactive-gradient text-primary" : ""}`}
+            className={`${isDisabled ? "bg-inactive-gradient text-primary" : isAcquired ? "bg-success-gradient" : selected ? "bg-inactive-gradient text-primary" : ""}`}
         >
-            {selected || isAcquired ? <IoCheckmarkCircle /> : <IoCart/>}
+            {buttonIcon}
         </PrimaryButton>
     </div>
 }

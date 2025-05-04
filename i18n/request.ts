@@ -5,7 +5,7 @@ import {SUPPORTED_LANGS, SupportedLanguage} from "@/app/_config/config";
 export default getRequestConfig(async () => {
     const userCookies = cookies();
     const lang = userCookies.get("NEXT_INTL");
-    let locale = "en";
+    let locale = "bg";
 
     if (lang && SUPPORTED_LANGS.includes(lang.value as SupportedLanguage)) locale = lang.value
 
