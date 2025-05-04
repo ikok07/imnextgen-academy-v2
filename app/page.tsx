@@ -3,7 +3,9 @@ import {getTranslations} from "next-intl/server";
 import AuthComponent from "@/app/_components/AuthComponent";
 import ThemeSelector from "@/app/_components/ui/theme/ThemeSelector";
 
-// TODO: 1. Add payment options to profile settings
+// DONE: 1. Add payment options to profile settings
+// DONE: 1.1 Add modules to user's bought modules
+// TODO: 1.2 Add payment success page
 // TODO: 2. Add global 404 and error pages
 // TODO: 3. Integrate DSK Payments
 // TODO: 4. Full user test

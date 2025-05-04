@@ -57,10 +57,9 @@ async function handleCheckoutComplete(event: Stripe.CheckoutSessionCompletedEven
         });
     }
 
-    if (event.data.object.line_items) {
-        const productIds = event.data.object.line_items.data.map(item => item.price).filter(p => !!p).map(p => p.product as string);
-        const modules: Module[] = await getInjection("IGetModulesByProductIdsUseCase")(productIds);
-
+    const lineItems = await getInjection("IGetCheckoutSessionsLineItemsController")(event.data.object.id);
+    if (lineItems.length > 0) {
+        const modules = await getInjection("IGetModulesByProductIdsController")(lineItems.map(i => i.price!.product as string));
         await getInjection("IAddUserBoughtModulesController")(profile.id, modules.map(m => m.id));
     }
 }

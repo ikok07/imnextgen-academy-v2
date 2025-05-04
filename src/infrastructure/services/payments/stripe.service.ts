@@ -76,6 +76,14 @@ export class StripeService implements IPaymentService {
         }
     }
 
+    async getCheckoutSessionsLineItems(sessionId: string): Promise<Stripe.LineItem[]> {
+        try {
+            return (await this.stripeClient.checkout.sessions.listLineItems(sessionId)).data;
+        } catch(e) {
+            throw new PaymentError("Failed to get checkout session's line items!");
+        }
+    }
+
     validateWebhook(rawBody: string, signature: string, secret: string): Stripe.Event {
         try {
             return this.stripeClient.webhooks.constructEvent(rawBody, signature, secret);

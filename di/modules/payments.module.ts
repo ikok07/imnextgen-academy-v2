@@ -13,6 +13,12 @@ import {getCustomerUseCase} from "@/src/application/use-cases/payments/get-custo
 import {getCustomerController} from "@/src/interface-adapters/controllers/payments/get-customer.controller";
 import {getSubscriptionUseCase} from "@/src/application/use-cases/payments/get-subscription.use-case";
 import {getSubscriptionController} from "@/src/interface-adapters/controllers/payments/get-subscription.controller";
+import {
+    getCheckoutSessionsLineItemsUseCase
+} from "@/src/application/use-cases/payments/get-checkout-sessions-line-items.use-case";
+import {
+    getCheckoutSessionsLineItemsController
+} from "@/src/interface-adapters/controllers/payments/get-checkout-sessions-line-items.controller";
 
 export function createPaymentsModule() {
     const paymentsModule = createModule();
@@ -44,6 +50,14 @@ export function createPaymentsModule() {
     paymentsModule
         .bind(DI_SYMBOLS.ICreateCheckoutSessionController)
         .toHigherOrderFunction(createCheckoutSessionController, [DI_SYMBOLS.ICreateCheckoutSessionUseCase]);
+
+    paymentsModule
+        .bind(DI_SYMBOLS.IGetCheckoutSessionsLineItemsUseCase)
+        .toHigherOrderFunction(getCheckoutSessionsLineItemsUseCase, [DI_SYMBOLS.IPaymentService]);
+
+    paymentsModule
+        .bind(DI_SYMBOLS.IGetCheckoutSessionsLineItemsController)
+        .toHigherOrderFunction(getCheckoutSessionsLineItemsController, [DI_SYMBOLS.IGetCheckoutSessionsLineItemsUseCase]);
 
     paymentsModule
         .bind(DI_SYMBOLS.IValidateWebhookUseCase)
