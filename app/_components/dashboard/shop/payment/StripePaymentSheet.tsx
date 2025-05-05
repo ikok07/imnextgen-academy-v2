@@ -8,17 +8,20 @@ import {
 } from "@stripe/react-stripe-js";
 import {useTheme} from "next-themes";
 import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {useMutation} from "react-query";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/app/_components/ui/shadcn/card";
 import {useShop} from "@/app/_providers/ShopProvider";
 import {useRouter} from "next/navigation";
+import PrimaryInput from "@/app/_components/ui/inputs/PrimaryInput";
+import {useDebounce} from "@react-hook/debounce";
 import {Routes} from "@/app/_utils/nav/routes";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!, {locale: "bg"});
 
 type StripePaymentSheetProps = {
-    clientSecret: string | null
+    clientSecret: string | null,
+    phoneNumber: string
 }
 
 
@@ -49,19 +52,57 @@ export default function StripePaymentSheet(props: StripePaymentSheetProps) {
                 }
             }
         }} >
-        <InnerContent />
+        <InnerContent {...props} />
     </CheckoutProvider>
 }
 
-function InnerContent() {
+function InnerContent({phoneNumber}: StripePaymentSheetProps) {
     const checkout = useCheckout();
+    const [promoCode, setPromoCode] = useState<string | null>(null);
+    const [debouncedPromoCode, setDebouncedPromoCode] = useDebounce<string | null>(null, 1000);
+    const [promoCodeError, setPromoCodeError] = useState<string | null>(null);
 
+    const discountAmount = useMemo(() => {
+        if (checkout.discountAmounts) {
+            let total = 0;
+            checkout.discountAmounts.forEach(amount => total += amount.minorUnitsAmount);
+            return total / 100;
+        }
+    }, [checkout.discountAmounts?.length])
+
+    // Cannot be inside server action!
     const {mutate: confirmCheckoutMethod, isLoading} = useMutation({
         mutationFn: async () => {
+            const phoneNumberResponse = await checkout.updatePhoneNumber(phoneNumber);
+            if (phoneNumberResponse.type === "error") throw new Error("Invalid phone number!");
             const confirmResponse = await checkout.confirm();
             if (confirmResponse.type === "error") throw new Error(confirmResponse.error.message);
         }
+    });
+
+    const {mutate: applyPromoCodeMethod, isLoading: isApplyingPromoCode} = useMutation({
+        mutationFn: async (promoCode: string) => {
+            const response = await checkout.applyPromotionCode(promoCode);
+            if (response.type === "error") throw new Error(response.error.message);
+            setPromoCodeError(null);
+        },
+        onError(e: Error) {
+            setPromoCodeError(e.message);
+        }
     })
+
+    useEffect(() => {
+        if (promoCode) {
+            setDebouncedPromoCode(promoCode);
+        } else {
+            setPromoCodeError(null);
+            setDebouncedPromoCode(null);
+        }
+    }, [promoCode]);
+
+    useEffect(() => {
+        if (debouncedPromoCode) applyPromoCodeMethod(debouncedPromoCode);
+    }, [debouncedPromoCode]);
 
     return <Card>
         <CardHeader className="space-y-0.5">
@@ -78,14 +119,30 @@ function InnerContent() {
                             key={index}
                         >
                             <div>- {item.name}</div>
-                            <div>{item.total.amount}</div>
+                            <div className="font-bold">
+                                {item.total.amount}
+                                {checkout?.discountAmounts && checkout.discountAmounts[index] && <span className="text-sm text-cta">(-{checkout.discountAmounts[index].percentOff}%)</span>}
+                            </div>
                         </div>
                     })}
                 </ul>
             </div>
             <div className="mb-5">
                 <p className="text-primary/70">Обща сума</p>
-                <h1 className="text-2xl font-black uppercase">{checkout.total.total.amount}</h1>
+                <h1 className="text-2xl font-black uppercase">
+                    {checkout.total.total.amount}
+                    {discountAmount && discountAmount > 0 ? <span className="text-sm text-cta"> (-{discountAmount.toFixed(2)} {checkout.currency})</span> : ""}
+                </h1>
+            </div>
+            <div className="mb-3">
+                <PrimaryInput
+                    label="Промокод"
+                    placeholder="Опционален код за отстъпка"
+                    value={promoCode ?? ""}
+                    onChange={(e: any) => setPromoCode(e.target.value)}
+                    error={promoCodeError ?? undefined}
+                    disabled={isApplyingPromoCode}
+                />
             </div>
             <PaymentElement />
             <PrimaryButton

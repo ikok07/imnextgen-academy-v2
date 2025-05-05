@@ -23,6 +23,5 @@ export interface IPaymentService {
     getCustomer(customerId: string): Promise<Stripe.Response<Stripe.Customer | Stripe.DeletedCustomer>>
     createCheckoutSession(opts: CreateCheckoutSessionOptions): Promise<Stripe.Response<Stripe.Checkout.Session>>
     getCheckoutSessionsLineItems(sessionId: string): Promise<Stripe.LineItem[]>
-    confirmCheckout(customerEmail: string, checkout: ConfirmCheckout): Promise<void>
     validateWebhook(rawBody: string, signature: string, secret: string): Stripe.Event
 }

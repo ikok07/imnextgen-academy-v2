@@ -70,6 +70,7 @@ export class StripeService implements IPaymentService {
                 subscription_data: {
                     metadata: subscriptionMetadata
                 },
+                allow_promotion_codes: true,
                 metadata: metadata
             })
         } catch(e) {
@@ -82,19 +83,6 @@ export class StripeService implements IPaymentService {
             return (await this.stripeClient.checkout.sessions.listLineItems(sessionId)).data;
         } catch(e) {
             throw new PaymentError(`Failed to get checkout session's line items! ${e}`);
-        }
-    }
-
-    async confirmCheckout(customerEmail: string, checkout: ConfirmCheckout): Promise<void> {
-        try {
-            const {type: updateEmailResponseType} = await checkout.updateEmail(customerEmail);
-            if (updateEmailResponseType === "error") throw new Error("Invalid customer email!");
-
-            const confirmResponse = await checkout.confirm();
-            if (confirmResponse.type === "error") throw new Error(confirmResponse.error.message);
-        } catch(e) {
-            console.log(e);
-            throw new PaymentError(`Failed to confirm checkout! ${e}`);
         }
     }
 

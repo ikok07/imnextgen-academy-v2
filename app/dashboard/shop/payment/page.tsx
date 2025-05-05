@@ -87,6 +87,7 @@ export async function InnerContent(props: z.infer<typeof searchParamsSchema>) {
             <div>
                 <StripePaymentSheet
                     clientSecret={checkoutSession.value.client_secret}
+                    phoneNumber={userResponse.value.user.phoneNumbers[0].phoneNumber}
                 />
             </div>
         </>
