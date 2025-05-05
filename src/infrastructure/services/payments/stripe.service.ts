@@ -71,6 +71,9 @@ export class StripeService implements IPaymentService {
                     metadata: subscriptionMetadata
                 },
                 allow_promotion_codes: true,
+                phone_number_collection: {
+                    enabled: true
+                },
                 metadata: metadata
             })
         } catch(e) {

@@ -10,7 +10,7 @@ export const profilesTable = pgTable("profiles", {
     configured: boolean("configured").notNull().default(false),
     payment_customer_id: text("payment_customer_id"),
     image_url: text("image_url"),
-})
+});
 
 export const profilesSchema = createSelectSchema(profilesTable);
 export type Profile = z.infer<typeof profilesSchema>;

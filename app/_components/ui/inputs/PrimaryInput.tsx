@@ -27,7 +27,7 @@ export default function PrimaryInput({label, error, multiline, className, ...pro
             )}
             {...(props as any)}
         />
-        <div className={`${error ? "h-5" : "h-0"} transition-all duration-300`}>
+        <div className={`${error ? "h-9" : "h-0"} transition-all duration-300`}>
             <small
                 className={
                     cn(

@@ -20,7 +20,7 @@ export default function LoomVideoPlayer({videoUrl, className, playerClassName, s
         )}
     >
         <iframe
-            src={`${videoUrl}&hideEmbedTopBar=true`}
+            src={`${videoUrl}&hideEmbedTopBar=false`}
             className={cn(
                 `${isLoading && "hidden"} max-w-[50rem] w-[97%] md:mx-auto aspect-video rounded-sm shadow-md md:shadow-xl`,
                 playerClassName

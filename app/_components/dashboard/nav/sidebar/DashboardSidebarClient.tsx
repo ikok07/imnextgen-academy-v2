@@ -19,6 +19,7 @@ import DashboardSidebarSkeleton from "@/app/_components/dashboard/nav/sidebar/Da
 import {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "@/app/_hooks/redux";
 import {setDashboardLoaded, setDashboardMobileSidebarOpen} from "@/app/_store/slices/dashboardSidebar";
+import {useTheme} from "next-themes";
 
 type DashboardSidebarClientWrapperProps = {
     results: DecisionResults
@@ -33,6 +34,7 @@ export default function DashboardSidebarClient(props: DashboardSidebarClientWrap
 export function InnerContent({results}: DashboardSidebarClientWrapperProps) {
     const {dashboardMobileSidebarOpen} = useAppSelector(state => state.dashboardSidebar);
     const dispatch = useAppDispatch();
+    const {resolvedTheme} = useTheme();
 
     const {viewLoaded} = useViewLoaded({
         onLoaded() {
@@ -62,7 +64,7 @@ export function InnerContent({results}: DashboardSidebarClientWrapperProps) {
         >
             <SidebarHeader>
                 <div className="grid">
-                    <div><Image alt="I&M NextGen Academy" src="/logo.png" width={200} height={60} /></div>
+                    <div><Image alt="I&M NextGen Academy" src={resolvedTheme === "dark" ? "/logo-dark.png" : "/logo.png"} width={200} height={60} /></div>
                 </div>
             </SidebarHeader>
             <SidebarContent>

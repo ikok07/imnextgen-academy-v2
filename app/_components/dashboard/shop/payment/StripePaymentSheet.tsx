@@ -16,6 +16,9 @@ import {useRouter} from "next/navigation";
 import PrimaryInput from "@/app/_components/ui/inputs/PrimaryInput";
 import {useDebounce} from "@react-hook/debounce";
 import {Routes} from "@/app/_utils/nav/routes";
+import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
+import PaymentSheetSkeleton from "@/app/_components/dashboard/shop/payment/PaymentSheetSkeleton";
+import {toast} from "sonner";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!, {locale: "bg"});
 
@@ -57,6 +60,7 @@ export default function StripePaymentSheet(props: StripePaymentSheetProps) {
 }
 
 function InnerContent({phoneNumber}: StripePaymentSheetProps) {
+    const {viewLoaded} = useViewLoaded();
     const checkout = useCheckout();
     const [promoCode, setPromoCode] = useState<string | null>(null);
     const [debouncedPromoCode, setDebouncedPromoCode] = useDebounce<string | null>(null, 1000);
@@ -77,6 +81,9 @@ function InnerContent({phoneNumber}: StripePaymentSheetProps) {
             if (phoneNumberResponse.type === "error") throw new Error("Invalid phone number!");
             const confirmResponse = await checkout.confirm();
             if (confirmResponse.type === "error") throw new Error(confirmResponse.error.message);
+        },
+        onError(e: Error) {
+            toast.error(e.message);
         }
     });
 
@@ -103,6 +110,8 @@ function InnerContent({phoneNumber}: StripePaymentSheetProps) {
     useEffect(() => {
         if (debouncedPromoCode) applyPromoCodeMethod(debouncedPromoCode);
     }, [debouncedPromoCode]);
+
+    if (!viewLoaded) return <PaymentSheetSkeleton />
 
     return <Card>
         <CardHeader className="space-y-0.5">

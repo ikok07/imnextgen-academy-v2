@@ -6,7 +6,7 @@ import DashboardModuleVideoDescription
 import SecondaryButton from "@/app/_components/ui/buttons/SecondaryButton";
 import {IoCheckmarkCircle} from "react-icons/io5";
 import useErrorQuery from "@/app/_hooks/useErrorQuery";
-import {addFinishedVideo, checkFinishedVideo, getFinishedVideos, removeFinishedVideo} from "@/app/dashboard/actions";
+import {addFinishedVideo, getFinishedVideos, removeFinishedVideo} from "@/app/dashboard/actions";
 import {toast} from "sonner";
 import DashboardModuleVideoFinishedVideoButtonSkeleton
     from "@/app/_components/dashboard/classroom/module/video/skeletons/DashboardModuleVideoFinishedVideoButtonSkeleton";
@@ -75,10 +75,10 @@ export default function DashboardModuleVideoInfo({videoId, moduleId, title, desc
                     {videoFinished ?
                         <div className="flex items-center gap-2">
                             <IoCheckmarkCircle />
-                            Изгледано видео
+                            Завършен ресурс
                         </div>
                         :
-                        "Отбелязване като изгледано"
+                        "Отбелязване като завършен"
                     }
                 </SecondaryButton>
             }
