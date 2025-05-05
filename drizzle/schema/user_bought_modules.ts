@@ -1,4 +1,4 @@
-import {pgTable, text} from "drizzle-orm/pg-core";
+import {pgTable, text, unique} from "drizzle-orm/pg-core";
 import {sql} from "drizzle-orm";
 import {createInsertSchema, createSelectSchema} from "drizzle-zod";
 import {z} from "zod";
@@ -15,6 +15,10 @@ export const userBoughtModuleTable = pgTable("user_bought_modules", {
         onDelete: "cascade",
         onUpdate: "cascade"
     }),
+}, (table) => {
+    return {
+        profile_module_unique: unique().on(table.profile_id, table.module_id)
+    }
 });
 
 export const userBoughtModuleSchema = createSelectSchema(userBoughtModuleTable);

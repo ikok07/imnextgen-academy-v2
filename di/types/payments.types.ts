@@ -13,6 +13,8 @@ import {
     IGetCheckoutSessionsLineItemsUseCase
 } from "@/src/application/use-cases/payments/get-checkout-sessions-line-items.use-case";
 import { IGetCheckoutSessionsLineItemsController } from "@/src/interface-adapters/controllers/payments/get-checkout-sessions-line-items.controller";
+import {IConfirmCheckoutController} from "@/src/interface-adapters/controllers/payments/confirm-checkout.controller";
+import {IConfirmCheckoutUseCase} from "@/src/application/use-cases/payments/confirm-checkout.use-case";
 
 export const PAYMENTS_SYMBOLS = {
     IPaymentService: Symbol.for("IPaymentService"),
@@ -31,6 +33,9 @@ export const PAYMENTS_SYMBOLS = {
 
     IGetCheckoutSessionsLineItemsUseCase: Symbol.for("IGetCheckoutSessionsLineItemsUseCase"),
     IGetCheckoutSessionsLineItemsController: Symbol.for("IGetCheckoutSessionsLineItemsController"),
+
+    IConfirmCheckoutUseCase: Symbol.for("IConfirmCheckoutUseCase"),
+    IConfirmCheckoutController: Symbol.for("IConfirmCheckoutController"),
 
     IValidateWebhookUseCase: Symbol.for("IValidateWebhookUseCase"),
     IValidateWebhookController: Symbol.for("IValidateWebhookController")
@@ -52,7 +57,10 @@ export interface PAYMENTS_RETURN_TYPES {
     ICreateCheckoutSessionController: ICreateCheckoutSessionController,
 
     IGetCheckoutSessionsLineItemsUseCase: IGetCheckoutSessionsLineItemsUseCase,
-    IGetCheckoutSessionsLineItemsController: IGetCheckoutSessionsLineItemsController
+    IGetCheckoutSessionsLineItemsController: IGetCheckoutSessionsLineItemsController,
+
+    IConfirmCheckoutUseCase: IConfirmCheckoutUseCase,
+    IConfirmCheckoutController: IConfirmCheckoutController,
 
     IValidateWebhookUseCase: IValidateWebhookUseCase,
     IValidateWebhookController: IValidateWebhookController

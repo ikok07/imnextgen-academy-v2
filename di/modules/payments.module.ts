@@ -19,6 +19,8 @@ import {
 import {
     getCheckoutSessionsLineItemsController
 } from "@/src/interface-adapters/controllers/payments/get-checkout-sessions-line-items.controller";
+import {confirmCheckoutUseCase} from "@/src/application/use-cases/payments/confirm-checkout.use-case";
+import {confirmCheckoutController} from "@/src/interface-adapters/controllers/payments/confirm-checkout.controller";
 
 export function createPaymentsModule() {
     const paymentsModule = createModule();
@@ -58,6 +60,14 @@ export function createPaymentsModule() {
     paymentsModule
         .bind(DI_SYMBOLS.IGetCheckoutSessionsLineItemsController)
         .toHigherOrderFunction(getCheckoutSessionsLineItemsController, [DI_SYMBOLS.IGetCheckoutSessionsLineItemsUseCase]);
+
+    paymentsModule
+        .bind(DI_SYMBOLS.IConfirmCheckoutUseCase)
+        .toHigherOrderFunction(confirmCheckoutUseCase, [DI_SYMBOLS.IPaymentService]);
+
+    paymentsModule
+        .bind(DI_SYMBOLS.IConfirmCheckoutController)
+        .toHigherOrderFunction(confirmCheckoutController, [DI_SYMBOLS.IConfirmCheckoutUseCase]);
 
     paymentsModule
         .bind(DI_SYMBOLS.IValidateWebhookUseCase)

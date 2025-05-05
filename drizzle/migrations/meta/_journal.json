@@ -183,6 +183,13 @@
       "when": 1745946605266,
       "tag": "0025_add-payment-customer-id-to-profiles",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1746429586157,
+      "tag": "0026_make-profile-module-pair-unique-for-bought-modules",
+      "breakpoints": true
     }
   ]
 }

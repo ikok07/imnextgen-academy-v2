@@ -18,7 +18,7 @@ export default function PrimaryButton({children, href, onClick, disabled, loadin
                 primaryControlBackground(className),
                 className,
                 {
-                    "cursor-not-allowed from-gray-400 to-gray-600 dark:from-gray-500 dark:to-gray-700 dark:text-white dark:hover:from-gray-400 dark:hover:to-gray-600": loading || disabled
+                    "cursor-not-allowed from-gray-400 to-gray-600 hover:from-gray-400 hover:to-gray-600 dark:from-gray-500 dark:to-gray-700 dark:text-white dark:hover:from-gray-400 dark:hover:to-gray-600": loading || disabled
                 }
             )
         }

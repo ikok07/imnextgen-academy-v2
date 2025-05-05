@@ -1,0 +1,1 @@
+ALTER TABLE "user_bought_modules" ADD CONSTRAINT "user_bought_modules_profile_id_module_id_unique" UNIQUE("profile_id","module_id");

@@ -11,18 +11,14 @@ import {useEffect} from "react";
 export default function SuccessfulPaymentClassroomButton() {
     const {viewLoaded} = useViewLoaded();
     const router = useRouter();
-    const {selectedSubscriptionTier, selectedProductIds, clearCart} = useShop();
+    const {clearCart} = useShop();
 
     function handleClick() {
         router.push(Routes.dashboard.classroom.base);
     }
 
     useEffect(() => {
-        if (!selectedSubscriptionTier && selectedProductIds.size === 0) {
-            router.push(Routes.dashboard.classroom.base);
-        } else {
-            clearCart();
-        }
+        clearCart();
     }, []);
 
     if (!viewLoaded) return <Skeleton className="w-[7rem] h-[2rem]" />

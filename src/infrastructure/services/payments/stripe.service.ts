@@ -1,4 +1,5 @@
 import {
+    ConfirmCheckout,
     CreateCheckoutSessionOptions,
     IPaymentService
 } from "@/src/application/services/payments/payment.service.interface";
@@ -28,7 +29,7 @@ export class StripeService implements IPaymentService {
 
             return finalProduct;
         } catch(e) {
-            throw new PaymentError("Failed to get products from payment service!");
+            throw new PaymentError(`Failed to get products from payment service! ${e}`);
         }
     }
 
@@ -36,7 +37,7 @@ export class StripeService implements IPaymentService {
         try {
             return this.stripeClient.subscriptions.retrieve(subscriptionId);
         } catch(e) {
-            throw new PaymentError("Failed to get subscription from payment service!");
+            throw new PaymentError(`Failed to get subscription from payment service! ${e}`);
         }
     }
 
@@ -44,7 +45,7 @@ export class StripeService implements IPaymentService {
         try {
             return this.stripeClient.customers.retrieve(customerId);
         } catch(e) {
-            throw new PaymentError("Failed to get customer from payment service!");
+            throw new PaymentError(`Failed to get customer from payment service! ${e}`);
         }
     }
 
@@ -72,7 +73,7 @@ export class StripeService implements IPaymentService {
                 metadata: metadata
             })
         } catch(e) {
-            throw new PaymentError("Failed to create checkout session!");
+            throw new PaymentError(`Failed to create checkout session! ${e}`);
         }
     }
 
@@ -80,7 +81,20 @@ export class StripeService implements IPaymentService {
         try {
             return (await this.stripeClient.checkout.sessions.listLineItems(sessionId)).data;
         } catch(e) {
-            throw new PaymentError("Failed to get checkout session's line items!");
+            throw new PaymentError(`Failed to get checkout session's line items! ${e}`);
+        }
+    }
+
+    async confirmCheckout(customerEmail: string, checkout: ConfirmCheckout): Promise<void> {
+        try {
+            const {type: updateEmailResponseType} = await checkout.updateEmail(customerEmail);
+            if (updateEmailResponseType === "error") throw new Error("Invalid customer email!");
+
+            const confirmResponse = await checkout.confirm();
+            if (confirmResponse.type === "error") throw new Error(confirmResponse.error.message);
+        } catch(e) {
+            console.log(e);
+            throw new PaymentError(`Failed to confirm checkout! ${e}`);
         }
     }
 
