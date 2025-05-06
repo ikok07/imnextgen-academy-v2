@@ -27,9 +27,14 @@ export const getFullMeetingByIdUseCase = (
 
         const fullMeeting = fullMeetings.get(result.meeting.id)!;
 
-        if (result.meeting_date) fullMeeting.meeting_dates.push(result.meeting_date);
-        if (result.excluded_date) fullMeeting.excluded_dates.push(result.excluded_date);
-        if (result.repeat_day) fullMeeting.repeat_days.push(result.repeat_day);
+        if (result.meeting_date && !fullMeeting.meeting_dates.some(d => d.id === result.meeting_date!.id))
+            fullMeeting.meeting_dates.push(result.meeting_date);
+
+        if (result.excluded_date && !fullMeeting.excluded_dates.some(d => d.id === result.excluded_date!.id))
+            fullMeeting.excluded_dates.push(result.excluded_date);
+
+        if (result.repeat_day && !fullMeeting.repeat_days.some(d => d.id === result.repeat_day!.id))
+            fullMeeting.repeat_days.push(result.repeat_day);
     }
 
     const fullMeetingsArr = Array.from(fullMeetings.values());

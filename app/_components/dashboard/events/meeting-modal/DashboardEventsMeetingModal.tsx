@@ -14,6 +14,7 @@ type DashboardEventsMeetingModalProps = {
 }
 
 export default function DashboardEventsMeetingModal({fullMeeting}: DashboardEventsMeetingModalProps) {
+
     return <DialogContent className="max-w-[95%] md:max-w-xl">
         <DashboardEventsMeetingHeader fullMeeting={fullMeeting} />
         <div className="grid md:grid-cols-2">
