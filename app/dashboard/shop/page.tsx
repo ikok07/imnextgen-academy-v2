@@ -25,7 +25,7 @@ export default async function Page() {
     </div>
 }
 
-export async function InnerContent() {
+async function InnerContent() {
     try {
         const userObject = await getInjection("IGetUserController")({excludeDbProfile: true});
 
