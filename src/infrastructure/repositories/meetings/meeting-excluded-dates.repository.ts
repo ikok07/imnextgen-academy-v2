@@ -9,9 +9,10 @@ import {addHours, startOfDay} from "date-fns";
 import {meetingDateTable} from "@/drizzle/schema/meeting_dates";
 
 export class MeetingExcludedDatesRepository extends BaseRepository implements IMeetingExcludedDatesRepository {
-    getMultipleMeetingsExcludedDatesForDate(meetingIds: string[], startDate: number): Promise<MeetingExcludedDate[]> {
-        const dayStart = Math.floor(startOfDay(startDate).valueOf() / 1000);
-        const dayEnd = Math.floor(addHours(startOfDay(startDate).valueOf(), 24).valueOf() / 1000);
+    getMultipleMeetingsExcludedDatesForDate(meetingIds: string[], startDate: number, timezoneOffsetMin: number): Promise<MeetingExcludedDate[]> {
+        const utcStartDate = startDate + timezoneOffsetMin * 60 * 1000;
+        const dayStart = Math.floor(startOfDay(utcStartDate).valueOf() / 1000);
+        const dayEnd = Math.floor(addHours(startOfDay(utcStartDate).valueOf(), 24).valueOf() / 1000);
 
         try {
             return this.queryDB(db => {

@@ -7,9 +7,10 @@ export type IGetMeetingDatesByStartDateController = ReturnType<typeof getMeeting
 
 export const getMeetingDatesByStartDateController = (
     getMeetingDatesByStartDateUseCase: IGetMeetingDatesByStartDateUseCase
-) => (startDate: number | undefined) => {
+) => (startDate: number | undefined, timezoneOffsetMin: number | undefined) => {
 
     if (!startDate || startDate < new Date(1, 1, new Date().getFullYear() - 1).valueOf()) throw new InputParseError("Invalid start date!");
+    if (timezoneOffsetMin === undefined) throw new InputParseError("Invalid timezoneOffsetMin!");
 
-    return getMeetingDatesByStartDateUseCase(startDate);
+    return getMeetingDatesByStartDateUseCase(startDate, timezoneOffsetMin);
 }

@@ -7,7 +7,7 @@ export type IGetMultipleMeetingsExcludedDatesForDateController = ReturnType<type
 
 export const getMultipleMeetingsExcludedDatesForDateController = (
     getMultipleMeetingsExcludedDatesForDateUseCase: IGetMultipleMeetingsExcludedDatesForDateUseCase
-) => (moduleIds: string[] | undefined, startDate: number | undefined) => {
+) => (moduleIds: string[] | undefined, startDate: number | undefined, timezoneOffsetMin: number | undefined) => {
 
     if (!moduleIds || moduleIds.length === 0)
         throw new InputParseError("Invalid module ids!");
@@ -15,5 +15,7 @@ export const getMultipleMeetingsExcludedDatesForDateController = (
     if (!startDate || startDate < new Date(1, 1, new Date().getFullYear() - 1).valueOf())
         throw new InputParseError("Invalid start date!");
 
-    return getMultipleMeetingsExcludedDatesForDateUseCase(moduleIds, startDate);
+    if (timezoneOffsetMin === undefined) throw new InputParseError("Invalid timezoneOffsetMin!");
+
+    return getMultipleMeetingsExcludedDatesForDateUseCase(moduleIds, startDate, timezoneOffsetMin);
 }

@@ -12,30 +12,26 @@ export const getFullMeetingById = createServerAction((id: string | undefined) =>
    });
 });
 
-export const getFullMeetingsForDate = createServerAction(async (timestamp: number, timezoneOffsetSec: number) => {
+export const getFullMeetingsForDate = createServerAction(async (timestamp: number, timezoneOffsetMin: number) => {
    const date = new Date(timestamp);
-   const dayOfWeek = addMinutes(date, -timezoneOffsetSec).getDay();
+   const dayOfWeek = addMinutes(date, -timezoneOffsetMin).getDay();
 
    const meetingIdsSet = new Set<string>();
 
    (await getInjection("IGetMeetingsByRepeatingDayOfWeekController")(dayOfWeek))
        .forEach(v => {
-          console.log(v);
           if (!v.valid_until || v.valid_until > Date.now() / 1000) {
              meetingIdsSet.add(v.meeting_id);
              return;
           }
        });
 
-   (await getInjection("IGetMeetingDatesByStartDateController")(timestamp))
+   (await getInjection("IGetMeetingDatesByStartDateController")(timestamp, -timezoneOffsetMin))
        .forEach(v => meetingIdsSet.add(v.meeting_id));
 
    if (meetingIdsSet.size > 0) {
-      (await getInjection("IGetMultipleMeetingsExcludedDatesForDateController")(Array.from(meetingIdsSet), timestamp))
-          .forEach(v => {
-             console.log(v);
-             meetingIdsSet.delete(v.meeting_id);
-          });
+      (await getInjection("IGetMultipleMeetingsExcludedDatesForDateController")(Array.from(meetingIdsSet), timestamp, -timezoneOffsetMin))
+          .forEach(v => meetingIdsSet.delete(v.meeting_id));
    }
 
    return await getInjection("IGetFullMeetingByIdController")({

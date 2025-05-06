@@ -23,7 +23,7 @@ export default function DashboardSidebarAccountDropdownMenu() {
     const clerk = useClerk();
     const dispatch = useAppDispatch();
 
-    const {theme, setTheme} = useTheme();
+    const {resolvedTheme, setTheme} = useTheme();
     const {userObject, emailConfirmed} = useAppUser();
 
     const [isSigningOut, setIsSigningOut] = useState(false);
@@ -75,8 +75,8 @@ export default function DashboardSidebarAccountDropdownMenu() {
                     Icon={IoMoon}
                     label="Тъмен режим"
                     type="button"
-                    additionalContent={<PrimarySwitch checked={theme === "dark"} />}
-                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                    additionalContent={<PrimarySwitch checked={resolvedTheme === "dark"} />}
+                    onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
                 />
             </DropdownMenuGroup>
         </DropdownMenuContent>

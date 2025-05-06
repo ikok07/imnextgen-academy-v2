@@ -4,6 +4,6 @@ export type IGetMeetingDatesByStartDateUseCase = ReturnType<typeof getMeetingDat
 
 export const getMeetingDatesByStartDateUseCase = (
     meetingDatesRepository: IMeetingDatesRepository
-) => (startDate: number) => {
-    return meetingDatesRepository.getMeetingDatesByStartDate(startDate);
+) => (startDate: number, timezoneOffsetMin: number) => {
+    return meetingDatesRepository.getMeetingDatesByStartDate(startDate, timezoneOffsetMin);
 }

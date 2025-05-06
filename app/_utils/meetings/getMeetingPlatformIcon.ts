@@ -1,7 +1,8 @@
 import {MeetingPlatform} from "@/drizzle/schema/meetings";
 
 export function getMeetingPlatformIcon(platform: MeetingPlatform): { path: string, pathDark: string, width: number } {
-    const basePath = "/meetings-platforms"
+    const basePath = "/meeting-platforms";
+
     switch (platform) {
         case "zoom":
             return {

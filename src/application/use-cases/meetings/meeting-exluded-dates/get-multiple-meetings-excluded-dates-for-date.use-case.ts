@@ -6,6 +6,6 @@ export type IGetMultipleMeetingsExcludedDatesForDateUseCase = ReturnType<typeof 
 
 export const getMultipleMeetingsExcludedDatesForDateUseCase = (
     meetingExcludedDatesRepository: IMeetingExcludedDatesRepository
-) => (moduleIds: string[], startDate: number) => {
-    return meetingExcludedDatesRepository.getMultipleMeetingsExcludedDatesForDate(moduleIds, startDate)
+) => (moduleIds: string[], startDate: number, timezoneOffsetMin: number) => {
+    return meetingExcludedDatesRepository.getMultipleMeetingsExcludedDatesForDate(moduleIds, startDate, timezoneOffsetMin);
 }

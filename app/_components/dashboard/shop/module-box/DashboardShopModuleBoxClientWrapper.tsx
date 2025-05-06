@@ -32,7 +32,7 @@ export default function DashboardShopModuleBoxClientWrapper({children, moduleId,
             </Tooltip>
         </TooltipProvider>
     }
-    console.log(selectedProductIds.has(stripeProductId));
+
     return <div
         onClick={() => {
             if (!errorProductIds.has(stripeProductId)) {

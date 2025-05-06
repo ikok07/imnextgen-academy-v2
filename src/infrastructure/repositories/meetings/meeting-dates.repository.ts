@@ -15,10 +15,11 @@ export class MeetingDatesRepository extends BaseRepository implements IMeetingDa
             throw new DatabaseError(`Failed to get meeting dates: ${e}`);
         }
     }
-    getMeetingDatesByStartDate(startDate: number): Promise<MeetingDate[]> {
+    getMeetingDatesByStartDate(startDate: number, timezoneOffsetMin: number): Promise<MeetingDate[]> {
         try {
-            const dayStart = Math.floor(startOfDay(startDate).valueOf() / 1000);
-            const dayEnd = Math.floor(addHours(startOfDay(startDate).valueOf(), 24).valueOf() / 1000);
+            const utcStartDate = startDate + timezoneOffsetMin * 60 * 1000;
+            const dayStart = Math.floor(startOfDay(utcStartDate).valueOf() / 1000);
+            const dayEnd = Math.floor(addHours(startOfDay(utcStartDate).valueOf(), 24).valueOf() / 1000);
 
             return this.queryDB(db => {
                 return db.query.meetingDateTable
