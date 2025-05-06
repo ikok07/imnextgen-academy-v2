@@ -25,7 +25,7 @@ export default async function ModulesGrid() {
             userId: userObject.value.user.id,
             roles: userObject.value.user.publicMetadata["roles"] as string[],
             subscription_tier: subscriptionResponse.value?.tier,
-            paid_modules: boughtModulesResponse.value.map(v => v.module_id),
+            paid_modules: boughtModulesResponse.value.map(v => v.module.id),
             modules: modulesResponse.value
         });
 

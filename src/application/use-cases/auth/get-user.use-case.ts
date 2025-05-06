@@ -6,7 +6,7 @@ export type IGetUserUseCase = ReturnType<typeof getUserUseCase>;
 export const getUserUseCase = (
     authenticationService: IAuthenticationService,
     profilesRepository: IProfilesRepository
-)=> async (excludeDbProfile: boolean | undefined) => {
+)=> async (excludeDbProfile?: boolean) => {
     const userObject = await authenticationService.getUser();
 
     return {

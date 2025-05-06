@@ -21,5 +21,6 @@ export default function DashboardShopModuleBoxPriceWrapper({moduleId, stripeProd
         stripe_product_id={stripeProductId}
         selected={selected}
         isAcquired={alreadyBought}
+        isDisabled={false}
     />
 }

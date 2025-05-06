@@ -4,9 +4,13 @@ import {IoWarning} from "react-icons/io5";
 import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
 import {useAppDispatch} from "@/app/_hooks/redux";
 import {setSettingsOpened} from "@/app/_store/slices/settings";
+import {useUser} from "@clerk/nextjs";
 
 export default function DashboardEmailConfirmMessage() {
     const dispatch = useAppDispatch();
+    const {user} = useUser();
+
+    if (!user || user.emailAddresses[0].verification?.status === "verified") return;
 
     return <div className="absolute w-[97%] md:w-[90%] left-1/2 top-0 -translate-x-1/2">
         <div className="px-3 py-2 flex md:items-center flex-col md:flex-row gap-4 mx-auto mt-3 rounded-lg shadow-2xl border border-border bg-secondary-gradient animate-in slide-in-from-top-1/2 zoom-in-[104%] fade-in ease-out duration-500 transform-gpu">
