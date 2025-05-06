@@ -43,7 +43,7 @@ export default function Page(props: z.infer<typeof propsSchema>) {
     </Suspense>
 }
 
-export async function InnerContent(props: z.infer<typeof propsSchema>) {
+async function InnerContent(props: z.infer<typeof propsSchema>) {
     try {
         const {data: safeProps, error} = propsSchema.safeParse(props);
         if (error) throw new Error("Invalid page params!");
@@ -68,7 +68,7 @@ export async function InnerContent(props: z.infer<typeof propsSchema>) {
             userId: user.id,
             roles: user.publicMetadata["roles"] as string[],
             subscription_tier: subscriptionResponse.value?.tier,
-            paid_modules: boughtModulesResponse.value.map(v => v.module_id),
+            paid_modules: boughtModulesResponse.value.map(v => v.module.id),
             moduleId: moduleResult.value.id,
             moduleAccess: moduleResult.value.access,
         });

@@ -42,7 +42,7 @@ export async function POST(req: Request) {
         }
 
         const locale = user.unsafeMetadata.locale as string | undefined ?? "en";
-        
+
         switch (parsedBody.data.slug) {
             case "verification_code":
                 await sendOtpCodeEmail({
