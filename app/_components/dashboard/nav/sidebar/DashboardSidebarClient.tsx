@@ -31,7 +31,7 @@ export default function DashboardSidebarClient(props: DashboardSidebarClientWrap
     </SidebarProvider>
 }
 
-export function InnerContent({results}: DashboardSidebarClientWrapperProps) {
+function InnerContent({results}: DashboardSidebarClientWrapperProps) {
     const {dashboardMobileSidebarOpen} = useAppSelector(state => state.dashboardSidebar);
     const dispatch = useAppDispatch();
     const {resolvedTheme} = useTheme();

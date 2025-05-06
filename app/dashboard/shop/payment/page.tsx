@@ -30,7 +30,7 @@ export default async function Page(props: z.infer<typeof searchParamsSchema>) {
     </div>
 }
 
-export async function InnerContent(props: z.infer<typeof searchParamsSchema>) {
+async function InnerContent(props: z.infer<typeof searchParamsSchema>) {
     try {
         const {data: parsedProps, error: propsError} = searchParamsSchema.safeParse(props);
         if (propsError) throw new Error("Invalid props");
