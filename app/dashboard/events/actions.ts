@@ -19,6 +19,7 @@ export const getFullMeetingsForDate = createServerAction(async (timestamp: numbe
 
    (await getInjection("IGetMeetingsByRepeatingDayOfWeekController")(dayOfWeek))
        .forEach(v => {
+          console.log(v);
           if (!v.valid_until || v.valid_until > Date.now() / 1000) {
              meetingIdsSet.add(v.meeting_id);
              return;
@@ -30,7 +31,10 @@ export const getFullMeetingsForDate = createServerAction(async (timestamp: numbe
 
    if (meetingIdsSet.size > 0) {
       (await getInjection("IGetMultipleMeetingsExcludedDatesForDateController")(Array.from(meetingIdsSet), timestamp))
-          .forEach(v => meetingIdsSet.delete(v.meeting_id));
+          .forEach(v => {
+             console.log(v);
+             meetingIdsSet.delete(v.meeting_id);
+          });
    }
 
    return await getInjection("IGetFullMeetingByIdController")({
