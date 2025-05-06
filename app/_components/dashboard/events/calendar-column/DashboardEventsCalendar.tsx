@@ -2,8 +2,10 @@
 
 import {Calendar} from "@/app/_components/ui/shadcn/calendar";
 import {bg} from "date-fns/locale";
-import {addMonths} from "date-fns";
+import {addHours, addMilliseconds, addMinutes, addMonths} from "date-fns";
 import {useDashboardEvents} from "@/app/_providers/DashboardEventsProvider";
+import {UTCDate} from "@date-fns/utc";
+import {getTimezoneOffset} from "date-fns-tz/getTimezoneOffset";
 
 type DashboardEventsCalendarProps = {
     onSelect: (date: Date) => void
@@ -11,13 +13,15 @@ type DashboardEventsCalendarProps = {
 
 export default function DashboardEventsCalendar({onSelect}: DashboardEventsCalendarProps) {
     const {selectedDate, setSelectedDate} = useDashboardEvents();
-
     return <Calendar
         mode="single"
         selected={new Date(selectedDate)}
         required={true}
         onSelect={(d) => {
             if (d) {
+                // const utcStartDay = new Date(addMinutes(d, -d.getTimezoneOffset()))
+                // setSelectedDate(utcStartDay.getTime());
+                // onSelect(utcStartDay);
                 setSelectedDate(d.getTime());
                 onSelect(d);
             }

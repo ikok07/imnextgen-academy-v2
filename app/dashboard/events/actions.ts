@@ -3,6 +3,7 @@
 import {createServerAction} from "@/app/_utils/createServerAction";
 import {getInjection} from "@/di/container";
 import {FullMeeting} from "@/drizzle/schema/meetings";
+import {addMinutes} from "date-fns";
 
 export const getFullMeetingById = createServerAction((id: string | undefined) => {
    return getInjection("IGetFullMeetingByIdController")({
@@ -11,9 +12,9 @@ export const getFullMeetingById = createServerAction((id: string | undefined) =>
    });
 });
 
-export const getFullMeetingsForDate = createServerAction(async (timestamp: number) => {
+export const getFullMeetingsForDate = createServerAction(async (timestamp: number, timezoneOffsetSec: number) => {
    const date = new Date(timestamp);
-   const dayOfWeek = date.getDay();
+   const dayOfWeek = addMinutes(date, -timezoneOffsetSec).getDay();
 
    const meetingIdsSet = new Set<string>();
 

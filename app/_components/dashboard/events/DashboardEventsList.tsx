@@ -24,7 +24,7 @@ export default function DashboardEventsList({userId, userRoles, subscriptionTier
     const {selectedDate} = useDashboardEvents();
 
     const {data: fullMeetingsQuery, isLoading, isError} = useErrorQuery({
-        queryFn: () => getFullMeetingsForDate(selectedDate),
+        queryFn: () => getFullMeetingsForDate(selectedDate, new Date().getTimezoneOffset()),
         queryKey: `full-meetings-${selectedDate}`,
     });
 
