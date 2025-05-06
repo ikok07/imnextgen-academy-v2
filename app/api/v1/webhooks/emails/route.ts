@@ -3,18 +3,19 @@ import {z} from "zod";
 import {getInjection} from "@/di/container";
 import {clerkWebhookProtect} from "@/app/api/v1/webhooks/protect";
 import {clerkClient} from "@clerk/nextjs/server";
+import {User} from "@clerk/backend";
 
 const sendEmailBodySchema = z.object({
     data: z.object({
         data: z.object({}).passthrough(),
         slug: z.string(),
         to_email_address: z.string().email(),
-        user_id: z.string()
+        user_id: z.string().nullable()
     }),
     type: z.literal("email.created"),
 })
 
-const sendConfirmEmailDataSchema = z.object({
+const sendOtpEmailDataSchema = z.object({
     otp_code: z.string(),
 })
 
@@ -30,12 +31,41 @@ export async function POST(req: Request) {
             return NextResponse.json({status: "fail", error: "Invalid body!"}, {status: 400});
         }
 
-        const client = await clerkClient()
-        const user = await client.users.getUser(parsedBody.data.user_id);
+        const client = await clerkClient();
+        let user: User | undefined;
+        if (parsedBody.data.user_id) {
+            user = await client.users.getUser(parsedBody.data.user_id);
+        } else {
+            user = (await client.users.getUserList({
+                emailAddress: [parsedBody.data.to_email_address]
+            })).data[0];
+        }
 
+        const locale = user.unsafeMetadata.locale as string | undefined ?? "en";
+        
         switch (parsedBody.data.slug) {
             case "verification_code":
-                await sendConfirmEmail(parsedBody.data.data, parsedBody.data.to_email_address, user.unsafeMetadata.locale as string | undefined ?? "en");
+                await sendOtpCodeEmail({
+                    to: parsedBody.data.to_email_address,
+                    templateId: locale === "bg" ? +process.env.BREVO_OTP_EMAIL_ID_BG! : +process.env.BREVO_OTP_EMAIL_ID_EN!,
+                    data: parsedBody.data. data
+                });
+                break;
+            case "reset_password_code":
+                await sendOtpCodeEmail({
+                    to: parsedBody.data.to_email_address,
+                    templateId: locale === "bg" ? +process.env.BREVO_RESET_PASSWORD_EMAIL_ID_BG! : +process.env.BREVO_RESET_PASSWORD_EMAIL_ID_EN!,
+                    data: parsedBody.data. data
+                });
+                break;
+            case "password_changed":
+                await getInjection("ISendEmailUseCase")({
+                    to: {
+                        name: "user",
+                        email: parsedBody.data.to_email_address
+                    },
+                    templateId: locale === "bg" ? +process.env.BREVO_PASSWORD_CHANGED_EMAIL_ID_BG! : +process.env.BREVO_PASSWORD_CHANGED_EMAIL_ID_EN!,
+                });
                 break;
         }
 
@@ -46,22 +76,21 @@ export async function POST(req: Request) {
     }
 }
 
-async function sendConfirmEmail(parsedBodyData: object, to_email_address: string, locale: string) {
-    const {data: parsedEmailData, error: emailDataError} = sendConfirmEmailDataSchema.safeParse(parsedBodyData);
+async function sendOtpCodeEmail({data, to, templateId}: {data: object, to: string, templateId: number}) {
+    const {data: parsedData, error: emailDataError} = sendOtpEmailDataSchema.safeParse(data);
     if (emailDataError) {
         console.error(emailDataError)
         return NextResponse.json({status: "fail", error: "Invalid email data!"}, {status: 400});
     }
 
-    const sendConfirmEmailUseCase = getInjection("ISendConfirmEmailUseCase");
-    await sendConfirmEmailUseCase({
+    await getInjection("ISendEmailUseCase")({
         to: {
             name: "user",
-            email: to_email_address
+            email: to
         },
-        templateId: locale === "bg" ? +process.env.BREVO_CONFIRM_EMAIL_ID_BG! : +process.env.BREVO_CONFIRM_EMAIL_ID_EN!,
+        templateId: templateId,
         params: {
-            "OTP_CODE": parsedEmailData.otp_code
+            "OTP_CODE": parsedData.otp_code
         }
-    })
+    });
 }

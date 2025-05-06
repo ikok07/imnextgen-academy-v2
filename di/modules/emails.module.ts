@@ -1,7 +1,7 @@
 import {createModule} from "@evyweb/ioctopus";
 import {DI_SYMBOLS} from "@/di/types/types";
 import {BrevoEmailService} from "@/src/infrastructure/services/emails/brevo-email.service";
-import {sendConfirmEmailUseCase} from "@/src/application/use-cases/email/send-confirm-email.use-case";
+import {sendEmailUseCase} from "@/src/application/use-cases/email/send-confirm-email.use-case";
 
 export function createEmailsModule() {
     const emailsModule = createModule();
@@ -11,8 +11,8 @@ export function createEmailsModule() {
         .toClass(BrevoEmailService);
 
     emailsModule
-        .bind(DI_SYMBOLS.ISendConfirmEmailUseCase)
-        .toHigherOrderFunction(sendConfirmEmailUseCase, [DI_SYMBOLS.BrevoEmailService]);
+        .bind(DI_SYMBOLS.ISendEmailUseCase)
+        .toHigherOrderFunction(sendEmailUseCase, [DI_SYMBOLS.BrevoEmailService]);
 
     return emailsModule;
 }

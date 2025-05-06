@@ -1,8 +1,8 @@
 import {IEmailService, ISendEmailServiceOptions } from "../../services/emails/email.service.interface";
 
-export type ISendConfirmEmailUseCase = ReturnType<typeof sendConfirmEmailUseCase>;
+export type ISendEmailUseCase = ReturnType<typeof sendEmailUseCase>;
 
-export const sendConfirmEmailUseCase = (
+export const sendEmailUseCase = (
     emailService: IEmailService
 ) => async (
     opts: ISendEmailServiceOptions

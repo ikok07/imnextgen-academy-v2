@@ -95,6 +95,7 @@ function InnerContent({phoneNumber}: StripePaymentSheetProps) {
         },
         onError(e: Error) {
             setPromoCodeError(e.message);
+            checkout.removePromotionCode();
         }
     })
 
@@ -104,6 +105,7 @@ function InnerContent({phoneNumber}: StripePaymentSheetProps) {
         } else {
             setPromoCodeError(null);
             setDebouncedPromoCode(null);
+            checkout.removePromotionCode();
         }
     }, [promoCode]);
 

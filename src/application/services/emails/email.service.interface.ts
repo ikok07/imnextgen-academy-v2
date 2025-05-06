@@ -6,7 +6,7 @@ export const emailServiceSendEmailOptionsSchema = z.object({
         email: z.string().email()
     }),
     templateId: z.number(),
-    params: z.object({}).passthrough()
+    params: z.object({}).passthrough().optional()
 })
 
 export type ISendEmailServiceOptions = z.infer<typeof emailServiceSendEmailOptionsSchema>

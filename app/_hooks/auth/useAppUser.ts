@@ -4,7 +4,7 @@ import {useAuth, useUser} from "@clerk/nextjs";
 import useErrorQuery from "@/app/_hooks/useErrorQuery";
 import {getDbProfile} from "@/app/actions";
 
-export function useAppUser() {
+export function useAppUser(omitDbProfile?: boolean) {
     const authData = useAuth();
     const userObject = useUser();
 
@@ -12,7 +12,7 @@ export function useAppUser() {
         queryFn: () => getDbProfile(userObject.user?.id),
         queryKey: ["dbProfile"],
         staleTime: 60_000,
-        enabled: !!userObject.user?.id
+        enabled: !!userObject.user?.id && !omitDbProfile
     })
 
     return {
