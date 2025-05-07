@@ -50,7 +50,7 @@ export default function ModuleBox({module, moduleAllowed}: ModuleBoxProps) {
             {(module.access != "free" && !moduleAllowed) &&
                 <ModuleLockedMessage
                     options={getModuleNotAllowedMessage({
-                        moduleId: module.id,
+                        productId: module.stripe_product_id,
                         moduleAccess: module.access
                     })}
                 />

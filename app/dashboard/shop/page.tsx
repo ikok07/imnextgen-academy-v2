@@ -9,10 +9,19 @@ import DashboardShopSkeleton from "@/app/_components/dashboard/shop/skeletons/Da
 import DashboardShopGoToCartPopup from "@/app/_components/dashboard/shop/DashboardShopGoToCartPopup";
 import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
 import {IoCloudOffline} from "react-icons/io5";
+import {z} from "zod";
 
-export default async function Page() {
+const pagePropsSchema = z.object({
+    searchParams: z.object({
+        productIds: z.string().optional()
+    })
+})
+
+type PageProps = z.infer<typeof pagePropsSchema>;
+
+export default async function Page({searchParams}: PageProps) {
     return <div>
-        <DashboardShopGoToCartPopup />
+        <DashboardShopGoToCartPopup initialProductIds={searchParams.productIds?.split(',')} />
         <div className="w-full min-h-[100vh] pb-20 xs:pb-14">
             <DashboardPageTitle>Магазин</DashboardPageTitle>
             <div className="w-[95%] max-w-[50rem] mx-auto">

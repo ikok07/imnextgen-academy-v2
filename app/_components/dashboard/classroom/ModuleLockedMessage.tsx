@@ -32,8 +32,12 @@ export default function ModuleLockedMessage({options}: ModuleLockedMessageProps)
             {options.buttons && <div className="w-full flex flex-col gap-y-2 gap-x-3 mt-3">
                 {options.buttons.map((button, index) => {
                     const Button = button.variant === "primary" ? PrimaryButton : SecondaryButton;
-                    return <Button className={cn("w-full", button.className)} href={button.href}
-                                   key={index}>{button.label}</Button>
+                    return <Button
+                        className={cn("w-full", button.className)}
+                        href={button.href}
+                        key={index}>
+                        {button.label}
+                    </Button>
                 })}
             </div>}
         </div>

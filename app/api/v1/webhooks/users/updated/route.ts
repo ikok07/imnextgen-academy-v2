@@ -1,11 +1,10 @@
-import {z} from "zod";
-import {NextResponse} from "next/server";
+import {NextRequest, NextResponse} from "next/server";
 import {clerkWebhookProtect} from "@/app/api/v1/webhooks/protect";
+import {z} from "zod";
 import {getInjection} from "@/di/container";
-import axios from "axios";
 
 const requestBodySchema = z.object({
-    type: z.literal("user.created"),
+    type: z.literal("user.updated"),
     data: z.object({
         id: z.string(),
         email_addresses: z.array(z.object({
@@ -20,33 +19,19 @@ const requestBodySchema = z.object({
     })
 });
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     try {
         const rawBody = await req.text();
-        const protectResponse = clerkWebhookProtect(process.env.CLERK_USER_CREATED_WEBHOOK_SECRET!, rawBody, req.headers);
+        const protectResponse = clerkWebhookProtect(process.env.CLERK_USER_UPDATED_WEBHOOK_SECRET!, rawBody, req.headers);
         if (protectResponse) return protectResponse;
 
         const {data: body, error: bodyError} = requestBodySchema.safeParse(JSON.parse(rawBody));
-        if (bodyError) {
-            console.error(bodyError);
-            return NextResponse.json({status: "fail", error: "Invalid body!"}, {status: 400});
-        }
+        if (bodyError) return NextResponse.json({status: "fail", error: "Invalid body!"}, {status: 400});
 
-        await axios.patch(`https://api.clerk.com/v1/users/${body.data.id}/metadata`, {
-            public_metadata: {
-                roles: ["user"],
-            }
-        }, {
-            headers: {
-                Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`
-            }
-        })
-
-        await getInjection("ICreateProfileController")({
-            id: body.data.id,
+        await getInjection("IUpdateProfileController")(body.data.id, {
             name: `${body.data.first_name} ${body.data.last_name}`,
-            email: body.data.email_addresses[0].email_address,
-            phone: body.data.phone_numbers[0].phone_number,
+            email: body.data.email_addresses[0]?.email_address ?? "<email-removed>",
+            phone: body.data.phone_numbers[0]?.phone_number ?? "<phone-removed>",
             image_url: body.data.image_url,
         });
 

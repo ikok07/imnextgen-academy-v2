@@ -4,11 +4,15 @@ import {IoCart} from "react-icons/io5";
 import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
 import SecondaryButton from "@/app/_components/ui/buttons/SecondaryButton";
 import {useShop} from "@/app/_providers/ShopProvider";
-import {useMemo} from "react";
+import {useEffect, useMemo} from "react";
 import {useRouter} from "next/navigation";
 import { Routes } from "@/app/_utils/nav/routes";
 
-export default function DashboardShopGoToCartPopup() {
+type DashboardShopGoToCartPopupProps = {
+    initialProductIds?: string[]
+}
+
+export default function DashboardShopGoToCartPopup({initialProductIds}: DashboardShopGoToCartPopupProps) {
     const router = useRouter();
 
     const {selectedSubscriptionTier, setSelectedSubscriptionTier, selectedProductIds, setSelectedProductIds} = useShop();
@@ -22,6 +26,12 @@ export default function DashboardShopGoToCartPopup() {
             !!selectedSubscriptionTier
         ));
     }
+
+    useEffect(() => {
+        if (initialProductIds) {
+            setSelectedProductIds(v => new Set([...v.values().toArray(), ...initialProductIds]));
+        }
+    }, []);
 
     return <div className="fixed w-[95%] max-w-[25rem] left-[50%] bottom-3 -translate-x-1/2 z-20">
         <div className={`${isActive ? "visible animate-in slide-in-from-bottom" : "invisible animate-out slide-out-to-bottom"} flex flex-col xs:flex-row items-center justify-between gap-y-2 bg-black-gradient rounded-lg xs:rounded-full text-background py-3 xs:py-2 px-3 fade-out duration-300 transform-gpu`}>

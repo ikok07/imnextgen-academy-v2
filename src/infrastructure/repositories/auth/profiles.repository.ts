@@ -38,6 +38,18 @@ export class ProfilesRepository extends BaseRepository implements IProfilesRepos
         }
     }
 
+    async updateProfile(userId: string, data: Partial<ProfileInsert>): Promise<Profile> {
+        try {
+            return this.queryDB(async db => {
+                const result = await db.update(profilesTable).set(data).where(eq(profilesTable.id, userId)).returning();
+                if (result.length === 0) throw new Error("No profile has been updated!");
+                return result[0];
+            })
+        } catch(e) {
+            throw new DatabaseError(`Failed to update profile: ${e}`);
+        }
+    }
+
     async deleteProfileById(id: string): Promise<void> {
         try {
             return this.queryDB(async (db) => {

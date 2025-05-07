@@ -1,15 +1,16 @@
 import {z} from "zod";
 import {moduleAccessEnumSchema} from "@/drizzle/schema/modules";
 import {ModuleNotAllowedOptions} from "@/app/_components/dashboard/classroom/ModuleLockedMessage";
+import {Routes} from "@/app/_utils/nav/routes";
 
 export const getModuleNotAllowedOptionsSchema = z.object({
-    moduleId: z.string().uuid(),
+    productId: z.string().nullable(),
     moduleAccess: moduleAccessEnumSchema.exclude(["free"]),
 });
 
 export type GetModuleNotAllowedOptions = z.infer<typeof getModuleNotAllowedOptionsSchema>;
 
-export function getModuleNotAllowedMessage({moduleId, moduleAccess}: GetModuleNotAllowedOptions): ModuleNotAllowedOptions {
+export function getModuleNotAllowedMessage({productId, moduleAccess}: GetModuleNotAllowedOptions): ModuleNotAllowedOptions {
     switch (moduleAccess) {
         case "subscription":
             return {
@@ -17,7 +18,7 @@ export function getModuleNotAllowedMessage({moduleId, moduleAccess}: GetModuleNo
                 buttons: [
                     {
                         label: "Закупуване на абонамент",
-                        href: "/dashboard",
+                        href: Routes.dashboard.shop.base(),
                         variant: "primary"
                     }
                 ]
@@ -28,7 +29,7 @@ export function getModuleNotAllowedMessage({moduleId, moduleAccess}: GetModuleNo
                 buttons: [
                     {
                         label: "Закупуване на модул",
-                        href: `/dashboard/${moduleId}`,
+                        href: `${Routes.dashboard.shop.base()}${productId ? `?productIds=${productId}` : ""}`,
                         variant: "primary"
                     }
                 ]
@@ -39,12 +40,12 @@ export function getModuleNotAllowedMessage({moduleId, moduleAccess}: GetModuleNo
                 buttons: [
                     {
                         label: "Закупуване на абонамент",
-                        href: "/dashboard",
+                        href: Routes.dashboard.shop.base(),
                         variant: "primary"
                     },
                     {
                         label: "Закупуване на модул",
-                        href: `/dashboard/${moduleId}`,
+                        href: `${Routes.dashboard.shop.base()}${productId ? `?productIds=${productId}` : ""}`,
                         variant: "secondary"
                     }
                 ]

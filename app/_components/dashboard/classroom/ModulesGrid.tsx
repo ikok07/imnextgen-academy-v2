@@ -37,7 +37,7 @@ export default async function ModulesGrid() {
                 module={module}
                 moduleAllowed={accessResponse.value.some((obj) => obj.resourceId === module.id && obj.actions["select"] === "EFFECT_ALLOW")}
             />
-        })
+        });
     } catch(e) {
         console.error(e);
         return <PrimaryErrorMessage

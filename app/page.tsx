@@ -12,8 +12,9 @@ import ThemeSelector from "@/app/_components/ui/theme/ThemeSelector";
 // DONE: 3.1 Do not allow non configured users to access dashboard
 // DONE: 3.2 Fix setup completion on Vercel
 // DONE: 4. Create production publish checklist
-// TODO: 5. Create modularization strategy
-// TODO: 6. Integrate DSK Payments
+// DONE: 5. Update user data in db after change in Clerk
+// TODO: 6. Create modularization strategy
+// TODO: 7. Integrate DSK Payments
 
 export default async function Home() {
   const t = await getTranslations("Homepage");
