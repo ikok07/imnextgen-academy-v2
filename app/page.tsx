@@ -11,7 +11,7 @@ import ThemeSelector from "@/app/_components/ui/theme/ThemeSelector";
 // DONE: 3. Full user test
 // DONE: 3.1 Do not allow non configured users to access dashboard
 // DONE: 3.2 Fix setup completion on Vercel
-// TODO: 4. Create production publish checklist
+// DONE: 4. Create production publish checklist
 // TODO: 5. Create modularization strategy
 // TODO: 6. Integrate DSK Payments
 
