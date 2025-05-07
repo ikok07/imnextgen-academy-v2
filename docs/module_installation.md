@@ -1,10 +1,12 @@
 ### Install steps
 
 1. Export all pages from the module's ```/app``` folder in the root ```/app```
+#### `somewhere in @/app`
 ```ts
     export {default} from "@/modules/<module>/app/<page-path>"
 ```
 2. Add module's ```DI_SYMBOLS``` and ```RETURN_TYPES``` in the root files
+#### `@/di/types/types.ts`
 ```ts
 import * as DI_TEST_MODULE from "@/modules/test/di/types/types"
 
@@ -51,3 +53,18 @@ export interface DI_RETURN_TYPES extends
     
     // ... other modules
 ```
+4. Merge module's translation files with the root translations
+#### `@/i18n/request.ts`
+```ts
+    export default getRequestConfig(async () => {
+        // ... some config
+    
+        Localizator.getInstance().loadMessages((await import(`@/modules/<module>/messages/${locale}.json`)).default);
+    
+        return {
+            // ... other fields
+            messages: Localizator.getInstance().getMessages()
+        }
+    })
+```
+5. The module's media files from `@/modules/<module>/public` should manually be copied into the root `/public` folder. 
