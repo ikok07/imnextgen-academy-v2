@@ -54,6 +54,8 @@ export class BaseRepository {
             schema: this.schema
         })
 
-        return callback(db);
+        const result = await callback(db);
+        await pool.end();
+        return result;
     };
 }

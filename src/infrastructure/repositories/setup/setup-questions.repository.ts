@@ -36,7 +36,7 @@ export class SetupQuestionsRepository extends BaseRepository implements ISetupQu
                     await db.transaction(async tx => {
                         await tx.delete(userSetupQuestionsTable).where(eq(userSetupQuestionsTable.profile_id, userId)).execute();
                         await tx.insert(userSetupQuestionsTable).values(answers).execute();
-                        await tx.update(profilesTable).set({configured: true}).where(eq(profilesTable.id, userId));
+                        await tx.update(profilesTable).set({configured: true}).where(eq(profilesTable.id, userId)).execute();
                     })
                 }
             })
