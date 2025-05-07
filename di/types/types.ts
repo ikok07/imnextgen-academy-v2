@@ -16,7 +16,18 @@ import {USER_BOUGHT_MODULES_RETURN_TYPES, USER_BOUGHT_MODULES_SYMBOLS} from "@/d
 import {MEETINGS_RETURN_TYPES, MEETINGS_SYMBOLS} from "@/di/types/meetings.types";
 import {PAYMENTS_RETURN_TYPES, PAYMENTS_SYMBOLS} from "@/di/types/payments.types";
 
+import * as DI_TEST_MODULE from "@/modules/test/di/types/types"
+
+const MODULE_DI_SYMBOLS = {
+    ...DI_TEST_MODULE.DI_SYMBOLS
+};
+
+interface MODULE_RETURN_TYPES extends
+    DI_TEST_MODULE.DI_RETURN_TYPES
+{}
+
 export const DI_SYMBOLS = {
+    ...MODULE_DI_SYMBOLS,
     ...AUTH_SYMBOLS,
     ...AUTHORIZATION_SYMBOLS,
     ...EMAIL_SYMBOLS,
@@ -34,6 +45,7 @@ export const DI_SYMBOLS = {
 };
 
 export interface DI_RETURN_TYPES extends
+    MODULE_RETURN_TYPES,
     AUTH_RETURN_TYPES,
     AUTHORIZATION_RETURN_TYPES,
     EMAIL_RETURN_TYPES,

@@ -1,4 +1,4 @@
-import {createContainer} from "@evyweb/ioctopus";
+import {Container, createContainer} from "@evyweb/ioctopus";
 import {DI_RETURN_TYPES, DI_SYMBOLS} from "@/di/types/types";
 import {createAuthenticationModule} from "@/di/modules/authentication.module";
 import {createEmailsModule} from "@/di/modules/emails.module";
@@ -15,8 +15,15 @@ import {createUserBoughtModulesModule} from "@/di/modules/user-bought-modules.mo
 import { createMeetingsModule } from "./modules/meetings.module";
 import {createPaymentsModule} from "@/di/modules/payments.module";
 
+import loadTestModules from "@/modules/test/di/container";
+
+function loadExternalModules(container: Container) {
+    loadTestModules(container);
+}
+
 const ApplicationContainer = createContainer();
 
+loadExternalModules(ApplicationContainer);
 ApplicationContainer.load(Symbol("AuthenticationModule"), createAuthenticationModule());
 ApplicationContainer.load(Symbol("AuthorizationModule"), createAuthorizationModule());
 ApplicationContainer.load(Symbol("EmailModule"), createEmailsModule());
