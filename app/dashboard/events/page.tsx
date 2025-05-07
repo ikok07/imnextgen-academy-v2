@@ -1,4 +1,3 @@
-import SetActiveLinkComponent from "@/app/_components/dashboard/nav/SetActiveLinkComponent";
 import DashboardEventsCalendarColumn from "@/app/_components/dashboard/events/calendar-column/DashboardEventsCalendarColumn";
 import DashboardEventsProvider from "@/app/_providers/DashboardEventsProvider";
 import DashboardEventsList from "@/app/_components/dashboard/events/DashboardEventsList";

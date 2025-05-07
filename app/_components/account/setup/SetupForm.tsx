@@ -12,6 +12,9 @@ import {setUserSetupQuestions} from "@/app/account/setup/actions";
 import {useAppUser} from "@/app/_hooks/auth/useAppUser";
 import { UserSetupAnswer } from "@/src/entities/setup/user-setup-answers";
 import {Routes} from "@/app/_utils/nav/routes";
+import {toast} from "sonner";
+import {useQueryClient} from "react-query";
+import {ServerActionError} from "@/app/_utils/createServerAction";
 
 type SetupFormProps = {
     setupQuestions: SetupQuestion[]
@@ -21,12 +24,18 @@ export default function SetupForm({setupQuestions}: SetupFormProps) {
     const [errors, setErrors] = useState<string[]>([]);
     const [answers, setAnswers] = useState<UserSetupAnswer[]>(setupQuestions.map(q => ({id: q.id, text: null})));
     const {userObject} = useAppUser();
+    const queryClient = useQueryClient();
     const router = useRouter();
 
     const {mutate: setUserSetupQuestionsMethod, isLoading} = useErrorMutation({
         mutationFn: () => setUserSetupQuestions(userObject.user?.id, answers),
         onSuccess() {
+            queryClient.invalidateQueries(["dbProfile"]);
             router.push(Routes.dashboard.classroom.base);
+        },
+        onError(e) {
+            console.error(e);
+            toast.error("Нещо се обърка! Моля, свържи се с екипа ни!")
         }
     })
 

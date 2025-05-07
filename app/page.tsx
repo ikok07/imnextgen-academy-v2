@@ -8,10 +8,12 @@ import ThemeSelector from "@/app/_components/ui/theme/ThemeSelector";
 // DONE: 1.2 Add payment payment-success page
 // DONE: 1.3 Refactor Stripe's payment sheet
 // DONE: 2. Add global 404 and error pages
-// TODO: 3. Integrate DSK Payments
-// TODO: 4. Full user test
-// TODO: 5. Create branching in NEON Database
-// TODO: 6. Create modularization strategy
+// TODO: 3. Full user test
+// TODO: 3.1 Do not allow non configured users to access dashboard
+// TODO: 3.2 Fix setup completion on Vercel
+// TODO: 4. Create production publish checklist
+// TODO: 5. Create modularization strategy
+// TODO: 6. Integrate DSK Payments
 
 export default async function Home() {
   const t = await getTranslations("Homepage");

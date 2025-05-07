@@ -8,6 +8,9 @@ type LayoutProps = {
 }
 
 export default async function Layout({children}: LayoutProps) {
+
+
+
     return <DashboardWrapper>
         <DashboardEmailConfirmMessage />
         <DashboardClientWrapper>
