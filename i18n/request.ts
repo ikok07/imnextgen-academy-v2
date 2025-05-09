@@ -10,7 +10,10 @@ export default getRequestConfig(async () => {
 
     if (lang && SUPPORTED_LANGS.includes(lang.value as SupportedLanguage)) locale = lang.value;
 
+    async function loadExternalModuleMessages() {}
+
     Localizator.getInstance().loadMessages((await import(`../messages/${locale}.json`)).default);
+    await loadExternalModuleMessages();
 
     return {
         locale,
