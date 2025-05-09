@@ -11,6 +11,9 @@ import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage
 import {IoCloudOffline} from "react-icons/io5";
 import RedirectComponent from "@/app/_components/ui/RedirectComponent";
 import {getInjection} from "@/di/container";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/app/_components/ui/shadcn/card";
+import Image from "next/image";
+import BankCreditForm from "@/app/_components/dashboard/shop/payment/bank/BankCreditForm";
 
 const searchParamsSchema = z.object({
     searchParams: z.object({
@@ -22,7 +25,7 @@ const searchParamsSchema = z.object({
 export default async function Page(props: z.infer<typeof searchParamsSchema>) {
     return <div>
         <DashboardPageTitle>Завършване на плащане</DashboardPageTitle>
-        <div className="w-full max-w-[60rem] mx-auto grid md:grid-cols-[1.25fr_1fr]">
+        <div className="w-full max-w-[60rem] mx-auto grid md:grid-cols-[1.25fr_1fr] gap-4">
             <Suspense fallback={<PaymentSheetSkeleton />}>
                 <InnerContent {...props} />
             </Suspense>
@@ -81,15 +84,11 @@ async function InnerContent(props: z.infer<typeof searchParamsSchema>) {
         if (!checkoutSession.success) throw new Error("Checkout session is not available!");
 
         return <>
-            <div className="grid place-content-center">
-                <h1>DSK BANK</h1>
-            </div>
-            <div>
-                <StripePaymentSheet
-                    clientSecret={checkoutSession.value.client_secret}
-                    phoneNumber={userResponse.value.user.phoneNumbers[0].phoneNumber}
-                />
-            </div>
+            <BankCreditForm />
+            <StripePaymentSheet
+                clientSecret={checkoutSession.value.client_secret}
+                phoneNumber={userResponse.value.user.phoneNumbers[0].phoneNumber}
+            />
         </>
     } catch(e) {
         console.error(e);
