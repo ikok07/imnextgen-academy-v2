@@ -15,11 +15,7 @@ import {createUserBoughtModulesModule} from "@/di/modules/user-bought-modules.mo
 import { createMeetingsModule } from "./modules/meetings.module";
 import {createPaymentsModule} from "@/di/modules/payments.module";
 
-import loadTestModules from "@/modules/test/di/container";
-
-function loadExternalModules(container: Container) {
-    loadTestModules(container);
-}
+function loadExternalModules(container: Container) {}
 
 const ApplicationContainer = createContainer();
 

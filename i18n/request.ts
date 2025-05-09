@@ -11,7 +11,6 @@ export default getRequestConfig(async () => {
     if (lang && SUPPORTED_LANGS.includes(lang.value as SupportedLanguage)) locale = lang.value;
 
     Localizator.getInstance().loadMessages((await import(`../messages/${locale}.json`)).default);
-    Localizator.getInstance().loadMessages((await import(`@/modules/test/messages/${locale}.json`)).default);
 
     return {
         locale,
