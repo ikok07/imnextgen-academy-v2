@@ -2,6 +2,8 @@ import LanguageSelector from "@/app/_components/ui/language/LanguageSelector";
 import {getTranslations} from "next-intl/server";
 import AuthComponent from "@/app/_components/AuthComponent";
 import ThemeSelector from "@/app/_components/ui/theme/ThemeSelector";
+import {publicEncrypt} from "crypto"
+import {getCalculationForAllSchemes} from "@/app/dashboard/shop/payment/actions";
 
 // DONE: 1. Add payment options to profile settings
 // DONE: 1.1 Add modules to user's bought modules
@@ -18,6 +20,12 @@ import ThemeSelector from "@/app/_components/ui/theme/ThemeSelector";
 
 export default async function Home() {
   const t = await getTranslations("Homepage");
+
+  console.log(await getCalculationForAllSchemes({
+    price: "1000",
+    productId: "test",
+    initialPayment: "100"
+  }));
 
   return <div className="p-4 space-y-3">
     <div className="flex items-center gap-2">

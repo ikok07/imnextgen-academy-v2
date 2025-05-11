@@ -4,16 +4,21 @@ import {createCheckoutSession, getFullSubscriptionTiers} from "@/app/dashboard/s
 import {z} from "zod";
 import {getUser} from "@/app/dashboard/actions";
 import { Routes } from "@/app/_utils/nav/routes";
-import PaymentSheetSkeleton from "@/app/_components/dashboard/shop/payment/PaymentSheetSkeleton";
 import {Suspense} from "react";
 import {getUserBoughtModules, getUserSubscription} from "@/app/actions";
 import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
-import {IoCloudOffline} from "react-icons/io5";
+import {IoCalendar, IoCash, IoCloudOffline} from "react-icons/io5";
 import RedirectComponent from "@/app/_components/ui/RedirectComponent";
 import {getInjection} from "@/di/container";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/app/_components/ui/shadcn/card";
 import Image from "next/image";
-import BankCreditForm from "@/app/_components/dashboard/shop/payment/bank/BankCreditForm";
+import DSKBankCreditForm from "@/app/_components/dashboard/shop/payment/bank/dsk/DSKBankCreditForm";
+import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
+import BankCreditFormPropertyBox from "@/app/_components/dashboard/shop/payment/bank/BankCreditFormPropertyBox";
+import {PaymentPageProvider} from "@/app/_providers/PaymentPageProvider";
+import StripePaymentSheetSkeleton from "@/app/_components/dashboard/shop/payment/skeleton/StripePaymentSheetSkeleton";
+import PaymentPageClientContent from "@/app/_components/dashboard/shop/payment/PaymentPageClientContent";
+import PaymentPageSkeleton from "@/app/_components/dashboard/shop/payment/skeleton/PaymentPageSkeleton";
 
 const searchParamsSchema = z.object({
     searchParams: z.object({
@@ -25,8 +30,8 @@ const searchParamsSchema = z.object({
 export default async function Page(props: z.infer<typeof searchParamsSchema>) {
     return <div>
         <DashboardPageTitle>Завършване на плащане</DashboardPageTitle>
-        <div className="w-full max-w-[60rem] mx-auto grid md:grid-cols-[1.25fr_1fr] gap-4">
-            <Suspense fallback={<PaymentSheetSkeleton />}>
+        <div className="w-full max-w-[50rem] mx-auto grid lg:grid-cols-[1.6fr_2fr] gap-4">
+            <Suspense fallback={<PaymentPageSkeleton />}>
                 <InnerContent {...props} />
             </Suspense>
         </div>
@@ -70,26 +75,17 @@ async function InnerContent(props: z.infer<typeof searchParamsSchema>) {
 
         if (productIds.length === 0) return <RedirectComponent path={Routes.dashboard.shop.base()} />
 
-        const checkoutSession = await createCheckoutSession({
-            productIds,
-            customerId: userResponse.value.dbProfile.payment_customer_id || undefined,
-            customerEmail: userResponse.value.user.emailAddresses[0].emailAddress,
-            locale: "bg",
-            mode: !userHasSubscription && parsedProps.searchParams.hasSubscription === "true" ? "subscription" : "payment",
-            returnUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${Routes.dashboard.shop.paymentSuccess()}`,
-            subscriptionMetadata: !userHasSubscription && parsedProps.searchParams.hasSubscription === "true" ? {
-                tier_id: (await getInjection("IGetFullSubscriptionTiersByProductIdsController")(productIds))[0].id
-            } : undefined
-        });
-        if (!checkoutSession.success) throw new Error("Checkout session is not available!");
-
-        return <>
-            <BankCreditForm />
-            <StripePaymentSheet
-                clientSecret={checkoutSession.value.client_secret}
+        return <PaymentPageProvider>
+            <PaymentPageClientContent
+                productIds={productIds}
+                email={userResponse.value.user.emailAddresses[0].emailAddress}
                 phoneNumber={userResponse.value.user.phoneNumbers[0].phoneNumber}
+                customerId={userResponse.value.dbProfile.payment_customer_id ?? undefined}
+                userHasSubscription={userHasSubscription}
+                hasSubscriptionSearchParam={parsedProps.searchParams.hasSubscription}
+                tierId={!userHasSubscription && parsedProps.searchParams.hasSubscription === "true" ? (await getInjection("IGetFullSubscriptionTiersByProductIdsController")(productIds))[0].id : undefined}
             />
-        </>
+        </PaymentPageProvider>
     } catch(e) {
         console.error(e);
         return <PrimaryErrorMessage

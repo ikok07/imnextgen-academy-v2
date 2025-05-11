@@ -13,12 +13,17 @@ import {
     IGetCheckoutSessionsLineItemsUseCase
 } from "@/src/application/use-cases/payments/get-checkout-sessions-line-items.use-case";
 import { IGetCheckoutSessionsLineItemsController } from "@/src/interface-adapters/controllers/payments/get-checkout-sessions-line-items.controller";
+import {
+    IGetMultipleProductsController
+} from "@/src/interface-adapters/controllers/payments/get-multiple-products.controller";
 
 export const PAYMENTS_SYMBOLS = {
     IPaymentService: Symbol.for("IPaymentService"),
 
     IGetProductUseCase: Symbol.for("IGetProductUseCase"),
     IGetProductController: Symbol.for("IGetProductController"),
+
+    IGetMultipleProductsController: Symbol.for("IGetMultipleProductsController"),
 
     IGetSubscriptionUseCase: Symbol.for("IGetSubscriptionUseCase"),
     IGetSubscriptionController: Symbol.for("IGetSubscriptionController"),
@@ -41,6 +46,8 @@ export interface PAYMENTS_RETURN_TYPES {
 
     IGetProductUseCase: IGetProductUseCase,
     IGetProductController: IGetProductController,
+
+    IGetMultipleProductsController: IGetMultipleProductsController,
 
     IGetSubscriptionUseCase: IGetSubscriptionUseCase,
     IGetSubscriptionController: IGetSubscriptionController,

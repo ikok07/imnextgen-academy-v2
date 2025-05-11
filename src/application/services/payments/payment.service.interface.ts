@@ -3,17 +3,21 @@ import {z} from "zod";
 import Stripe from "stripe";
 import {StripeCheckout, StripeCheckoutSession} from "@stripe/stripe-js";
 
+export const checkoutModeEnum = z.enum(["subscription", "payment"]);
+
 export const createCheckoutSessionOptionsSchema = z.object({
     productIds: z.array(z.string()),
     customerId: z.string().optional(),
     customerEmail: z.string().email().optional(),
     locale: z.enum(["bg"]),
-    mode: z.enum(["subscription", "payment"]),
+    mode: checkoutModeEnum,
     returnUrl: z.string(),
     subscriptionMetadata: z.record(z.string()).optional(),
-    metadata: z.record(z.string()).optional()
+    metadata: z.record(z.string()).optional(),
+    clientSecretOnly: z.boolean().optional()
 });
 
+export type CheckoutMode = z.infer<typeof checkoutModeEnum>;
 export type CreateCheckoutSessionOptions = z.infer<typeof createCheckoutSessionOptionsSchema>;
 export type ConfirmCheckout = StripeCheckoutSession & Omit<Omit<StripeCheckout, "session">, "on">;
 
@@ -21,7 +25,7 @@ export interface IPaymentService {
     getProduct(productId: string): Promise<PaymentProduct>
     getSubscription(subscriptionId: string): Promise<Stripe.Response<Stripe.Subscription>>
     getCustomer(customerId: string): Promise<Stripe.Response<Stripe.Customer | Stripe.DeletedCustomer>>
-    createCheckoutSession(opts: CreateCheckoutSessionOptions): Promise<Stripe.Response<Stripe.Checkout.Session>>
+    createCheckoutSession(opts: CreateCheckoutSessionOptions): Promise<Stripe.Response<Stripe.Checkout.Session> | string>
     getCheckoutSessionsLineItems(sessionId: string): Promise<Stripe.LineItem[]>
     validateWebhook(rawBody: string, signature: string, secret: string): Stripe.Event
 }

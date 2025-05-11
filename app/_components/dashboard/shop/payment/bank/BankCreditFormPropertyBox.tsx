@@ -1,5 +1,4 @@
 import {IconType} from "react-icons";
-import {ReactNode} from "react";
 import {cn} from "@/app/_utils/cn";
 import {Card} from "@/app/_components/ui/shadcn/card";
 import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";

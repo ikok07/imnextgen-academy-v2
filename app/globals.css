@@ -29,6 +29,10 @@ button {
   }
 }
 
+.checkbox-label a {
+  @apply cursor-pointer text-cta hover:opacity-80
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

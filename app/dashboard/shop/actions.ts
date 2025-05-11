@@ -12,6 +12,10 @@ export const getPaymentProductById = createServerAction((productId: string | und
     return getInjection("IGetProductController")(productId);
 });
 
+export const getPaymentProductsById = createServerAction((productIds: string[] | undefined) => {
+    return getInjection("IGetMultipleProductsController")(productIds);
+})
+
 export const createCheckoutSession = createServerAction((opts: Partial<CreateCheckoutSessionOptions>) => {
     return getInjection("ICreateCheckoutSessionController")(opts)
 })

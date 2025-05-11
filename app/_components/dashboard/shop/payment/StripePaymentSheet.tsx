@@ -17,28 +17,40 @@ import PrimaryInput from "@/app/_components/ui/inputs/PrimaryInput";
 import {useDebounce} from "@react-hook/debounce";
 import {Routes} from "@/app/_utils/nav/routes";
 import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
-import PaymentSheetSkeleton from "@/app/_components/dashboard/shop/payment/PaymentSheetSkeleton";
 import {toast} from "sonner";
+import StripePaymentSheetSkeleton from "@/app/_components/dashboard/shop/payment/skeleton/StripePaymentSheetSkeleton";
+import {createCheckoutSession} from "@/app/dashboard/shop/actions";
+import {getInjection} from "@/di/container";
+import {CheckoutMode} from "@/src/application/services/payments/payment.service.interface";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!, {locale: "bg"});
 
 type StripePaymentSheetProps = {
-    clientSecret: string | null,
-    phoneNumber: string
+    productIds: string[],
+    email: string | undefined,
+    phoneNumber: string,
+    customerId: string | undefined,
+    mode: CheckoutMode,
+    subscriptionMetadata: Record<string, string> | undefined
 }
 
 
 export default function StripePaymentSheet(props: StripePaymentSheetProps) {
     const {resolvedTheme} = useTheme();
-    const {selectedSubscriptionTier, selectedProductIds} = useShop();
-    const router = useRouter();
-    const promise = () => new Promise<string>(res => res(props.clientSecret!));
-
-    useEffect(() => {
-        if (!selectedSubscriptionTier && selectedProductIds.size === 0) {
-            router.push(Routes.dashboard.shop.base());
-        }
-    }, []);
+    const promise = async () => {
+        const clientSecretResponse = await createCheckoutSession({
+            productIds: props.productIds,
+            customerId: props.customerId || undefined,
+            customerEmail: props.email,
+            locale: "bg",
+            mode: props.mode,
+            returnUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${Routes.dashboard.shop.paymentSuccess()}`,
+            subscriptionMetadata: props.subscriptionMetadata,
+            clientSecretOnly: true
+        });
+        if (!clientSecretResponse.success) throw new Error("Checkout session is not available!");
+        return clientSecretResponse.value as string ?? "";
+    };
 
     return <CheckoutProvider
         stripe={stripePromise}
@@ -113,7 +125,7 @@ function InnerContent({phoneNumber}: StripePaymentSheetProps) {
         if (debouncedPromoCode) applyPromoCodeMethod(debouncedPromoCode);
     }, [debouncedPromoCode]);
 
-    if (!viewLoaded) return <PaymentSheetSkeleton />
+    if (!viewLoaded) return <StripePaymentSheetSkeleton />
 
     return <Card>
         <CardHeader className="space-y-0.5">

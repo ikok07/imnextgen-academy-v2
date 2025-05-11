@@ -19,6 +19,10 @@ import {
 import {
     getCheckoutSessionsLineItemsController
 } from "@/src/interface-adapters/controllers/payments/get-checkout-sessions-line-items.controller";
+import {
+    getMultipleProductsController,
+    IGetMultipleProductsController
+} from "@/src/interface-adapters/controllers/payments/get-multiple-products.controller";
 
 export function createPaymentsModule() {
     const paymentsModule = createModule();
@@ -34,6 +38,10 @@ export function createPaymentsModule() {
     paymentsModule
         .bind(DI_SYMBOLS.IGetProductController)
         .toHigherOrderFunction(getProductController, [DI_SYMBOLS.IGetProductUseCase]);
+
+    paymentsModule
+        .bind(DI_SYMBOLS.IGetMultipleProductsController)
+        .toHigherOrderFunction(getMultipleProductsController, [DI_SYMBOLS.IGetProductUseCase]);
 
     paymentsModule
         .bind(DI_SYMBOLS.IGetSubscriptionUseCase)

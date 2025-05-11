@@ -14,6 +14,7 @@ import { createSubscriptionsModule } from "./modules/subscriptions.module";
 import {createUserBoughtModulesModule} from "@/di/modules/user-bought-modules.module";
 import { createMeetingsModule } from "./modules/meetings.module";
 import {createPaymentsModule} from "@/di/modules/payments.module";
+import {createDskModule} from "@/di/modules/dsk.module";
 
 function loadExternalModules(container: Container) {}
 
@@ -34,6 +35,7 @@ ApplicationContainer.load(Symbol("SubscriptionsModule"), createSubscriptionsModu
 ApplicationContainer.load(Symbol("UserBoughtModulesModule"), createUserBoughtModulesModule());
 ApplicationContainer.load(Symbol("MeetingsModule"), createMeetingsModule());
 ApplicationContainer.load(Symbol("PaymentsModule"), createPaymentsModule());
+ApplicationContainer.load(Symbol("DskModule"), createDskModule());
 
 export function getInjection<K extends keyof typeof DI_SYMBOLS>(symbol: K): DI_RETURN_TYPES[K] {
     return ApplicationContainer.get(DI_SYMBOLS[symbol]);

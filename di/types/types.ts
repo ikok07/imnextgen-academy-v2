@@ -15,6 +15,7 @@ import {SUBSCRIPTIONS_RETURN_TYPES, SUBSCRIPTIONS_SYMBOLS} from "@/di/types/subs
 import {USER_BOUGHT_MODULES_RETURN_TYPES, USER_BOUGHT_MODULES_SYMBOLS} from "@/di/types/user-bought-modules.types";
 import {MEETINGS_RETURN_TYPES, MEETINGS_SYMBOLS} from "@/di/types/meetings.types";
 import {PAYMENTS_RETURN_TYPES, PAYMENTS_SYMBOLS} from "@/di/types/payments.types";
+import {DSK_RETURN_TYPES, DSK_SYMBOLS} from "@/di/types/dsk.types";
 
 const MODULE_DI_SYMBOLS = {};
 
@@ -35,7 +36,8 @@ export const DI_SYMBOLS = {
     ...SUBSCRIPTIONS_SYMBOLS,
     ...USER_BOUGHT_MODULES_SYMBOLS,
     ...MEETINGS_SYMBOLS,
-    ...PAYMENTS_SYMBOLS
+    ...PAYMENTS_SYMBOLS,
+    ...DSK_SYMBOLS
 };
 
 export interface DI_RETURN_TYPES extends
@@ -53,5 +55,6 @@ export interface DI_RETURN_TYPES extends
     SUBSCRIPTIONS_RETURN_TYPES,
     USER_BOUGHT_MODULES_RETURN_TYPES,
     MEETINGS_RETURN_TYPES,
-    PAYMENTS_RETURN_TYPES
+    PAYMENTS_RETURN_TYPES,
+    DSK_RETURN_TYPES
 {}

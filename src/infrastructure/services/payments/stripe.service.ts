@@ -49,11 +49,11 @@ export class StripeService implements IPaymentService {
         }
     }
 
-    async createCheckoutSession({productIds, customerId, customerEmail, locale, returnUrl, mode, subscriptionMetadata, metadata}: CreateCheckoutSessionOptions): Promise<Stripe.Response<Stripe.Checkout.Session>> {
+    async createCheckoutSession({productIds, customerId, customerEmail, locale, returnUrl, mode, subscriptionMetadata, metadata, clientSecretOnly}: CreateCheckoutSessionOptions): Promise<Stripe.Response<Stripe.Checkout.Session> | string> {
         const products = (await Promise.all(productIds.map(id => this.stripeClient.products.retrieve(id)))).filter(p => !!p.default_price);
 
         try {
-            return this.stripeClient.checkout.sessions.create({
+            const session = await this.stripeClient.checkout.sessions.create({
                 line_items: products.map(p => ({
                     price: p.default_price as string,
                     adjustable_quantity: {
@@ -75,7 +75,8 @@ export class StripeService implements IPaymentService {
                     enabled: true
                 },
                 metadata: metadata
-            })
+            });
+            return clientSecretOnly && session.client_secret ? session.client_secret : session;
         } catch(e) {
             throw new PaymentError(`Failed to create checkout session! ${e}`);
         }
