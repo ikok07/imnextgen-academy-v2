@@ -6,6 +6,7 @@ import {
 import {PaymentError} from "@/src/entities/errors/payments/payment";
 import Stripe from "stripe";
 import {PaymentProduct} from "@/src/entities/models/payments/payment-product";
+import {images} from "next/dist/build/webpack/config/blocks/images";
 
 export class StripeService implements IPaymentService {
     secretKey: string = process.env.STRIPE_SECRET_KEY!;
@@ -18,7 +19,8 @@ export class StripeService implements IPaymentService {
 
             const finalProduct: PaymentProduct = {
                 id: productResponse.id,
-                name: productResponse.name
+                name: productResponse.name,
+                image: productResponse.images[0] ?? undefined
             }
 
             if (typeof productResponse.default_price === "string") {

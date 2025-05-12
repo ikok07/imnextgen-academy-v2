@@ -9,19 +9,17 @@ import {
 import {useTheme} from "next-themes";
 import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
 import {useEffect, useMemo, useState} from "react";
-import {useMutation} from "react-query";
+import {useMutation, useQuery} from "react-query";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/app/_components/ui/shadcn/card";
-import {useShop} from "@/app/_providers/ShopProvider";
-import {useRouter} from "next/navigation";
 import PrimaryInput from "@/app/_components/ui/inputs/PrimaryInput";
 import {useDebounce} from "@react-hook/debounce";
 import {Routes} from "@/app/_utils/nav/routes";
-import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
 import {toast} from "sonner";
 import StripePaymentSheetSkeleton from "@/app/_components/dashboard/shop/payment/skeleton/StripePaymentSheetSkeleton";
 import {createCheckoutSession} from "@/app/dashboard/shop/actions";
-import {getInjection} from "@/di/container";
 import {CheckoutMode} from "@/src/application/services/payments/payment.service.interface";
+import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
+import {IoCloudOffline} from "react-icons/io5";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!, {locale: "bg"});
 
@@ -37,6 +35,7 @@ type StripePaymentSheetProps = {
 
 export default function StripePaymentSheet(props: StripePaymentSheetProps) {
     const {resolvedTheme} = useTheme();
+
     const promise = async () => {
         const clientSecretResponse = await createCheckoutSession({
             productIds: props.productIds,
@@ -50,7 +49,7 @@ export default function StripePaymentSheet(props: StripePaymentSheetProps) {
         });
         if (!clientSecretResponse.success) throw new Error("Checkout session is not available!");
         return clientSecretResponse.value as string ?? "";
-    };
+    }
 
     return <CheckoutProvider
         stripe={stripePromise}
@@ -72,7 +71,6 @@ export default function StripePaymentSheet(props: StripePaymentSheetProps) {
 }
 
 function InnerContent({phoneNumber}: StripePaymentSheetProps) {
-    const {viewLoaded} = useViewLoaded();
     const checkout = useCheckout();
     const [promoCode, setPromoCode] = useState<string | null>(null);
     const [debouncedPromoCode, setDebouncedPromoCode] = useDebounce<string | null>(null, 1000);
@@ -124,8 +122,6 @@ function InnerContent({phoneNumber}: StripePaymentSheetProps) {
     useEffect(() => {
         if (debouncedPromoCode) applyPromoCodeMethod(debouncedPromoCode);
     }, [debouncedPromoCode]);
-
-    if (!viewLoaded) return <StripePaymentSheetSkeleton />
 
     return <Card>
         <CardHeader className="space-y-0.5">

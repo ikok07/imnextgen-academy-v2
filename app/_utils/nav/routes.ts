@@ -19,7 +19,8 @@ export const Routes = {
         shop: {
             base: () => `${Routes.dashboard.base}/shop`,
             payment: (productIds: string[], hasSubscription: boolean) => `${Routes.dashboard.shop.base()}/payment?productIds=${productIds}&hasSubscription=${hasSubscription}`,
-            paymentSuccess: () => `${Routes.dashboard.shop.base()}/payment-success`
+            paymentSuccess: () => `${Routes.dashboard.shop.base()}/payment-success`,
+            creditSuccess: () => `${Routes.dashboard.shop.base()}/credit-success`,
         }
     }
 }

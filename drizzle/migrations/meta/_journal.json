@@ -190,6 +190,27 @@
       "when": 1746429586157,
       "tag": "0026_make-profile-module-pair-unique-for-bought-modules",
       "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1746991474147,
+      "tag": "0027_add-bank-orders",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1747032299573,
+      "tag": "0028_add-bank-order-products",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1747034851100,
+      "tag": "0029_modify-bank-order-products-table",
+      "breakpoints": true
     }
   ]
 }

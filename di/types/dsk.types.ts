@@ -5,19 +5,27 @@ import {
 import {
     IGetCalculationForAllSchemesController
 } from "@/src/interface-adapters/controllers/payments/dsk/get-calculation-for-all-schemes.controller";
+import {IPayDirectUseCase} from "@/src/application/use-cases/payments/dsk/pay-direct.use-case";
+import {IPayDirectController} from "@/src/interface-adapters/controllers/payments/dsk/pay-direct.controller";
 
 export const DSK_SYMBOLS = {
     IDskService: Symbol.for("IDskService"),
 
     IGetCalculationForAllSchemesUseCase: Symbol.for("IGetCalculationForAllSchemesUseCase"),
     IGetCalculationForAllSchemesController: Symbol.for("IGetCalculationForAllSchemesController"),
+
+    IPayDirectUseCase: Symbol.for("IPayDirectUseCase"),
+    IPayDirectController: Symbol.for("IPayDirectController")
 }
 
 export interface DSK_RETURN_TYPES {
     IDskService: IDskService,
 
     IGetCalculationForAllSchemesUseCase: IGetCalculationForAllSchemesUseCase,
-    IGetCalculationForAllSchemesController: IGetCalculationForAllSchemesController
+    IGetCalculationForAllSchemesController: IGetCalculationForAllSchemesController,
+
+    IPayDirectUseCase: IPayDirectUseCase,
+    IPayDirectController: IPayDirectController
 }
 
 

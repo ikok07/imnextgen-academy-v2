@@ -3,5 +3,6 @@ export const BREADCRUMB_LABELS: Record<string, string> = {
     events: "Календар",
     shop: "Магазин",
     payment: "Плащане",
-    "payment-success": "Успешно плащане"
+    "payment-success": "Успешно плащане",
+    "credit-success": "Успешна заявка"
 }

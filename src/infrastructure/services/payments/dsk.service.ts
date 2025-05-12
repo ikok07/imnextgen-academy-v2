@@ -6,6 +6,10 @@ import {
 import {PaymentError} from "@/src/entities/errors/payments/payment";
 import axios from "axios";
 import crypto from "crypto"
+import {
+    SendDirectPayOptions, SendDirectPayResults,
+    sendDirectPayResultsSchema
+} from "@/src/entities/models/payments/dsk/send-direct-pay-options";
 
 export class DskService implements IDskService {
 
@@ -52,4 +56,38 @@ export class DskService implements IDskService {
         }
     }
 
+    async sendDskPayDirect(opts: SendDirectPayOptions): Promise<SendDirectPayResults> {
+        try {
+            const {data} = await axios.post<{data: {status: number, result: object}}>(this.baseUrl, {
+                data: this.encryptBody(JSON.stringify({
+                    name: "sendDskPayDirect",
+                    param: {
+                        unicid: this.unicd,
+                        orderid: opts.orderId,
+                        first_name: opts.firstName,
+                        last_name: opts.lastName,
+                        phone: opts.phone,
+                        email: opts.email,
+                        address2: opts.address,
+                        address2city: opts.city,
+                        postcode: opts.postCode,
+                        price: opts.price,
+                        address: opts.address,
+                        addresscity: opts.city,
+                        id: opts.period.toString(),
+                        monthly_payment: opts.monthlyPayment,
+                        gpr: opts.gpr,
+                        egn: opts.personalId,
+                        initial_payment: opts.initialPayment,
+                        glp: opts.glp,
+                        items: opts.items
+                    }
+                }))
+            });
+
+            return sendDirectPayResultsSchema.parse(data.data.result);
+        } catch(e) {
+            throw new PaymentError(`Failed to pay directly to DSK Bank: ${e}`)
+        }
+    }
 }

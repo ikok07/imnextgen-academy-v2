@@ -11,6 +11,8 @@ import * as meetings from "../../../drizzle/schema/meetings"
 import * as meetingRepeatDays from "../../../drizzle/schema/meeting_repeat_days"
 import * as meetingExcludedDates from "../../../drizzle/schema/meeting_excluded_dates"
 import * as meetingDates from "../../../drizzle/schema/meeting_dates"
+import * as bankOrders from "../../../drizzle/schema/bank_orders"
+import * as bankOrderProducts from "../../../drizzle/schema/bank_order_products"
 
 import ws from "ws"
 
@@ -34,7 +36,9 @@ export class BaseRepository {
         ...meetings,
         ...meetingRepeatDays,
         ...meetingExcludedDates,
-        ...meetingDates
+        ...meetingDates,
+        ...bankOrders,
+        ...bankOrderProducts
     };
     constructor(authenticationService: IAuthenticationService) {
         this.authService = authenticationService;

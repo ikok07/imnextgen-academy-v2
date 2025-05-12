@@ -19,6 +19,7 @@ import {PaymentPageProvider} from "@/app/_providers/PaymentPageProvider";
 import StripePaymentSheetSkeleton from "@/app/_components/dashboard/shop/payment/skeleton/StripePaymentSheetSkeleton";
 import PaymentPageClientContent from "@/app/_components/dashboard/shop/payment/PaymentPageClientContent";
 import PaymentPageSkeleton from "@/app/_components/dashboard/shop/payment/skeleton/PaymentPageSkeleton";
+import {SerializableUser} from "@/src/entities/models/auth/serializable-user";
 
 const searchParamsSchema = z.object({
     searchParams: z.object({
@@ -75,8 +76,16 @@ async function InnerContent(props: z.infer<typeof searchParamsSchema>) {
 
         if (productIds.length === 0) return <RedirectComponent path={Routes.dashboard.shop.base()} />
 
+        const serializableUser: SerializableUser = {
+            id: userResponse.value.user.id,
+            firstName: userResponse.value.user.firstName,
+            lastName: userResponse.value.user.lastName,
+            emailAddress: userResponse.value.user.emailAddresses[0].emailAddress,
+            phoneNumber: userResponse.value.user.phoneNumbers[0].phoneNumber
+        }
         return <PaymentPageProvider>
             <PaymentPageClientContent
+                user={serializableUser}
                 productIds={productIds}
                 email={userResponse.value.user.emailAddresses[0].emailAddress}
                 phoneNumber={userResponse.value.user.phoneNumbers[0].phoneNumber}

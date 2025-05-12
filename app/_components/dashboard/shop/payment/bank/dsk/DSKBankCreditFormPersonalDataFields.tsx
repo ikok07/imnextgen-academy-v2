@@ -6,6 +6,10 @@ import {handleParse, trackErrors} from "@/app/_utils/handleInputValidation";
 import {z} from "zod";
 
 type DskBankCreditFormPersonalDataFieldsProps = {
+    firstName: string | null,
+    setFirstName: Dispatch<SetStateAction<string | null>>,
+    lastName: string | null,
+    setLastName: Dispatch<SetStateAction<string | null>>,
     isLoading: boolean,
     errors: string[],
     setErrors: Dispatch<SetStateAction<string[]>>,
@@ -21,6 +25,34 @@ type DskBankCreditFormPersonalDataFieldsProps = {
 
 export default function DskBankCreditFormPersonalDataFields(props: DskBankCreditFormPersonalDataFieldsProps) {
     return <>
+        <div className="grid grid-cols-2 gap-3">
+            <PrimaryInput
+                disabled={props.isLoading}
+                label="Име"
+                value={props.firstName ?? ""}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => props.setFirstName(e.target.value)}
+                error={handleParse({
+                    type: "ignoreNull",
+                    value: props.firstName,
+                    validateCb: () => z.string().min(1, {message: "Невалидно име"}).parse(props.firstName),
+                    trackErrorsFunc: (id, action) => trackErrors(id, action, props.errors, props.setErrors),
+                    errorId: "firstName"
+                })}
+            />
+            <PrimaryInput
+                disabled={props.isLoading}
+                label="Фамилия"
+                value={props.lastName ?? ""}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => props.setLastName(e.target.value)}
+                error={handleParse({
+                    type: "ignoreNull",
+                    value: props.lastName,
+                    validateCb: () => z.string().min(3, {message: "Невалидна фамилия"}).parse(props.lastName),
+                    trackErrorsFunc: (id, action) => trackErrors(id, action, props.errors, props.setErrors),
+                    errorId: "lastName"
+                })}
+            />
+        </div>
         <PrimaryInput
             disabled={props.isLoading}
             label="Адрес"

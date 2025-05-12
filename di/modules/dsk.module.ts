@@ -7,6 +7,8 @@ import {
 import {
     getCalculationForAllSchemesController
 } from "@/src/interface-adapters/controllers/payments/dsk/get-calculation-for-all-schemes.controller";
+import {payDirectUseCase} from "@/src/application/use-cases/payments/dsk/pay-direct.use-case";
+import {payDirectController} from "@/src/interface-adapters/controllers/payments/dsk/pay-direct.controller";
 
 export function createDskModule() {
     const dskModule = createModule();
@@ -22,6 +24,14 @@ export function createDskModule() {
     dskModule
         .bind(DI_SYMBOLS.IGetCalculationForAllSchemesController)
         .toHigherOrderFunction(getCalculationForAllSchemesController, [DI_SYMBOLS.IGetCalculationForAllSchemesUseCase, DI_SYMBOLS.IGetProductUseCase]);
+
+    dskModule
+        .bind(DI_SYMBOLS.IPayDirectUseCase)
+        .toHigherOrderFunction(payDirectUseCase, [DI_SYMBOLS.IDskService]);
+
+    dskModule
+        .bind(DI_SYMBOLS.IPayDirectController)
+        .toHigherOrderFunction(payDirectController, [DI_SYMBOLS.ICreateOrderUseCase, DI_SYMBOLS.IPayDirectUseCase]);
 
     return dskModule;
 }

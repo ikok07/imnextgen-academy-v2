@@ -1,0 +1,65 @@
+import {IPayDirectUseCase} from "@/src/application/use-cases/payments/dsk/pay-direct.use-case";
+import {ICreateOrderUseCase} from "@/src/application/use-cases/payments/bank-orders/create-order.use-case";
+import {
+    SendDirectPayOptions,
+    sendDirectPayOptionsSchema
+} from "@/src/entities/models/payments/dsk/send-direct-pay-options";
+import {InputParseError} from "@/src/entities/errors/common";
+import {z} from "zod";
+import {paymentProductSchema} from "@/src/entities/models/payments/payment-product";
+
+export type IPayDirectController = ReturnType<typeof payDirectController>;
+
+export const directPayOptionsExtensionSchema = z.object({
+    products: z.array(paymentProductSchema)
+});
+
+export type DirectPayOptionsExtension = z.infer<typeof directPayOptionsExtensionSchema>;
+
+export const payDirectController = (
+    createOrderUseCase: ICreateOrderUseCase,
+    payDirectUseCase: IPayDirectUseCase
+) => async (
+    userId: string | undefined,
+    opts: Partial<Omit<Omit<SendDirectPayOptions, "orderId">, "items"> & DirectPayOptionsExtension>
+) => {
+    if (!userId) throw new InputParseError("Invalid userId!");
+
+    const {data, error} = sendDirectPayOptionsSchema
+        .omit({orderId: true, items: true})
+        .and(directPayOptionsExtensionSchema)
+        .safeParse(opts);
+    if (error) throw new InputParseError("Invalid options!");
+
+    if (isNaN(+data.price)) throw new InputParseError("Invalid price!");
+
+    const totalPrice = data.products.reduce((prev, curr) => {
+        if (!curr.price) throw new InputParseError(`Product with id ${curr.id} has no price!`);
+        return prev + (curr.price / 100);
+    }, 0);
+    if (totalPrice < +data.price) throw new InputParseError("The provided price exceeds the total price of all items!");
+
+    const order = await createOrderUseCase(
+        userId,
+        data.products.map(p => ({
+            product_id: p.id
+        }))
+    );
+
+    const items = data.products?.map(p => ({
+        id: p.id,
+        name: p.name,
+        price: (p.price! / 100).toFixed(2).toString(),
+        quantity: "1",
+        image: p.image ?? "no-img"
+    }));
+
+    const fullOptions: SendDirectPayOptions = {...data, orderId: order.id, items};
+    // console.log(fullOptions);
+    // try {
+    //     return await payDirectUseCase(fullOptions);
+    // } catch(e) {
+    //     // TODO: Delete order;
+    //     throw e;
+    // }
+}

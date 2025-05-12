@@ -8,8 +8,10 @@ import {useEffect} from "react";
 import {Routes} from "@/app/_utils/nav/routes";
 import {useShop} from "@/app/_providers/ShopProvider";
 import {useRouter} from "next/navigation";
+import {SerializableUser} from "@/src/entities/models/auth/serializable-user";
 
 type PaymentPageClientContentProps = {
+    user: SerializableUser,
     productIds: string[],
     email: string | undefined,
     customerId: string | undefined,
@@ -19,7 +21,7 @@ type PaymentPageClientContentProps = {
     tierId: string | undefined
 }
 
-export default function PaymentPageClientContent({productIds, email, customerId, phoneNumber, userHasSubscription, hasSubscriptionSearchParam, tierId}: PaymentPageClientContentProps) {
+export default function PaymentPageClientContent({user, productIds, email, customerId, phoneNumber, userHasSubscription, hasSubscriptionSearchParam, tierId}: PaymentPageClientContentProps) {
     const {selectedSubscriptionTier, selectedProductIds} = useShop();
     const router = useRouter();
     const {selectedPaymentOption} = usePaymentPage();
@@ -29,15 +31,15 @@ export default function PaymentPageClientContent({productIds, email, customerId,
     }
 
     useEffect(() => {
-        // if (!selectedSubscriptionTier && selectedProductIds.size === 0) {
-        //     router.push(Routes.dashboard.shop.base());
-        // }
+        if (!selectedSubscriptionTier && selectedProductIds.size === 0) {
+            router.push(Routes.dashboard.shop.base());
+        }
     }, []);
 
     return <>
         <PaymentOptionSelector />
         <div className={generateAnimationClasses("credit-dsk")}>
-            <DSKBankCreditForm productIds={productIds} />
+            <DSKBankCreditForm user={user} productIds={productIds} />
         </div>
         <div className={generateAnimationClasses("pay-stripe")}>
             <StripePaymentSheet

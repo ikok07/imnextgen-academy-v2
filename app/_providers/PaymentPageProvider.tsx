@@ -21,7 +21,7 @@ type PaymentPageProviderProps = {
 }
 
 export function PaymentPageProvider({children}: PaymentPageProviderProps) {
-    const [selectedPaymentOption, setSelectedPaymentOption] = useState<PaymentOption>("credit-dsk");
+    const [selectedPaymentOption, setSelectedPaymentOption] = useState<PaymentOption>("pay-stripe");
 
     return <PaymentPageContext.Provider value={{selectedPaymentOption, setSelectedPaymentOption}}>
         {children}

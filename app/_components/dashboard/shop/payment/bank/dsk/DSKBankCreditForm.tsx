@@ -7,7 +7,7 @@ import {useMemo, useState} from "react";
 import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
 import BankFormSkeleton from "@/app/_components/dashboard/shop/payment/skeleton/BankFormSkeleton";
 import useErrorQuery from "@/app/_hooks/useErrorQuery";
-import {getCalculationForAllSchemes} from "@/app/dashboard/shop/payment/actions";
+import {getCalculationForAllSchemes, payDirect} from "@/app/dashboard/shop/payment/actions";
 import {z} from "zod"
 import {useDebounce} from "@react-hook/debounce";
 import DskBankCreditFormInitialFields
@@ -19,19 +19,27 @@ import DskBankCreditFormPersonalDataFields
 import {toast} from "sonner";
 import {getPaymentProductsById} from "@/app/dashboard/shop/actions";
 import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
-import PrimaryCheckbox from "@/app/_components/ui/checkboxes/PrimaryCheckbox";
 import DskBankCreditFormCheckmarks from "@/app/_components/dashboard/shop/payment/bank/dsk/DSKBankCreditFormCheckmarks";
+import useErrorMutation from "@/app/_hooks/useErrorMutation";
+import {SerializableUser} from "@/src/entities/models/auth/serializable-user";
+import {useRouter} from "next/navigation";
+import {Routes} from "@/app/_utils/nav/routes";
 
 type DskBankCreditFormProps = {
+    user: SerializableUser,
     productIds: string[]
 }
 
-export default function DSKBankCreditForm({productIds}: DskBankCreditFormProps) {
+export default function DSKBankCreditForm({user, productIds}: DskBankCreditFormProps) {
     const {viewLoaded} = useViewLoaded();
+    const router = useRouter();
     const [errors, setErrors] = useState<string[]>([]);
 
     const [debouncedInitialPayment, setDebouncedInitialPayment] = useDebounce<string | null>(null, 1000, false);
     const [debouncedPeriodString, setDebouncedPeriodString] = useDebounce<string | null>(null, 1000, false);
+
+    const [firstName, setFirstName] = useState<string | null>(null);
+    const [lastName, setLastName] = useState<string | null>(null);
     const [address, setAddress] = useState<string | null>(null);
     const [personalId, setPersonalId] = useState<string | null>(null);
     const [city, setCity] = useState<string | null>(null);
@@ -42,6 +50,12 @@ export default function DSKBankCreditForm({productIds}: DskBankCreditFormProps) 
         queryFn: () => getPaymentProductsById(productIds),
         queryKey: ["payment-all-products"]
     });
+
+    const allProducts = useMemo(() => {
+        if (allProductsQuery?.success) {
+            return allProductsQuery.value;
+        }
+    }, [allProductsQuery]);
 
     const totalPrice = useMemo(() => {
         return allProductsQuery?.success ? allProductsQuery.value.reduce((prev, curr) => {
@@ -70,19 +84,45 @@ export default function DSKBankCreditForm({productIds}: DskBankCreditFormProps) 
         queryKey: ["dsk-calculation-for-all-schemes", debouncedInitialPayment],
         enabled: validInitialPayment && validPeriod,
         onError() {
-            toast.error("Лизингодателят няма кредитна оферта за тази първоначална вноска")
+            toast.error("Лизингодателят няма кредитна оферта за тази първоначална вноска");
         }
     });
-
-    const isLoading = useMemo(() => {
-        return isGettingCalculations || isRefetchingCalculations || isGettingAllProducts;
-    }, [isGettingCalculations, isRefetchingCalculations, isGettingAllProducts]);
 
     const selectedPeriodCalculations = useMemo(() => {
         if (validInitialPayment && validPeriod && calculationResultsQuery?.success) {
             return calculationResultsQuery.value[debouncedPeriodString!];
         }
     }, [validInitialPayment, validPeriod, calculationResultsQuery]);
+
+    const {mutate: payDirectMethod, isLoading: isPayingDirect} = useErrorMutation({
+        mutationFn: () => payDirect(user.id, {
+            firstName: firstName ?? undefined,
+            lastName: lastName ?? undefined,
+            phone: user.phoneNumber ?? undefined,
+            email: user.emailAddress,
+            address: address ?? undefined,
+            city: city ?? undefined,
+            postCode: zipCode ?? undefined,
+            price: totalPrice?.toString(),
+            period: debouncedPeriodString ? +debouncedPeriodString : undefined,
+            monthlyPayment: selectedPeriodCalculations?.monthly_payment,
+            gpr: selectedPeriodCalculations?.gpr,
+            personalId: personalId ?? undefined,
+            initialPayment: debouncedInitialPayment ?? undefined,
+            glp: selectedPeriodCalculations?.glp,
+            products: allProducts
+        }),
+        onSuccess() {
+            router.push(Routes.dashboard.shop.creditSuccess());
+        },
+        onError() {
+            toast.error("Възникна грешка! Заявката не беше изпратена.")
+        }
+    });
+
+    const isLoading = useMemo(() => {
+        return isGettingCalculations || isRefetchingCalculations || isGettingAllProducts || isPayingDirect;
+    }, [isGettingCalculations, isRefetchingCalculations, isGettingAllProducts, isPayingDirect]);
 
     if (!viewLoaded) return <BankFormSkeleton />
 
@@ -118,6 +158,10 @@ export default function DSKBankCreditForm({productIds}: DskBankCreditFormProps) 
 
                 <DskBankCreditFormPersonalDataFields
                     isLoading={isLoading}
+                    firstName={firstName}
+                    setFirstName={setFirstName}
+                    lastName={lastName}
+                    setLastName={setLastName}
                     errors={errors}
                     setErrors={setErrors}
                     address={address}
@@ -136,7 +180,8 @@ export default function DSKBankCreditForm({productIds}: DskBankCreditFormProps) 
             />
             <PrimaryButton
                 className="w-full mt-6"
-                disabled={errors.length > 0 || checkedOptions.size !== 3}
+                disabled={errors.length > 0 || checkedOptions.size !== 3 || isLoading}
+                onClick={() => payDirectMethod()}
             >
                 Изпращане на заявка
             </PrimaryButton>
