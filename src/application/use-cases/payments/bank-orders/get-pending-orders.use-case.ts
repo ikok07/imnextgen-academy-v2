@@ -5,7 +5,7 @@ export type IGetPendingOrdersUseCase = ReturnType<typeof getPendingOrdersUseCase
 
 export const getPendingOrdersUseCase = (
     bankOrdersRepository: IBankOrdersRepository
-) => async (userId: string) => {
+) => async (userId?: string) => {
     const rawResults = await bankOrdersRepository.getPendingOrders(userId);
 
     const ordersMap: Map<string, FullBankOrder> = new Map([]);

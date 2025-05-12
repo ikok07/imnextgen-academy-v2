@@ -10,7 +10,9 @@ export const rawOrderResponseSchema = z.array(z.object({
 export type RawOrderResponse = z.infer<typeof rawOrderResponseSchema>;
 
 export interface IBankOrdersRepository {
-    getPendingOrders(userId: string): Promise<RawOrderResponse>
+    getPendingOrders(userId?: string): Promise<RawOrderResponse>
     createOrder(userId: string, products: Omit<BankOrderProductInsert, "bank_order_id">[]): Promise<BankOrder>
     updateOrder(id: string, data: Partial<BankOrderInsert>): Promise<void>
+    updateOrderProduct(productId: string, data: Partial<BankOrderProductInsert>): Promise<void>
+    deleteOrder(id: string): Promise<void>
 }

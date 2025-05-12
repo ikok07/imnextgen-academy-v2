@@ -1,0 +1,1 @@
+ALTER TYPE "public"."bank_order_enum" ADD VALUE 'cron-failed';

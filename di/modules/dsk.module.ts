@@ -9,6 +9,10 @@ import {
 } from "@/src/interface-adapters/controllers/payments/dsk/get-calculation-for-all-schemes.controller";
 import {payDirectUseCase} from "@/src/application/use-cases/payments/dsk/pay-direct.use-case";
 import {payDirectController} from "@/src/interface-adapters/controllers/payments/dsk/pay-direct.controller";
+import {getPaymentStatusUseCase} from "@/src/application/use-cases/payments/dsk/get-payment-status.use-case";
+import {
+    getPaymentStatusController
+} from "@/src/interface-adapters/controllers/payments/dsk/get-payment-status.controller";
 
 export function createDskModule() {
     const dskModule = createModule();
@@ -26,12 +30,20 @@ export function createDskModule() {
         .toHigherOrderFunction(getCalculationForAllSchemesController, [DI_SYMBOLS.IGetCalculationForAllSchemesUseCase, DI_SYMBOLS.IGetProductUseCase]);
 
     dskModule
+        .bind(DI_SYMBOLS.IGetPaymentStatusUseCase)
+        .toHigherOrderFunction(getPaymentStatusUseCase, [DI_SYMBOLS.IDskService]);
+
+    dskModule
+        .bind(DI_SYMBOLS.IGetPaymentStatusController)
+        .toHigherOrderFunction(getPaymentStatusController, [DI_SYMBOLS.IGetPaymentStatusUseCase]);
+
+    dskModule
         .bind(DI_SYMBOLS.IPayDirectUseCase)
         .toHigherOrderFunction(payDirectUseCase, [DI_SYMBOLS.IDskService]);
 
     dskModule
         .bind(DI_SYMBOLS.IPayDirectController)
-        .toHigherOrderFunction(payDirectController, [DI_SYMBOLS.ICreateOrderUseCase, DI_SYMBOLS.IPayDirectUseCase]);
+        .toHigherOrderFunction(payDirectController, [DI_SYMBOLS.ICreateOrderUseCase, DI_SYMBOLS.IDeleteOrderUseCase, DI_SYMBOLS.IPayDirectUseCase]);
 
     return dskModule;
 }

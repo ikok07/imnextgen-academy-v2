@@ -16,6 +16,7 @@ import { createMeetingsModule } from "./modules/meetings.module";
 import {createPaymentsModule} from "@/di/modules/payments.module";
 import {createDskModule} from "@/di/modules/dsk.module";
 import {createBankOrdersModule} from "@/di/modules/bank-orders.module";
+import {createBackendKeysModule} from "@/di/modules/backend-keys.module";
 
 function loadExternalModules(container: Container) {}
 
@@ -38,6 +39,7 @@ ApplicationContainer.load(Symbol("MeetingsModule"), createMeetingsModule());
 ApplicationContainer.load(Symbol("PaymentsModule"), createPaymentsModule());
 ApplicationContainer.load(Symbol("DskModule"), createDskModule());
 ApplicationContainer.load(Symbol("BankOrdersModule"), createBankOrdersModule());
+ApplicationContainer.load(Symbol("BackendKeysModule"), createBackendKeysModule());
 
 export function getInjection<K extends keyof typeof DI_SYMBOLS>(symbol: K): DI_RETURN_TYPES[K] {
     return ApplicationContainer.get(DI_SYMBOLS[symbol]);

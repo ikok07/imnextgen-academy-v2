@@ -1,4 +1,4 @@
-import {IDskService} from "@/src/application/services/payments/dsk.service.interface";
+import {DskDefaultResponse, IDskService} from "@/src/application/services/payments/dsk.service.interface";
 import {
     CalculationForAllSchemes,
     CalculationForAllSchemesOptions, calculationForAllSchemesSchema
@@ -10,6 +10,11 @@ import {
     SendDirectPayOptions, SendDirectPayResults,
     sendDirectPayResultsSchema
 } from "@/src/entities/models/payments/dsk/send-direct-pay-options";
+import {
+    DSKPaymentStatus,
+    dskPaymentStatusSchema,
+    GetStatusOptions
+} from "@/src/entities/models/payments/dsk/get-status-options";
 
 export class DskService implements IDskService {
 
@@ -38,7 +43,7 @@ export class DskService implements IDskService {
 
     async getCalculationForAllSchemes({price, productId, initialPayment}: CalculationForAllSchemesOptions): Promise<CalculationForAllSchemes> {
         try {
-            const {data} = await axios.post<{data: {status: number, result: object}}>(this.baseUrl, {
+            const {data} = await axios.post<DskDefaultResponse>(this.baseUrl, {
                 data: this.encryptBody(JSON.stringify({
                     name: "getCalculationForAllSchemes",
                     param: {
@@ -50,7 +55,33 @@ export class DskService implements IDskService {
                 }))
             });
 
+            if ("error" in data) {
+                throw new Error(data.error.message);
+            }
+
             return calculationForAllSchemesSchema.parse(data.data.result);
+        } catch(e) {
+            throw new PaymentError(`Failed to get calculation for all DSK schemes: ${e}`)
+        }
+    }
+
+    async getDskPayStatus(opts: GetStatusOptions): Promise<DSKPaymentStatus> {
+        try {
+            const {data} = await axios.post<DskDefaultResponse>(this.baseUrl, {
+                data: this.encryptBody(JSON.stringify({
+                    name: "getDskPayStatus",
+                    param: {
+                        unicid: this.unicd,
+                        orderid: opts.orderId,
+                    }
+                }))
+            });
+
+            if ("error" in data) {
+                throw new Error(data.error.message);
+            }
+
+            return dskPaymentStatusSchema.parse(data.data.result);
         } catch(e) {
             throw new PaymentError(`Failed to get calculation for all DSK schemes: ${e}`)
         }
@@ -58,7 +89,7 @@ export class DskService implements IDskService {
 
     async sendDskPayDirect(opts: SendDirectPayOptions): Promise<SendDirectPayResults> {
         try {
-            const {data} = await axios.post<{data: {status: number, result: object}}>(this.baseUrl, {
+            const {data} = await axios.post<DskDefaultResponse>(this.baseUrl, {
                 data: this.encryptBody(JSON.stringify({
                     name: "sendDskPayDirect",
                     param: {
@@ -84,6 +115,10 @@ export class DskService implements IDskService {
                     }
                 }))
             });
+
+            if ("error" in data) {
+                throw new Error(data.error.message);
+            }
 
             return sendDirectPayResultsSchema.parse(data.data.result);
         } catch(e) {

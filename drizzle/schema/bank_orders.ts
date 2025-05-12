@@ -4,7 +4,7 @@ import {createInsertSchema, createSelectSchema} from "drizzle-zod";
 import {z} from "zod";
 import {profilesTable} from "@/drizzle/schema/profiles";
 
-export const bankOrderEnum = pgEnum("bank_order_enum", ["failed", "pending", "success"]);
+export const bankOrderEnum = pgEnum("bank_order_enum", ["failed", "pending", "success", "cron-failed"]);
 
 export const bankOrdersTable = pgTable("bank_orders", {
     id: text("id").notNull().primaryKey().default(sql`gen_random_uuid()`),

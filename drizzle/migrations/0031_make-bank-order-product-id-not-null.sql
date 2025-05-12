@@ -1,0 +1,1 @@
+ALTER TABLE "bank_order_products" ALTER COLUMN "product_id" SET NOT NULL;

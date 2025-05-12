@@ -7,6 +7,7 @@ import {
 import {InputParseError} from "@/src/entities/errors/common";
 import {z} from "zod";
 import {paymentProductSchema} from "@/src/entities/models/payments/payment-product";
+import {IDeleteOrderUseCase} from "@/src/application/use-cases/payments/bank-orders/delete-order.use-case";
 
 export type IPayDirectController = ReturnType<typeof payDirectController>;
 
@@ -18,7 +19,8 @@ export type DirectPayOptionsExtension = z.infer<typeof directPayOptionsExtension
 
 export const payDirectController = (
     createOrderUseCase: ICreateOrderUseCase,
-    payDirectUseCase: IPayDirectUseCase
+    deleteOrderUseCase: IDeleteOrderUseCase,
+    payDirectUseCase: IPayDirectUseCase,
 ) => async (
     userId: string | undefined,
     opts: Partial<Omit<Omit<SendDirectPayOptions, "orderId">, "items"> & DirectPayOptionsExtension>
@@ -54,12 +56,12 @@ export const payDirectController = (
         image: p.image ?? "no-img"
     }));
 
-    const fullOptions: SendDirectPayOptions = {...data, orderId: order.id, items};
+    const fullOptions: SendDirectPayOptions = {...data, orderId: "manual-orders", items};
     // console.log(fullOptions);
-    // try {
-    //     return await payDirectUseCase(fullOptions);
-    // } catch(e) {
-    //     // TODO: Delete order;
-    //     throw e;
-    // }
+    try {
+        // return await payDirectUseCase(fullOptions);
+    } catch(e) {
+        await deleteOrderUseCase(order.id);
+        throw e;
+    }
 }

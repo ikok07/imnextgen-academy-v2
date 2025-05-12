@@ -33,7 +33,7 @@ export class UserBoughtModulesRepository extends BaseRepository implements IUser
                 return db.insert(userBoughtModuleTable).values(moduleIds.map(moduleId => ({
                     profile_id: userId,
                     module_id: moduleId
-                }))).returning();
+                }))).onConflictDoNothing().returning();
             });
         } catch (e) {
             throw new DatabaseError(`Failed to add bought module: ${e}`);

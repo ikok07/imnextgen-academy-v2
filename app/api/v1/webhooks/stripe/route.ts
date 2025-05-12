@@ -32,7 +32,7 @@ async function handleSubscriptionEnable(event: Stripe.CustomerSubscriptionCreate
 
     await getInjection("ICreateUserSubscriptionUseCase")({
         profile_id: profile.id,
-        tierId: event.data.object.metadata.tier_id
+        tier_id: event.data.object.metadata.tier_id
     });
 }
 

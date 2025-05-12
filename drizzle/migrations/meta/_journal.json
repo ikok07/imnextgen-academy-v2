@@ -211,6 +211,41 @@
       "when": 1747034851100,
       "tag": "0029_modify-bank-order-products-table",
       "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1747070327212,
+      "tag": "0030_delete-order-product-on-order-delete",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1747072494859,
+      "tag": "0031_make-bank-order-product-id-not-null",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1747072896539,
+      "tag": "0032_make-bank-order-rows-unique",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1747073423958,
+      "tag": "0033_add-another-bank-order-status",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1747076789391,
+      "tag": "0034_add-backend-keys",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "bank_order_products" ADD CONSTRAINT "bank_order_products_bank_order_id_product_id_unique" UNIQUE("bank_order_id","product_id");
