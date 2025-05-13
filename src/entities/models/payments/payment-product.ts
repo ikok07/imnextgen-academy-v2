@@ -5,7 +5,7 @@ export const paymentProductSchema = z.object({
     name: z.string(),
     price: z.number().nullable().optional(),
     currency: z.string().nullable().optional(),
-    image: z.string().optional()
+    image: z.string().optional().nullable()
 });
 
 export type PaymentProduct = z.infer<typeof paymentProductSchema>;

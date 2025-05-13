@@ -83,7 +83,7 @@ export class DskService implements IDskService {
 
             return dskPaymentStatusSchema.parse(data.data.result);
         } catch(e) {
-            throw new PaymentError(`Failed to get calculation for all DSK schemes: ${e}`)
+            throw new PaymentError(`Failed to get DSK payment status: ${e}`)
         }
     }
 

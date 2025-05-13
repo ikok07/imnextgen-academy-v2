@@ -15,7 +15,10 @@ export const directPayOptionsExtensionSchema = z.object({
     products: z.array(paymentProductSchema)
 });
 
+export const sendDirectPayModifiedOptionsSchema = sendDirectPayOptionsSchema.omit({orderId: true, items: true}).and(directPayOptionsExtensionSchema);
+
 export type DirectPayOptionsExtension = z.infer<typeof directPayOptionsExtensionSchema>;
+export type SendDirectPayModifiedOptions = z.infer<typeof sendDirectPayModifiedOptionsSchema>;
 
 export const payDirectController = (
     createOrderUseCase: ICreateOrderUseCase,
@@ -23,7 +26,7 @@ export const payDirectController = (
     payDirectUseCase: IPayDirectUseCase,
 ) => async (
     userId: string | undefined,
-    opts: Partial<Omit<Omit<SendDirectPayOptions, "orderId">, "items"> & DirectPayOptionsExtension>
+    opts: Partial<SendDirectPayModifiedOptions>
 ) => {
     if (!userId) throw new InputParseError("Invalid userId!");
 
@@ -39,6 +42,7 @@ export const payDirectController = (
         if (!curr.price) throw new InputParseError(`Product with id ${curr.id} has no price!`);
         return prev + (curr.price / 100);
     }, 0);
+
     if (totalPrice < +data.price) throw new InputParseError("The provided price exceeds the total price of all items!");
 
     const order = await createOrderUseCase(
