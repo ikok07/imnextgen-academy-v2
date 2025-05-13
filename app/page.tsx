@@ -2,8 +2,6 @@ import LanguageSelector from "@/app/_components/ui/language/LanguageSelector";
 import {getTranslations} from "next-intl/server";
 import AuthComponent from "@/app/_components/AuthComponent";
 import ThemeSelector from "@/app/_components/ui/theme/ThemeSelector";
-import {publicEncrypt} from "crypto"
-import {getCalculationForAllSchemes, payDirect} from "@/app/dashboard/shop/payment/actions";
 
 // DONE: 1. Add payment options to profile settings
 // DONE: 1.1 Add modules to user's bought modules
@@ -15,8 +13,8 @@ import {getCalculationForAllSchemes, payDirect} from "@/app/dashboard/shop/payme
 // DONE: 3.2 Fix setup completion on Vercel
 // DONE: 4. Create production publish checklist
 // DONE: 5. Update user data in db after change in Clerk
-// TODO: 6. Create modularization strategy
-// TODO: 7. Integrate DSK Payments
+// DONE: 6. Integrate DSK Payments
+// TODO: 7. Create modularization strategy
 
 export default async function Home() {
   const t = await getTranslations("Homepage");

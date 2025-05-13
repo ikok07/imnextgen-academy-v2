@@ -67,6 +67,7 @@ export class DskService implements IDskService {
 
     async getDskPayStatus(opts: GetStatusOptions): Promise<DSKPaymentStatus> {
         try {
+
             const {data} = await axios.post<DskDefaultResponse>(this.baseUrl, {
                 data: this.encryptBody(JSON.stringify({
                     name: "getDskPayStatus",
@@ -111,7 +112,13 @@ export class DskService implements IDskService {
                         egn: opts.personalId,
                         initial_payment: opts.initialPayment,
                         glp: opts.glp,
-                        items: opts.items
+                        items: opts.items.map(item => ({
+                            products_id: item.id,
+                            products_name: item.name,
+                            products_q: item.quantity,
+                            products_p: item.price,
+                            products_i: item.image
+                        }))
                     }
                 }))
             });

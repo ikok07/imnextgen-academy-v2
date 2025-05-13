@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
         if (bodyError) return NextResponse.json({error: "Invalid body"}, {status: 400});
 
         const result = await getInjection("IPayDirectController")(parsedBody.userId, parsedBody.loanData);
-        return NextResponse.json({status: "success", data: result})
+        return NextResponse.json({status: "success", data: result});
     } catch(e) {
         console.error(e);
         return NextResponse.json({error: "Internal server error!"}, {status: 500});

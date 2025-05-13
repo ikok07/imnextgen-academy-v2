@@ -16,8 +16,8 @@ export const getStatusOptionsSchema = z.object({
 });
 
 export const dskPaymentStatusSchema = z.object({
-    orderid: z.string(),
-    status: z.custom<DSKPaymentStatusEnum>(),
+    orderid: z.string().optional(),
+    status: z.custom<DSKPaymentStatusEnum>().optional(),
 });
 
 export type GetStatusOptions = z.infer<typeof getStatusOptionsSchema>;

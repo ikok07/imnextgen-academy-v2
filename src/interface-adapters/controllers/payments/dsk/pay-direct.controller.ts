@@ -60,7 +60,7 @@ export const payDirectController = (
         image: p.image ?? "no-img"
     }));
 
-    const fullOptions: SendDirectPayOptions = {...data, orderId: "manual-orders", items};
+    const fullOptions: SendDirectPayOptions = {...data, orderId: order.id, items};
     // console.log(fullOptions);
     try {
         // return await payDirectUseCase(fullOptions);

@@ -54,6 +54,7 @@ export async function POST(req: NextRequest) {
                 if (subscriptionCheckResult.error) errors.push(subscriptionCheckResult.error);
             }
         } else if (
+            !paymentStatus.status ||
             paymentStatus.status === DSKPaymentStatusEnum.UNABLE_TO_CONTACT_CUSTOMER ||
             paymentStatus.status === DSKPaymentStatusEnum.APPLICATION_TERMINATED ||
             paymentStatus.status === DSKPaymentStatusEnum.APPLICATION_CANCELED
@@ -61,7 +62,7 @@ export async function POST(req: NextRequest) {
         else continue;
 
         if (errors.length > 0) console.error(`Bank orders CRON job errors: ${errors}`);
-        if (bankError) console.error("Customer didn't take the loan");
+        if (bankError) console.error(`Customer (${order.profile_id}) didn't take the loan or the loan wasn't found`);
 
         await getInjection("IUpdateOrderController")(order.id, {status: bankError ? "failed" : errors.length > 0 ? "cron-failed" : "success"});
     }
