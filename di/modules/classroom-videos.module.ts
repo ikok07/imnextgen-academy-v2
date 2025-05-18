@@ -11,6 +11,12 @@ import {
 } from "@/src/interface-adapters/controllers/media/videos/get-videos-for-section.controller";
 import {getVideoByIdUseCase} from "@/src/application/use-cases/media/videos/get-video-by-id.use-case";
 import {getVideoByIdController} from "@/src/interface-adapters/controllers/media/videos/get-video-by-id.controller";
+import {IVideosService} from "@/src/application/services/media/videos/videos.service.interface";
+import {MuxService} from "@/src/infrastructure/services/media/videos/mux.service";
+import {
+    getSignedTokensController
+} from "@/src/interface-adapters/controllers/media/videos/get-signed-tokens.controller";
+import {getSignedTokensUrlUseCase} from "@/src/application/use-cases/media/videos/get-signed-tokens.use-case";
 
 export function createVideosModule() {
     const videosModule = createModule();
@@ -18,6 +24,10 @@ export function createVideosModule() {
     videosModule
         .bind(DI_SYMBOLS.IVideosRepository)
         .toClass(VideosRepository);
+
+    videosModule
+        .bind(DI_SYMBOLS.IVideosService)
+        .toClass(MuxService);
 
     videosModule
         .bind(DI_SYMBOLS.IGetVideosForModuleUseCase)
@@ -42,6 +52,14 @@ export function createVideosModule() {
     videosModule
         .bind(DI_SYMBOLS.IGetVideoByIdController)
         .toHigherOrderFunction(getVideoByIdController, [DI_SYMBOLS.IGetVideoByIdUseCase]);
+
+    videosModule
+        .bind(DI_SYMBOLS.IGetSignedTokensUseCase)
+        .toHigherOrderFunction(getSignedTokensUrlUseCase, [DI_SYMBOLS.IVideosService]);
+
+    videosModule
+        .bind(DI_SYMBOLS.IGetSignedTokensController)
+        .toHigherOrderFunction(getSignedTokensController, [DI_SYMBOLS.IGetSignedTokensUseCase]);
 
     return videosModule;
 }

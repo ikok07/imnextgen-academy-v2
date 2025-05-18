@@ -3,9 +3,6 @@
 import Video from "next-video/player";
 import {cn} from "@/app/_utils/cn";
 import {useState} from "react";
-import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
-import {IoVideocamOff} from "react-icons/io5";
-import {Card} from "@/app/_components/ui/shadcn/card";
 import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
 import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
 import PlayerVideoError from "@/app/_components/ui/players/PlayerVideoError";
@@ -20,7 +17,7 @@ export default function SelfHostedVideoPlayer({url, onTimeUpdate, className}: Se
     const {viewLoaded} = useViewLoaded();
     const [hasError, setHasError] = useState(false);
 
-    if (!viewLoaded) return <Skeleton className={cn("max-w-[50rem] w-full mx-auto aspect-video")} />
+    if (!viewLoaded) return <Skeleton className={cn("max-w-[50rem] w-[97%] mx-auto aspect-video")} />
 
     if (hasError) return <PlayerVideoError />
 
