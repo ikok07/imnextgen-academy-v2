@@ -6,7 +6,7 @@ import {auth} from "@clerk/nextjs/server";
 
 const s3 = new S3Client({
     region: "auto",
-    endpoint: process.env.VIDEO_PROVIDER_BASE_URL!,
+    endpoint: process.env.R2_BASE_URL!,
     credentials: {
         accessKeyId: process.env.R2_ACCESS_KEY_ID!,
         secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!

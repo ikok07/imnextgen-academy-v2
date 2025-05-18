@@ -12,7 +12,7 @@ export const videosTable = pgTable("videos", {
         onDelete: "set null"
     }),
     title: text("title").notNull(),
-    url: text("url"),
+    playbackId: text("playback_id"),
     description_id: text("description_id").notNull().references(() => videoDescriptionsTable.id),
     order_number: integer("order_number").notNull()
 }, (table) => [

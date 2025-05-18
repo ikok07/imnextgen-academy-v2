@@ -9,6 +9,7 @@ import {sectionsTable} from "@/drizzle/schema/sections";
 import {eq} from "drizzle-orm";
 import {modulesTable} from "@/drizzle/schema/modules";
 import {videoDescriptionsTable} from "@/drizzle/schema/video_descriptions";
+import {videoChaptersTable} from "@/drizzle/schema/video_chapters";
 
 export class VideosRepository extends BaseRepository implements IVideosRepository {
     getVideoById(id: string): Promise<Video> {
@@ -29,12 +30,14 @@ export class VideosRepository extends BaseRepository implements IVideosRepositor
                 return db.select({
                     video: videosTable,
                     section: sectionsTable,
-                    description: videoDescriptionsTable
+                    description: videoDescriptionsTable,
+                    chapter: videoChaptersTable
                 })
                     .from(videosTable)
                     .innerJoin(sectionsTable, eq(sectionsTable.id, videosTable.section_id))
                     .innerJoin(modulesTable, eq(modulesTable.id, sectionsTable.module_id))
-                    .innerJoin(videoDescriptionsTable, eq(videoDescriptionsTable.id, videosTable.description_id))
+                    .leftJoin(videoDescriptionsTable, eq(videoDescriptionsTable.id, videosTable.description_id))
+                    .leftJoin(videoChaptersTable, eq(videoChaptersTable.video_id, videosTable.id))
                     .where(eq(modulesTable.id, moduleId))
                     .execute();
             })

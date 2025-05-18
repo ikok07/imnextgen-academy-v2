@@ -4,7 +4,6 @@ import Mux from "@mux/mux-node";
 import {TypeClaim} from "@mux/mux-node/util/jwt-types";
 
 export class MuxService implements IVideosService {
-
     mux = new Mux({tokenId: process.env.MUX_TOKEN_ID!, tokenSecret: process.env.MUX_API_TOKEN!});
 
     async getSignedTokens(playbackId: string, types: (keyof typeof TypeClaim)[]): Promise<Map<keyof typeof TypeClaim, string>> {
@@ -18,7 +17,7 @@ export class MuxService implements IVideosService {
                         {
                             keyId: process.env.MUX_SIGNING_KEY_ID!,
                             keySecret: Buffer.from(process.env.MUX_PRIVATE_KEY_BASE64!, "base64").toString("ascii"),
-                            expiration: "2h",
+                            expiration: process.env.MUX_TOKEN_EXPIRATION!,
                             type
                         }
                     )

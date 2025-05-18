@@ -246,6 +246,20 @@
       "when": 1747076789391,
       "tag": "0034_add-backend-keys",
       "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "7",
+      "when": 1747597251640,
+      "tag": "0035_remove-video-url-and-add-playback-id",
+      "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1747598543755,
+      "tag": "0036_add-video-chapters",
+      "breakpoints": true
     }
   ]
 }

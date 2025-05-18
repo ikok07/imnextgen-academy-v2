@@ -2,11 +2,13 @@ import {Video, videosSchema} from "@/drizzle/schema/videos";
 import {sectionsSchema} from "@/drizzle/schema/sections";
 import {z} from "zod";
 import {videoDescriptionsSchema} from "@/drizzle/schema/video_descriptions";
+import {videoChapterSchema} from "@/drizzle/schema/video_chapters";
 
 export const videosForModuleResults = z.array(z.object({
     section: sectionsSchema,
     video: videosSchema,
-    description: videoDescriptionsSchema
+    description: videoDescriptionsSchema.nullable(),
+    chapter: videoChapterSchema.nullable()
 }));
 
 export type VideosForModuleResults = z.infer<typeof videosForModuleResults>;

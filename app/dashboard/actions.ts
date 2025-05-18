@@ -2,6 +2,7 @@
 
 import {createServerAction} from "@/app/_utils/createServerAction";
 import {getInjection} from "@/di/container";
+import {TypeClaim} from "@mux/mux-node/util/jwt-types";
 
 export const getUser = createServerAction(() => {
     return getInjection("IGetUserController")();
@@ -42,3 +43,7 @@ export const addFinishedVideo = createServerAction((videoId: string | undefined,
 export const removeFinishedVideo = createServerAction((videoId: string | undefined, userId: string | undefined) => {
     return getInjection("IRemoveFinishedVideoController")(videoId, userId);
 });
+
+export const getSignedTokens = createServerAction((playbackId: string | undefined, types: (keyof typeof TypeClaim)[] | undefined) => {
+    return getInjection("IGetSignedTokensController")(playbackId, types);
+})
