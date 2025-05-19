@@ -23,7 +23,7 @@ export async function GET(req: Request, res: Response) {
         if (!authObject.userId) return NextResponse.json({error: "Unauthorized!"}, {status: 401});
 
         const command = new GetObjectCommand({
-            Bucket: "test",
+            Bucket: process.env.R2_BUCKET!,
             Key: path
         });
 

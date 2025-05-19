@@ -42,7 +42,7 @@ function InnerContent({userId, moduleId, moduleTitle, videosForModule, finishedV
 
     const {data: finishedVideosQuery} = useErrorQuery({
         queryFn: () => getFinishedVideos(moduleId, userId),
-        queryKey: ["finished-videos"],
+        queryKey: ["finished-assets"],
         initialData: finishedVideosResult
     });
 
