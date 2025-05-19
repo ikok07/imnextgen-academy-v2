@@ -16,14 +16,17 @@ const s3 = new S3Client({
 export async function GET(req: Request, res: Response) {
     try {
         const url = new URL(req.url);
+        const bucket = url.searchParams.get("bucket");
         const path = url.searchParams.get("path");
+
+        if (!bucket) return NextResponse.json({error: "Invalid bucket"}, {status: 400});
         if (!path) return NextResponse.json({error: "Invalid path"}, {status: 400});
 
         const authObject = await auth();
         if (!authObject.userId) return NextResponse.json({error: "Unauthorized!"}, {status: 401});
 
         const command = new GetObjectCommand({
-            Bucket: process.env.R2_BUCKET!,
+            Bucket: bucket,
             Key: path
         });
 
