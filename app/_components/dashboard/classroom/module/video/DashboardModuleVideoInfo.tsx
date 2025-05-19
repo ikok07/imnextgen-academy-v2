@@ -28,14 +28,14 @@ export default function DashboardModuleVideoInfo({videoId, moduleId, title, desc
     const queryClient = useQueryClient();
     const {data: finishedVideosQuery, isLoading: isLoadingFinishedVideos} = useErrorQuery({
         queryFn: () => getFinishedVideos(moduleId, userId),
-        queryKey: ["finished-videos"],
+        queryKey: ["finished-assets"],
         initialData: finishedVideosResult
     });
 
     const {mutate: addFinishedVideoMethod, isLoading: isAddingFinishedVideo} = useErrorMutation({
         mutationFn: () => addFinishedVideo(videoId, userId),
         onSuccess() {
-            queryClient.invalidateQueries(["finished-videos"]);
+            queryClient.invalidateQueries(["finished-assets"]);
         },
         onError() {
             toast.error("Видеото не беше отбелязано като изгледано успешно!");
@@ -45,7 +45,7 @@ export default function DashboardModuleVideoInfo({videoId, moduleId, title, desc
     const {mutate: removeFinishedVideoMethod, isLoading: isRemovingFinishedVideo} = useErrorMutation({
         mutationFn: () => removeFinishedVideo(videoId, userId),
         onSuccess() {
-            queryClient.invalidateQueries(["finished-videos"]);
+            queryClient.invalidateQueries(["finished-assets"]);
         },
         onError() {
             toast.error("Видеото не беше премахнато от изгледани успешно!");
