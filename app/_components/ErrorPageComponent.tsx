@@ -16,7 +16,7 @@ export default function ErrorPageComponent({heading, subheading, description}: E
     const {resolvedTheme} = useTheme();
 
     return <div className="flex flex-col items-center mt-5">
-        <Image alt="I&M NextGen Academy" src={resolvedTheme === "dark" ? "/logo-dark.png" : "/logo.png"} width={200} height={100} />
+        <Image alt="I&M NextGen Academy" src={resolvedTheme === "dark" ? "/logo-dark.svg" : "/logo.svg"} width={200} height={100} />
         <div className="w-[95%] max-w-[60rem] m-auto grid md:grid-cols-2 items-center">
             <div className="text-center">
                 <h1 className="text-4xl md:text-5xl font-black">{heading}</h1>

@@ -23,7 +23,7 @@ export default function ClerkAuthProvider({children, locale}: ClerkAuthProviderP
                 colorPrimary: "#825dff"
             },
             layout: {
-                logoImageUrl: "/logo.png",
+                logoImageUrl: "/logo.svg",
                 privacyPageUrl: "/",
             },
             elements: {
