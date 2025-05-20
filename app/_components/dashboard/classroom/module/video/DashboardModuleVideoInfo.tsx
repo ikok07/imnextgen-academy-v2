@@ -55,7 +55,7 @@ export default function DashboardModuleVideoInfo({videoId, moduleId, title, desc
     const videoFinished = !!finishedVideosQuery?.success && finishedVideosQuery.value.finishedVideos.some(v => v.video_id === videoId);
 
     return <Card className="rounded-sm mt-3 dashboard-module-video-info markdown">
-        <CardHeader className="flex lg:flex-row lg:items-center justify-between gap-3">
+        <CardHeader className="grid xl:grid-cols-[1fr_auto] lg:items-center gap-3">
             <div>
                 <CardTitle className="text-2xl">
                     {title}
@@ -68,7 +68,7 @@ export default function DashboardModuleVideoInfo({videoId, moduleId, title, desc
                 <DashboardModuleVideoFinishedVideoButtonSkeleton />
                 :
                 <SecondaryButton
-                    className={`${videoFinished ? "bg-main-gradient border-none text-white dark:text-white hover:from-purple-600 hover:to-cta dark:hover:from-purple-500 dark:hover:to-cta" : ""}`}
+                    className={`${videoFinished ? "bg-main-gradient border-none text-white dark:text-white hover:from-purple-600 hover:to-cta dark:hover:from-purple-500 dark:hover:to-cta" : ""} flex-1`}
                     onClick={() => videoFinished ? removeFinishedVideoMethod() : addFinishedVideoMethod()}
                     loading={isAddingFinishedVideo || isRemovingFinishedVideo}
                 >
