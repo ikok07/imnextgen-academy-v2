@@ -28,7 +28,7 @@ export default function DashboardModuleSectionsSidebarContent({videosForModule, 
         className="flex-1 max-h-full overflow-y-auto pb-[5rem] scrollbar-hide"
     >
         {viewLoaded && <SidebarMenu className="space-y-1">
-            {videosForModule.map((sectionObject, index) => {
+            {videosForModule.sort((a, b) => a.section.order_number - b.section.order_number).map((sectionObject, index) => {
                 return <Collapsible open={activeSectionId === sectionObject.section.id}
                                     onOpenChange={v => selectSection(v ? sectionObject.section.id : null)}
                                     key={index}>
@@ -39,7 +39,7 @@ export default function DashboardModuleSectionsSidebarContent({videosForModule, 
                                     <Tooltip>
                                         <TooltipTrigger className="w-full flex items-center justify-between">
                                             <div className="flex items-center gap-2">
-                                                <p>{sectionObject.section.order_number}.</p>
+                                                <p>{sectionObject.section.order_number + 1}.</p>
                                                 <p className="max-w-[10.5rem] truncate">{sectionObject.section.title}</p>
                                             </div>
                                             <IoChevronDown
@@ -55,7 +55,7 @@ export default function DashboardModuleSectionsSidebarContent({videosForModule, 
                     </CollapsibleTrigger>
                     <CollapsibleContent>
                         <SidebarMenuSub className="space-y-1">
-                            {sectionObject.videos.map((video, index) => {
+                            {sectionObject.videos.sort((a, b) => a.order_number - b.order_number).map((video, index) => {
                                 return <SidebarMenuSubItem key={index}>
                                     <SidebarMenuButton
                                         onClick={() => selectVideo(video.id)}
@@ -66,7 +66,7 @@ export default function DashboardModuleSectionsSidebarContent({videosForModule, 
                                                 <TooltipTrigger className="w-full">
                                                     <div className="flex items-center justify-between">
                                                         <div className="flex items-center gap-2 text-left">
-                                                            <p>{video.order_number}.</p>
+                                                            <p>{video.order_number + 1}.</p>
                                                             <p className="max-w-[8.5rem] truncate">{video.title}</p>
                                                         </div>
                                                         {finishedVideos.some(v => v.video_id === video.id) && <IoCheckmarkCircle className={`${activeVideoId === video.id ? "text-white" : "text-cta"} text-lg w-[1rem] text-right`} />}
