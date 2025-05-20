@@ -43,11 +43,7 @@ jobs:
           branch_name: preview/pr-${{ github.event.number }}-${{ needs.setup.outputs.branch }}
           api_key: ${{ secrets.NEON_API_KEY }}
 
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          path: .
-          
+
       - name: Run Migrations
         run: npm run db:migrate
         working-directory: ./imnextgen-academy-v2
