@@ -19,7 +19,7 @@ export default function DashboardShopSubscriptionBox({userSubscription, fullTier
     >
         <Card className="cursor-pointer flex flex-col justify-between hover:bg-secondary/70 dark:hover:bg-border/50">
             <CardHeader className="pt-3 pb-0">
-                <h1 className="text-3xl font-black text-cta opacity-70">{fullTier.order_number}.</h1>
+                <h1 className="text-3xl font-black text-cta opacity-70">{fullTier.order_number + 1}.</h1>
                 <CardTitle>{fullTier.title}</CardTitle>
                 <CardDescription className="line-clamp-2">{fullTier.description}</CardDescription>
             </CardHeader>
