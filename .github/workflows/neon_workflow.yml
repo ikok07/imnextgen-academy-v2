@@ -53,6 +53,7 @@ jobs:
   # For example, you can uncomment the lines below to run a database migration command:
       - name: Run Migrations
         run: npm run db:migrate
+        working-directory: ./imnextgen-academy-v2
         env:
           # to use pooled connection
           DATABASE_URL: "${{ steps.create_neon_branch.outputs.db_url_with_pooler }}"
