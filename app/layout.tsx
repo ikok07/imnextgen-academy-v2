@@ -10,8 +10,17 @@ import ClerkAuthProvider from "@/app/_providers/ClerkAuthProvider";
 import { Toaster } from "@/app/_components/ui/shadcn/sonner";
 
 export const metadata: Metadata = {
-  title: "Basic Academy",
-  description: "Created by Kaloyan Stefanov (CTO of I&M NextGen)",
+    title: "I&M NextGen Academy — Без повече притеснения за работа",
+    description: "Научи Как да Станеш IT Специалист с Умения като за 5+ Години Опит с I&M NextGen Academy (стъпка по стъпка), БЕЗ Предишен Опит и БЕЗ Скъпи Курсове!",
+    openGraph: {
+        title: `I&M NextGen Academy — Без повече притеснения за работа`,
+        description: "Научи Как да Станеш IT Специалист с Умения като за 5+ Години Опит с I&M NextGen Academy (стъпка по стъпка), БЕЗ Предишен Опит и БЕЗ Скъпи Курсове!",
+        url: process.env.NEXT_PUBLIC_BASE_URL,
+        siteName: "I&M NextGen Academy",
+        images: ["/banner.jpg"],
+        locale: "bg_BG",
+        type: "website"
+    },
     icons: {
       icon: [
           {

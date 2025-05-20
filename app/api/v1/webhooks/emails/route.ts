@@ -48,14 +48,14 @@ export async function POST(req: Request) {
                 await sendOtpCodeEmail({
                     to: parsedBody.data.to_email_address,
                     templateId: locale === "bg" ? +process.env.BREVO_OTP_EMAIL_ID_BG! : +process.env.BREVO_OTP_EMAIL_ID_EN!,
-                    data: parsedBody.data. data
+                    data: parsedBody.data.data
                 });
                 break;
             case "reset_password_code":
                 await sendOtpCodeEmail({
                     to: parsedBody.data.to_email_address,
                     templateId: locale === "bg" ? +process.env.BREVO_RESET_PASSWORD_EMAIL_ID_BG! : +process.env.BREVO_RESET_PASSWORD_EMAIL_ID_EN!,
-                    data: parsedBody.data. data
+                    data: parsedBody.data.data
                 });
                 break;
             case "password_changed":
