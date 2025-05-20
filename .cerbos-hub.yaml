@@ -1,4 +1,6 @@
 apiVersion: api.cerbos.cloud/v1
 labels:
-  latest:
+  production:
     branch: main
+  development:
+    branch: development
