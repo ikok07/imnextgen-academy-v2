@@ -6,7 +6,7 @@ import path from "node:path";
 const MUX_TOKEN_ID= "";
 const MUX_TOKEN_SECRET = "";
 
-const ROOT_PATH = "/Users/kok/Downloads/academy-videos";
+const ROOT_PATH = "/Users/kok/Downloads/HTML_archive";
 const FORMATS = ["mp4"];
 
 const axiosDefaultConfig = {
@@ -14,6 +14,8 @@ const axiosDefaultConfig = {
         Authorization: `Basic ${btoa(`${MUX_TOKEN_ID}:${MUX_TOKEN_SECRET}`)}`
     },
 };
+
+let videoCount = 0;
 
 async function uploadVideos() {
     const files = fs.readdirSync(ROOT_PATH).filter(file => FORMATS.some(format => file.includes(format)));
@@ -54,7 +56,7 @@ async function uploadVideos() {
         const splittedFile = file.split('.');
         const title = splittedFile.slice(0, splittedFile.length - 1).join('.');
         const creator_id = "script";
-        const external_id = "test";
+        const external_id = "<change-me>";
         await axios.patch(`https://api.mux.com/video/v1/assets/${parsedUploadData.data.asset_id}`, {
             meta: {
                 title,
@@ -63,10 +65,10 @@ async function uploadVideos() {
             }
         }, axiosDefaultConfig);
 
-        console.log(`Finished uploading ${file}!`);
+        console.log(`Finished uploading ${file}! (Number: ${++videoCount}`);
     }
 }
 
 uploadVideos().then(res => {
-    console.log(res);
+    return;
 });
