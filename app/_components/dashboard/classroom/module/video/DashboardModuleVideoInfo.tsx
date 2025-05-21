@@ -25,25 +25,17 @@ type DashboardModuleVideoInfoProps = {
     moduleId: string,
     userId: string,
     resources: VideoResource[],
-    finishedVideosResult: ServerActionResult<FinishedVideosResponse>
+    finishedVideosResult: ServerActionResult<FinishedVideosResponse>,
+    isAddingFinishedVideo: boolean,
+    onAddFinishVideo: () => void
 }
 
-export default function DashboardModuleVideoInfo({videoId, moduleId, title, descriptionMarkdown, userId, resources, finishedVideosResult}: DashboardModuleVideoInfoProps) {
+export default function DashboardModuleVideoInfo({videoId, moduleId, title, descriptionMarkdown, userId, resources, finishedVideosResult, isAddingFinishedVideo, onAddFinishVideo}: DashboardModuleVideoInfoProps) {
     const queryClient = useQueryClient();
     const {data: finishedVideosQuery, isLoading: isLoadingFinishedVideos} = useErrorQuery({
         queryFn: () => getFinishedVideos(moduleId, userId),
         queryKey: ["finished-assets"],
         initialData: finishedVideosResult
-    });
-
-    const {mutate: addFinishedVideoMethod, isLoading: isAddingFinishedVideo} = useErrorMutation({
-        mutationFn: () => addFinishedVideo(videoId, userId),
-        onSuccess() {
-            queryClient.invalidateQueries(["finished-assets"]);
-        },
-        onError() {
-            toast.error("Видеото не беше отбелязано като изгледано успешно!");
-        }
     });
 
     const {mutate: removeFinishedVideoMethod, isLoading: isRemovingFinishedVideo} = useErrorMutation({
@@ -73,7 +65,7 @@ export default function DashboardModuleVideoInfo({videoId, moduleId, title, desc
                 :
                 <SecondaryButton
                     className={`${videoFinished ? "bg-main-gradient border-none text-white dark:text-white hover:from-purple-600 hover:to-cta dark:hover:from-purple-500 dark:hover:to-cta" : ""} flex-1`}
-                    onClick={() => videoFinished ? removeFinishedVideoMethod() : addFinishedVideoMethod()}
+                    onClick={() => videoFinished ? removeFinishedVideoMethod() : onAddFinishVideo()}
                     loading={isAddingFinishedVideo || isRemovingFinishedVideo}
                 >
                     {videoFinished ?

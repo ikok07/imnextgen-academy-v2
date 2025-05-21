@@ -3,8 +3,8 @@ import axios from "axios";
 import {z} from "zod";
 import path from "node:path";
 
-const MUX_TOKEN_ID= "";
-const MUX_TOKEN_SECRET = "";
+const MUX_TOKEN_ID= "796101c6-acee-453b-8d32-4695d46f4194";
+const MUX_TOKEN_SECRET = "CajqDbJN8UimUx6vhOTEzLQCDgOjYMX9SzB/veLVCBC4WH4FbkONyVZWM8oTT5S9FPA/j7xiU7t";
 
 const ROOT_PATH = "/Users/kok/Downloads/HTML_archive";
 const FORMATS = ["mp4"];
