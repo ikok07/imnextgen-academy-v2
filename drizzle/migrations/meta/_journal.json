@@ -260,6 +260,13 @@
       "when": 1747598543755,
       "tag": "0036_add-video-chapters",
       "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1747826947330,
+      "tag": "0037_add-video-id-to-video-resources-schema",
+      "breakpoints": true
     }
   ]
 }

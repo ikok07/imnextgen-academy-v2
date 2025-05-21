@@ -1,0 +1,2 @@
+ALTER TABLE "video_resources" ADD COLUMN "video_id" text NOT NULL;--> statement-breakpoint
+ALTER TABLE "video_resources" ADD CONSTRAINT "video_resources_video_id_videos_id_fk" FOREIGN KEY ("video_id") REFERENCES "public"."videos"("id") ON DELETE no action ON UPDATE no action;

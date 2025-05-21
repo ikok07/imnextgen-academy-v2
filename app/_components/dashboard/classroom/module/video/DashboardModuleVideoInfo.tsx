@@ -14,6 +14,9 @@ import useErrorMutation from "@/app/_hooks/useErrorMutation";
 import {useQueryClient} from "react-query";
 import {ServerActionResult} from "@/app/_utils/createServerAction";
 import {FinishedVideosResponse} from "@/src/application/repositories/media/videos/finished-videos.repository.interface";
+import {VideoResource} from "@/drizzle/schema/video_resources";
+import DashboardModuleVideoResources
+    from "@/app/_components/dashboard/classroom/module/video/DashboardModuleVideoResources";
 
 type DashboardModuleVideoInfoProps = {
     title: string
@@ -21,10 +24,11 @@ type DashboardModuleVideoInfoProps = {
     videoId: string,
     moduleId: string,
     userId: string,
+    resources: VideoResource[],
     finishedVideosResult: ServerActionResult<FinishedVideosResponse>
 }
 
-export default function DashboardModuleVideoInfo({videoId, moduleId, title, descriptionMarkdown, userId, finishedVideosResult}: DashboardModuleVideoInfoProps) {
+export default function DashboardModuleVideoInfo({videoId, moduleId, title, descriptionMarkdown, userId, resources, finishedVideosResult}: DashboardModuleVideoInfoProps) {
     const queryClient = useQueryClient();
     const {data: finishedVideosQuery, isLoading: isLoadingFinishedVideos} = useErrorQuery({
         queryFn: () => getFinishedVideos(moduleId, userId),
@@ -83,7 +87,8 @@ export default function DashboardModuleVideoInfo({videoId, moduleId, title, desc
                 </SecondaryButton>
             }
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
+            <DashboardModuleVideoResources resources={resources} />
             <DashboardModuleVideoDescription description={descriptionMarkdown}/>
         </CardContent>
     </Card>

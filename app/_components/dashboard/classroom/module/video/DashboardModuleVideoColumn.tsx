@@ -35,7 +35,7 @@ export default function DashboardModuleVideoColumn({moduleId, userId, videos, fi
         },
         enabled: !!activeVideo && !!activeVideo.playbackId
     });
-
+    
     const tokens: Tokens | undefined  = useMemo(() => {
         if (signedTokensQuery?.success) {
             return {
@@ -76,6 +76,7 @@ export default function DashboardModuleVideoColumn({moduleId, userId, videos, fi
             userId={userId}
             moduleId={moduleId}
             videoId={activeVideo.id}
+            resources={videos.flatMap(obj => obj.resources).filter(r => r.video_id === activeVideoId)}
             finishedVideosResult={finishedVideosResult}
         />
     </div>
