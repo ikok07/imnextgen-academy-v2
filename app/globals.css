@@ -43,6 +43,9 @@ button {
       @apply text-primary/70 text-[0.9rem] sm:text-[1rem]
     }
   }
+  .homepage-mobile-navbar-inner-container > div {
+    @apply w-full
+  }
 }
 
 @layer base {

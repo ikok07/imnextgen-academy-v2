@@ -1,6 +1,5 @@
 "use client"
 
-import {Technology} from "@/src/entities/models/homepage/technology";
 import {useMemo, useState} from "react";
 import {Card} from "@/app/_components/ui/shadcn/card";
 import {IoArrowBack, IoArrowForward} from "react-icons/io5";
@@ -14,7 +13,7 @@ export default function Technologies() {
 
     const arrowsContainerBaseClass = useMemo(() => "bg-cta rounded-full text-background text-lg w-8 h-8 grid place-content-center transition-all duration-500 ease-in-out", []);
 
-    return <section className="home-center-section">
+    return <section id="technologies" className="home-center-section">
         <Card className="grid md:grid-cols-2 overflow-hidden">
             <div className="grid p-4 md:p-6">
                 <TechnologyDescriptionCarousel activeTechnologyIndex={activeTechnologyIndex} />

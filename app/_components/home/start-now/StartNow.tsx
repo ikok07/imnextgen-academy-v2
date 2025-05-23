@@ -9,6 +9,6 @@ export default function StartNow() {
             description="Необходимо е само да създадеш своя профил в академията"
             className="text-center"
         />
-        <PrimaryButton href={Routes.auth.signUp} className="mt-5 py-2 px-3">Започни безплатно</PrimaryButton>
+        <PrimaryButton href={Routes.auth.signUp()} className="mt-5 py-2 px-3">Започни безплатно</PrimaryButton>
     </section>
 }

@@ -8,10 +8,11 @@ import {primaryControlBackground} from "@/app/_components/ui/backgrounds/primary
 type PrimaryButtonProps = {
     href?: string,
     loading?: boolean,
-    loadingText?: string
+    loadingText?: string,
+    linkClassName?: string
 } & ComponentProps<"button">
 
-export default function PrimaryButton({children, href, onClick, disabled, loading, loadingText, className, ...props}: PrimaryButtonProps) {
+export default function PrimaryButton({children, href, onClick, disabled, loading, loadingText, linkClassName, className, ...props}: PrimaryButtonProps) {
     const button = <Button
         className={
             cn(
@@ -30,7 +31,7 @@ export default function PrimaryButton({children, href, onClick, disabled, loadin
         {loading && loadingText ? loadingText : children}
     </Button>
 
-    if (href) return <Link href={href}>{button}</Link>
+    if (href) return <Link href={href} className={cn(linkClassName)}>{button}</Link>
 
     return button
 }
