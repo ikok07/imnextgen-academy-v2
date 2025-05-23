@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 :root {
-  margin: 0
+  margin: 0;
+  scroll-behavior: smooth;
 }
 
 button {
@@ -21,41 +22,47 @@ button {
   max-height: var(--radix-dropdown-menu-content-available-height);
 }
 
-.homepage {
-  position: relative;
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("/home/home-background.png");
-    background-repeat: repeat-y;
-    z-index: -1;
-    opacity: 0.3;
-  }
+@layer base {
+  .homepage {
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("/home/home-background.png");
+      background-repeat: repeat-y;
+      z-index: -1;
+      opacity: 0.3;
+    }
 
-  .home-center-section {
-    @apply max-w-[60rem] w-[95%] mx-auto
-  }
+    .home-center-section {
+      @apply max-w-[60rem] w-[95%] mx-auto
+    }
 
-  .paragraph {
-    @apply text-primary/70 text-[0.9rem] sm:text-[1rem]
+    .paragraph {
+      @apply text-primary/70 text-[0.9rem] sm:text-[1rem]
+    }
   }
 }
 
-.settings-modal {
-  .cl-rootBox {
-    @apply w-[95vw] md:w-auto h-full md:h-auto m-auto
-  }
-  .cl-cardBox {
-    @apply w-full h-full max-w-full md:h-[44rem] max-h-[85vh]
-  }
-  .cl-profileSectionItem {
-    flex-wrap: wrap;
+@layer base {
+  .settings-modal {
+    .cl-rootBox {
+      @apply w-[95vw] md:w-auto h-full md:h-auto m-auto
+    }
+    .cl-cardBox {
+      @apply w-full h-full max-w-full md:h-[44rem] max-h-[85vh]
+    }
+    .cl-profileSectionItem {
+      flex-wrap: wrap;
+    }
   }
 }
 
-.checkbox-label a {
-  @apply cursor-pointer text-cta hover:opacity-80
+@layer base {
+  .checkbox-label a {
+    @apply cursor-pointer text-cta hover:opacity-80
+  }
 }
 
 @layer base {

@@ -6,6 +6,7 @@ import GraphicDesign from "@/app/_components/home/graphic-design/GraphicDesign";
 import Mentoring from "@/app/_components/home/mentoring/Mentoring";
 import Team from "@/app/_components/home/team/Team";
 import Partners from "@/app/_components/home/partners/Partners";
+import Testimonials from "@/app/_components/home/testimonials/Testimonials";
 
 export default async function Home() {
   return <main className="homepage space-y-10">
@@ -17,5 +18,6 @@ export default async function Home() {
     <Mentoring />
     <Team />
     <Partners />
+    <Testimonials />
   </main>
 }
