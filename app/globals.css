@@ -17,6 +17,14 @@ button {
   max-height: var(--radix-dropdown-menu-content-available-height);
 }
 
+.home-center-section {
+  @apply max-w-[60rem] w-[95%] mx-auto
+}
+
+.paragraph {
+  @apply text-primary/70
+}
+
 .settings-modal {
   .cl-rootBox {
     @apply w-[95vw] md:w-auto h-full md:h-auto m-auto
