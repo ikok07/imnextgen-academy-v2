@@ -12,6 +12,10 @@ button {
   }
 }
 
+.flex-scroll {
+  flex: 1 0 100%;
+}
+
 .dropdown-content-width-full {
   width: var(--radix-dropdown-menu-trigger-width);
   max-height: var(--radix-dropdown-menu-content-available-height);
@@ -148,6 +152,10 @@ button {
 
   .bg-black-gradient {
     @apply bg-gradient-to-b from-gray-600 to-gray-900 dark:from-gray-50 dark:to-gray-200
+  }
+
+  .bg-black-background-gradient {
+    @apply bg-gradient-to-b from-black/80 to-[#111827]
   }
 }
 
