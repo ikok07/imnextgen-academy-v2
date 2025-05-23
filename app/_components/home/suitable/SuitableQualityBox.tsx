@@ -16,7 +16,7 @@ export default function SuitableQualityBox({Icon, title, description}: SuitableQ
         <Icon width={35} height={35} className="text-cta"/>
         <div>
             <h3 className="text-xl font-bold">{title}</h3>
-            <p className="paragraph text-[0.9rem]">{description}</p>
+            <p className="paragraph !text-[0.9rem] mt-1">{description}</p>
         </div>
     </Card>
 }

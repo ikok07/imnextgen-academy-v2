@@ -1,0 +1,1 @@
+export const FORCED_LIGHT_THEME_PAGES = ["/"]
