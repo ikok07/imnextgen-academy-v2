@@ -1,7 +1,6 @@
 import {NextResponse} from "next/server";
 import {GetObjectCommand, S3Client} from "@aws-sdk/client-s3";
 import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
-import {JsonWebTokenError} from "jsonwebtoken"
 import {auth} from "@clerk/nextjs/server";
 
 const s3 = new S3Client({
@@ -54,7 +53,6 @@ export async function GET(req: Request, res: Response) {
 
         return downloadResponse;
     } catch(e) {
-        if (e instanceof JsonWebTokenError) return NextResponse.json({error: "Unauthorized!"}, {status: 401});
         return NextResponse.json({error: "Unexpected error!"}, {status: 500});
     }
 }
