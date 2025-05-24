@@ -4,10 +4,9 @@ import {useEffect, useState} from "react";
 import {IoClose, IoMenuOutline} from "react-icons/io5";
 import Image from "next/image";
 import HomepageNavLinks from "@/app/_components/home/nav/HomepageNavLinks";
-import SecondaryButton from "@/app/_components/ui/buttons/SecondaryButton";
-import {Routes} from "@/app/_utils/nav/routes";
-import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
 import {cn} from "@/app/_utils/cn";
+import HomepageNavbarButtons from "@/app/_components/home/nav/HomepageNavbarButtons";
+
 
 export default function HomepageMobileNavbar() {
     const [opened, setOpened] = useState(false);
@@ -34,15 +33,14 @@ export default function HomepageMobileNavbar() {
             )}
         >
             <div className="grid grid-cols-[1fr_auto] px-3">
-                <Image alt="I&M NextGen Academy" src="/logo.svg" width={170} height={100} />
+                <Image alt="I&M NextGen Academy" src="/logo.png" width={170} height={100} />
                 <button onClick={() => setOpened(false)}><IoClose className="text-2xl text-primary/70" /></button>
             </div>
             <hr className="w-full h-[1px] bg-border my-3"/>
             <div className="px-3 flex flex-col justify-between">
                 <HomepageNavLinks onSelect={() => setOpened(false)} />
                 <div className="grid gap-2">
-                    <SecondaryButton href={Routes.auth.signIn()} className="w-full">Влизане</SecondaryButton>
-                    <PrimaryButton href={Routes.auth.signUp()} className="w-full">Регистрация</PrimaryButton>
+                    <HomepageNavbarButtons />
                 </div>
             </div>
         </div>

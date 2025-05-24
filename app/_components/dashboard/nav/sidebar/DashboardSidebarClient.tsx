@@ -64,7 +64,7 @@ function InnerContent({results}: DashboardSidebarClientWrapperProps) {
         >
             <SidebarHeader>
                 <div className="grid">
-                    <div><Image alt="I&M NextGen Academy" src={resolvedTheme === "dark" ? "/logo-dark.svg" : "/logo.svg"} width={200} height={60} /></div>
+                    <div><Image alt="I&M NextGen Academy" src={resolvedTheme === "dark" ? "/logo-dark.png" : "/logo.png"} width={200} height={60} /></div>
                 </div>
             </SidebarHeader>
             <SidebarContent>

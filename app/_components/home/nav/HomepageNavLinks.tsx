@@ -1,5 +1,3 @@
-"use client"
-
 import {HOME_NAV_ITEMS} from "@/app/_utils/home/nav/homepage-navbar-items";
 import Link from "next/link";
 

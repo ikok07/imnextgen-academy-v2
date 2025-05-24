@@ -9,7 +9,7 @@ export default function SignInClientComponent() {
     return <SignIn
         appearance={{
             layout: {
-                logoImageUrl: resolvedTheme === "dark" ? "/logo-dark.svg" : "/logo.svg"
+                logoImageUrl: resolvedTheme === "dark" ? "/logo-dark.png" : "/logo.png"
             }
         }}
     />

@@ -9,7 +9,7 @@ type ThemeProviderProps = {} & ComponentProps<typeof NextThemeProvider>
 
 export default function ThemeProvider({children, forcedTheme, ...props}: ThemeProviderProps) {
     const pathname = usePathname();
-    const customForcedTheme = useMemo(() => FORCED_LIGHT_THEME_PAGES.includes(pathname) ? "light" : null, []);
+    const customForcedTheme = useMemo(() => FORCED_LIGHT_THEME_PAGES.includes(pathname) ? "light" : null, [pathname]);
 
     return <NextThemeProvider
         {...props}
