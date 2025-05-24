@@ -12,6 +12,7 @@ export function clerkWebhookProtect(secret: string, payload: string, headers: He
         });
         return null;
     } catch(e) {
+        console.error(`Webhooks Authorization Error: ${e}`);
         return NextResponse.json({status: "fail", error: "Unauthorized"}, {status: 401});
     }
 }
