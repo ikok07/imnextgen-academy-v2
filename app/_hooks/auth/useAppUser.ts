@@ -19,7 +19,7 @@ export function useAppUser(omitDbProfile?: boolean) {
         authData,
         userObject,
         dbProfile: dbProfile?.success ? dbProfile.value : null,
-        isLoadingDbProfile,
+        isLoading: !authData.isLoaded || isLoadingDbProfile,
         emailConfirmed: userObject.user?.emailAddresses[0]?.verification?.status === "verified"
     }
 }

@@ -7,10 +7,11 @@ import {secondaryControlBackground} from "@/app/_components/ui/backgrounds/secon
 
 type SecondaryButtonProps = {
     href?: string,
-    loading?: boolean
+    loading?: boolean,
+    linkClassName?: string
 } & ComponentProps<"button">
 
-export default function SecondaryButton({children, href, onClick, disabled, loading, className, ...props}: SecondaryButtonProps) {
+export default function SecondaryButton({children, href, onClick, disabled, loading, linkClassName, className, ...props}: SecondaryButtonProps) {
     const button = <Button
         className={
             cn(
@@ -28,7 +29,7 @@ export default function SecondaryButton({children, href, onClick, disabled, load
         {children}
     </Button>
 
-    if (href) return <Link href={href}>{button}</Link>
+    if (href) return <Link href={href} className={cn(linkClassName)}>{button}</Link>
 
     return button;
 }

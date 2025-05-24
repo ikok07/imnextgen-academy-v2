@@ -8,6 +8,7 @@ import AppQueryClientProvider from "@/app/_providers/AppQueryClientProvider";
 import ThemeProvider from "@/app/_providers/ThemeProvider";
 import ClerkAuthProvider from "@/app/_providers/ClerkAuthProvider";
 import { Toaster } from "@/app/_components/ui/shadcn/sonner";
+import {Inter} from "next/font/google"
 
 export const metadata: Metadata = {
     title: "I&M NextGen Academy — Без повече притеснения за работа",
@@ -37,6 +38,10 @@ export const metadata: Metadata = {
     }
 };
 
+const InterFont = Inter({
+    subsets: ["cyrillic"]
+})
+
 type LayoutProps = {
     children: ReactNode
 }
@@ -48,7 +53,7 @@ export default async function RootLayout({
     const messages = await getMessages();
 
     return (
-        <html lang={locale} suppressHydrationWarning={true}>
+        <html lang={locale} suppressHydrationWarning={true} className={InterFont.className}>
         <NextIntlClientProvider messages={messages}>
             <AppStoreProvider>
                 <AppQueryClientProvider>

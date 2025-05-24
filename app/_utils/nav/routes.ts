@@ -4,8 +4,9 @@ export const Routes = {
         setup: "/account/setup"
     },
     auth: {
-        signIn: "/sign-in",
-        signUp: "/sign-up",
+        base: "/auth",
+        signIn: () => `${Routes.auth.base}/sign-in`,
+        signUp: () => `${Routes.auth.base}/sign-up`,
     },
     dashboard: {
         base: "/dashboard",
