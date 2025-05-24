@@ -45,7 +45,9 @@ export default function ModuleBox({module, moduleAllowed}: ModuleBoxProps) {
     }, [viewLoaded]);
 
     return <div className="rounded-lg shadow-xl border border-border w-[95%] md:w-full mx-auto">
-        {module.image_url && <div className="relative w-full aspect-video"><Image alt={module.title} src={module.image_url} fill className="rounded-t-lg"/></div>}
+        {/*{module.image_url && <div className="relative w-full aspect-video"><Image alt={module.title} src={module.image_url} fill className="rounded-t-lg"/></div>}*/}
+        {/* Use standard <img /> because of vercel's image optimization not having access to  /api/v1/assets */}
+        {module.image_url && <div className="relative w-full aspect-video"><img alt={module.title} src={module.image_url} className="absolute inset-0 rounded-t-lg"/></div>}
         <div className="relative px-2 py-3">
             {(module.access != "free" && !moduleAllowed) &&
                 <ModuleLockedMessage
