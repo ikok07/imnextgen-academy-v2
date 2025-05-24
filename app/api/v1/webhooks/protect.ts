@@ -10,9 +10,10 @@ export function clerkWebhookProtect(secret: string, payload: string, headers: He
             "svix-timestamp": headers.get("svix-timestamp") ?? "",
             "svix-signature": headers.get("svix-signature") ?? ""
         });
+        console.log("Webhook authenticated!");
         return null;
     } catch(e) {
-        console.error(`Webhooks Authorization Error: ${e}`);
+        console.log(`Webhooks Authorization Error: ${e}`);
         return NextResponse.json({status: "fail", error: "Unauthorized"}, {status: 401});
     }
 }
