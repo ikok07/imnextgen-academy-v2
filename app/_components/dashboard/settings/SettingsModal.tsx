@@ -13,7 +13,7 @@ import {Routes} from "@/app/_utils/nav/routes";
 
 export default function SettingsModal() {
     const router = useRouter();
-    const {userObject, dbProfile} = useAppUser(false)
+    const {userObject} = useAppUser(true);
     const {settingsOpened} = useAppSelector(state => state.settings);
     const dispatch = useAppDispatch();
 
@@ -29,12 +29,7 @@ export default function SettingsModal() {
         }
     }, [settingsOpened]);
 
-    if (!userObject.user?.id || !dbProfile) return;
-
-    if (!dbProfile.configured) {
-        router.push(Routes.account.setup);
-        return;
-    }
+    if (!userObject.user?.id) return;
 
     return <div
         className={`absolute ${settingsOpened ? "visible opacity-100" : "opacity-0 invisible"} w-full min-h-full settings-modal bg-black bg-opacity-80 z-30 grid transition-[opacity,visibility] duration-200`}
