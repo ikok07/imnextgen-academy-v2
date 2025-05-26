@@ -13,7 +13,7 @@ export default function SignUpClientComponent({locale}: SignUpClientComponentPro
     return <SignUp
         appearance={{
             layout: {
-                logoImageUrl: resolvedTheme === "dark" ? "/logo-dark.svg" : "/logo.svg"
+                logoImageUrl: resolvedTheme === "dark" ? "/logo-dark.png" : "/logo.png"
             }
         }}
         unsafeMetadata={{

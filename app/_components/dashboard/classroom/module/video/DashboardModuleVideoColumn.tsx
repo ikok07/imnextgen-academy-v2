@@ -10,9 +10,12 @@ import {FinishedVideosResponse} from "@/src/application/repositories/media/video
 import {VideosForModuleResponse} from "@/src/application/use-cases/media/videos/get-videos-for-module.use-case";
 import MuxVideoPlayer from "@/app/_components/ui/players/MuxVideoPlayer";
 import useErrorQuery from "@/app/_hooks/useErrorQuery";
-import {getSignedTokens} from "@/app/dashboard/actions";
+import {addFinishedVideo, getSignedTokens} from "@/app/dashboard/actions";
 import {Tokens} from "@mux/mux-player";
 import {useMemo, useState} from "react";
+import useErrorMutation from "@/app/_hooks/useErrorMutation";
+import {toast} from "sonner";
+import {useQueryClient} from "react-query";
 
 type DashboardModuleVideoColumnProps = {
     moduleId: string,
@@ -24,7 +27,10 @@ type DashboardModuleVideoColumnProps = {
 export default function DashboardModuleVideoColumn({moduleId, userId, videos, finishedVideosResult}: DashboardModuleVideoColumnProps) {
     const {viewLoaded} = useViewLoaded();
     const {activeVideoId} = useModule();
-    const [isInvalid, setIsInvalid] = useState(false)
+    const queryClient = useQueryClient();
+
+    const [isInvalid, setIsInvalid] = useState(false);
+    const [finishedVideoAutomaticallyAdded, setFinishedVideoAutomaticallyAdded] = useState(false);
 
     const activeVideo = videos.flatMap(obj => obj.videos).find(v => v.id === activeVideoId)!;
     const {data: signedTokensQuery, isLoading: isGettingSignedTokens} = useErrorQuery({
@@ -36,6 +42,16 @@ export default function DashboardModuleVideoColumn({moduleId, userId, videos, fi
         enabled: !!activeVideo && !!activeVideo.playbackId
     });
 
+    const {mutate: addFinishedVideoMethod, isLoading: isAddingFinishedVideo} = useErrorMutation({
+        mutationFn: () => addFinishedVideo(activeVideo.id, userId),
+        onSuccess() {
+            queryClient.invalidateQueries(["finished-assets"]);
+        },
+        onError() {
+            toast.error("Видеото не беше отбелязано като изгледано успешно!");
+        }
+    });
+    
     const tokens: Tokens | undefined  = useMemo(() => {
         if (signedTokensQuery?.success) {
             return {
@@ -68,6 +84,17 @@ export default function DashboardModuleVideoColumn({moduleId, userId, videos, fi
                             endTime: c.end_seconds ?? undefined
                         }))
                 }
+                onTimeUpdate={(curr, total) => {
+                    const progress = curr / total;
+                    if (progress > 0.97 &&
+                        !finishedVideoAutomaticallyAdded &&
+                        finishedVideosResult.success &&
+                        !finishedVideosResult.value.finishedVideos.some(v => v.video_id === activeVideo.id)
+                    ) {
+                        addFinishedVideoMethod();
+                        setFinishedVideoAutomaticallyAdded(true);
+                    }
+                }}
             />
         }
         <DashboardModuleVideoInfo
@@ -76,7 +103,10 @@ export default function DashboardModuleVideoColumn({moduleId, userId, videos, fi
             userId={userId}
             moduleId={moduleId}
             videoId={activeVideo.id}
+            resources={videos.flatMap(obj => obj.resources).filter(r => r.video_id === activeVideoId)}
             finishedVideosResult={finishedVideosResult}
+            isAddingFinishedVideo={isAddingFinishedVideo}
+            onAddFinishVideo={addFinishedVideoMethod}
         />
     </div>
 }

@@ -1,19 +1,29 @@
-import LanguageSelector from "@/app/_components/ui/language/LanguageSelector";
-import {getTranslations} from "next-intl/server";
-import AuthComponent from "@/app/_components/AuthComponent";
-import ThemeSelector from "@/app/_components/ui/theme/ThemeSelector";
+import Hero from "@/app/_components/home/hero/Hero";
+import Tiles from "@/app/_components/home/tiles/Tiles";
+import Suitable from "@/app/_components/home/suitable/Suitable";
+import Technologies from "@/app/_components/home/technologies/Technologies";
+import GraphicDesign from "@/app/_components/home/graphic-design/GraphicDesign";
+import Mentoring from "@/app/_components/home/mentoring/Mentoring";
+import Team from "@/app/_components/home/team/Team";
+import Partners from "@/app/_components/home/partners/Partners";
+import Testimonials from "@/app/_components/home/testimonials/Testimonials";
+import StartNow from "@/app/_components/home/start-now/StartNow";
+import Footer from "@/app/_components/home/footer/Footer";
+import HomepageNavbar from "@/app/_components/home/nav/HomepageNavbar";
 
 export default async function Home() {
-  const t = await getTranslations("Homepage");
-
-  return <div className="p-4 space-y-3">
-    <div className="flex items-center gap-2">
-      <ThemeSelector />
-      <LanguageSelector />
-    </div>
-    <div>
-      <h1>{t("title")}</h1>
-    </div>
-    <AuthComponent />
-  </div>
+  return <main className="homepage space-y-10">
+    <HomepageNavbar />
+    <Hero />
+    <Tiles />
+    <Suitable />
+    <Technologies />
+    <GraphicDesign />
+    <Mentoring />
+    <Team />
+    <Partners />
+    <Testimonials />
+    <StartNow />
+    <Footer />
+  </main>
 }

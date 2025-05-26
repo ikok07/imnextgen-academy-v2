@@ -48,7 +48,7 @@ jobs:
           project_id: ${{ vars.NEON_PROJECT_ID }}
           branch_name: preview/pr-${{ github.event.number }}-${{ needs.setup.outputs.branch }}
           api_key: ${{ secrets.NEON_API_KEY }}
-          username: 'github-actions'
+          username: 'neondb_owner'
 
       - name: Run Migrations
         run: npm run db:migrate

@@ -30,11 +30,11 @@ export default function DashboardShopBoxPrice({stripe_product_id, selected, isAc
     });
 
     let buttonIcon = useMemo(() => {
-        if (isDisabled) {
-            return <IoCloseCircle />
-        }
         if (selected || isAcquired) {
             return <IoCheckmarkCircle />
+        }
+        if (isDisabled) {
+            return <IoCloseCircle />
         }
         return <IoCart/>;
     }, [isDisabled, selected, isAcquired]);
@@ -49,7 +49,7 @@ export default function DashboardShopBoxPrice({stripe_product_id, selected, isAc
     return <div className="flex items-center justify-between flex-wrap">
         <h1 className="flex items-end"><span className="text-2xl font-black">{Math.floor(paymentProductQuery.value.price / 100)}</span> <span className="text-sm font-normal pb-1">.{(paymentProductQuery.value.price % 100).toString().padStart(2, '0')} лв.</span></h1>
         <PrimaryButton
-            className={`${isDisabled ? "bg-inactive-gradient text-primary" : isAcquired ? "bg-success-gradient" : selected ? "bg-inactive-gradient text-primary" : ""}`}
+            className={`${isAcquired ? "bg-success-gradient" : isDisabled ? "bg-inactive-gradient text-primary" : selected ? "bg-inactive-gradient text-primary" : ""}`}
         >
             {buttonIcon}
         </PrimaryButton>
