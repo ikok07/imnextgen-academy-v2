@@ -66,7 +66,7 @@ async function InnerContent() {
             <div>
                 <h2 className="text-xl mb-4">Модули</h2>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {paidModulesResponse.value.filter(m => !!m.stripe_product_id).sort((a, b) => a.order_number - b.order_number).map((module, index) => {
+                    {paidModulesResponse.value.filter(m => !!m.stripe_product_id && (m.access === "subscription-or-paid" || m.access === "paid")).sort((a, b) => a.order_number - b.order_number).map((module, index) => {
                         return <DashboardShopModuleBox
                             module={{...module, stripe_product_id: module.stripe_product_id!}}
                             boughtModules={boughtModulesResponse.value}

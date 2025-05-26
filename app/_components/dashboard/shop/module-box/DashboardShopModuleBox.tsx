@@ -13,7 +13,7 @@ type DashboardShopModuleBoxProps = {
 }
 
 export default function DashboardShopModuleBox({module, boughtModules}: DashboardShopModuleBoxProps) {
-    return <DashboardShopModuleBoxClientWrapper moduleId={module.id} stripeProductId={module.stripe_product_id} boughtModules={boughtModules}>
+    return <DashboardShopModuleBoxClientWrapper module={module} stripeProductId={module.stripe_product_id} boughtModules={boughtModules}>
         <Card className="cursor-pointer flex flex-col justify-between hover:bg-secondary/70 dark:hover:bg-border/50">
             <div className="relative w-full aspect-video rounded-t-lg overflow-hidden">
                 {module.image_url && <img alt={module.title} src={module.image_url} className="absolute inset-0 object-cover" />}
@@ -24,7 +24,7 @@ export default function DashboardShopModuleBox({module, boughtModules}: Dashboar
             </CardHeader>
             <CardContent className="mt-3">
                 <DashboardShopModuleBoxPriceWrapper
-                    moduleId={module.id}
+                    module={module}
                     stripeProductId={module.stripe_product_id}
                     boughtModules={boughtModules}
                 />

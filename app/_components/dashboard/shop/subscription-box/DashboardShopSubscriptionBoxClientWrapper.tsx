@@ -30,7 +30,11 @@ export default function DashboardShopSubscriptionBoxClientWrapper({userSubscript
         </TooltipProvider>
     }
 
-    return <div onClick={() => !errorProductIds.has(fullTier.stripe_product_id) && setSelectedSubscriptionTier(selectedSubscriptionTier?.id === fullTier.id ? null : fullTier)}>
+    return <div onClick={() => {
+        if (!errorProductIds.has(fullTier.stripe_product_id)) {
+            setSelectedSubscriptionTier(selectedSubscriptionTier?.id === fullTier.id ? null : fullTier);
+        }
+    }}>
         {children}
     </div>
 }
