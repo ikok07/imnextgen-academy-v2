@@ -30,11 +30,11 @@ export default function DashboardShopBoxPrice({stripe_product_id, selected, isAc
     });
 
     let buttonIcon = useMemo(() => {
-        if (isDisabled) {
-            return <IoCloseCircle />
-        }
         if (selected || isAcquired) {
             return <IoCheckmarkCircle />
+        }
+        if (isDisabled) {
+            return <IoCloseCircle />
         }
         return <IoCart/>;
     }, [isDisabled, selected, isAcquired]);

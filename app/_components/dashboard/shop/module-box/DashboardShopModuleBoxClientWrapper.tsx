@@ -11,15 +11,16 @@ import {Module} from "@/drizzle/schema/modules";
 
 type DashboardShopModuleBoxClientWrapperProps = {
     children: ReactNode,
+    userSubscription: UserFullSubscription | undefined,
     module: Module,
     stripeProductId: string,
     boughtModules: FullBoughtModule[]
 }
 
-export default function DashboardShopModuleBoxClientWrapper({children, module, stripeProductId, boughtModules}: DashboardShopModuleBoxClientWrapperProps) {
+export default function DashboardShopModuleBoxClientWrapper({children, userSubscription, module, stripeProductId, boughtModules}: DashboardShopModuleBoxClientWrapperProps) {
     const {setSelectedProductIds, errorProductIds, alreadyBought, moduleIncludedInSelectedSubscription} = useShop();
 
-    const moduleIncludedInSubscription = moduleIncludedInSelectedSubscription(module);
+    const moduleIncludedInSubscription = moduleIncludedInSelectedSubscription(module, userSubscription);
     const alreadyPurchased = alreadyBought(boughtModules, module.id);
 
     if (alreadyPurchased || moduleIncludedInSubscription) {
@@ -29,7 +30,7 @@ export default function DashboardShopModuleBoxClientWrapper({children, module, s
                     {children}
                 </TooltipTrigger>
                 <TooltipContent>
-                    <p>{alreadyPurchased ? "Вече притежаваш този продукт" : "Модулът е включен в избранят от теб абонамент"}</p>
+                    <p>{alreadyPurchased ? "Вече притежаваш този продукт" : "Модулът е включен в избрания или закупен от теб абонамент"}</p>
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>

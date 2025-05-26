@@ -5,6 +5,7 @@ import {z} from "zod";
 import {FullSubscriptionTier} from "@/src/entities/models/payments/full-subscription-tier";
 import {FullBoughtModule} from "@/src/entities/models/media/modules/full-bought-module";
 import {Module} from "@/drizzle/schema/modules";
+import {UserFullSubscription} from "@/src/entities/models/payments/user-full-subscription";
 
 const shopState = z.object({
     selectedSubscriptionTier: z.custom<FullSubscriptionTier>().nullable(),
@@ -15,7 +16,7 @@ const shopState = z.object({
     setErrorProductIds: z.custom<Dispatch<SetStateAction<Set<string>>>>(),
     clearCart: z.custom<() => void>(),
     alreadyBought:  z.custom<(boughtModules: FullBoughtModule[], moduleId: string) => boolean>(),
-    moduleIncludedInSelectedSubscription: z.custom<(module: Module) => boolean>()
+    moduleIncludedInSelectedSubscription: z.custom<(module: Module, userSubscription?: UserFullSubscription) => boolean>()
 });
 
 export type ShopState = z.infer<typeof shopState>;
@@ -40,8 +41,8 @@ export function ShopProvider({children}: ShopProviderProps) {
         return boughtModules.some(m => m.module.id === moduleId);
     }, []);
 
-    const moduleIncludedInSelectedSubscription = useCallback((module: Module) => {
-        return module.access === "subscription-or-paid" && !!selectedSubscriptionTier;
+    const moduleIncludedInSelectedSubscription = useCallback((module: Module, userSubscription?: UserFullSubscription) => {
+        return module.access === "subscription-or-paid" && (!!selectedSubscriptionTier || !!userSubscription);
     }, [selectedSubscriptionTier]);
 
     return <ShopContext.Provider value={{
