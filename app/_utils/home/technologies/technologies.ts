@@ -33,4 +33,12 @@ export const TECHNOLOGIES: Technology[] = [
         language: "jsx",
         code: "export default function App() {\n    const [name, setName] = useState(\"\");\n    const [email, setEmail] = useState(\"\");\n    const [phone, setPhone] = useState(\"\");\n\n    function submitForm(e) {\n        e.preventDefault();\n        async function submit() {\n            if (!name || !email || !phone) throw new Error(\"Invalid fields!\");\n\n            const res = await fetch(\"https://api.imnextgen.bg/test/submit\");\n            if (res.ok) {\n                console.log(await res.json())\n            } else {\n                throw new Error(\`An error occurred!\`)\n            }\n        }\n        submit();\n    }\n\n    return <form>\n        <input placeholder=\"Име\" value={name} onChange={e => setName(e.target.value)} />\n        <input placeholder=\"Имейл\" value={email} onChange={e => setEmail(e.target.value)} />\n        <input placeholder=\"Телефон\" value={phone} onChange={e => setPhone(e.target.value)} />\n        <button type='submit' onClick={submitForm}>Потвърждаване</button>\n    </form>\n}"
     },
+    {
+        id: "nextjs",
+        image: "/home/technologies/nextjs.svg",
+        title: "NextJS",
+        description: "Надгради уменията си с Next.js – професионалната рамка за създаване на бързи, SEO-оптимизирани уеб приложения. Ще се научиш да работиш със сървърни компоненти, маршрути, мета тагове, форми и бази данни -точно както го правят компаниите.",
+        language: "jsx",
+        code: "async function submitFormAction(formData) {\n    \"use server\"\n    \n    if (!formData.has(\"name\") || !formData.has(\"email\") || !formData.has(\"phone\")) throw new Error(\"Invalid fields!\");\n\n    const res = await fetch(\"https://api.imnextgen.bg/test/submit\");\n    if (res.ok) {\n        console.log(await res.json())\n    } else {\n        throw new Error(\`An error occurred!\`)\n    }\n    redirect(\"/form/submitted\");\n}\n\nexport default function Homepage() {\n    return <div>\n        <h1 className='heading-1'>Твоят първи уебсайт</h1>\n        <form action={submitFormAction}>\n            <input id=\"name\" placeholder=\"Име\"/>\n            <input id=\"email\" placeholder=\"Имейл\"/>\n            <input id=\"phone\" placeholder=\"Телефон\"/>\n            <button type='submit' onClick='submitForm'>Потвърждаване</button>\n        </form>\n    </div>\n}"
+    },
 ]
