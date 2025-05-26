@@ -1,8 +1,10 @@
 "use client"
 
-import {createContext, Dispatch, ReactNode, SetStateAction, useContext, useState} from "react";
+import {createContext, Dispatch, ReactNode, SetStateAction, useCallback, useContext, useMemo, useState} from "react";
 import {z} from "zod";
 import {FullSubscriptionTier} from "@/src/entities/models/payments/full-subscription-tier";
+import {FullBoughtModule} from "@/src/entities/models/media/modules/full-bought-module";
+import {Module} from "@/drizzle/schema/modules";
 
 const shopState = z.object({
     selectedSubscriptionTier: z.custom<FullSubscriptionTier>().nullable(),
@@ -11,7 +13,9 @@ const shopState = z.object({
     setSelectedProductIds: z.custom<Dispatch<SetStateAction<Set<string>>>>(),
     errorProductIds: z.set(z.string()),
     setErrorProductIds: z.custom<Dispatch<SetStateAction<Set<string>>>>(),
-    clearCart: z.custom<() => void>()
+    clearCart: z.custom<() => void>(),
+    alreadyBought:  z.custom<(boughtModules: FullBoughtModule[], moduleId: string) => boolean>(),
+    moduleIncludedInSelectedSubscription: z.custom<(module: Module) => boolean>()
 });
 
 export type ShopState = z.infer<typeof shopState>;
@@ -31,6 +35,14 @@ export function ShopProvider({children}: ShopProviderProps) {
         setSelectedSubscriptionTier(null);
         setSelectedProductIds(new Set());
     }
+    
+    const alreadyBought = useCallback((boughtModules: FullBoughtModule[], moduleId: string) => {
+        return boughtModules.some(m => m.module.id === moduleId);
+    }, []);
+
+    const moduleIncludedInSelectedSubscription = useCallback((module: Module) => {
+        return module.access === "subscription-or-paid" && !!selectedSubscriptionTier;
+    }, [selectedSubscriptionTier]);
 
     return <ShopContext.Provider value={{
         selectedSubscriptionTier,
@@ -39,7 +51,9 @@ export function ShopProvider({children}: ShopProviderProps) {
         setSelectedProductIds,
         errorProductIds,
         setErrorProductIds,
-        clearCart
+        clearCart,
+        alreadyBought,
+        moduleIncludedInSelectedSubscription
     }}>
         {children}
     </ShopContext.Provider>

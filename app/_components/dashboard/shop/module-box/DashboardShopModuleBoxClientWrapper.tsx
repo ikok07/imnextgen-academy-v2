@@ -7,27 +7,29 @@ import {UserFullSubscription} from "@/src/entities/models/payments/user-full-sub
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/app/_components/ui/shadcn/tooltip";
 import {UserBoughtModule} from "@/drizzle/schema/user_bought_modules";
 import {FullBoughtModule} from "@/src/entities/models/media/modules/full-bought-module";
+import {Module} from "@/drizzle/schema/modules";
 
 type DashboardShopModuleBoxClientWrapperProps = {
     children: ReactNode,
-    moduleId: string,
+    module: Module,
     stripeProductId: string,
     boughtModules: FullBoughtModule[]
 }
 
-export default function DashboardShopModuleBoxClientWrapper({children, moduleId, stripeProductId, boughtModules}: DashboardShopModuleBoxClientWrapperProps) {
-    const {selectedProductIds, setSelectedProductIds, errorProductIds} = useShop();
+export default function DashboardShopModuleBoxClientWrapper({children, module, stripeProductId, boughtModules}: DashboardShopModuleBoxClientWrapperProps) {
+    const {setSelectedProductIds, errorProductIds, alreadyBought, moduleIncludedInSelectedSubscription} = useShop();
 
-    const alreadyPurchased = useMemo(() => boughtModules.some(m => m.module.id === moduleId), []);
+    const moduleIncludedInSubscription = moduleIncludedInSelectedSubscription(module);
+    const alreadyPurchased = alreadyBought(boughtModules, module.id);
 
-    if (alreadyPurchased) {
+    if (alreadyPurchased || moduleIncludedInSubscription) {
         return <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger className="text-left">
                     {children}
                 </TooltipTrigger>
                 <TooltipContent>
-                    <p>Вече притежаваш този продукт</p>
+                    <p>{alreadyPurchased ? "Вече притежаваш този продукт" : "Модулът е включен в избранят от теб абонамент"}</p>
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>

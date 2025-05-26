@@ -1,6 +1,6 @@
 import DashboardPageTitle from "@/app/_components/dashboard/DashboardPageTitle";
 import StripePaymentSheet from "@/app/_components/dashboard/shop/payment/StripePaymentSheet";
-import {createCheckoutSession, getFullSubscriptionTiers} from "@/app/dashboard/shop/actions";
+import {createCheckoutSession, getFullSubscriptionTiers, getPaidModules} from "@/app/dashboard/shop/actions";
 import {z} from "zod";
 import {getUser} from "@/app/dashboard/actions";
 import { Routes } from "@/app/_utils/nav/routes";
@@ -47,14 +47,16 @@ async function InnerContent(props: z.infer<typeof searchParamsSchema>) {
         const userResponse = await getUser();
         if (!userResponse.success || !userResponse.value.user || !userResponse.value.dbProfile) throw new Error("User is not available!");
 
-        const [userSubscriptionResponse, fullSubscriptionsResponse, boughtModulesResponse] = await Promise.all([
+        const [userSubscriptionResponse, fullSubscriptionsResponse, paidModulesResponse, boughtModulesResponse] = await Promise.all([
             getUserSubscription(userResponse.value.user.id),
             getFullSubscriptionTiers(),
+            getPaidModules(),
             getUserBoughtModules(userResponse.value.user.id),
         ]);
 
         if (!userSubscriptionResponse.success) throw new Error("User subscription is not available!");
         if (!fullSubscriptionsResponse.success) throw new Error("Full subscription tiers are not available!");
+        if (!paidModulesResponse.success) throw new Error("Paid modules are not available!");
         if (!boughtModulesResponse.success) throw new Error("Bought modules are not available!");
 
         const userHasSubscription = !!userSubscriptionResponse.value;
@@ -67,13 +69,16 @@ async function InnerContent(props: z.infer<typeof searchParamsSchema>) {
             });
         }
 
-        // Remove already bought product ids.
+        // Remove already bought and included in subscription product ids.
         productIds = productIds.filter(productId => {
             return !boughtModulesResponse.value.some(v => {
                     return v.module.stripe_product_id === productId;
-                })
+                }) && !paidModulesResponse.value.some(v => {
+                    return v.stripe_product_id === productId && v.access === "subscription-or-paid" && parsedProps.searchParams.hasSubscription === "true"
+                });
         });
 
+        if (productIds.length === 0) return;
         if (productIds.length === 0) return <RedirectComponent path={Routes.dashboard.shop.base()} />
 
         const serializableUser: SerializableUser = {
