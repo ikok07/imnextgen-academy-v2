@@ -18,9 +18,6 @@ import {getInjection} from "@/di/container";
 // TODO: 4. Add webinars
 
 export default async function Home() {
-
-  console.log(await getInjection("IGenerateBackendKeyController")());
-
   return <main className="homepage space-y-10">
     <HomepageNavbar />
     <Hero />

@@ -37,7 +37,7 @@ export class BackendKeysRepository extends BaseRepository implements IBackendKey
     async validateBackendKey(value: string): Promise<boolean> {
         try {
             const hashedValue = this.hashString(value);
-            console.log(hashedValue);
+            console.log(process.env.KEYS_SECRET)
             const foundKeys = await this.queryDB(db => {
                 return db.select().from(backendKeysTable).where(eq(backendKeysTable.encoded_key, hashedValue));
             });
