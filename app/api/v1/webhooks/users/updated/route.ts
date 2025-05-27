@@ -28,11 +28,14 @@ export async function POST(req: NextRequest) {
         const {data: body, error: bodyError} = requestBodySchema.safeParse(JSON.parse(rawBody));
         if (bodyError) return NextResponse.json({status: "fail", error: "Invalid body!"}, {status: 400});
 
-        await getInjection("IUpdateProfileController")(body.data.id, {
-            name: `${body.data.first_name} ${body.data.last_name}`,
-            email: body.data.email_addresses[0]?.email_address ?? "<email-removed>",
-            phone: body.data.phone_numbers[0]?.phone_number ?? "<phone-removed>",
-            image_url: body.data.image_url,
+        await getInjection("IUpdateProfileController")({
+            userId: body.data.id,
+            data: {
+                name: `${body.data.first_name} ${body.data.last_name}`,
+                email: body.data.email_addresses[0]?.email_address ?? "<email-removed>",
+                phone: body.data.phone_numbers[0]?.phone_number ?? "<phone-removed>",
+                image_url: body.data.image_url,
+            }
         });
 
         return NextResponse.json({status: "success"});
