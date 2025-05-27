@@ -1,4 +1,4 @@
 export interface IBackendKeysRepository {
-    generateBackendKey(): string
+    generateBackendKey(): {key: string, encoded: string}
     validateBackendKey(value: string): Promise<boolean>
 }

@@ -11,9 +11,24 @@ export class BackendKeysRepository extends BaseRepository implements IBackendKey
         return crypto.createHmac("sha256", process.env.KEYS_SECRET!).update(str).digest("base64")
     }
 
-    generateBackendKey(): string {
+    private createKey() {
+        const keyLength = 32;
+        let key: string = 'key_imnextgen_';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        for (let i = 0; i < keyLength; i++ ) {
+            key += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return key;
+    }
+
+    generateBackendKey(): {key: string, encoded: string} {
         try {
-            return this.hashString(crypto.randomBytes(32).toString("utf8"));
+            const key = this.createKey();
+            return {
+                key,
+                encoded: this.hashString(key)
+            };
         } catch(e) {
             throw new DatabaseError(`Failed to generate backend key: ${e}`)
         }
@@ -22,6 +37,7 @@ export class BackendKeysRepository extends BaseRepository implements IBackendKey
     async validateBackendKey(value: string): Promise<boolean> {
         try {
             const hashedValue = this.hashString(value);
+            console.log(hashedValue);
             const foundKeys = await this.queryDB(db => {
                 return db.select().from(backendKeysTable).where(eq(backendKeysTable.encoded_key, hashedValue));
             });
