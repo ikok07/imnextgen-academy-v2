@@ -13,7 +13,7 @@ export const TECHNOLOGIES: Technology[] = [
         id: "css",
         image: "/home/technologies/css.svg",
         title: "CSS",
-        description: "Научи как да изграждаш структурата на страници с елементи като заглавия, параграфи и бутони. Ще знаеш как браузърите „виждат“ съдържанието и как да го подредиш логично и семантично.",
+        description: "Оформи външния вид на сайта – цветове, шрифтове, разстояния, подравняване, ефекти и адаптивен дизайн за мобилни устройства. Превърни всяка идея във визуално изпипан уебсайт.",
         language: "css",
         code: ":root {\n margin: 0\n}\nhtml {\n overflow: hidden;\n}\n.heading-1 {\n font-size: 2rem;\n font-weight: 700;\n color: #333333;\n}\n#name, #email, #phone {\n font-size: 1.6rem;\n color: #555555;\n font-weight: bold;\n text-decoration: underline; }"
     },
@@ -40,5 +40,13 @@ export const TECHNOLOGIES: Technology[] = [
         description: "Надгради уменията си с Next.js – професионалната рамка за създаване на бързи, SEO-оптимизирани уеб приложения. Ще се научиш да работиш със сървърни компоненти, маршрути, мета тагове, форми и бази данни -точно както го правят компаниите.",
         language: "jsx",
         code: "async function submitFormAction(formData) {\n    \"use server\"\n    \n    if (!formData.has(\"name\") || !formData.has(\"email\") || !formData.has(\"phone\")) throw new Error(\"Invalid fields!\");\n\n    const res = await fetch(\"https://api.imnextgen.bg/test/submit\");\n    if (res.ok) {\n        console.log(await res.json())\n    } else {\n        throw new Error(\`An error occurred!\`)\n    }\n    redirect(\"/form/submitted\");\n}\n\nexport default function Homepage() {\n    return <div>\n        <h1 className='heading-1'>Твоят първи уебсайт</h1>\n        <form action={submitFormAction}>\n            <input id=\"name\" placeholder=\"Име\"/>\n            <input id=\"email\" placeholder=\"Имейл\"/>\n            <input id=\"phone\" placeholder=\"Телефон\"/>\n            <button type='submit' onClick='submitForm'>Потвърждаване</button>\n        </form>\n    </div>\n}"
+    },
+    {
+        id: "git",
+        image: "/home/technologies/github.svg",
+        title: "Git & GitHub",
+        description: "Ще се научиш как да използваш Git – системата за контрол на версиите, която всеки професионален разработчик използва. Ще работиш с команди като commit, branch, merge и ще разбираш как да проследяваш и управляваш всяка промяна в проекта си.",
+        language: "git",
+        code: 'git checkout main\ngit add .\ngit commit -m "Add form"\ngit push origin main'
     },
 ]

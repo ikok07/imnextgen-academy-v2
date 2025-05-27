@@ -7,7 +7,7 @@ export default function Mentoring() {
             <div className="p-5 md:p-10 flex flex-col justify-between">
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-black">Не разчитай само на себе си</h1>
-                    <p className="paragraph mt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <p className="paragraph mt-2">Ще имаш до себе си опитни ментори, които ще те напътстват във всеки етап от обучението. Винаги можеш да разчиташ на подкрепа, обратна връзка и насоки от хора с реален опит в индустрията.</p>
                 </div>
 
                 <div className="flex items-center gap-2 mt-5">

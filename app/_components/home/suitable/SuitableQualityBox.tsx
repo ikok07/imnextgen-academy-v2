@@ -10,7 +10,7 @@ type SuitableQualityBoxProps = {
 
 export default function SuitableQualityBox({Icon, title, description}: SuitableQualityBoxProps) {
     return <Card className={cn(
-        "py-5 px-3 rounded-xl w-full grid grid-cols-[auto_1fr] gap-3",
+        "py-5 px-3 rounded-xl w-full grid grid-cols-[auto_1fr] min-h-[9rem] gap-3",
         "md:hover:scale-[1.01] md:hover:shadow-md transition-all duration-200 ease-in-out"
     )}>
         <Icon width={35} height={35} className="text-cta"/>
