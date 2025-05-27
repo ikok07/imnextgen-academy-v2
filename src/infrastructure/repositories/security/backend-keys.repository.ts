@@ -11,9 +11,13 @@ export class BackendKeysRepository extends BaseRepository implements IBackendKey
         return crypto.createHmac("sha256", process.env.KEYS_SECRET!).update(str).digest("base64")
     }
 
-    generateBackendKey(): string {
+    generateBackendKey(): {key: string, encoded: string} {
         try {
-            return this.hashString(crypto.randomBytes(32).toString("utf8"));
+            const key = crypto.randomBytes(32).toString("utf8");
+            return {
+                key,
+                encoded: this.hashString(key)
+            };
         } catch(e) {
             throw new DatabaseError(`Failed to generate backend key: ${e}`)
         }
