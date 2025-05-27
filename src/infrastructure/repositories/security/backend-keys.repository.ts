@@ -11,9 +11,19 @@ export class BackendKeysRepository extends BaseRepository implements IBackendKey
         return crypto.createHmac("sha256", process.env.KEYS_SECRET!).update(str).digest("base64")
     }
 
+    private createKey() {
+        let key: string = 'key_imnextgen_';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        for (let i = 0; i < length; i++ ) {
+            key += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return key;
+    }
+
     generateBackendKey(): {key: string, encoded: string} {
         try {
-            const key = crypto.randomBytes(32).toString("utf8");
+            const key = this.createKey();
             return {
                 key,
                 encoded: this.hashString(key)
