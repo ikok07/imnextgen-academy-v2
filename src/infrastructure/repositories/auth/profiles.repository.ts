@@ -1,5 +1,8 @@
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
-import {IProfilesRepository} from "@/src/application/repositories/auth/profiles.repository.interface";
+import {
+    IProfilesRepository,
+    UpdateProfileOptions
+} from "@/src/application/repositories/auth/profiles.repository.interface";
 import {Profile, ProfileInsert, profilesTable} from "@/drizzle/schema/profiles";
 import { DatabaseError } from "@/src/entities/errors/db/database";
 import {eq} from "drizzle-orm";
@@ -38,13 +41,17 @@ export class ProfilesRepository extends BaseRepository implements IProfilesRepos
         }
     }
 
-    async updateProfile(userId: string, data: Partial<ProfileInsert>): Promise<Profile> {
+    async updateProfile({data, ...opts}: UpdateProfileOptions): Promise<Profile> {
         try {
             return this.queryDB(async db => {
-                const result = await db.update(profilesTable).set(data).where(eq(profilesTable.id, userId)).returning();
+                const result = await db
+                    .update(profilesTable)
+                    .set(data)
+                    .where(opts.userId ? eq(profilesTable.id, opts.userId) : eq(profilesTable.email, opts.email!))
+                    .returning();
                 if (result.length === 0) throw new Error("No profile has been updated!");
                 return result[0];
-            })
+            });
         } catch(e) {
             throw new DatabaseError(`Failed to update profile: ${e}`);
         }

@@ -1,14 +1,18 @@
 import {IUpdateProfileUseCase} from "@/src/application/use-cases/auth/update-profile.use-case";
-import {ProfileInsert} from "@/drizzle/schema/profiles";
 import {InputParseError} from "@/src/entities/errors/common";
+import {
+    UpdateProfileOptions,
+    updateProfileOptionsSchema
+} from "@/src/application/repositories/auth/profiles.repository.interface";
 
 export type IUpdateProfileController = ReturnType<typeof updateProfileController>;
 
 export const updateProfileController = (
     updateProfileUseCase: IUpdateProfileUseCase
-) => async (userId: string | undefined, data: Partial<ProfileInsert>) => {
+) => async (opts: Partial<UpdateProfileOptions>) => {
 
-    if (!userId) throw new InputParseError("Invalid userId!");
+    const {data, error} = updateProfileOptionsSchema.safeParse(opts);
+    if (error) throw new InputParseError("Invalid options!");
 
-    return updateProfileUseCase(userId, data);
+    return updateProfileUseCase(data);
 }
