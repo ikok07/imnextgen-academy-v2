@@ -2,18 +2,18 @@ import {TeamMember} from "@/src/entities/models/homepage/team-member";
 
 export const TEAM_MEMBERS: TeamMember[] = [
     {
-        image: "/home/team/team-mockup.jpg",
+        image: "/home/team/martin-georgiev.jpg",
         name: "Мартин Георгиев",
-        role: "Ментор в академията"
+        role: "Уеб програмист и главен ментор"
     },
     {
-        image: "/home/team/team-mockup.jpg",
+        image: "/home/team/ivalin-boev.jpg",
         name: "Ивалин Боев",
-        role: "Ментор в академията"
+        role: "C# и уеб програмист"
     },
     {
-        image: "/home/team/team-mockup.jpg",
-        name: "Ивалин Боев",
-        role: "Ментор в академията"
+        image: "/home/team/alex-dimov.jpg",
+        name: "Александър Димов",
+        role: "Фронт-енд програмист"
     },
 ]

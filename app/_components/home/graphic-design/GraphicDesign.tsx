@@ -4,7 +4,7 @@ export default function GraphicDesign() {
     return <section id="graphic-design" className="relative bg-black-background-gradient grid xl:grid-cols-2 w-full h-[22rem]">
         <div className="flex flex-col justify-center w-full h-full max-w-[50rem] pl-5 sm:pl-12 lg:pl-36 pr-5 z-20">
             <h1 className="text-3xl sm:text-4xl xl:text-5xl font-black text-background">Графичен дизайн</h1>
-            <p className="paragraph !text-background/70 mt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex.</p>
+            <p className="paragraph !text-background/70 mt-3">Научи основите на уеб дизайна и как да създаваш красиви и функционални интерфейси. Ще работиш с Figma – един от най-популярните инструменти за дизайн в индустрията. Без значение дали си начинаещ — ще започнем с основите и ще стигнем до реални проекти.</p>
             <div className="flex items-center gap-3 mt-7">
                 <Image alt="Figma" src="/home/graphic-design/figma.svg" width={25} height={25} />
                 <h3 className="font-bold text-2xl text-background">Figma</h3>

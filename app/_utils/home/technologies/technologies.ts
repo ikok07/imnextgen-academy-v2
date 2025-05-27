@@ -13,7 +13,7 @@ export const TECHNOLOGIES: Technology[] = [
         id: "css",
         image: "/home/technologies/css.svg",
         title: "CSS",
-        description: "Научи как да изграждаш структурата на страници с елементи като заглавия, параграфи и бутони. Ще знаеш как браузърите „виждат“ съдържанието и как да го подредиш логично и семантично.",
+        description: "Оформи външния вид на сайта – цветове, шрифтове, разстояния, подравняване, ефекти и адаптивен дизайн за мобилни устройства. Превърни всяка идея във визуално изпипан уебсайт.",
         language: "css",
         code: ":root {\n margin: 0\n}\nhtml {\n overflow: hidden;\n}\n.heading-1 {\n font-size: 2rem;\n font-weight: 700;\n color: #333333;\n}\n#name, #email, #phone {\n font-size: 1.6rem;\n color: #555555;\n font-weight: bold;\n text-decoration: underline; }"
     },
