@@ -17,6 +17,12 @@ export async function POST(req: NextRequest) {
         case "checkout.session.completed":
             await handleCheckoutComplete(event);
             break;
+        case "customer.created":
+            await handleCustomerCreated(event);
+            break;
+        case "customer.deleted":
+            await handleCustomerDeleted(event);
+            break;
     }
 
     return NextResponse.json({status: "success"});
@@ -61,4 +67,26 @@ async function handleCheckoutComplete(event: Stripe.CheckoutSessionCompletedEven
         const modules = await getInjection("IGetModulesByProductIdsController")(lineItems.map(i => i.price!.product as string));
         await getInjection("IAddUserBoughtModulesController")(profile.id, modules.map(m => m.id));
     }
+}
+
+async function handleCustomerCreated(event: Stripe.CustomerCreatedEvent) {
+    if (!event.data.object.email) throw new Error("Customer doesn't have email!");
+
+    await getInjection("IUpdateProfileController")({
+        email: event.data.object.email,
+        data: {
+            payment_customer_id: event.data.object.id
+        }
+    });
+}
+
+async function handleCustomerDeleted(event: Stripe.CustomerDeletedEvent) {
+    if (!event.data.object.email) throw new Error("Customer doesn't have email!");
+
+    await getInjection("IUpdateProfileController")({
+        email: event.data.object.email,
+        data: {
+            payment_customer_id: null
+        }
+    });
 }

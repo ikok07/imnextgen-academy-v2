@@ -3,9 +3,10 @@
 import {createServerAction} from "@/app/_utils/createServerAction";
 import {getInjection} from "@/di/container";
 import {TypeClaim} from "@mux/mux-node/util/jwt-types";
+import {DatabaseError} from "pg-protocol";
 
-export const getUser = createServerAction(() => {
-    return getInjection("IGetUserController")();
+export const getUser = createServerAction((opts?: {excludeDbProfile?: boolean, dbUserNullOnError?: boolean}) => {
+    return getInjection("IGetUserController")(opts);
 })
 
 export const getAllModules = createServerAction(() => {

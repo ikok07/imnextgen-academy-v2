@@ -3,13 +3,13 @@ import SetupForm from "@/app/_components/account/setup/SetupForm";
 import Image from "next/image";
 import {redirect} from "next/navigation";
 import {Routes} from "@/app/_utils/nav/routes";
+import {getUser} from "@/app/dashboard/actions";
 
 export default async function Page() {
+    const userResponse = await getUser({dbUserNullOnError: true});
+    if (!userResponse.success) throw new Error("User could not be fetched!");
 
-    const getUserController = getInjection("IGetUserController");
-    const {dbProfile} = await getUserController();
-
-    if (dbProfile && dbProfile.configured) redirect(Routes.dashboard.classroom.base);
+    if (userResponse.value?.dbProfile && userResponse.value.dbProfile.configured) redirect(Routes.dashboard.classroom.base);
 
     const getSetupQuestionsController = getInjection("IGetSetupQuestionController");
     const setupQuestions = await getSetupQuestionsController();

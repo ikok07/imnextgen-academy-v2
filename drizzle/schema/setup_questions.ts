@@ -7,6 +7,7 @@ export const setupQuestionsTable = pgTable("setup_questions", {
     id: text("id").notNull().primaryKey().default(sql`gen_random_uuid()`),
     question: text("question").notNull(),
     is_multiline: boolean("is_multiline").notNull().default(false),
+    placeholder: text("placeholder"),
     required: boolean("required").notNull().default(true)
 })
 
