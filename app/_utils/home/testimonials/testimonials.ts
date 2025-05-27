@@ -2,16 +2,15 @@ import {Testimonial} from "@/src/entities/models/homepage/testimonial";
 
 export const TESTIMONIALS: Testimonial[] = [
     {
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut.",
-        name: "John Smith",
-        image: "/home/team/team-mockup.jpg"
+        text: "В академията получих нужните знания, за да стартирам кариера в програмирането и да започна да се развивам в тази област",
+        name: "Денислав",
     },
     {
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut.",
-        name: "John Smith",
+        text: "Концепциите се обясняват по-много прост начин, което ги прави лесни за разбиране дори от човек, започващ от нулата",
+        name: "Николай Тобошаров",
     },
     {
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut.",
-        name: "John Smith",
+        text: "Постоянната обратна връзка с менторите прави работата много по-гладка и ефективна.",
+        name: "Лъчезар Маков",
     },
 ]
