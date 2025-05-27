@@ -1,0 +1,1 @@
+ALTER TABLE "setup_questions" ADD COLUMN "placeholder" text;
