@@ -41,4 +41,12 @@ export const TECHNOLOGIES: Technology[] = [
         language: "jsx",
         code: "async function submitFormAction(formData) {\n    \"use server\"\n    \n    if (!formData.has(\"name\") || !formData.has(\"email\") || !formData.has(\"phone\")) throw new Error(\"Invalid fields!\");\n\n    const res = await fetch(\"https://api.imnextgen.bg/test/submit\");\n    if (res.ok) {\n        console.log(await res.json())\n    } else {\n        throw new Error(\`An error occurred!\`)\n    }\n    redirect(\"/form/submitted\");\n}\n\nexport default function Homepage() {\n    return <div>\n        <h1 className='heading-1'>Твоят първи уебсайт</h1>\n        <form action={submitFormAction}>\n            <input id=\"name\" placeholder=\"Име\"/>\n            <input id=\"email\" placeholder=\"Имейл\"/>\n            <input id=\"phone\" placeholder=\"Телефон\"/>\n            <button type='submit' onClick='submitForm'>Потвърждаване</button>\n        </form>\n    </div>\n}"
     },
+    {
+        id: "git",
+        image: "/home/technologies/github.svg",
+        title: "Git & GitHub",
+        description: "Ще се научиш как да използваш Git – системата за контрол на версиите, която всеки професионален разработчик използва. Ще работиш с команди като commit, branch, merge и ще разбираш как да проследяваш и управляваш всяка промяна в проекта си.",
+        language: "git",
+        code: 'git checkout main\ngit add .\ngit commit -m "Add form"\ngit push origin main'
+    },
 ]
