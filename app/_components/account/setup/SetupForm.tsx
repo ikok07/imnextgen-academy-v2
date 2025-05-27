@@ -50,7 +50,7 @@ export default function SetupForm({setupQuestions}: SetupFormProps) {
                 return <PrimaryInput
                     key={index}
                     label={question.question}
-                    placeholder="Question 1"
+                    placeholder={question.placeholder ?? ""}
                     value={answers[answerIndex].text ?? ""}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => {
                         setAnswers(v => [{id: answers[answerIndex].id, text: e.target.value}, ...(v.filter(a => a.id !== question.id))])
