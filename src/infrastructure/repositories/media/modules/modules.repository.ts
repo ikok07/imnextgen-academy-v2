@@ -30,7 +30,7 @@ export class ModulesRepository extends BaseRepository implements IModulesReposit
     getPaidModules(): Promise<Module[]> {
         try {
             return this.queryDB(db => {
-                return db.query.modulesTable.findMany({where: or(eq(modulesTable.access, "subscription-or-paid"), eq(modulesTable.access, "subscription"), eq(modulesTable.access, "pre-order"))});
+                return db.query.modulesTable.findMany({where: or(eq(modulesTable.access, "subscription-or-paid"), eq(modulesTable.access, "paid"), eq(modulesTable.access, "pre-order"))});
             })
         } catch (e) {
             throw new DatabaseError(`Failed to get paid modules! ${e}`);
