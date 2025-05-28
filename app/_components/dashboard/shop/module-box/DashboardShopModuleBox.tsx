@@ -14,8 +14,8 @@ type DashboardShopModuleBoxProps = {
     boughtModules: FullBoughtModule[]
 }
 
-export default function DashboardShopModuleBox({module, boughtModules}: DashboardShopModuleBoxProps) {
-    return <DashboardShopModuleBoxClientWrapper moduleId={module.id} stripeProductId={module.stripe_product_id} boughtModules={boughtModules}>
+export default function DashboardShopModuleBox({userSubscription, module, boughtModules}: DashboardShopModuleBoxProps) {
+    return <DashboardShopModuleBoxClientWrapper module={module} userSubscription={userSubscription} stripeProductId={module.stripe_product_id} boughtModules={boughtModules}>
         <div className="relative">
             {module.access === "pre-order" && <div
                 className="absolute left-0 right-0 top-7 pb-1 h-full bg-cta flex items-end justify-center rounded-lg -z-10">
@@ -32,9 +32,9 @@ export default function DashboardShopModuleBox({module, boughtModules}: Dashboar
                 </CardHeader>
                 <CardContent className="mt-3">
                     <DashboardShopModuleBoxPriceWrapper
-                        moduleId={module.id}
+                        module={module}
+                        userSubscription={userSubscription}
                         stripeProductId={module.stripe_product_id}
-                        nonDiscountedPriceId={module.non_discounted_price_id ?? undefined}
                         boughtModules={boughtModules}
                     />
                 </CardContent>
