@@ -19,6 +19,7 @@ export default function DashboardShopSubscriptionBoxPriceWrapper({userSubscripti
 
     return <DashboardShopBoxPrice
         stripe_product_id={fullTier.stripe_product_id}
+        nonDiscountedPriceId={undefined}
         selected={selected}
         isAcquired={subscribedToTheSamePlan}
         isDisabled={hasSubscription && !subscribedToTheSamePlan}

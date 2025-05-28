@@ -9,16 +9,18 @@ import {FullBoughtModule} from "@/src/entities/models/media/modules/full-bought-
 type DashboardShopModuleBoxPriceWrapperProps = {
     moduleId: string,
     stripeProductId: string,
+    nonDiscountedPriceId: string | undefined
     boughtModules: FullBoughtModule[]
 }
 
-export default function DashboardShopModuleBoxPriceWrapper({moduleId, stripeProductId, boughtModules}: DashboardShopModuleBoxPriceWrapperProps) {
+export default function DashboardShopModuleBoxPriceWrapper({moduleId, stripeProductId, nonDiscountedPriceId, boughtModules}: DashboardShopModuleBoxPriceWrapperProps) {
     const {selectedProductIds} = useShop();
     const selected = useMemo(() => selectedProductIds.has(stripeProductId), [selectedProductIds]);
     const alreadyBought = useMemo(() => boughtModules.some(m => m.module.id === moduleId), []);
 
     return <DashboardShopBoxPrice
         stripe_product_id={stripeProductId}
+        nonDiscountedPriceId={nonDiscountedPriceId}
         selected={selected}
         isAcquired={alreadyBought}
         isDisabled={false}
