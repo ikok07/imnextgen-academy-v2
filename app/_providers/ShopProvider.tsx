@@ -41,6 +41,10 @@ export function ShopProvider({children}: ShopProviderProps) {
         return boughtModules.some(m => m.module.id === moduleId);
     }, []);
 
+    const moduleIncludedInSelectedSubscription = useCallback((module: Module, userSubscription?: UserFullSubscription) => {
+        return module.access === "subscription-or-paid" && (!!selectedSubscriptionTier || !!userSubscription);
+    }, [selectedSubscriptionTier]);
+
     return <ShopContext.Provider value={{
         selectedSubscriptionTier,
         setSelectedSubscriptionTier,
