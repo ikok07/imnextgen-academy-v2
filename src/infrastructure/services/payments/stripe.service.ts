@@ -16,11 +16,15 @@ export class StripeService implements IPaymentService {
     async getProduct(productId: string): Promise<PaymentProduct> {
         try {
             const productResponse = await this.stripeClient.products.retrieve(productId);
+            const otherProductPrices = await this.stripeClient.prices.list({
+                product: productId
+            });
 
             const finalProduct: PaymentProduct = {
                 id: productResponse.id,
                 name: productResponse.name,
-                image: productResponse.images[0] ?? undefined
+                image: productResponse.images[0] ?? undefined,
+                secondaryPrices: {}
             }
 
             if (typeof productResponse.default_price === "string") {
@@ -28,6 +32,10 @@ export class StripeService implements IPaymentService {
                 finalProduct.price = priceResponse.unit_amount;
                 finalProduct.currency = priceResponse.currency;
             }
+
+            finalProduct.secondaryPrices = otherProductPrices.data.filter(price => price.id !== productResponse.default_price).reduce((prev, curr) => {
+                return {...prev, [curr.id]: curr.unit_amount}
+            }, {})
 
             return finalProduct;
         } catch(e) {

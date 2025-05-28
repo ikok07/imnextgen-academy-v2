@@ -9,6 +9,7 @@ import ThemeProvider from "@/app/_providers/ThemeProvider";
 import ClerkAuthProvider from "@/app/_providers/ClerkAuthProvider";
 import { Toaster } from "@/app/_components/ui/shadcn/sonner";
 import {Inter} from "next/font/google"
+import {IubendaCookieSolutionBannerConfigInterface, IubendaProvider} from "@mep-agency/next-iubenda";
 
 export const metadata: Metadata = {
     title: "I&M NextGen Academy — Без повече притеснения за работа",
@@ -40,7 +41,15 @@ export const metadata: Metadata = {
 
 const InterFont = Inter({
     subsets: ["cyrillic"]
-})
+});
+
+const bannerConfig: IubendaCookieSolutionBannerConfigInterface = {
+    siteId: 3839657,
+    cookiePolicyId: 82266683,
+    lang: "bg",
+    whitelabel: true,
+    floatingPreferencesButtonDisplay: false
+}
 
 type LayoutProps = {
     children: ReactNode
@@ -54,27 +63,29 @@ export default async function RootLayout({
 
     return (
         <html lang={locale} suppressHydrationWarning={true} className={InterFont.className}>
-        <NextIntlClientProvider messages={messages}>
-            <AppStoreProvider>
-                <AppQueryClientProvider>
-                    <body>
-                        <ThemeProvider
-                            attribute="class"
-                            defaultTheme="system"
-                            enableSystem={true}
-                            disableTransitionOnChange={true}
-                        >
-                            <ClerkAuthProvider locale={locale}>
-                                {children}
-                                <Toaster
-                                    position="top-right"
-                                />
-                            </ClerkAuthProvider>
-                        </ThemeProvider>
-                    </body>
-                </AppQueryClientProvider>
-            </AppStoreProvider>
-        </NextIntlClientProvider>
+            <IubendaProvider bannerConfig={bannerConfig}>
+                <NextIntlClientProvider messages={messages}>
+                    <AppStoreProvider>
+                        <AppQueryClientProvider>
+                            <body>
+                            <ThemeProvider
+                                attribute="class"
+                                defaultTheme="system"
+                                enableSystem={true}
+                                disableTransitionOnChange={true}
+                            >
+                                <ClerkAuthProvider locale={locale}>
+                                    {children}
+                                    <Toaster
+                                        position="top-right"
+                                    />
+                                </ClerkAuthProvider>
+                            </ThemeProvider>
+                            </body>
+                        </AppQueryClientProvider>
+                    </AppStoreProvider>
+                </NextIntlClientProvider>
+            </IubendaProvider>
         </html>
     );
 }

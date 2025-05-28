@@ -3,8 +3,11 @@ import SecondaryButton from "@/app/_components/ui/buttons/SecondaryButton";
 import {z} from "zod";
 import {cn} from "@/app/_utils/cn";
 import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
+import {IconType} from "react-icons";
 
 export const moduleNotAllowedOptionsSchema = z.object({
+    Icon: z.custom<IconType>().optional(),
+    title: z.string().optional(),
     description: z.string(),
     buttons: z.array(z.object({
         label: z.string(),
@@ -21,15 +24,17 @@ type ModuleLockedMessageProps = {
 }
 
 export default function ModuleLockedMessage({options}: ModuleLockedMessageProps) {
+    const Icon = options.Icon ?? IoDocumentLock;
+
     return <div className="absolute inset-0 z-20 px-3 py-2 pb-3">
         <div className="absolute inset-0 bg-background z-10"/>
         <div className="relative w-full h-full flex flex-col justify-between z-20">
             <div className="flex flex-1 flex-col items-center justify-center text-center">
-                <IoDocumentLock className="text-3xl text-cta"/>
-                <h2 className="text-lg font-bold">Модулът е заключен</h2>
-                <p className="text-sm text-primary/60">{options.description}</p>
+                <Icon className="text-3xl text-cta"/>
+                <h2 className="text-lg font-bold">{options.title ?? "Модулът е заключен"}</h2>
+                <p className="text-sm text-primary/60">{options?.description ?? ""}</p>
             </div>
-            {options.buttons && <div className="w-full flex flex-col gap-y-2 gap-x-3 mt-3">
+            {options?.buttons && <div className="w-full flex flex-col gap-y-2 gap-x-3 mt-3">
                 {options.buttons.map((button, index) => {
                     const Button = button.variant === "primary" ? PrimaryButton : SecondaryButton;
                     return <Button

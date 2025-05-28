@@ -29,13 +29,21 @@ export default function ModuleBox({module, moduleAllowed}: ModuleBoxProps) {
     const {data: finishedVideosQuery, isLoading: isLoadingFinishedVideos} = useErrorQuery({
         queryFn: () => getFinishedVideos(module!.id, userObject.user!.id),
         queryKey: [`finished-videos-${module!.id}`],
-        enabled: !!module?.id && !!userObject.user
+        enabled: !!module?.id && !!userObject.user && module.access === "pre-order"
     });
 
     const modulePercentage = finishedVideosQuery?.success ? finishedVideosQuery.value.percentage : 0;
 
     function handleClick() {
         router.push(Routes.dashboard.classroom.module(module.id));
+    }
+
+    function loadAllowedModuleButton() {
+        if (module.access != "pre-order") {
+            return modulePercentage > 0 ? <PrimaryButton className="mt-6 w-full" onClick={handleClick}>Продължаване ({Math.round(modulePercentage)}%)</PrimaryButton> : <SecondaryButton className="mt-6 w-full" onClick={handleClick}>Стартиране</SecondaryButton>
+        }
+
+        return <SecondaryButton className="cursor-not-allowed mt-6 w-full" disabled={true}>Очаквай скоро</SecondaryButton>
     }
 
     useEffect(() => {
@@ -64,7 +72,7 @@ export default function ModuleBox({module, moduleAllowed}: ModuleBoxProps) {
             {!viewLoaded || buttonLoading || isLoadingFinishedVideos || !module ?
                 <Skeleton className="w-full h-8 aspect-video mt-6" />
                 :
-                modulePercentage > 0 ? <PrimaryButton className="mt-6 w-full" onClick={handleClick}>Продължаване ({Math.round(modulePercentage)}%)</PrimaryButton> : <SecondaryButton className="mt-6 w-full" onClick={handleClick}>Стартиране</SecondaryButton>
+                loadAllowedModuleButton()
             }
         </div>
     </div>

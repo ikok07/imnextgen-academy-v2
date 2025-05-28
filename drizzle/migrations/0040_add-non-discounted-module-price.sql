@@ -1,0 +1,1 @@
+ALTER TABLE "modules" ADD COLUMN "non_discounted_price_id" text;

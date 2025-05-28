@@ -2,6 +2,7 @@ import {z} from "zod";
 import {moduleAccessEnumSchema} from "@/drizzle/schema/modules";
 import {ModuleNotAllowedOptions} from "@/app/_components/dashboard/classroom/ModuleLockedMessage";
 import {Routes} from "@/app/_utils/nav/routes";
+import {IoTime} from "react-icons/io5";
 
 export const getModuleNotAllowedOptionsSchema = z.object({
     productId: z.string().nullable(),
@@ -54,6 +55,19 @@ export function getModuleNotAllowedMessage({productId, moduleAccess}: GetModuleN
             return {
                 description: "Модулът е недостъпен за момента",
                 buttons: undefined
+            }
+        case "pre-order":
+            return {
+                Icon: IoTime,
+                title: "Очаквай скоро",
+                description: "Модулът е в процес на разработка. Спести от цената му, като направиш ранна покупка",
+                buttons: [
+                    {
+                        label: "Ранно закупуване",
+                        href: `${Routes.dashboard.shop.base()}${productId ? `?productIds=${productId}` : ""}`,
+                        variant: "primary"
+                    }
+                ]
             }
     }
 }
