@@ -1,6 +1,6 @@
 "use client"
 
-import {createContext, Dispatch, ReactNode, SetStateAction, useCallback, useContext, useMemo, useState} from "react";
+import {createContext, Dispatch, ReactNode, SetStateAction, useCallback, useContext, useState} from "react";
 import {z} from "zod";
 import {FullSubscriptionTier} from "@/src/entities/models/payments/full-subscription-tier";
 import {FullBoughtModule} from "@/src/entities/models/media/modules/full-bought-module";
@@ -40,10 +40,6 @@ export function ShopProvider({children}: ShopProviderProps) {
     const alreadyBought = useCallback((boughtModules: FullBoughtModule[], moduleId: string) => {
         return boughtModules.some(m => m.module.id === moduleId);
     }, []);
-
-    const moduleIncludedInSelectedSubscription = useCallback((module: Module, userSubscription?: UserFullSubscription) => {
-        return module.access === "subscription-or-paid" && (!!selectedSubscriptionTier || !!userSubscription);
-    }, [selectedSubscriptionTier]);
 
     return <ShopContext.Provider value={{
         selectedSubscriptionTier,

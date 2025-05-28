@@ -55,5 +55,17 @@ export function getModuleNotAllowedMessage({productId, moduleAccess}: GetModuleN
                 description: "Модулът е недостъпен за момента",
                 buttons: undefined
             }
+        case "pre-order":
+            return {
+                title: "Очаквай скоро",
+                description: "Модулът се разработва в момента. Спести от цената му, като направиш ранна покупка",
+                buttons: [
+                    {
+                        label: "Ранно закупуване",
+                        href: `${Routes.dashboard.shop.base()}${productId ? `?productIds=${productId}` : ""}`,
+                        variant: "primary"
+                    }
+                ]
+            }
     }
 }
