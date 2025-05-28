@@ -12,7 +12,8 @@ const nextConfig = {
                 hostname: "img.clerk.com"
             },
         ]
-    }
+    },
+    transpilePackages: ['@mep-agency/next-iubenda'],
 };
 
 export default withNextIntl(withNextVideo(nextConfig));
