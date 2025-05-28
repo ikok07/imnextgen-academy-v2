@@ -274,6 +274,20 @@
       "when": 1748364570836,
       "tag": "0038_add-placeholder-to-setup-questions",
       "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1748417708394,
+      "tag": "0039_add-pre-order-access-status-to-modules",
+      "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1748418445199,
+      "tag": "0040_add-non-discounted-module-price",
+      "breakpoints": true
     }
   ]
 }

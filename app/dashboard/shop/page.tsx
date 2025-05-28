@@ -66,7 +66,7 @@ async function InnerContent() {
             <div>
                 <h2 className="text-xl mb-4">Модули</h2>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {paidModulesResponse.value.filter(m => !!m.stripe_product_id && (m.access === "subscription-or-paid" || m.access === "paid")).sort((a, b) => a.order_number - b.order_number).map((module, index) => {
+                    {paidModulesResponse.value.filter(m => !!m.stripe_product_id).sort((a, b) => a.order_number - b.order_number).map((module, index) => {
                         return <DashboardShopModuleBox
                             userSubscription={userSubscriptionResponse.value}
                             module={{...module, stripe_product_id: module.stripe_product_id!}}
@@ -78,6 +78,7 @@ async function InnerContent() {
             </div>
         </div>
     } catch(e) {
+        console.error(e);
         return <PrimaryErrorMessage
                 Icon={IoCloudOffline}
                 message="Продуктите не можаха да бъдат заредени"

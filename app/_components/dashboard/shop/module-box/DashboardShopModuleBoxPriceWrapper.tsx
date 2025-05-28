@@ -21,6 +21,7 @@ export default function DashboardShopModuleBoxPriceWrapper({userSubscription, mo
 
     return <DashboardShopBoxPrice
         stripe_product_id={stripeProductId}
+        nonDiscountedPriceId={module.non_discounted_price_id ?? undefined}
         selected={selected}
         isAcquired={alreadyBought(boughtModules, module.id)}
         isDisabled={moduleIncludedInSelectedSubscription(module, userSubscription)}

@@ -3,7 +3,7 @@ import {sql} from "drizzle-orm";
 import {createInsertSchema, createSelectSchema} from "drizzle-zod";
 import {z} from "zod";
 
-export const moduleAccessEnum = pgEnum("module_access_enum", ["free", "subscription", "paid", "subscription-or-paid", "private"]);
+export const moduleAccessEnum = pgEnum("module_access_enum", ["free", "subscription", "paid", "subscription-or-paid", "private", "pre-order"]);
 export const moduleAccessEnumSchema = createSelectSchema(moduleAccessEnum);
 
 export const modulesTable = pgTable("modules", {
@@ -13,6 +13,7 @@ export const modulesTable = pgTable("modules", {
     access: moduleAccessEnum().notNull().default("free"),
     order_number: integer("order_number").notNull(),
     stripe_product_id: text("stripe_product_id"),
+    non_discounted_price_id: text("non_discounted_price_id"),
     image_url: text("image_url")
 }, (table) => [
     check("order_number_check", sql`${table.order_number} > -1`)
