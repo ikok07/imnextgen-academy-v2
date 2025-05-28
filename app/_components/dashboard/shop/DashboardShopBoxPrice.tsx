@@ -66,7 +66,7 @@ export default function DashboardShopBoxPrice({stripe_product_id, nonDiscountedP
                     {nonDiscountedFormattedPrice} лв.
                 </span>
             }
-            <span className={`text-2xl font-black flex items-center gap-1 ${nonDiscountedPrice ? "pt-2 text-cta" : ""}`}>{primaryFormattedPrice} лв.</span>
+            <span className={`text-2xl font-black flex items-center gap-1 ${nonDiscountedPrice ? "pt-2 text-cta dark:text-primary" : ""}`}>{primaryFormattedPrice} лв.</span>
         </h1>
         <PrimaryButton
             className={`${isDisabled ? "bg-inactive-gradient text-primary" : isAcquired ? "bg-success-gradient" : selected ? "bg-inactive-gradient text-primary" : ""}`}
