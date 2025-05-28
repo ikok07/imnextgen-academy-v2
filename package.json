@@ -86,6 +86,7 @@
     "zod": "^3.24.4"
   },
   "devDependencies": {
+    "@mep-agency/next-iubenda": "^1.0.0-alpha5",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^18",
