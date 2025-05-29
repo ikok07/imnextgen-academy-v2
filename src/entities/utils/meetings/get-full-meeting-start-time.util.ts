@@ -25,12 +25,6 @@ export function getFullMeetingStartTime(fullMeeting: FullMeeting, targetDate: nu
     const targetDateSeconds = Math.floor(targetDate / 1000);
     const repeatedDay = fullMeeting.repeat_days.find(v => v.day_of_week === new Date(targetDate).getDay());
     if (repeatedDay) {
-        console.log(targetDate)
-        console.log({
-            timestamp: addMinutes(targetDate, repeatedDay.start_hour_utc * 60 + repeatedDay.start_minutes_utc + millisecondsToMinutes(getTimezoneOffset("Europe/Sofia"))).valueOf(),
-            hours: repeatedDay.start_hour_utc + millisecondsToHours(getTimezoneOffset("Europe/Sofia")),
-            minutes: repeatedDay.start_minutes_utc
-        })
         return {
             timestamp: addMinutes(targetDate, repeatedDay.start_hour_utc * 60 + repeatedDay.start_minutes_utc + millisecondsToMinutes(getTimezoneOffset("Europe/Sofia"))).valueOf(),
             hours: repeatedDay.start_hour_utc + millisecondsToHours(getTimezoneOffset("Europe/Sofia")),
