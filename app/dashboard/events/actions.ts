@@ -49,7 +49,7 @@ export const checkUserSignedUpForMeeting = createServerAction(async (email: stri
    const res = await getInjection("IGetSignedUpUserForMeetingController")({
       email,
       meeting_id: meetingId,
-      start_date: startDate / 1000,
+      start_date: startDate
    });
 
    return !!res;

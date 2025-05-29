@@ -29,7 +29,7 @@ export default function DashboardEventsMeetingHeader({fullMeeting, user, startDa
     const userSignedUpQueryKey = useMemo(() => `signed-up-user-${startDate!.hours}-${startDate!.minutes}-${fullMeeting.id}`, [fullMeeting.id, startDate?.hours, startDate?.minutes]);
 
     const {data: userSignedUpQuery, isLoading: isCheckingUserSignedUp, isFetching: isReFetchingUserSignedUp} = useErrorQuery({
-        queryFn: () => checkUserSignedUpForMeeting(user.emailAddress, fullMeeting.id, startDate!.timestamp),
+        queryFn: () => checkUserSignedUpForMeeting(user.emailAddress, fullMeeting.id, Math.floor(startDate!.timestamp / 1000)),
         queryKey: [userSignedUpQueryKey],
         enabled: !!startDate,
         onError() {
@@ -44,7 +44,7 @@ export default function DashboardEventsMeetingHeader({fullMeeting, user, startDa
             email: user.emailAddress,
             phone: user.phoneNumber,
             meeting_id: fullMeeting.id,
-            meeting_start_date: startDate?.timestamp ? Math.round(startDate.timestamp / 1000) : undefined
+            meeting_start_date: startDate?.timestamp ? Math.floor(startDate.timestamp / 1000) : undefined
         }),
         onSuccess() {queryClient.invalidateQueries([userSignedUpQueryKey])},
         onError() {
