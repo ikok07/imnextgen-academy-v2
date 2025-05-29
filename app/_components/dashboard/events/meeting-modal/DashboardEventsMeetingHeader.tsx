@@ -6,16 +6,12 @@ import SecondaryButton from "@/app/_components/ui/buttons/SecondaryButton";
 import {LucideClipboard, LucideClipboardCheck} from "lucide-react";
 import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
 import {useCallback, useMemo, useState} from "react";
-import {useTheme} from "next-themes";
-import {getMeetingPlatformIcon} from "@/app/_utils/meetings/getMeetingPlatformIcon";
 import {FullMeeting} from "@/drizzle/schema/meetings";
 import {IoStar} from "react-icons/io5";
 import useErrorQuery from "@/app/_hooks/useErrorQuery";
-import {useDashboardEvents} from "@/app/_providers/DashboardEventsProvider";
 import {addSignedUpUser, checkUserSignedUpForMeeting, removeSignedUpUser} from "@/app/dashboard/events/actions";
 import {FullMeetingStartTime} from "@/src/entities/utils/meetings/get-full-meeting-start-time.util";
 import {toast} from "sonner";
-import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
 import {SerializableUser} from "@/src/entities/models/auth/serializable-user";
 import useErrorMutation from "@/app/_hooks/useErrorMutation";
 import {useQueryClient} from "react-query";
@@ -65,7 +61,7 @@ export default function DashboardEventsMeetingHeader({fullMeeting, user, startDa
         onError() {
             toast.error("Не можахме да променим статуса за присъствието ти в тази среща!");
         }
-    })
+    });
 
     function setCopiedLink() {
         if (!resetTimeout) {
