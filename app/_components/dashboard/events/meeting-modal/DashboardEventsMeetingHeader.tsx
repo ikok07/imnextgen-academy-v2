@@ -39,6 +39,7 @@ export default function DashboardEventsMeetingHeader({fullMeeting, user, startDa
 
     const {mutate: addSignedUpUserMethod, isLoading: isAddingSignedUpUser} = useErrorMutation({
         mutationFn: () => addSignedUpUser({
+            profile_id: user.id,
             name: `${user.firstName} ${user.lastName}`,
             email: user.emailAddress,
             phone: user.phoneNumber,
@@ -103,7 +104,7 @@ export default function DashboardEventsMeetingHeader({fullMeeting, user, startDa
 
     return <div className="grid md:grid-cols-[1fr_1.5fr] gap-4">
         <div className="relative w-full aspect-video overflow-hidden rounded-md">
-            <img alt={fullMeeting.title} src={fullMeeting.image_url} className="absolute inset-0" />
+            <img alt={fullMeeting.title} src={fullMeeting.image_url} className="absolute inset-0 object-cover" />
         </div>
         <div className="flex flex-col justify-between">
             <div>

@@ -13,7 +13,7 @@ const nextConfig = {
             },
             {
                 protocol: "https",
-                hostname: "ozwkuahulnwluilmnjjr.supabase.co"
+                hostname: "beta.academy.imnextgen.bg"
             },
         ]
     }
