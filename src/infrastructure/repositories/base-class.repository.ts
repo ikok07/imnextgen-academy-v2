@@ -14,6 +14,7 @@ import * as meetingDates from "../../../drizzle/schema/meeting_dates"
 import * as bankOrders from "../../../drizzle/schema/bank_orders"
 import * as bankOrderProducts from "../../../drizzle/schema/bank_order_products"
 import * as backendKeys from "../../../drizzle/schema/backend_keys"
+import * as meetingSignedUpUsers from "../../../drizzle/schema/meeting_signed_up_users"
 
 import ws from "ws"
 
@@ -40,7 +41,8 @@ export class BaseRepository {
         ...meetingDates,
         ...bankOrders,
         ...bankOrderProducts,
-        ...backendKeys
+        ...backendKeys,
+        ...meetingSignedUpUsers
     };
     constructor(authenticationService: IAuthenticationService) {
         this.authService = authenticationService;

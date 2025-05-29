@@ -20,6 +20,7 @@ import {createCheckoutSession} from "@/app/dashboard/shop/actions";
 import {CheckoutMode} from "@/src/application/services/payments/payment.service.interface";
 import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
 import {IoCloudOffline} from "react-icons/io5";
+import useErrorQuery from "@/app/_hooks/useErrorQuery";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!, {locale: "bg"});
 
@@ -36,25 +37,37 @@ type StripePaymentSheetProps = {
 export default function StripePaymentSheet(props: StripePaymentSheetProps) {
     const {resolvedTheme} = useTheme();
 
-    const promise = async () => {
-        const clientSecretResponse = await createCheckoutSession({
-            productIds: props.productIds,
-            customerId: props.customerId || undefined,
-            customerEmail: props.email,
-            locale: "bg",
-            mode: props.mode,
-            returnUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${Routes.dashboard.shop.paymentSuccess()}`,
-            subscriptionMetadata: props.subscriptionMetadata,
-            clientSecretOnly: true
-        });
-        if (!clientSecretResponse.success) throw new Error("Checkout session is not available!");
-        return clientSecretResponse.value as string ?? "";
+    const {data: checkoutSessionQuery, isLoading, error} = useQuery({
+        queryFn: async () => {
+            const clientSecretResponse = await createCheckoutSession({
+                productIds: props.productIds,
+                customerId: props.customerId || undefined,
+                customerEmail: props.email,
+                locale: "bg",
+                mode: props.mode,
+                returnUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${Routes.dashboard.shop.paymentSuccess()}`,
+                subscriptionMetadata: props.subscriptionMetadata,
+                clientSecretOnly: true
+            });
+            if (!clientSecretResponse.success) throw new Error("Checkout session is not available!");
+            return clientSecretResponse.value as string ?? "";
+        }
+    })
+
+    if (isLoading) {
+        return <StripePaymentSheetSkeleton />
     }
+
+    if (error || !checkoutSessionQuery) {
+        return <PrimaryErrorMessage Icon={IoCloudOffline} title="Нещо се обърка" message="Възникна грешка при зареждането на формата" />
+    }
+
+    const promise = new Promise<string>((res) => res(checkoutSessionQuery));
 
     return <CheckoutProvider
         stripe={stripePromise}
         options={{
-            fetchClientSecret: promise,
+            fetchClientSecret:() => promise,
             elementsOptions: {
                 loader: "always",
                 appearance: {

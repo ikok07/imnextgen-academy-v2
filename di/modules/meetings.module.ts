@@ -50,6 +50,31 @@ import {
 import {
     getMultipleMeetingsExcludedDatesForDateController
 } from "@/src/interface-adapters/controllers/meetings/meeting-excluded-dates/get-multiple-meetings-excluded-dates-for-date.controller";
+import {
+    MeetingSignedUpUsersRepository
+} from "@/src/infrastructure/repositories/meetings/meeting-signed-up-users.repository";
+import {
+    getSignedUpUsersForMeetingUseCase
+} from "@/src/application/use-cases/meetings/meeting-signed-up-users/get-signed-up-users-for-meeting.use-case";
+import {
+    getSignedUpUsersForMeetingController
+} from "@/src/interface-adapters/controllers/meetings/meeting-signed-up-users/get-signed-up-users-for-meeting.controller";
+import { getSignedUpUserForMeetingUseCase } from "@/src/application/use-cases/meetings/meeting-signed-up-users/get-signed-up-user-for-meeting.use-case";
+import {
+    getSignedUpUserForMeetingController
+} from "@/src/interface-adapters/controllers/meetings/meeting-signed-up-users/get-signed-up-user-for-meeting.controller";
+import {
+    addSignedUpUserUseCase
+} from "@/src/application/use-cases/meetings/meeting-signed-up-users/add-signed-up-user.use-case";
+import {
+    addSignedUpUserController
+} from "@/src/interface-adapters/controllers/meetings/meeting-signed-up-users/add-signed-up-user.controller";
+import {
+    removeSignedUpUserUseCase
+} from "@/src/application/use-cases/meetings/meeting-signed-up-users/remove-signed-up-user.use-case";
+import {
+    removeSignedUpUserController
+} from "@/src/interface-adapters/controllers/meetings/meeting-signed-up-users/remove-signed-up-user.controller";
 
 export function createMeetingsModule() {
     const meetingsModule = createModule();
@@ -165,6 +190,42 @@ export function createMeetingsModule() {
     meetingsModule
         .bind(DI_SYMBOLS.IGetMeetingDatesByStartDateController)
         .toHigherOrderFunction(getMeetingDatesByStartDateController, [DI_SYMBOLS.IGetMeetingDatesByStartDateUseCase]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IMeetingSignedUpUsersRepository)
+        .toClass(MeetingSignedUpUsersRepository);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IGetSignedUpUsersForMeetingUseCase)
+        .toHigherOrderFunction(getSignedUpUsersForMeetingUseCase, [DI_SYMBOLS.IMeetingSignedUpUsersRepository]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IGetSignedUpUsersForMeetingController)
+        .toHigherOrderFunction(getSignedUpUsersForMeetingController, [DI_SYMBOLS.IGetSignedUpUsersForMeetingUseCase]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IGetSignedUpUserForMeetingUseCase)
+        .toHigherOrderFunction(getSignedUpUserForMeetingUseCase, [DI_SYMBOLS.IMeetingSignedUpUsersRepository]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IGetSignedUpUserForMeetingController)
+        .toHigherOrderFunction(getSignedUpUserForMeetingController, [DI_SYMBOLS.IGetSignedUpUserForMeetingUseCase]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IAddSignedUpUserUseCase)
+        .toHigherOrderFunction(addSignedUpUserUseCase, [DI_SYMBOLS.IMeetingSignedUpUsersRepository]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IAddSignedUpUserController)
+        .toHigherOrderFunction(addSignedUpUserController, [DI_SYMBOLS.IAddSignedUpUserUseCase]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IRemoveSignedUpUserUseCase)
+        .toHigherOrderFunction(removeSignedUpUserUseCase, [DI_SYMBOLS.IMeetingSignedUpUsersRepository]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IRemoveSignedUpUserController)
+        .toHigherOrderFunction(removeSignedUpUserController, [DI_SYMBOLS.IRemoveSignedUpUserUseCase]);
 
     return meetingsModule;
 }

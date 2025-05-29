@@ -48,6 +48,33 @@ import {
     IGetMultipleMeetingsExcludedDatesForDateController
 } from "@/src/interface-adapters/controllers/meetings/meeting-excluded-dates/get-multiple-meetings-excluded-dates-for-date.controller";
 import { IGetMultipleMeetingsExcludedDatesForDateUseCase } from "@/src/application/use-cases/meetings/meeting-exluded-dates/get-multiple-meetings-excluded-dates-for-date.use-case";
+import {
+    IGetSignedUpUsersForMeetingUseCase
+} from "@/src/application/use-cases/meetings/meeting-signed-up-users/get-signed-up-users-for-meeting.use-case";
+import {
+    IGetSignedUpUsersForMeetingController
+} from "@/src/interface-adapters/controllers/meetings/meeting-signed-up-users/get-signed-up-users-for-meeting.controller";
+import {
+    IGetSignedUpUserForMeetingUseCase
+} from "@/src/application/use-cases/meetings/meeting-signed-up-users/get-signed-up-user-for-meeting.use-case";
+import {
+    IGetSignedUpUserForMeetingController
+} from "@/src/interface-adapters/controllers/meetings/meeting-signed-up-users/get-signed-up-user-for-meeting.controller";
+import {
+    IAddSignedUpUserController
+} from "@/src/interface-adapters/controllers/meetings/meeting-signed-up-users/add-signed-up-user.controller";
+import {
+    IAddSignedUpUserUseCase
+} from "@/src/application/use-cases/meetings/meeting-signed-up-users/add-signed-up-user.use-case";
+import {
+    IRemoveSignedUpUserUseCase
+} from "@/src/application/use-cases/meetings/meeting-signed-up-users/remove-signed-up-user.use-case";
+import {
+    IRemoveSignedUpUserController
+} from "@/src/interface-adapters/controllers/meetings/meeting-signed-up-users/remove-signed-up-user.controller";
+import {
+    IMeetingSignedUpUsersRepository
+} from "@/src/application/repositories/meetings/meeting-signed-up-users.repository.interface";
 
 export const MEETINGS_SYMBOLS = {
     IMeetingsRepository: Symbol.for("IMeetingsRepository"),
@@ -92,7 +119,21 @@ export const MEETINGS_SYMBOLS = {
     IGetMeetingDatesController: Symbol.for("IGetMeetingDatesController"),
 
     IGetMeetingDatesByStartDateUseCase: Symbol.for("IGetMeetingDatesByStartDateUseCase"),
-    IGetMeetingDatesByStartDateController: Symbol.for("IGetMeetingDatesByStartDateController")
+    IGetMeetingDatesByStartDateController: Symbol.for("IGetMeetingDatesByStartDateController"),
+
+    IMeetingSignedUpUsersRepository: Symbol.for("IMeetingSignedUpUsersRepository"),
+
+    IGetSignedUpUsersForMeetingUseCase: Symbol.for("IGetSignedUpUsersForMeetingUseCase"),
+    IGetSignedUpUsersForMeetingController: Symbol.for("IGetSignedUpUsersForMeetingController"),
+
+    IGetSignedUpUserForMeetingUseCase: Symbol.for("IGetSignedUpUserForMeetingUseCase"),
+    IGetSignedUpUserForMeetingController: Symbol.for("IGetSignedUpUserForMeetingController"),
+
+    IAddSignedUpUserUseCase: Symbol.for("IAddSignedUpUserUseCase"),
+    IAddSignedUpUserController: Symbol.for("IAddSignedUpUserController"),
+
+    IRemoveSignedUpUserUseCase: Symbol.for("IRemoveSignedUpUserUseCase"),
+    IRemoveSignedUpUserController: Symbol.for('IRemoveSignedUpUserController')
 }
 
 export interface MEETINGS_RETURN_TYPES {
@@ -137,7 +178,21 @@ export interface MEETINGS_RETURN_TYPES {
     IGetMeetingDatesController: IGetMeetingDatesController,
 
     IGetMeetingDatesByStartDateUseCase: IGetMeetingDatesByStartDateUseCase,
-    IGetMeetingDatesByStartDateController: IGetMeetingDatesByStartDateController
+    IGetMeetingDatesByStartDateController: IGetMeetingDatesByStartDateController,
+
+    IMeetingSignedUpUsersRepository: IMeetingSignedUpUsersRepository,
+
+    IGetSignedUpUsersForMeetingUseCase: IGetSignedUpUsersForMeetingUseCase,
+    IGetSignedUpUsersForMeetingController: IGetSignedUpUsersForMeetingController,
+
+    IGetSignedUpUserForMeetingUseCase: IGetSignedUpUserForMeetingUseCase,
+    IGetSignedUpUserForMeetingController: IGetSignedUpUserForMeetingController,
+
+    IAddSignedUpUserUseCase: IAddSignedUpUserUseCase
+    IAddSignedUpUserController: IAddSignedUpUserController,
+
+    IRemoveSignedUpUserUseCase: IRemoveSignedUpUserUseCase,
+    IRemoveSignedUpUserController: IRemoveSignedUpUserController
 }
 
 
