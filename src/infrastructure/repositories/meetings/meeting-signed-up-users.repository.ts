@@ -26,9 +26,9 @@ export class MeetingSignedUpUsersRepository extends BaseRepository implements IM
         try {
             const res = await this.queryDB(async db => {
                 if (opts.userId) {
-                    return db.query.meetingSignedUpUsersTable.findFirst({where: and(eq(meetingSignedUpUsersTable.profile_id, opts.userId), eq(meetingSignedUpUsersTable.meeting_id, opts.meeting_id), eq(meetingSignedUpUsersTable.meeting_start_date, opts.start_date))});
+                    return db.query.meetingSignedUpUsersTable.findFirst({where: and(eq(meetingSignedUpUsersTable.profile_id, opts.userId), eq(meetingSignedUpUsersTable.meeting_id, opts.meeting_id), eq(meetingSignedUpUsersTable.meeting_start_date, Math.round(opts.start_date)))});
                 }
-                return db.query.meetingSignedUpUsersTable.findFirst({where: and(eq(meetingSignedUpUsersTable.email, opts.email!), eq(meetingSignedUpUsersTable.meeting_id, opts.meeting_id), eq(meetingSignedUpUsersTable.meeting_start_date, opts.start_date))});
+                return db.query.meetingSignedUpUsersTable.findFirst({where: and(eq(meetingSignedUpUsersTable.email, opts.email!), eq(meetingSignedUpUsersTable.meeting_id, opts.meeting_id), eq(meetingSignedUpUsersTable.meeting_start_date, Math.round(opts.start_date)))});
             });
             return res;
         } catch (e) {
@@ -50,9 +50,9 @@ export class MeetingSignedUpUsersRepository extends BaseRepository implements IM
         try {
             return this.queryDB(async db => {
                 if (opts.userId) {
-                    await db.delete(meetingSignedUpUsersTable).where(and(eq(meetingSignedUpUsersTable.profile_id, opts.userId), eq(meetingSignedUpUsersTable.meeting_id, opts.meeting_id), eq(meetingSignedUpUsersTable.meeting_start_date, opts.start_date)));
+                    await db.delete(meetingSignedUpUsersTable).where(and(eq(meetingSignedUpUsersTable.profile_id, opts.userId), eq(meetingSignedUpUsersTable.meeting_id, opts.meeting_id), eq(meetingSignedUpUsersTable.meeting_start_date, Math.round(opts.start_date))));
                 } else {
-                    await db.delete(meetingSignedUpUsersTable).where(and(eq(meetingSignedUpUsersTable.email, opts.email!), eq(meetingSignedUpUsersTable.meeting_id, opts.meeting_id), eq(meetingSignedUpUsersTable.meeting_start_date, opts.start_date)));
+                    await db.delete(meetingSignedUpUsersTable).where(and(eq(meetingSignedUpUsersTable.email, opts.email!), eq(meetingSignedUpUsersTable.meeting_id, opts.meeting_id), eq(meetingSignedUpUsersTable.meeting_start_date, Math.round(opts.start_date))));
                 }
             })
         } catch (e) {
