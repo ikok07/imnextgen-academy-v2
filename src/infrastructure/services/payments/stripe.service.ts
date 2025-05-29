@@ -71,7 +71,7 @@ export class StripeService implements IPaymentService {
                     },
                     quantity: 1
                 })),
-                customer_email: customerEmail,
+                customer_email: customerId ? undefined : customerEmail,
                 customer: customerId,
                 locale,
                 mode,

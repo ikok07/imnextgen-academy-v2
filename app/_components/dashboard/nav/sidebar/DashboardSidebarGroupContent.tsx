@@ -45,7 +45,7 @@ export default function DashboardSidebarGroupContent({group, results}: Dashboard
                                 {item.items.map((link, index) => {
                                    if (results.some(res => res.resourceId === link.id && res.actions["select"] === "EFFECT_ALLOW")) {
                                        return <SidebarMenuSub>
-                                           <SidebarMenuButton asChild={true} className={`${activeLinkId === link.id ? "bg-main-gradient text-white hover:text-white" : ""}`}>
+                                           <SidebarMenuButton asChild={true} className={`${activeLinkId === link.id ? "bg-main-gradient text-white hover:text-white active:text-white" : ""}`}>
                                                <Link href={link.href} key={index}>
                                                    <link.Icon />
                                                    <span>{link.label}</span>
@@ -59,7 +59,7 @@ export default function DashboardSidebarGroupContent({group, results}: Dashboard
                     </Collapsible>
                 }
 
-                return <SidebarMenuButton key={index} asChild={true} className={activeLinkId === item.id ? "bg-main-gradient text-white hover:text-white" : ""}>
+                return <SidebarMenuButton key={index} asChild={true} className={activeLinkId === item.id ? "bg-main-gradient text-white hover:text-white active:text-white" : ""}>
                     <Link href={item.href}>
                         <item.Icon />
                         <span>{item.label}</span>

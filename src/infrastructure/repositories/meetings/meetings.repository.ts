@@ -7,10 +7,11 @@ import {
 } from "@/src/application/repositories/meetings/meetings.repository.interface";
 import {Meeting, MeetingInsert, meetingsTable} from "@/drizzle/schema/meetings";
 import { DatabaseError } from "@/src/entities/errors/db/database";
-import {eq, inArray} from "drizzle-orm";
+import {and, eq, inArray} from "drizzle-orm";
 import {meetingRepeatDayTable} from "@/drizzle/schema/meeting_repeat_days";
 import {meetingExcludedDateTable} from "@/drizzle/schema/meeting_excluded_dates";
 import {meetingDateTable} from "@/drizzle/schema/meeting_dates";
+import {meetingSignedUpUsersTable} from "@/drizzle/schema/meeting_signed_up_users";
 
 export class MeetingsRepository extends BaseRepository implements IMeetingsRepository {
     getMeetings(): Promise<Meeting[]> {
@@ -31,7 +32,7 @@ export class MeetingsRepository extends BaseRepository implements IMeetingsRepos
                         meeting: meetingsTable,
                         repeat_day: meetingRepeatDayTable,
                         excluded_date: meetingExcludedDateTable,
-                        meeting_date: meetingDateTable
+                        meeting_date: meetingDateTable,
                     })
                     .from(meetingsTable)
                     .where(
@@ -39,7 +40,7 @@ export class MeetingsRepository extends BaseRepository implements IMeetingsRepos
                     )
                     .leftJoin(meetingRepeatDayTable, eq(meetingRepeatDayTable.meeting_id, meetingsTable.id))
                     .leftJoin(meetingExcludedDateTable, eq(meetingExcludedDateTable.meeting_id, meetingsTable.id))
-                    .leftJoin(meetingDateTable, eq(meetingDateTable.meeting_id, meetingsTable.id));
+                    .leftJoin(meetingDateTable, eq(meetingDateTable.meeting_id, meetingsTable.id))
 
                 if (results.length === 0) return options.type === "single" ? undefined : [];
 
