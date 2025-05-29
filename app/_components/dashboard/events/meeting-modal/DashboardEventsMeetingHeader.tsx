@@ -29,7 +29,7 @@ export default function DashboardEventsMeetingHeader({fullMeeting, user, startDa
     const userSignedUpQueryKey = useMemo(() => `signed-up-user-${startDate!.hours}-${startDate!.minutes}-${fullMeeting.id}`, [fullMeeting.id, startDate?.hours, startDate?.minutes]);
 
     const {data: userSignedUpQuery, isLoading: isCheckingUserSignedUp, isFetching: isReFetchingUserSignedUp} = useErrorQuery({
-        queryFn: () => checkUserSignedUpForMeeting(user.emailAddress, fullMeeting.id, startDate!.timestamp),
+        queryFn: () => checkUserSignedUpForMeeting(user.emailAddress, fullMeeting.id, Math.floor(startDate!.timestamp / 1000)),
         queryKey: [userSignedUpQueryKey],
         enabled: !!startDate,
         onError() {
@@ -39,11 +39,12 @@ export default function DashboardEventsMeetingHeader({fullMeeting, user, startDa
 
     const {mutate: addSignedUpUserMethod, isLoading: isAddingSignedUpUser} = useErrorMutation({
         mutationFn: () => addSignedUpUser({
+            profile_id: user.id,
             name: `${user.firstName} ${user.lastName}`,
             email: user.emailAddress,
             phone: user.phoneNumber,
             meeting_id: fullMeeting.id,
-            meeting_start_date: startDate?.timestamp ? Math.round(startDate.timestamp / 1000) : undefined
+            meeting_start_date: startDate?.timestamp ? Math.floor(startDate.timestamp / 1000) : undefined
         }),
         onSuccess() {queryClient.invalidateQueries([userSignedUpQueryKey])},
         onError() {
@@ -103,7 +104,7 @@ export default function DashboardEventsMeetingHeader({fullMeeting, user, startDa
 
     return <div className="grid md:grid-cols-[1fr_1.5fr] gap-4">
         <div className="relative w-full aspect-video overflow-hidden rounded-md">
-            <img alt={fullMeeting.title} src={fullMeeting.image_url} className="absolute inset-0" />
+            <img alt={fullMeeting.title} src={fullMeeting.image_url} className="absolute inset-0 object-cover" />
         </div>
         <div className="flex flex-col justify-between">
             <div>
