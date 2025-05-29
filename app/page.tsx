@@ -11,11 +11,6 @@ import StartNow from "@/app/_components/home/start-now/StartNow";
 import Footer from "@/app/_components/home/footer/Footer";
 import HomepageNavbar from "@/app/_components/home/nav/HomepageNavbar";
 
-// DONE: 1. Add sitemap and robots.txt
-// DONE: 2. Add iubenda cookies banner
-// TODO: 3. Export old users from old database
-// TODO: 4. Add webinars
-
 export default async function Home() {
   return <main className="homepage space-y-10">
     <HomepageNavbar />
