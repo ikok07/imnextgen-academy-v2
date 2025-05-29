@@ -3,12 +3,16 @@ import {z} from "zod";
 
 export const getSignedUpUserByUserIdSchema = z.object({
     userId: z.string(),
-    email: z.undefined()
+    email: z.undefined(),
+    meeting_id: z.string(),
+    start_date: z.number()
 });
 
 export const getSignedUpUserByEmailSchema = z.object({
     userId: z.undefined(),
-    email: z.string().email()
+    email: z.string().email(),
+    meeting_id: z.string(),
+    start_date: z.number()
 });
 
 export const getSignedUpUserOptionsSchema = getSignedUpUserByUserIdSchema.or(getSignedUpUserByEmailSchema);

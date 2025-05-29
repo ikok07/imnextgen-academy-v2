@@ -12,7 +12,7 @@ export const removeSignedUpUserController = (
     removeSignedUpUserUseCase: IRemoveSignedUpUserUseCase
 ) => async (opts: Partial<RemoveSignedUpUserOptions>) => {
     const {data, error} = removeSignedUpUserOptionsSchema.safeParse(opts);
-    if (error) throw new InputParseError("Invalid options!");
+    if (error) throw new InputParseError(`Invalid options! ${error}`);
 
     return removeSignedUpUserUseCase(data);
 }

@@ -10,7 +10,7 @@ import {
     meetingSignedUpUsersTable
 } from "@/drizzle/schema/meeting_signed_up_users";
 import { DatabaseError } from "@/src/entities/errors/db/database";
-import {eq} from "drizzle-orm";
+import {and, eq} from "drizzle-orm";
 
 export class MeetingSignedUpUsersRepository extends BaseRepository implements IMeetingSignedUpUsersRepository {
     getSignedUpUsersForMeeting(meetingId: string): Promise<MeetingSignedUpUser[]> {
@@ -22,14 +22,15 @@ export class MeetingSignedUpUsersRepository extends BaseRepository implements IM
             throw new DatabaseError(`Failed to get signed up users for meeting: ${e}`);
         }
     }
-    getSignedUpUserForMeeting(opts: GetSignedUpUserOptions): Promise<MeetingSignedUpUser | undefined> {
+    async getSignedUpUserForMeeting(opts: GetSignedUpUserOptions): Promise<MeetingSignedUpUser | undefined> {
         try {
-            return this.queryDB(db => {
+            const res = await this.queryDB(async db => {
                 if (opts.userId) {
-                    return db.query.meetingSignedUpUsersTable.findFirst({where: eq(meetingSignedUpUsersTable.profile_id, opts.userId)});
+                    return db.query.meetingSignedUpUsersTable.findFirst({where: and(eq(meetingSignedUpUsersTable.profile_id, opts.userId), eq(meetingSignedUpUsersTable.meeting_id, opts.meeting_id), eq(meetingSignedUpUsersTable.meeting_start_date, opts.start_date))});
                 }
-                return db.query.meetingSignedUpUsersTable.findFirst({where: eq(meetingSignedUpUsersTable.email, opts.email!)});
-            })
+                return db.query.meetingSignedUpUsersTable.findFirst({where: and(eq(meetingSignedUpUsersTable.email, opts.email!), eq(meetingSignedUpUsersTable.meeting_id, opts.meeting_id), eq(meetingSignedUpUsersTable.meeting_start_date, opts.start_date))});
+            });
+            return res;
         } catch (e) {
             throw new DatabaseError(`Failed to get signed up user for meeting: ${e}`);
         }
@@ -49,9 +50,9 @@ export class MeetingSignedUpUsersRepository extends BaseRepository implements IM
         try {
             return this.queryDB(async db => {
                 if (opts.userId) {
-                    await db.delete(meetingSignedUpUsersTable).where(eq(meetingSignedUpUsersTable.profile_id, opts.userId));
+                    await db.delete(meetingSignedUpUsersTable).where(and(eq(meetingSignedUpUsersTable.profile_id, opts.userId), eq(meetingSignedUpUsersTable.meeting_id, opts.meeting_id), eq(meetingSignedUpUsersTable.meeting_start_date, opts.start_date)));
                 } else {
-                    await db.delete(meetingSignedUpUsersTable).where(eq(meetingSignedUpUsersTable.email, opts.email!));
+                    await db.delete(meetingSignedUpUsersTable).where(and(eq(meetingSignedUpUsersTable.email, opts.email!), eq(meetingSignedUpUsersTable.meeting_id, opts.meeting_id), eq(meetingSignedUpUsersTable.meeting_start_date, opts.start_date)));
                 }
             })
         } catch (e) {

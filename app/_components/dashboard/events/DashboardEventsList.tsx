@@ -13,25 +13,26 @@ import {IoCloudOffline, IoSearch} from "react-icons/io5";
 import DashboardEventsListItemSkeleton from "@/app/_components/dashboard/events/DashboardEventsListItemSkeleton";
 import {checkMultipleResourcesAccess} from "@/app/actions";
 import {SubscriptionTier} from "@/drizzle/schema/subscription_tiers";
+import {SerializableUser} from "@/src/entities/models/auth/serializable-user";
 
 type DashboardEventsListProps = {
-    userId: string,
+    user: SerializableUser,
     userRoles: string[],
     subscriptionTier: SubscriptionTier | undefined
 }
 
-export default function DashboardEventsList({userId, userRoles, subscriptionTier}: DashboardEventsListProps) {
+export default function DashboardEventsList({user, userRoles, subscriptionTier}: DashboardEventsListProps) {
     const {selectedDate} = useDashboardEvents();
 
     const {data: fullMeetingsQuery, isLoading, isError} = useErrorQuery({
-        queryFn: () => getFullMeetingsForDate(selectedDate, new Date().getTimezoneOffset()),
+        queryFn: () => getFullMeetingsForDate(selectedDate, new Date().getTimezoneOffset(), user.emailAddress),
         queryKey: `full-meetings-${selectedDate}`,
     });
 
     const {data: accessDataQuery, isLoading: isLoadingAccessData, isError: accessDataError} = useErrorQuery({
         queryFn: () => checkMultipleResourcesAccess({
             principal: {
-                id: userId,
+                id: user.id,
                 roles: userRoles,
                 attr: {
                     access: subscriptionTier ? "subscription" : "free"
@@ -81,6 +82,7 @@ export default function DashboardEventsList({userId, userRoles, subscriptionTier
             return <DashboardEventsListItem
                 hasAccess={!!accessDataQuery && accessDataQuery.success && accessDataQuery.value.some(v => v.resourceId === fullMeeting.id && v.actions["select"] === "EFFECT_ALLOW")}
                 fullMeeting={fullMeeting}
+                user={user}
                 index={index}
                 allItemsCount={fullMeetingsQuery.value.length}
                 key={index}

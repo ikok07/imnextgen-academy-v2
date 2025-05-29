@@ -1,4 +1,4 @@
-import {pgTable, text, integer} from "drizzle-orm/pg-core";
+import {pgTable, text, integer, unique} from "drizzle-orm/pg-core";
 import {sql} from "drizzle-orm";
 import {createInsertSchema, createSelectSchema} from "drizzle-zod";
 import {z} from "zod";
@@ -12,7 +12,11 @@ export const meetingSignedUpUsersTable = pgTable("meeting_signed_up_users", {
     email: text("email").notNull(), // allow anonymous up users to sign up for meetings
     phone: text("phone").notNull(),
     meeting_id: text("meeting_id").notNull().references(() => meetingsTable.id),
-    meeting_start_date: integer("meeting_start_date").notNull()
+    meeting_start_date: integer("meeting_start_date").notNull(),
+}, (table) => {
+    return {
+        unique_user_records: unique().on(table.email, table.meeting_id)
+    }
 });
 
 export const meetingSignedUpUserSchema = createSelectSchema(meetingSignedUpUsersTable);
