@@ -5,6 +5,7 @@ import {z} from "zod";
 import {MeetingRepeatDay} from "@/drizzle/schema/meeting_repeat_days";
 import {MeetingExcludedDate} from "@/drizzle/schema/meeting_excluded_dates";
 import {MeetingDate} from "@/drizzle/schema/meeting_dates";
+import {MeetingSignedUpUser} from "@/drizzle/schema/meeting_signed_up_users";
 
 export const meetingAccessEnum = pgEnum("meeting_access_enum", ["free", "premium"]);
 export const meetingPlatformEnum = pgEnum("meeting_platform_enum", ["zoom"])

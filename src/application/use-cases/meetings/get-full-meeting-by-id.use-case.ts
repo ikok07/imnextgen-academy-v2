@@ -21,7 +21,7 @@ export const getFullMeetingByIdUseCase = (
                 ...result.meeting,
                 meeting_dates: [],
                 repeat_days: [],
-                excluded_dates: []
+                excluded_dates: [],
             });
         }
 

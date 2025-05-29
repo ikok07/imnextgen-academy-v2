@@ -22,7 +22,7 @@ export default function DashboardShopModuleBox({userSubscription, module, bought
                 <h1 className="text-white uppercase font-bold text-sm text-center">PRE ORDER</h1>
             </div>}
             <div className="absolute inset-0 bg-background"/>
-            <Card className="relative cursor-pointer flex flex-col justify-between hover:bg-secondary/70 dark:hover:bg-border/50">
+            <Card className={`relative cursor-pointer flex flex-col justify-between hover:bg-secondary/70 dark:hover:bg-border/50 ${module.access ? "rounded-b-none" : ""}`}>
                 <div className="relative w-full aspect-video rounded-t-lg overflow-hidden">
                     {module.image_url && <img alt={module.title} src={module.image_url} className="absolute inset-0 object-cover" />}
                 </div>

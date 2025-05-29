@@ -12,15 +12,17 @@ import {getMeetingPlatformIcon} from "@/app/_utils/meetings/getMeetingPlatformIc
 import {useTheme} from "next-themes";
 import {Dialog, DialogTrigger} from "@/app/_components/ui/shadcn/dialog";
 import DashboardEventsMeetingModal from "@/app/_components/dashboard/events/meeting-modal/DashboardEventsMeetingModal";
+import {SerializableUser} from "@/src/entities/models/auth/serializable-user";
 
 type DashboardEventsListItemProps = {
     hasAccess: boolean,
     fullMeeting: FullMeeting,
+    user: SerializableUser,
     index: number,
     allItemsCount: number
 }
 
-export default function DashboardEventsListItem({hasAccess, fullMeeting, index, allItemsCount}: DashboardEventsListItemProps) {
+export default function DashboardEventsListItem({hasAccess, fullMeeting, user, index, allItemsCount}: DashboardEventsListItemProps) {
     const {selectedDate} = useDashboardEvents();
     const {resolvedTheme} = useTheme();
 
@@ -77,6 +79,6 @@ export default function DashboardEventsListItem({hasAccess, fullMeeting, index, 
         <DialogTrigger>
             {item}
         </DialogTrigger>
-        <DashboardEventsMeetingModal fullMeeting={fullMeeting} />
+        <DashboardEventsMeetingModal fullMeeting={fullMeeting} user={user} startDate={startTime} />
     </Dialog>
 }

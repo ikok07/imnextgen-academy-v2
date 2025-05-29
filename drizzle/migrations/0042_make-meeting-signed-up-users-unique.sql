@@ -1,0 +1,1 @@
+ALTER TABLE "meeting_signed_up_users" ADD CONSTRAINT "meeting_signed_up_users_email_meeting_id_unique" UNIQUE("email","meeting_id");
