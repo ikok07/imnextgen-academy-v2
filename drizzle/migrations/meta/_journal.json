@@ -288,6 +288,13 @@
       "when": 1748418445199,
       "tag": "0040_add-non-discounted-module-price",
       "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1748505814304,
+      "tag": "0041_add-meeting-signed-up-users-table",
+      "breakpoints": true
     }
   ]
 }
