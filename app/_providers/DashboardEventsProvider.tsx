@@ -2,6 +2,7 @@
 
 import {createContext, ReactNode, useContext, useState} from "react";
 import {z} from "zod";
+import {startOfDay} from "date-fns";
 
 export const dashboardEventsStateSchema = z.object({
     selectedDate: z.number(),
@@ -18,7 +19,7 @@ type DashboardEventsProviderProps = {
 }
 
 export default function DashboardEventsProvider({children}: DashboardEventsProviderProps) {
-    const [selectedDate, setSelectedDate] = useState(Date.now());
+    const [selectedDate, setSelectedDate] = useState(startOfDay(Date.now()).valueOf());
 
     function updateSelectedDate(date: number) {
         setSelectedDate(date);
