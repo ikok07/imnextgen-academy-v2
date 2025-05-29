@@ -103,7 +103,7 @@ export default function DashboardEventsMeetingHeader({fullMeeting, user, startDa
 
     return <div className="grid md:grid-cols-[1fr_1.5fr] gap-4">
         <div className="relative w-full aspect-video overflow-hidden rounded-md">
-            <Image alt={fullMeeting.title} src={fullMeeting.image_url} fill />
+            <img alt={fullMeeting.title} src={fullMeeting.image_url} className="absolute inset-0" />
         </div>
         <div className="flex flex-col justify-between">
             <div>
