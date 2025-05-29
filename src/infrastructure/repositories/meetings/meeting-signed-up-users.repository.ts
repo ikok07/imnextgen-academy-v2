@@ -24,15 +24,12 @@ export class MeetingSignedUpUsersRepository extends BaseRepository implements IM
     }
     async getSignedUpUserForMeeting(opts: GetSignedUpUserOptions): Promise<MeetingSignedUpUser | undefined> {
         try {
-            console.log(opts);
             const res = await this.queryDB(async db => {
                 if (opts.userId) {
                     return db.query.meetingSignedUpUsersTable.findFirst({where: and(eq(meetingSignedUpUsersTable.profile_id, opts.userId), eq(meetingSignedUpUsersTable.meeting_id, opts.meeting_id), eq(meetingSignedUpUsersTable.meeting_start_date, Math.floor(opts.start_date)))});
                 }
                 return db.query.meetingSignedUpUsersTable.findFirst({where: and(eq(meetingSignedUpUsersTable.email, opts.email!), eq(meetingSignedUpUsersTable.meeting_id, opts.meeting_id), eq(meetingSignedUpUsersTable.meeting_start_date, Math.floor(opts.start_date)))});
             });
-            console.log("RESPONSE:");
-            console.log(res);
             return res;
         } catch (e) {
             throw new DatabaseError(`Failed to get signed up user for meeting: ${e}`);
