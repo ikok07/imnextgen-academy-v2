@@ -40,7 +40,7 @@ export async function POST(req: Request) {
             headers: {
                 Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`
             }
-        })
+        });
 
         await getInjection("ICreateProfileController")({
             id: body.data.id,
@@ -49,6 +49,25 @@ export async function POST(req: Request) {
             phone: body.data.phone_numbers[0].phone_number,
             image_url: body.data.image_url,
         });
+
+        const adminUsers = await getInjection("IGetAllUsersForRoleController")({role: "admin"});
+        for (const user of adminUsers.data) {
+            const name = `${user.firstName} ${user.lastName}`;
+            const email = user.emailAddresses[0].emailAddress;
+            const phone = user.phoneNumbers[0].phoneNumber;
+            await getInjection("ISendEmailUseCase")({
+                to: {
+                    email,
+                    name
+                },
+                templateId: +process.env.BREVO_NEW_CUSTOMER_EMAIL_ID_BG!,
+                params: {
+                    "NAME": name,
+                    "EMAIL": email,
+                    "PHONE": phone
+                }
+            })
+        }
 
         return NextResponse.json({status: "success"});
     } catch(e) {
