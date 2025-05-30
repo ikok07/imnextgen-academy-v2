@@ -6,7 +6,6 @@ import {
 import {User, AuthObject, createClerkClient} from "@clerk/backend";
 import {auth, currentUser} from "@clerk/nextjs/server";
 import {AuthenticationError} from "@/src/entities/errors/auth/authentication";
-import {UserRole} from "@/src/entities/models/auth/user-roles";
 
 export class ClerkService implements IAuthenticationService {
     client = createClerkClient({secretKey: process.env.CLERK_SECRET_KEY});
