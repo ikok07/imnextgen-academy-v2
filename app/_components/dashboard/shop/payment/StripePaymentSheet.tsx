@@ -51,7 +51,8 @@ export default function StripePaymentSheet(props: StripePaymentSheetProps) {
             });
             if (!clientSecretResponse.success) throw new Error("Checkout session is not available!");
             return clientSecretResponse.value as string ?? "";
-        }
+        },
+        queryKey: [`checkout-${props.productIds.join("-")}`]
     })
 
     if (isLoading) {
