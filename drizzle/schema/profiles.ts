@@ -6,7 +6,7 @@ export const profilesTable = pgTable("profiles", {
     id: text("id").notNull().primaryKey(),
     name: text("name").notNull(),
     email: text("email").notNull().unique(),
-    phone: text("phone").notNull().unique(),
+    phone: text("phone").notNull(),
     configured: boolean("configured").notNull().default(false),
     payment_customer_id: text("payment_customer_id"),
     image_url: text("image_url"),
