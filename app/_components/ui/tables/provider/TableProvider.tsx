@@ -2,10 +2,31 @@
 
 import {createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useMemo, useState} from "react";
 import {
-    AccessorFnColumnDef, AccessorKeyColumnDef, ColumnDef, createColumnHelper, DisplayColumnDef, getCoreRowModel,
-    GroupColumnDef, RowSelectionState, Table, useReactTable
+    AccessorFnColumnDef,
+    AccessorKeyColumnDef,
+    ColumnDef,
+    createColumnHelper,
+    DisplayColumnDef,
+    getCoreRowModel, getFilteredRowModel,
+    getSortedRowModel,
+    GroupColumnDef,
+    Table,
+    useReactTable
 } from "@tanstack/react-table";
 import PrimaryCheckbox from "@/app/_components/ui/checkboxes/PrimaryCheckbox";
+import { SelectionOptions } from "./selection-options";
+import {SortingOptions} from "@/app/_components/ui/tables/provider/sorting-options";
+import {
+    complexFilter,
+} from "@/app/_components/ui/tables/utils/filter-methods";
+import {ColumnFilter} from "@tanstack/table-core";
+import {FilterOptions} from "@/app/_components/ui/tables/provider/filter-options";
+
+declare module "@tanstack/react-table" {
+    interface FilterFns {
+        complexFilter: keyof typeof complexFilter
+    }
+}
 
 export type AnyColumnDef<TData> =
     | ColumnDef<TData, any>
@@ -20,28 +41,40 @@ export type TableState<TData> = {
     setColumns: Dispatch<SetStateAction<ColumnDef<TData>[]>>,
     data: TData[],
     setData: Dispatch<SetStateAction<TData[]>>,
-    selectionOptions?: {enabled: boolean, multipleSelection?: boolean}
+    refreshAddRow: boolean,
+    setRefreshAddRow: Dispatch<SetStateAction<boolean>>,
+    selectionOptions?: SelectionOptions,
+    sortingOptions?: SortingOptions,
+    filterOptions?: FilterOptions,
 }
 
 const TableContext = createContext<TableState<any> | null>(null);
-
-type SelectionDisabledOptions = {enabled: false, multipleSelection?: undefined, selectedRows?: undefined, onRowSelected?: undefined}
-type SelectionEnabledOptions = {enabled: true, multipleSelection?: boolean, selectedRows: RowSelectionState, onRowSelected: Dispatch<SetStateAction<RowSelectionState>>}
-
-type SelectionOptions = SelectionDisabledOptions | SelectionEnabledOptions;
 
 type TableProviderProps<TData> = {
     children: ReactNode,
     initialColumns: AnyColumnDef<TData>[],
     initialData: TData[],
-    selectionOptions?: SelectionOptions
+    selectionOptions?: SelectionOptions,
+    sortingOptions?: SortingOptions,
+    filterOptions?: FilterOptions
 }
 
-export default function TableProvider<TData>({children, initialColumns, initialData, selectionOptions}: TableProviderProps<TData>) {
+export default function TableProvider<TData>(
+    {
+        children,
+        initialColumns,
+        initialData,
+        selectionOptions,
+        sortingOptions,
+        filterOptions
+    }: TableProviderProps<TData>
+) {
+    const [refreshAddRow, setRefreshAddRow] = useState(false);
     const columnHelper = useMemo(createColumnHelper<TData>, []);
 
     const [columns, setColumns] = useState<AnyColumnDef<TData>[]>(initialColumns);
     const [data, setData] = useState<TData[]>(initialData);
+
     const modifiedColumns = useMemo(() => {
         let newColumns = initialColumns;
         if (selectionOptions?.enabled) {
@@ -65,11 +98,18 @@ export default function TableProvider<TData>({children, initialColumns, initialD
         columns: modifiedColumns,
         data,
         getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: sortingOptions?.enabled ? getSortedRowModel() : undefined,
+        getFilteredRowModel: filterOptions?.enabled ? getFilteredRowModel() : undefined,
         enableMultiRowSelection: selectionOptions?.multipleSelection,
         state: {
-          rowSelection: selectionOptions?.selectedRows
+            rowSelection: selectionOptions?.selectedRows,
+            sorting: sortingOptions?.enabled ? sortingOptions.sortedFields : undefined,
+        },
+        filterFns: {
+            complexFilter
         },
         onRowSelectionChange: selectionOptions?.onRowSelected,
+        onSortingChange: sortingOptions?.enabled ? sortingOptions.onSortingChange : undefined,
         columnResizeMode: "onChange",
         columnResizeDirection: "ltr"
     });
@@ -80,7 +120,11 @@ export default function TableProvider<TData>({children, initialColumns, initialD
         data,
         setColumns,
         setData,
-        selectionOptions
+        refreshAddRow,
+        setRefreshAddRow,
+        selectionOptions,
+        sortingOptions,
+        filterOptions
     } as TableState<TData>}>
         {children}
     </TableContext.Provider>
