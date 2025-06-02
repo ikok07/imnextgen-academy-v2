@@ -2,7 +2,7 @@ import LanguageSelector from "@/app/_components/ui/language/LanguageSelector";
 import {getTranslations} from "next-intl/server";
 import AuthComponent from "@/app/_components/AuthComponent";
 import ThemeSelector from "@/app/_components/ui/theme/ThemeSelector";
-import TableComponent from "@/app/_components/TableComponent";
+import ClientTable from "@/app/_components/ClientTable";
 
 export default async function Home() {
   const t = await getTranslations("Homepage");
@@ -16,6 +16,6 @@ export default async function Home() {
       <h1>{t("title")}</h1>
     </div>
     <AuthComponent />
-    <div className="w-[40rem] h-[10rem]"><TableComponent /></div>
+    <div className="max-w-[30rem] h-[10rem]"><ClientTable /></div>
   </div>
 }
