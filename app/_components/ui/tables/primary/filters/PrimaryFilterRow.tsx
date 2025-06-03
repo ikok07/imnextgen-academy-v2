@@ -5,7 +5,7 @@ import {ReactNode, useMemo} from "react";
 import {flexRender} from "@tanstack/react-table";
 import {HeaderContext} from "@tanstack/table-core";
 import {getFilterOptionLabel} from "@/app/_components/ui/tables/utils/filter-option-labels";
-import {IoAdd, IoClose} from "react-icons/io5";
+import {IoClose} from "react-icons/io5";
 import {FilterRow, FilterValue} from "@/app/_components/ui/tables/primary/filters/PrimaryTableFilterSelector";
 
 function RowColumnField({children}: {children: ReactNode}) {

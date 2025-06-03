@@ -4,7 +4,7 @@ import PrimaryTable from "@/app/_components/ui/tables/primary/PrimaryTable";
 import TableProvider from "@/app/_components/ui/tables/provider/TableProvider";
 import {createColumnHelper, RowSelectionState, SortingState} from "@tanstack/react-table";
 import {useState} from "react";
-
+import {PaginationState} from "@tanstack/table-core";
 
 const columnHelper = createColumnHelper<{name: string, age: number}>();
 
@@ -12,7 +12,7 @@ const columns = [
     columnHelper.accessor(row => row.name, {
         id: "name",
         header: "Name",
-        filterFn: "complexFilter"
+        filterFn: "complexFilter",
     }),
     columnHelper.accessor(row => row.age, {
         id: "age",
@@ -21,11 +21,15 @@ const columns = [
     })
 ];
 
-const data = [{name: "Test1", age: 20}, {name: "Test2", age: 30},]
+const data = Array.from({length: 100}).map(_ => ({name: "Test", age: Math.round(Math.random() * 100)}));
 
 export default function ClientTable() {
     const [selectedRows, setSelectedRows] = useState<RowSelectionState>({});
     const [sortedFields, setSortedFields] = useState<SortingState>([]);
+    const [pagination, setPagination] = useState<PaginationState>({
+        pageIndex: 0,
+        pageSize: 10
+    });
 
     return <TableProvider<{name: string, age: number}>
         initialColumns={columns}
@@ -38,8 +42,14 @@ export default function ClientTable() {
         }}
         sortingOptions={{
             enabled: true,
-            sortedFields: sortedFields,
+            sortedFields,
             onSortingChange: setSortedFields
+        }}
+        paginationOptions={{
+            enabled: true,
+            clientSidePagination: true,
+            pagination,
+            onPaginationChange: setPagination
         }}
         filterOptions={{
             enabled: true

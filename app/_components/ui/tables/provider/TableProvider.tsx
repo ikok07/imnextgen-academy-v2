@@ -7,7 +7,7 @@ import {
     ColumnDef,
     createColumnHelper,
     DisplayColumnDef,
-    getCoreRowModel, getFilteredRowModel,
+    getCoreRowModel, getFilteredRowModel, getPaginationRowModel,
     getSortedRowModel,
     GroupColumnDef,
     Table,
@@ -19,8 +19,8 @@ import {SortingOptions} from "@/app/_components/ui/tables/provider/sorting-optio
 import {
     complexFilter,
 } from "@/app/_components/ui/tables/utils/filter-methods";
-import {ColumnFilter} from "@tanstack/table-core";
 import {FilterOptions} from "@/app/_components/ui/tables/provider/filter-options";
+import {PaginationOptions} from "@/app/_components/ui/tables/provider/pagination-options";
 
 declare module "@tanstack/react-table" {
     interface FilterFns {
@@ -46,6 +46,7 @@ export type TableState<TData> = {
     selectionOptions?: SelectionOptions,
     sortingOptions?: SortingOptions,
     filterOptions?: FilterOptions,
+    paginationOptions?: PaginationOptions
 }
 
 const TableContext = createContext<TableState<any> | null>(null);
@@ -56,7 +57,8 @@ type TableProviderProps<TData> = {
     initialData: TData[],
     selectionOptions?: SelectionOptions,
     sortingOptions?: SortingOptions,
-    filterOptions?: FilterOptions
+    filterOptions?: FilterOptions,
+    paginationOptions?: PaginationOptions
 }
 
 export default function TableProvider<TData>(
@@ -66,7 +68,8 @@ export default function TableProvider<TData>(
         initialData,
         selectionOptions,
         sortingOptions,
-        filterOptions
+        filterOptions,
+        paginationOptions
     }: TableProviderProps<TData>
 ) {
     const [refreshAddRow, setRefreshAddRow] = useState(false);
@@ -100,16 +103,19 @@ export default function TableProvider<TData>(
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: sortingOptions?.enabled ? getSortedRowModel() : undefined,
         getFilteredRowModel: filterOptions?.enabled ? getFilteredRowModel() : undefined,
+        getPaginationRowModel: paginationOptions?.enabled ? getPaginationRowModel() : undefined,
         enableMultiRowSelection: selectionOptions?.multipleSelection,
         state: {
             rowSelection: selectionOptions?.selectedRows,
             sorting: sortingOptions?.enabled ? sortingOptions.sortedFields : undefined,
-        },
-        filterFns: {
-            complexFilter
+            pagination: paginationOptions?.enabled ? paginationOptions.pagination : undefined
         },
         onRowSelectionChange: selectionOptions?.onRowSelected,
         onSortingChange: sortingOptions?.enabled ? sortingOptions.onSortingChange : undefined,
+        onPaginationChange: paginationOptions?.enabled ? paginationOptions.onPaginationChange : undefined,
+        filterFns: {
+            complexFilter
+        },
         columnResizeMode: "onChange",
         columnResizeDirection: "ltr"
     });
@@ -124,7 +130,8 @@ export default function TableProvider<TData>(
         setRefreshAddRow,
         selectionOptions,
         sortingOptions,
-        filterOptions
+        filterOptions,
+        paginationOptions
     } as TableState<TData>}>
         {children}
     </TableContext.Provider>

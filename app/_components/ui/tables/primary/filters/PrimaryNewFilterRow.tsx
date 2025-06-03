@@ -1,5 +1,5 @@
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/app/_components/ui/shadcn/select";
-import {Column, ColumnDef, flexRender, Table} from "@tanstack/react-table";
+import {Column, flexRender, Table} from "@tanstack/react-table";
 import {HeaderContext} from "@tanstack/table-core";
 import {getFilterOptionLabel} from "@/app/_components/ui/tables/utils/filter-option-labels";
 import {SUPPORTED_TABLE_FILTERS} from "@/app/_components/ui/tables/utils/filter-methods";
@@ -64,7 +64,7 @@ export default function PrimaryNewFilterRow<TData>() {
 
     return <div className="grid items-center grid-cols-[2fr_4rem_1.5fr_auto] gap-1">
         <Select defaultValue={selectedFilterColumnId} onValueChange={value => setSelectedFilterColumnId(value)}>
-            <SelectTrigger className="text-xs h-7">
+            <SelectTrigger className="text-xs h-7 focus:ring-cta">
                 <SelectValue placeholder="Колона">{flexRender(table.getColumn(selectedFilterColumnId)?.columnDef?.header, {} as HeaderContext<any, unknown>)}</SelectValue>
             </SelectTrigger>
             <SelectContent>
@@ -76,7 +76,7 @@ export default function PrimaryNewFilterRow<TData>() {
         <Select value={selectedFilterOption} onValueChange={(value) => {
             setSelectedFilterOption(value as FilterOption);
         }}>
-            <SelectTrigger className="text-xs w-[4rem] py-0 h-7">
+            <SelectTrigger className="text-xs w-[4rem] py-0 h-7 focus:ring-cta">
                 <SelectValue>{getFilterOptionLabel(selectedFilterOption).short}</SelectValue>
             </SelectTrigger>
             <SelectContent>

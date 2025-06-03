@@ -29,6 +29,7 @@ export default function TableResizeHead<TData>({header, className}: TableResizeH
         colSpan={header.colSpan}
         style={{width: `${header.getSize()}px`}}
         onClick={header.column.getToggleSortingHandler()}
+        onDoubleClick={header.column.resetSize}
         className={cn("relative cursor-pointer group", className)}
     >
         <div className="flex items-center justify-between group-hover:text-cta">

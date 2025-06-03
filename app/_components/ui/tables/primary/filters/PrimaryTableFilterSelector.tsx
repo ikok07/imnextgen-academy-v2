@@ -8,16 +8,8 @@ import {
     DropdownMenuTrigger
 } from "@/app/_components/ui/shadcn/dropdown-menu";
 import {useTable} from "@/app/_components/ui/tables/provider/TableProvider";
-import {ColumnFilter, HeaderContext} from "@tanstack/table-core";
-import {ReactNode, useEffect, useMemo, useState} from "react";
-import {FilterConfig, SUPPORTED_TABLE_FILTERS} from "@/app/_components/ui/tables/utils/filter-methods";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/app/_components/ui/shadcn/select";
-import {
-    getFilterOptionLabel
-} from "@/app/_components/ui/tables/utils/filter-option-labels";
-import PrimaryInput from "@/app/_components/ui/inputs/PrimaryInput";
-import {IoCloseCircle} from "react-icons/io5";
-import {flexRender} from "@tanstack/react-table";
+import {useMemo} from "react";
+import {SUPPORTED_TABLE_FILTERS} from "@/app/_components/ui/tables/utils/filter-methods";
 import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
 import PrimaryFilterRow from "@/app/_components/ui/tables/primary/filters/PrimaryFilterRow";
 import PrimaryNewFilterRow from "@/app/_components/ui/tables/primary/filters/PrimaryNewFilterRow";
@@ -42,14 +34,14 @@ export default function PrimaryTableFilterSelector<TData>() {
                 Филтри
             </SecondaryButton>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="py-2 px-3 w-[27rem]">
-            <div>
+        <DropdownMenuContent className="py-2 px-3 flex flex-col w-full max-w-[95vw] ml-2 overflow-scroll">
+            <div style={{flex: "0 0 100%"}} className="w-[27rem]">
                 <p className="text-[0.9rem] text-primary/70 px-2 pb-1">Активни:</p>
                 <div className="border-b border-border pb-2 mb-2 space-y-2">
                     <ActiveFiltersList<TData> />
                 </div>
             </div>
-            <div>
+            <div style={{flex: "0 0 100%"}} className="w-[27rem]">
                 <p className="text-[0.9rem] text-primary/70 px-2 pb-1">Добавяне:</p>
                 <PrimaryNewFilterRow />
             </div>
@@ -84,22 +76,4 @@ function ActiveFiltersList<TData>() {
             return <PrimaryFilterRow key={index} filterRow={filterRow} />
         })}
     </div>
-}
-
-function ActiveFilterItem<TData>({filterRow}: {filterRow: FilterRow}) {
-    const {table} = useTable<TData>();
-
-    const [selectedFilterColumnId, setSelectedFilterColumnId] = useState<string>(filterRow.id);
-    const [selectedFilterOption, setSelectedFilterOption] = useState<FilterOption>(filterRow.option);
-
-    const allColumns = useMemo(() => table.getAllColumns(), []);
-
-    function removeFilter() {
-        const tableFilter = {...table.getState().columnFilters.find(f => f.id === filterRow.id)!};
-        const hasMultipleOptions = Object.keys(tableFilter.value as object).length > 1;
-
-        if (hasMultipleOptions) delete (tableFilter.value as typeof SUPPORTED_TABLE_FILTERS)[selectedFilterOption];
-
-        table.setColumnFilters(state => hasMultipleOptions ? state.filter(f => f.id != filterRow.id).concat(tableFilter) : state.filter(f => f.id != filterRow.id))
-    }
 }
