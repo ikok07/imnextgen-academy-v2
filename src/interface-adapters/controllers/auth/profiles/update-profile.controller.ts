@@ -1,4 +1,4 @@
-import {IUpdateProfileUseCase} from "@/src/application/use-cases/auth/update-profile.use-case";
+import {IUpdateProfileUseCase} from "@/src/application/use-cases/auth/profiles/update-profile.use-case";
 import {InputParseError} from "@/src/entities/errors/common";
 import {
     UpdateProfileOptions,

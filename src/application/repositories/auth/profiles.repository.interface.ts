@@ -1,7 +1,11 @@
 import {Profile, ProfileInsert, profilesInsertSchema} from "@/drizzle/schema/profiles";
 import {z} from "zod";
-import {FullProfile} from "@/src/entities/models/auth/full-profile";
 import {UserRole, UserRoleType} from "@/drizzle/schema/user_roles";
+
+export const getAllProfilesOptionsSchema = z.object({
+    limit: z.number().optional(),
+    offset: z.number().optional()
+});
 
 const updateProfileByUserIdOptionsSchema = z.object({
     userId: z.string(),
@@ -17,6 +21,7 @@ const updateProfileByEmailIdOptionsSchema = z.object({
 
 export const updateProfileOptionsSchema = updateProfileByUserIdOptionsSchema.or(updateProfileByEmailIdOptionsSchema);
 
+export type GetAllProfilesOptions = z.infer<typeof getAllProfilesOptionsSchema>;
 export type UpdateProfileOptions = z.infer<typeof updateProfileOptionsSchema>;
 
 export type RawProfileResponse = {
@@ -27,6 +32,7 @@ export type RawProfileResponse = {
 export interface IProfilesRepository {
     getProfileById(id: string): Promise<RawProfileResponse>
     getProfileByEmail(email: string): Promise<RawProfileResponse>
+    getAllProfiles(opts: GetAllProfilesOptions): Promise<RawProfileResponse>
     getAllProfilesForRole(role: UserRoleType): Promise<RawProfileResponse>
     createProfile(data: ProfileInsert): Promise<Profile>
     updateProfile(opts: UpdateProfileOptions): Promise<Profile>
