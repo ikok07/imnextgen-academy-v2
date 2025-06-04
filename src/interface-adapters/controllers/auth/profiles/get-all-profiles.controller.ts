@@ -25,12 +25,13 @@ export const getAllProfilesController = (
             roles: dbProfile.roles
         },
         resource: {
-            id: "profles",
-            kind: "profiles"
-        }
+            id: "profile",
+            kind: "profile"
+        },
+        action: "select"
     });
 
-    if (hasAccess) throw new AccessError("Unauthorized action!");
+    if (!hasAccess) throw new AccessError("Unauthorized action!");
 
     if (opts) {
         const {data: parsedOpts, error} = getAllProfilesOptionsSchema.safeParse(opts);
