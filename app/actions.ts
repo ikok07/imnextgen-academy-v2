@@ -10,8 +10,8 @@ import {GetAllUsersForRoleOptions} from "@/src/application/services/auth/authent
 import {UserRoleType} from "@/drizzle/schema/user_roles";
 import {GetAllProfilesOptions} from "@/src/application/repositories/auth/profiles.repository.interface";
 
-export const getUser = createServerAction(() => {
-    return getInjection("IGetUserController")();
+export const getUser = createServerAction((opts?: {excludeDbProfile?: boolean, dbUserNullOnError?: boolean}) => {
+    return getInjection("IGetUserController")(opts);
 });
 
 export const getDbProfile = createServerAction(async (userId: string | undefined) => {
