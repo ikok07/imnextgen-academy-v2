@@ -1,6 +1,6 @@
 import {IAuthenticationService} from "@/src/application/services/auth/authentication.service.interface";
 import {IProfilesRepository} from "@/src/application/repositories/auth/profiles.repository.interface";
-import { DatabaseError } from "@/src/entities/errors/db/database";
+import {FullProfile} from "@/src/entities/models/auth/full-profile";
 
 export type IGetUserUseCase = ReturnType<typeof getUserUseCase>;
 
@@ -9,18 +9,22 @@ export const getUserUseCase = (
     profilesRepository: IProfilesRepository
 )=> async (excludeDbProfile?: boolean, dbUserNullOnError?: boolean) => {
     const userObject = await authenticationService.getUser();
-    try {
-        return {
-            ...userObject,
-            dbProfile: userObject.user?.id && !excludeDbProfile ? await profilesRepository.getProfileById(userObject.user?.id) : null
+
+    let fullProfile: FullProfile | null = null;
+    if (userObject.user?.id && !excludeDbProfile) {
+        const rawResponse = await profilesRepository.getProfileById(userObject.user?.id);
+        fullProfile = {
+            ...rawResponse[0].profile,
+            roles: []
         };
-    } catch (e) {
-        if (e instanceof DatabaseError && dbUserNullOnError) {
-            return {
-                ...userObject,
-                dbProfile: null
-            }
-        }
-        throw e;
+
+        rawResponse.forEach(response => {
+            fullProfile!.roles.push(response.role.type);
+        });
     }
+
+    return {
+        ...userObject,
+        dbProfile: fullProfile
+    };
 }

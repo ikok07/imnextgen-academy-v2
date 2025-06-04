@@ -1,40 +1,75 @@
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
 import {
-    IProfilesRepository,
+    IProfilesRepository, RawProfileResponse,
     UpdateProfileOptions
 } from "@/src/application/repositories/auth/profiles.repository.interface";
 import {Profile, ProfileInsert, profilesTable} from "@/drizzle/schema/profiles";
 import { DatabaseError } from "@/src/entities/errors/db/database";
-import {eq} from "drizzle-orm";
+import {eq, inArray} from "drizzle-orm";
+import {userRolesTable, UserRoleType} from "@/drizzle/schema/user_roles";
 
 export class ProfilesRepository extends BaseRepository implements IProfilesRepository {
-    async getProfileById(id: string): Promise<Profile> {
+    async getProfileById(id: string): Promise<RawProfileResponse> {
         try {
             const result = await this.queryDB(async (db) => {
-                return db.query.profilesTable.findFirst({where: eq(profilesTable.id, id)});
+                return db
+                    .select({
+                        profile: profilesTable,
+                        role: userRolesTable
+                    })
+                    .from(profilesTable)
+                    .where(eq(profilesTable.id, id))
+                    .innerJoin(userRolesTable, eq(userRolesTable.profile_id, profilesTable.id));
             });
-            if (!result) throw new Error("Could not find profile with this ID!");
+            if (result.length === 0 || !result[0].profile) throw new Error("Could not find profile with this ID!");
 
             return result;
         } catch(e) {
             throw new DatabaseError(`Failed to get profile: ${e}`);
         }
     }
-    async getProfileByEmail(email: string): Promise<Profile> {
+    async getProfileByEmail(email: string): Promise<RawProfileResponse> {
         try {
             return this.queryDB(async db => {
-                const result = await db.query.profilesTable.findFirst({where: eq(profilesTable.email, email)});
-                if (!result) throw new Error("Could not find profile with this email address!");
+                const result = await db
+                    .select({
+                        profile: profilesTable,
+                        role: userRolesTable
+                    })
+                    .from(profilesTable)
+                    .where(eq(profilesTable.email, email))
+                    .innerJoin(userRolesTable, eq(userRolesTable.profile_id, profilesTable.id));
+                if (result.length === 0 || !result[0].profile) throw new Error("Could not find profile with this email address!");
                 return result;
             })
         } catch(e) {
             throw new DatabaseError(`Failed to get profile by email: ${e}`);
         }
     }
+
+    getAllProfilesForRole(role: UserRoleType): Promise<RawProfileResponse> {
+        try {
+            return this.queryDB(db => {
+                return db
+                    .select({
+                        profile: profilesTable,
+                        role: userRolesTable
+                    })
+                    .from(profilesTable)
+                    .innerJoin(userRolesTable, eq(userRolesTable.profile_id, profilesTable.id))
+                    .where(eq(userRolesTable.type, role))
+            })
+        } catch(e) {
+            throw new DatabaseError(`Failed to get all profiles for roles: ${e}`);
+        }
+    }
+
     async createProfile(data: ProfileInsert): Promise<Profile> {
         try {
             return this.queryDB(async (db) => {
-                return (await db.insert(profilesTable).values(data).returning().execute())[0];
+                const result = (await db.insert(profilesTable).values(data).returning().execute())[0];
+                await db.insert(userRolesTable).values({type: "user", profile_id: result.id});
+                return result;
             });
         } catch(e) {
             throw new DatabaseError(`Failed to create profile: ${e}`);

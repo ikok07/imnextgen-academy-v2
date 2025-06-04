@@ -2,6 +2,7 @@ import DashboardPageTitle from "@/app/_components/dashboard/DashboardPageTitle";
 import ModulesGrid from "@/app/_components/dashboard/classroom/ModulesGrid";
 import ModuleSkeletonBox from "@/app/_components/dashboard/classroom/ModuleSkeletonBox";
 import {Suspense} from "react";
+import {getAllProfilesForRole} from "@/app/actions";
 
 export default async function Page() {
     const skeletonBoxes = <>{Array.from({length: 6}).map((_, index) => {

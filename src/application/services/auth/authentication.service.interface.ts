@@ -11,17 +11,10 @@ export const getUserResponseSchema = z.object({
     auth: z.custom<AuthObject>(),
 });
 
-export const getAllUsersForRoleResponseSchema = z.object({
-    data: z.array(z.custom<User>()),
-    count: z.number()
-});
-
 export type GetAllUsersForRoleOptions = z.infer<typeof getAllUsersForRoleOptionsSchema>;
 
 export type GetUserResponse = z.infer<typeof getUserResponseSchema>;
-export type GetAllUsersForRoleResponse = z.infer<typeof getAllUsersForRoleResponseSchema>;
 
 export interface IAuthenticationService {
     getUser(): Promise<GetUserResponse>;
-    getAllUsersForRole(opts: GetAllUsersForRoleOptions): Promise<GetAllUsersForRoleResponse>
 }

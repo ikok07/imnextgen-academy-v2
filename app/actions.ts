@@ -7,14 +7,19 @@ import {
 } from "@/src/application/services/auth/authorization.service.interface";
 import {createServerAction} from "@/app/_utils/createServerAction";
 import {GetAllUsersForRoleOptions} from "@/src/application/services/auth/authentication.service.interface";
+import {UserRoleType} from "@/drizzle/schema/user_roles";
+
+export const getUser = createServerAction((opts?: {excludeDbProfile?: boolean, dbUserNullOnError?: boolean}) => {
+    return getInjection("IGetUserController")(opts);
+})
 
 export const getDbProfile = createServerAction(async (userId: string | undefined) => {
     const getProfileController = getInjection("IGetProfileController");
     return await getProfileController(userId);
 });
 
-export const getAllUsersForRole = createServerAction((opts: Partial<GetAllUsersForRoleOptions>) => {
-    return getInjection("IGetAllUsersForRoleController")(opts);
+export const getAllProfilesForRole = createServerAction((role: UserRoleType | undefined) => {
+    return getInjection("IGetAllProfilesForRoleController")(role);
 })
 
 export const checkAccess = createServerAction((async (opts: Partial<CheckUserAccessOptions>) => {

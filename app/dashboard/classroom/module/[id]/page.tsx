@@ -48,8 +48,8 @@ async function InnerContent(props: z.infer<typeof propsSchema>) {
         const {data: safeProps, error} = propsSchema.safeParse(props);
         if (error) throw new Error("Invalid page params!");
 
-        const {user} = await getInjection("IGetUserController")();
-        if (!user) throw new Error("User was not found!");
+        const {user, dbProfile} = await getInjection("IGetUserController")();
+        if (!user || !dbProfile) throw new Error("User or profile was not found!");
 
         const [moduleResult, videosResult, finishedVideosResult, subscriptionResponse, boughtModulesResponse] = await Promise.all([
             getModuleById(safeProps.params.id),
@@ -66,7 +66,7 @@ async function InnerContent(props: z.infer<typeof propsSchema>) {
 
         const accessResponse = await serverCheckModuleAllowed({
             userId: user.id,
-            roles: user.publicMetadata["roles"] as string[],
+            roles: dbProfile?.roles ?? [],
             subscription_tier: subscriptionResponse.value?.tier,
             paid_modules: boughtModulesResponse.value.map(v => v.module.id),
             moduleId: moduleResult.value.id,

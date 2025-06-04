@@ -2,8 +2,8 @@ import {getAllModules} from "@/app/dashboard/actions";
 import ModuleBox from "@/app/_components/dashboard/classroom/ModuleBox";
 import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
 import {IoCloudOffline} from "react-icons/io5";
-import {getUserBoughtModules, getUserSubscription} from "@/app/actions";
-import {getUser} from "@/app/_utils/actions/auth";
+import {getUser, getUserBoughtModules, getUserSubscription} from "@/app/actions";
+
 import {serverCheckMultipleModulesAllowed} from "@/app/_utils/modules/serverCheckModulesAllowed";
 
 export default async function ModulesGrid() {
@@ -23,7 +23,7 @@ export default async function ModulesGrid() {
 
         const accessResponse = await serverCheckMultipleModulesAllowed({
             userId: userObject.value.user.id,
-            roles: userObject.value.user.publicMetadata["roles"] as string[],
+            roles: userObject.value.dbProfile?.roles ?? [],
             subscription_tier: subscriptionResponse.value?.tier,
             paid_modules: boughtModulesResponse.value.map(v => v.module.id),
             modules: modulesResponse.value
