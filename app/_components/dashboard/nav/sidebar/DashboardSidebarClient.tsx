@@ -55,7 +55,7 @@ function InnerContent({results}: DashboardSidebarClientWrapperProps) {
             dispatch(setDashboardMobileSidebarOpen(openMobile));
         }
     }, [openMobile]);
-    console.log(results);
+
     if (!viewLoaded) return <DashboardSidebarSkeleton />
 
     return <div className="flex">

@@ -68,19 +68,19 @@ export default async function RootLayout({
                     <AppStoreProvider>
                         <AppQueryClientProvider>
                             <body>
-                            <ThemeProvider
-                                attribute="class"
-                                defaultTheme="system"
-                                enableSystem={true}
-                                disableTransitionOnChange={true}
-                            >
-                                <ClerkAuthProvider locale={locale}>
-                                    {children}
-                                    <Toaster
-                                        position="top-right"
-                                    />
-                                </ClerkAuthProvider>
-                            </ThemeProvider>
+                                <ThemeProvider
+                                    attribute="class"
+                                    defaultTheme="system"
+                                    enableSystem={true}
+                                    disableTransitionOnChange={true}
+                                >
+                                    <ClerkAuthProvider locale={locale}>
+                                        {children}
+                                        <Toaster
+                                            position="top-right"
+                                        />
+                                    </ClerkAuthProvider>
+                                </ThemeProvider>
                             </body>
                         </AppQueryClientProvider>
                     </AppStoreProvider>

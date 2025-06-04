@@ -15,7 +15,7 @@ async function InnerContent() {
     const {user} = await getUserController();
 
     if (!user) throw new Error("User not found!");
-    console.log(user.publicMetadata["roles"])
+
     const checkResourcesController = getInjection("ICheckResourcesAccessController");
     const results = await checkResourcesController({
         principal: {
