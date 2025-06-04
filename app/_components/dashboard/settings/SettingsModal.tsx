@@ -31,11 +31,6 @@ export default function SettingsModal() {
 
     if (!userObject.user?.id || !dbProfile) return;
 
-    if (!dbProfile.configured) {
-        router.push(Routes.account.setup);
-        return;
-    }
-
     return <div
         className={`absolute ${settingsOpened ? "visible opacity-100" : "opacity-0 invisible"} w-full min-h-full settings-modal bg-black bg-opacity-80 z-30 grid transition-[opacity,visibility] duration-200`}
         onClick={e => {

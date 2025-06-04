@@ -12,7 +12,7 @@ export default function AuthComponent() {
     const {accessGranted, isLoading} = useAccess({
         principal: {
             id: userObject.user?.primaryEmailAddress?.emailAddress!,
-            roles: userObject.user?.publicMetadata["roles"] as string[]
+            roles: dbProfile?.roles ?? []
         },
         resource: {
             kind: "product",

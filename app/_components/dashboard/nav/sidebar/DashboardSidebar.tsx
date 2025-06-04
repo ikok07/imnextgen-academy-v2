@@ -12,15 +12,15 @@ export default async function DashboardSidebar() {
 
 async function InnerContent() {
     const getUserController = getInjection("IGetUserController");
-    const {user} = await getUserController();
+    const {user, dbProfile} = await getUserController();
 
-    if (!user) throw new Error("User not found!");
+    if (!user || !dbProfile) throw new Error("User not found!");
 
     const checkResourcesController = getInjection("ICheckResourcesAccessController");
     const results = await checkResourcesController({
         principal: {
             id: user.id!,
-            roles: user.publicMetadata["roles"] as string[]
+            roles: dbProfile.roles
         },
         resources: getNavlinkAuthResources(),
     })

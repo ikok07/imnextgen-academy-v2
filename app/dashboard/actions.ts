@@ -4,10 +4,6 @@ import {createServerAction} from "@/app/_utils/createServerAction";
 import {getInjection} from "@/di/container";
 import {TypeClaim} from "@mux/mux-node/util/jwt-types";
 
-export const getUser = createServerAction(() => {
-    return getInjection("IGetUserController")();
-})
-
 export const getAllModules = createServerAction(() => {
     return getInjection("IGetModulesController")();
 });
