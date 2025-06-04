@@ -1,20 +1,22 @@
 import {createModule} from "@evyweb/ioctopus";
 import {ProfilesRepository} from "@/src/infrastructure/repositories/auth/profiles.repository";
 import {DI_SYMBOLS} from "@/di/types/types";
-import {createProfileUseCase} from "@/src/application/use-cases/auth/create-profile.use-case";
-import {createProfileController} from "@/src/interface-adapters/controllers/auth/create-profile.controller";
-import {deleteProfileUseCase} from "@/src/application/use-cases/auth/delete-profile.use-case";
-import {deleteProfileController} from "@/src/interface-adapters/controllers/auth/delete-profile.controller";
-import {getProfileUseCase} from "@/src/application/use-cases/auth/get-profile.use-case";
-import {getProfileController} from "@/src/interface-adapters/controllers/auth/get-profile.controller";
-import {getProfileByEmailUseCase} from "@/src/application/use-cases/auth/get-profile-by-email.use-case";
-import { getProfileByEmailController } from "@/src/interface-adapters/controllers/auth/get-profile-by-email.controller";
-import {updateProfileUseCase} from "@/src/application/use-cases/auth/update-profile.use-case";
-import {updateProfileController} from "@/src/interface-adapters/controllers/auth/update-profile.controller";
-import {getAllProfilesForRoleUseCase} from "@/src/application/use-cases/auth/get-all-profiles-for-role.use-case";
+import {createProfileUseCase} from "@/src/application/use-cases/auth/profiles/create-profile.use-case";
+import {createProfileController} from "@/src/interface-adapters/controllers/auth/profiles/create-profile.controller";
+import {deleteProfileUseCase} from "@/src/application/use-cases/auth/profiles/delete-profile.use-case";
+import {deleteProfileController} from "@/src/interface-adapters/controllers/auth/profiles/delete-profile.controller";
+import {getProfileUseCase} from "@/src/application/use-cases/auth/profiles/get-profile.use-case";
+import {getProfileController} from "@/src/interface-adapters/controllers/auth/profiles/get-profile.controller";
+import {getProfileByEmailUseCase} from "@/src/application/use-cases/auth/profiles/get-profile-by-email.use-case";
+import { getProfileByEmailController } from "@/src/interface-adapters/controllers/auth/profiles/get-profile-by-email.controller";
+import {updateProfileUseCase} from "@/src/application/use-cases/auth/profiles/update-profile.use-case";
+import {updateProfileController} from "@/src/interface-adapters/controllers/auth/profiles/update-profile.controller";
+import {getAllProfilesForRoleUseCase} from "@/src/application/use-cases/auth/profiles/get-all-profiles-for-role.use-case";
 import {
     getAllProfilesForRoleController
-} from "@/src/interface-adapters/controllers/auth/get-all-profiles-for-role.controller";
+} from "@/src/interface-adapters/controllers/auth/profiles/get-all-profiles-for-role.controller";
+import {getAllProfilesUseCase} from "@/src/application/use-cases/auth/profiles/get-all-profiles.use-case";
+import {getAllProfilesController} from "@/src/interface-adapters/controllers/auth/profiles/get-all-profiles.controller";
 
 export function createProfilesModule() {
     const profilesModule = createModule();
@@ -30,6 +32,14 @@ export function createProfilesModule() {
     profilesModule
         .bind(DI_SYMBOLS.IGetProfileController)
         .toHigherOrderFunction(getProfileController, [DI_SYMBOLS.IGetProfileUseCase]);
+
+    profilesModule
+        .bind(DI_SYMBOLS.IGetAllProfilesUseCase)
+        .toHigherOrderFunction(getAllProfilesUseCase, [DI_SYMBOLS.ProfilesRepository]);
+
+    profilesModule
+        .bind(DI_SYMBOLS.IGetAllProfilesController)
+        .toHigherOrderFunction(getAllProfilesController, [DI_SYMBOLS.IGetAllProfilesUseCase, DI_SYMBOLS.IGetUserController, DI_SYMBOLS.ICheckAccessController]);
 
     profilesModule
         .bind(DI_SYMBOLS.IGetAllProfilesForRoleUseCase)

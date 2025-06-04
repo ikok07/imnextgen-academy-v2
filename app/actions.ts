@@ -8,15 +8,20 @@ import {
 import {createServerAction} from "@/app/_utils/createServerAction";
 import {GetAllUsersForRoleOptions} from "@/src/application/services/auth/authentication.service.interface";
 import {UserRoleType} from "@/drizzle/schema/user_roles";
+import {GetAllProfilesOptions} from "@/src/application/repositories/auth/profiles.repository.interface";
 
 export const getUser = createServerAction(() => {
     return getInjection("IGetUserController")();
-})
+});
 
 export const getDbProfile = createServerAction(async (userId: string | undefined) => {
     const getProfileController = getInjection("IGetProfileController");
     return await getProfileController(userId);
 });
+
+export const getAllProfiles = createServerAction((opts?: Partial<GetAllProfilesOptions>) => {
+    return getInjection("IGetAllProfilesController")(opts);
+})
 
 export const getAllProfilesForRole = createServerAction((role: UserRoleType | undefined) => {
     return getInjection("IGetAllProfilesForRoleController")(role);

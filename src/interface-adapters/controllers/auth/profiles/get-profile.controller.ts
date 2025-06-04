@@ -1,4 +1,4 @@
-import {IGetProfileUseCase} from "@/src/application/use-cases/auth/get-profile.use-case";
+import {IGetProfileUseCase} from "@/src/application/use-cases/auth/profiles/get-profile.use-case";
 import {InputParseError} from "@/src/entities/errors/common";
 
 export type IGetProfileController = ReturnType<typeof getProfileController>;

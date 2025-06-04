@@ -1,11 +1,12 @@
 import {ICheckAccessUseCase} from "@/src/application/use-cases/auth/check-access.use-case";
 import {getInjection} from "@/di/container";
+import {CheckUserAccessOptions} from "@/src/application/services/auth/authorization.service.interface";
 
 export type ICheckAccessController = ReturnType<typeof checkAccessController>;
 
 export const checkAccessController = (
     checkAccessUseCase: ICheckAccessUseCase
-) => async (opts: Partial<ICheckAccessUseCase>) => {
+) => async (opts: Partial<CheckUserAccessOptions>) => {
     const getUserUseCase = getInjection("IGetUserUseCase");
     const user = await getUserUseCase();
 

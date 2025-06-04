@@ -1,4 +1,4 @@
-import {IGetProfileByEmailUseCase} from "@/src/application/use-cases/auth/get-profile-by-email.use-case";
+import {IGetProfileByEmailUseCase} from "@/src/application/use-cases/auth/profiles/get-profile-by-email.use-case";
 import {InputParseError} from "@/src/entities/errors/common";
 import {z} from "zod";
 

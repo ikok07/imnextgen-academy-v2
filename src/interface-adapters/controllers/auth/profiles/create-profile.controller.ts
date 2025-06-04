@@ -1,4 +1,4 @@
-import {ICreateProfileUseCase} from "@/src/application/use-cases/auth/create-profile.use-case";
+import {ICreateProfileUseCase} from "@/src/application/use-cases/auth/profiles/create-profile.use-case";
 import {ProfileInsert, profilesInsertSchema} from "@/drizzle/schema/profiles";
 import {InputParseError} from "@/src/entities/errors/common";
 
