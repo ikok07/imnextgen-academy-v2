@@ -51,6 +51,7 @@ export async function POST(req: Request) {
         });
 
         const adminUsers = await getInjection("IGetAllUsersForRoleController")({role: "admin"});
+        console.log(adminUsers);
         for (const user of adminUsers.data) {
             const name = `${user.firstName} ${user.lastName}`;
             const email = user.emailAddresses[0].emailAddress;
