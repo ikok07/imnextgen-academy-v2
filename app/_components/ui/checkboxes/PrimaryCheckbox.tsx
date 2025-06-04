@@ -3,7 +3,7 @@ import {ComponentProps, ReactNode} from "react";
 import {cn} from "@/app/_utils/cn";
 
 type PrimaryCheckboxProps = {
-    label: string | ReactNode
+    label?: string | ReactNode
     boxClassName?: string,
     labelClassName?: string,
 } & ComponentProps<typeof Checkbox>;
@@ -20,11 +20,11 @@ export default function PrimaryCheckbox({label, boxClassName, labelClassName, cl
             )}
             {...props}
         />
-        <small
+        {label && <small
             className={cn(
                 "font-semibold checkbox-label",
                 labelClassName
             )}
-        >{label}</small>
+        >{label}</small>}
     </div>
 }
