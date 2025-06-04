@@ -3,7 +3,7 @@ import SetupForm from "@/app/_components/account/setup/SetupForm";
 import Image from "next/image";
 import {redirect} from "next/navigation";
 import {Routes} from "@/app/_utils/nav/routes";
-import {getUser} from "@/app/dashboard/actions";
+import {getUser} from "@/app/actions";
 
 export default async function Page() {
     const userResponse = await getUser({dbUserNullOnError: true});
