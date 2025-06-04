@@ -10,5 +10,5 @@ resourcePolicy:
         - admin
       condition:
         match:
-          expr: "request.resource.attr.disallowedRoles.size() == 0 || !(request.principal.roles.exists(r, r in request.resource.attr.disallowedRoles))"
+          expr: "request.resource.attr.disallowedRoles.size() == 0 || request.principal.roles.exists(r, !(r in request.resource.attr.disallowedRoles))"
       effect: EFFECT_ALLOW
