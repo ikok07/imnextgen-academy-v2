@@ -32,16 +32,6 @@ export async function POST(req: Request) {
             return NextResponse.json({status: "fail", error: "Invalid body!"}, {status: 400});
         }
 
-        await axios.patch(`https://api.clerk.com/v1/users/${body.data.id}/metadata`, {
-            public_metadata: {
-                roles: ["user"],
-            }
-        }, {
-            headers: {
-                Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`
-            }
-        });
-
         await getInjection("ICreateProfileController")({
             id: body.data.id,
             name: `${body.data.first_name} ${body.data.last_name}`,

@@ -2,10 +2,10 @@ import {ReactNode} from "react";
 import DashboardWrapper from "@/app/_components/dashboard/DashboardWrapper";
 import DashboardEmailConfirmMessage from "@/app/_components/dashboard/DashboardEmailConfirmMessage";
 import DashboardClientWrapper from "@/app/_components/dashboard/DashboardClientWrapper";
-import {auth} from "@clerk/nextjs/server";
-import {getUser} from "@/app/dashboard/actions";
-import RedirectComponent from "@/app/_components/ui/RedirectComponent";
-import {Routes} from "@/app/_utils/nav/routes";
+import { Routes } from "../_utils/nav/routes";
+import RedirectComponent from "../_components/ui/RedirectComponent";
+import {getUser} from "@/app/actions";
+
 
 type LayoutProps = {
     children: ReactNode

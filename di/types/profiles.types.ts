@@ -9,12 +9,18 @@ import {IGetProfileByEmailController} from "@/src/interface-adapters/controllers
 import {IGetProfileByEmailUseCase} from "@/src/application/use-cases/auth/get-profile-by-email.use-case";
 import {IUpdateProfileUseCase} from "@/src/application/use-cases/auth/update-profile.use-case";
 import { IUpdateProfileController } from "@/src/interface-adapters/controllers/auth/update-profile.controller";
+import { IGetAllProfilesForRoleUseCase } from "@/src/application/use-cases/auth/get-all-profiles-for-role.use-case";
+import {
+    IGetAllProfilesForRoleController
+} from "@/src/interface-adapters/controllers/auth/get-all-profiles-for-role.controller";
 
 export const PROFILE_SYMBOLS = {
     ProfilesRepository: Symbol.for("ProfilesRepository"),
 
     IGetProfileUseCase: Symbol.for("IGetProfileUseCase"),
     IGetProfileByEmailUseCase: Symbol.for("IGetProfileByEmailUseCase"),
+    IGetAllProfilesForRoleUseCase: Symbol.for("IGetAllProfilesForRoleUseCase"),
+    IGetAllProfilesForRoleController: Symbol.for("IGetAllProfilesForRoleController"),
     ICreateProfileUseCase: Symbol.for("ICreateProfileUseCase"),
     ICreateProfileController: Symbol.for("ICreateProfileController"),
     IUpdateProfileUseCase: Symbol.for("IUpdateProfileUseCase"),
@@ -31,6 +37,8 @@ export interface PROFILE_RETURN_TYPES {
 
     IGetProfileUseCase: IGetProfileUseCase,
     IGetProfileByEmailUseCase: IGetProfileByEmailUseCase,
+    IGetAllProfilesForRoleUseCase: IGetAllProfilesForRoleUseCase,
+    IGetAllProfilesForRoleController: IGetAllProfilesForRoleController,
     ICreateProfileUseCase: ICreateProfileUseCase,
     ICreateProfileController: ICreateProfileController,
     IUpdateProfileUseCase: IUpdateProfileUseCase,
