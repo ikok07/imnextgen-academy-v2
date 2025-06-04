@@ -34,7 +34,7 @@ export const payDirectController = (
         .omit({orderId: true, items: true})
         .and(directPayOptionsExtensionSchema)
         .safeParse(opts);
-    if (error) throw new InputParseError("Invalid options!");
+    if (error) throw new InputParseError(`Invalid options! ${error}`);
 
     if (isNaN(+data.price)) throw new InputParseError("Invalid price!");
 
