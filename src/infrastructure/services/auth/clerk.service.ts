@@ -25,6 +25,8 @@ export class ClerkService implements IAuthenticationService {
     async getAllUsersForRole({role}: GetAllUsersForRoleOptions): Promise<GetAllUsersForRoleResponse> {
         try {
             const {data} = await this.client.users.getUserList();
+            console.log("ADMIN DATA:")
+            console.log(data);
             const filteredUsers = data.filter(user => (user.publicMetadata["roles"] as string[] | undefined)?.includes(role));
 
             return {
