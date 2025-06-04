@@ -1,7 +1,7 @@
 import SectionHeading from "@/app/_components/ui/home/SectionHeading";
 import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
 import {Routes} from "@/app/_utils/nav/routes";
-import {getUser} from "@/app/_utils/actions/auth";
+import {getUser} from "@/app/actions";
 
 export default async function StartNow() {
     const res = await getUser();

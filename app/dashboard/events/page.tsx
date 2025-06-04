@@ -7,9 +7,8 @@ import {getInjection} from "@/di/container";
 import {generateSerializableUser} from "@/src/entities/utils/auth/generate-serializable-user";
 
 export default async function Page() {
-
-    const {user, auth: authObject} = await getInjection("IGetUserController")({excludeDbProfile: true});
-    if (!authObject.userId || !user) throw new Error("User not logged in!");
+    const {user, auth: authObject, dbProfile} = await getInjection("IGetUserController")();
+    if (!authObject.userId || !user || !dbProfile) throw new Error("User not logged in!");
 
     const subscriptionResponse = await getUserSubscription(authObject.userId);
     if (!subscriptionResponse.success) throw new Error("User's subscription is not available!")
@@ -21,7 +20,7 @@ export default async function Page() {
                 <DashboardEventsCalendarColumn subscriptionTier={subscriptionResponse.value?.tier} />
                 <DashboardEventsList
                     user={generateSerializableUser(user)}
-                    userRoles={user.publicMetadata["roles"] as string[]}
+                    userRoles={dbProfile.roles}
                     subscriptionTier={subscriptionResponse.value?.tier}
                 />
             </div>

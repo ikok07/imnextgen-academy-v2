@@ -1,6 +1,5 @@
 import {ReactNode} from "react";
-import {checkAccess} from "@/app/actions";
-import {getUser} from "@/app/_utils/actions/auth";
+import {checkAccess, getUser} from "@/app/actions";
 import {redirect} from "next/navigation";
 import {Routes} from "@/app/_utils/nav/routes";
 import {getNavLinks} from "@/app/_utils/nav/navlinks";

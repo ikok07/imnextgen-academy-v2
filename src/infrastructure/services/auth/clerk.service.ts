@@ -1,6 +1,4 @@
 import {
-    GetAllUsersForRoleOptions,
-    GetAllUsersForRoleResponse,
     IAuthenticationService
 } from "@/src/application/services/auth/authentication.service.interface";
 import {User, AuthObject, createClerkClient} from "@clerk/backend";
@@ -20,21 +18,6 @@ export class ClerkService implements IAuthenticationService {
             };
         } catch(e) {
             throw new AuthenticationError(`Failed to get user! ${e}`);
-        }
-    }
-    async getAllUsersForRole({role}: GetAllUsersForRoleOptions): Promise<GetAllUsersForRoleResponse> {
-        try {
-            const {data} = await this.client.users.getUserList({
-                limit: 500
-            });
-            const filteredUsers = data.filter(user => (user.publicMetadata["roles"] as string[] | undefined)?.includes(role));
-
-            return {
-                data: filteredUsers,
-                count: filteredUsers.length
-            }
-        } catch(e) {
-            throw new AuthenticationError(`Failed to get users for role! ${e}`);
         }
     }
 }

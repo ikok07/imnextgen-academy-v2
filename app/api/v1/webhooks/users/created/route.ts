@@ -32,16 +32,6 @@ export async function POST(req: Request) {
             return NextResponse.json({status: "fail", error: "Invalid body!"}, {status: 400});
         }
 
-        await axios.patch(`https://api.clerk.com/v1/users/${body.data.id}/metadata`, {
-            public_metadata: {
-                roles: ["user"],
-            }
-        }, {
-            headers: {
-                Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`
-            }
-        });
-
         await getInjection("ICreateProfileController")({
             id: body.data.id,
             name: `${body.data.first_name} ${body.data.last_name}`,
@@ -50,22 +40,19 @@ export async function POST(req: Request) {
             image_url: body.data.image_url,
         });
 
-        const adminUsers = await getInjection("IGetAllUsersForRoleController")({role: "admin"});
-        console.log(adminUsers);
-        for (const user of adminUsers.data) {
-            const name = `${user.firstName} ${user.lastName}`;
-            const email = user.emailAddresses[0].emailAddress;
-            const phone = user.phoneNumbers[0].phoneNumber;
+        const adminProfiles = await getInjection("IGetAllProfilesForRoleController")("admin");
+
+        for (const profile of adminProfiles) {
             await getInjection("ISendEmailUseCase")({
                 to: {
-                    email,
-                    name
+                    email: profile.email,
+                    name: profile.name
                 },
                 templateId: +process.env.BREVO_NEW_CUSTOMER_EMAIL_ID_BG!,
                 params: {
-                    "NAME": name,
-                    "EMAIL": email,
-                    "PHONE": phone
+                    "NAME": profile.name,
+                    "EMAIL": profile.email,
+                    "PHONE": profile.phone
                 }
             })
         }
