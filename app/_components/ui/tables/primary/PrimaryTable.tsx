@@ -8,20 +8,34 @@ import {useTable} from "@/app/_components/ui/tables/provider/TableProvider";
 import {cn} from "@/app/_utils/cn";
 import PrimaryTableFilterSelector from "@/app/_components/ui/tables/primary/filters/PrimaryTableFilterSelector";
 import PrimaryTablePageSelector from "@/app/_components/ui/tables/primary/pagination/PrimaryTablePageSelector";
+import {useVirtualizer} from "@tanstack/react-virtual";
+import PrimaryTableBodySkeleton from "@/app/_components/ui/tables/primary/PrimaryTableBodySkeleton";
 
-export default function PrimaryTable<TData>() {
+type PrimaryTableProps = {
+    isLoading?: boolean
+}
+
+export default function PrimaryTable<TData>({isLoading}: PrimaryTableProps) {
     const {table, filterOptions, paginationOptions} = useTable<TData>();
+    const bodyWrapperRef = useRef<HTMLDivElement>(null);
+    const rowVirtualizer = useVirtualizer({
+        count: table.getRowModel().rows.length,
+        getScrollElement: () => bodyWrapperRef.current,
+        estimateSize: () => 37,
+        overscan: 10
+    });
+    const virtualRows = rowVirtualizer.getVirtualItems();
 
     const totalTableWidth = useMemo(() => {
         return Math.max(table.getTotalSize() + 10, 200);
     }, [table.getState().columnSizing]);
 
-    return <div className="grid space-y-3">
+    return <div className="grid grid-rows-[auto_1fr] space-y-3 w-max max-w-full h-full">
         <div>
             {filterOptions?.enabled && <PrimaryTableFilterSelector />}
         </div>
-        <div className="max-w-full overflow-auto border border-border rounded-lg">
-            <div style={{width: "100%", minWidth: `${totalTableWidth}px`}}>
+        <div className="grid grid-rows-[auto_1fr] overflow-auto border border-border rounded-lg">
+            <div style={{width: `${totalTableWidth}px`}}>
                 <div className="overflow-hidden">
                     <Table>
                         <TableHeader>
@@ -37,23 +51,31 @@ export default function PrimaryTable<TData>() {
                 </div>
             </div>
             <div
-                style={{width: "100%", minWidth: `${totalTableWidth}px`}}
-                className="overflow-x-hidden overflow-y-auto"
+                style={{width: `${totalTableWidth}px`}}
+                className="overflow-auto"
+                ref={bodyWrapperRef}
             >
                 <Table>
-                    <TableBody>
-                        {table.getRowModel().rows.map(row => {
-                            return <TableRow key={row.id} className={cn(
-                                "border-t border-border",
-                                {
-                                    "bg-cta/20 hover:bg-cta/30": row.getIsSelected()
-                                }
-                            )}>
-                                {row.getVisibleCells().map(cell => {
-                                    return <TableResizeCell cell={cell} />
-                                })}
-                            </TableRow>
-                        })}
+                    <TableBody className="relative w-full h-full" style={{height: `${rowVirtualizer.getTotalSize()}px`}}>
+                        {isLoading ? Array.from({length: 10}).map((_, index) => <PrimaryTableBodySkeleton columns={table.getAllColumns()} key={index} />) :
+                            virtualRows.map(item => {
+                                const row = table.getRowModel().rows[item.index];
+                                return <TableRow
+                                    key={item.key}
+                                    className={cn(
+                                        "absolute top-0 left-0 w-full flex items-center border-t border-border",
+                                        {
+                                            "bg-cta/20 hover:bg-cta/30": row.getIsSelected()
+                                        }
+                                    )}
+                                    style={{height: `${item.size}px`, transform: `translateY(${item.start}px)`}}
+                                >
+                                    {row.getVisibleCells().map(cell => {
+                                        return <TableResizeCell cell={cell} />
+                                    })}
+                                </TableRow>
+                            })
+                        }
                     </TableBody>
                 </Table>
             </div>

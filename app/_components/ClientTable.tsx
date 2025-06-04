@@ -1,12 +1,13 @@
 "use client"
 
-import PrimaryTable from "@/app/_components/ui/tables/primary/PrimaryTable";
 import TableProvider from "@/app/_components/ui/tables/provider/TableProvider";
 import {createColumnHelper, RowSelectionState, SortingState} from "@tanstack/react-table";
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {PaginationState} from "@tanstack/table-core";
+import PrimaryTable from "./ui/tables/primary/PrimaryTable";
+import {SetupQuestion} from "@/drizzle/schema/setup_questions";
 
-const columnHelper = createColumnHelper<{name: string, age: number}>();
+const columnHelper = createColumnHelper<{ name: string, age: number }>();
 
 const columns = [
     columnHelper.accessor(row => row.name, {
@@ -31,30 +32,32 @@ export default function ClientTable() {
         pageSize: 10
     });
 
-    return <TableProvider<{name: string, age: number}>
-        initialColumns={columns}
-        initialData={data}
-        selectionOptions={{
-            enabled: true,
-            multipleSelection: true,
-            selectedRows,
-            onRowSelected: setSelectedRows
-        }}
-        sortingOptions={{
-            enabled: true,
-            sortedFields,
-            onSortingChange: setSortedFields
-        }}
-        paginationOptions={{
-            enabled: true,
-            clientSidePagination: true,
-            pagination,
-            onPaginationChange: setPagination
-        }}
-        filterOptions={{
-            enabled: true
-        }}
-    >
-        <PrimaryTable<{name: string, age: number}> />
-    </TableProvider>
+    return <div className="w-[30rem] h-[30rem]">
+        <TableProvider<{name: string, age: number}>
+            initialColumns={columns}
+            initialData={data}
+            selectionOptions={{
+                enabled: true,
+                multipleSelection: true,
+                selectedRows,
+                onRowSelected: setSelectedRows
+            }}
+            sortingOptions={{
+                enabled: true,
+                sortedFields,
+                onSortingChange: setSortedFields
+            }}
+            paginationOptions={{
+                enabled: true,
+                clientSidePagination: true,
+                pagination,
+                onPaginationChange: setPagination
+            }}
+            filterOptions={{
+                enabled: true
+            }}
+        >
+            <PrimaryTable<{name: string, age: number}> />
+        </TableProvider>
+    </div>
 }

@@ -9,6 +9,7 @@ export default function TableResizeCell<TData>({cell}: TableResizeCellProps<TDat
     return <TableCell
         key={cell.id}
         style={{width: cell.column.getSize(), flex: `0 0 ${cell.column.getSize()}px`}}
+        className="truncate"
     >
         {flexRender(cell.column.columnDef.cell, cell.getContext())}
     </TableCell>

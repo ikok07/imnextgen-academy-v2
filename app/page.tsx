@@ -16,6 +16,6 @@ export default async function Home() {
       <h1>{t("title")}</h1>
     </div>
     <AuthComponent />
-    <div className="max-w-[30rem] h-[10rem]"><ClientTable /></div>
+    <ClientTable />
   </div>
 }
