@@ -67,7 +67,9 @@ export class ProfilesRepository extends BaseRepository implements IProfilesRepos
     async createProfile(data: ProfileInsert): Promise<Profile> {
         try {
             return this.queryDB(async (db) => {
-                return (await db.insert(profilesTable).values(data).returning().execute())[0];
+                const result = (await db.insert(profilesTable).values(data).returning().execute())[0];
+                await db.insert(userRolesTable).values({type: "user", profile_id: result.id});
+                return result;
             });
         } catch(e) {
             throw new DatabaseError(`Failed to create profile: ${e}`);
