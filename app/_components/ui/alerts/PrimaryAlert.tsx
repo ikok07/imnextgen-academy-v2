@@ -7,7 +7,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger
 } from "@/app/_components/ui/shadcn/alert-dialog";
-import {ComponentProps, ReactNode} from "react";
+import {ComponentProps, ReactNode, useEffect} from "react";
 import {cn} from "@/app/_utils/cn";
 
 type PrimaryAlertProps = ComponentProps<typeof AlertDialog> & {
@@ -30,6 +30,11 @@ type PrimaryAlertProps = ComponentProps<typeof AlertDialog> & {
 };
 
 export default function PrimaryAlert({trigger, title, description, cancel, accept, triggerClassName, titleClassName, descriptionClassName, cancelClassName, acceptClassName, ...props}: PrimaryAlertProps) {
+    useEffect(() => {
+        const timeout = setTimeout(() => document.body.style.pointerEvents = props.open ? "none" : "auto", 200);
+        return () => clearTimeout(timeout);
+    }, [props.open]);
+    
     return <AlertDialog {...props}>
         <AlertDialogTrigger className={triggerClassName}>
             {trigger}
