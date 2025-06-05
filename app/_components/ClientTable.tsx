@@ -41,7 +41,8 @@ export default function ClientTable() {
                 enabled: true,
                 multipleSelection: true,
                 selectedRows,
-                onRowSelected: setSelectedRows
+                onRowSelected: setSelectedRows,
+                onDelete: () => {}
             }}
             sortingOptions={{
                 enabled: true,
