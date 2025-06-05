@@ -12,16 +12,17 @@ import {useVirtualizer} from "@tanstack/react-virtual";
 import PrimaryTableBodySkeleton from "@/app/_components/ui/tables/primary/PrimaryTableBodySkeleton";
 
 type PrimaryTableProps = {
-    isLoading?: boolean
+    isLoading?: boolean,
+    rowSize?: number
 }
 
-export default function PrimaryTable<TData>({isLoading}: PrimaryTableProps) {
+export default function PrimaryTable<TData>({isLoading, rowSize}: PrimaryTableProps) {
     const {table, filterOptions, paginationOptions} = useTable<TData>();
     const bodyWrapperRef = useRef<HTMLDivElement>(null);
     const rowVirtualizer = useVirtualizer({
         count: table.getRowModel().rows.length,
         getScrollElement: () => bodyWrapperRef.current,
-        estimateSize: () => 37,
+        estimateSize: () => rowSize ?? 37,
         overscan: 10
     });
     const virtualRows = rowVirtualizer.getVirtualItems();
