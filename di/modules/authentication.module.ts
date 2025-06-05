@@ -30,11 +30,11 @@ export function createAuthenticationModule() {
 
     authModule
         .bind(DI_SYMBOLS.IDeleteUserController)
-        .toHigherOrderFunction(deleteUserController, [DI_SYMBOLS.IDeleteUserUseCase]);
+        .toHigherOrderFunction(deleteUserController, [DI_SYMBOLS.IDeleteUserUseCase, DI_SYMBOLS.IGetUserUseCase]);
 
     authModule
         .bind(DI_SYMBOLS.IDeleteMultipleUsersController)
-        .toHigherOrderFunction(deleteMultipleUsersController, [DI_SYMBOLS.IDeleteUserUseCase]);
+        .toHigherOrderFunction(deleteMultipleUsersController, [DI_SYMBOLS.IDeleteUserUseCase, DI_SYMBOLS.IGetUserUseCase]);
 
     return authModule;
 }
