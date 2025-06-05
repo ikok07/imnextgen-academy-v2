@@ -14,6 +14,7 @@ import PrimarySelectionOptionsDropdown
     from "@/app/_components/ui/tables/primary/selection-options/PrimarySelectionOptionsDropdown";
 import {Loader2} from "lucide-react"
 import PrimaryLoader from "@/app/_components/ui/loaders/PrimaryLoader";
+import PrimaryTableEmpty from "./PrimaryTableEmpty";
 
 type PrimaryTableProps = {
     isLoading?: boolean,
@@ -67,7 +68,11 @@ export default function PrimaryTable<TData>({isLoading, isRefetching, rowSize}: 
             >
                 <Table>
                     <TableBody className="relative w-full h-full" style={{height: `${rowVirtualizer.getTotalSize()}px`}}>
-                        {isLoading ? Array.from({length: 10}).map((_, index) => <PrimaryTableBodySkeleton columns={table.getAllColumns()} key={index} />) :
+                        {isLoading ?
+                            Array.from({length: 10}).map((_, index) => <PrimaryTableBodySkeleton columns={table.getAllColumns()} key={index} />) :
+
+                            virtualRows.length === 0 ? <PrimaryTableEmpty /> :
+                                
                             virtualRows.map(item => {
                                 const row = table.getRowModel().rows[item.index];
                                 return <TableRow
@@ -88,6 +93,7 @@ export default function PrimaryTable<TData>({isLoading, isRefetching, rowSize}: 
                         }
                     </TableBody>
                 </Table>
+
             </div>
         </div>
         <div className="w-full grid">
