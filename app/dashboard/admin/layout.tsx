@@ -33,7 +33,7 @@ export default async function Layout({children}: LayoutProps) {
 
     if (!accessResult.value) return redirect(Routes.dashboard.base);
 
-    return <div>
+    return <div className="grid">
         {children}
     </div>
 }

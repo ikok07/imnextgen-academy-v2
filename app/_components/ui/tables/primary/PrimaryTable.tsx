@@ -69,7 +69,7 @@ export default function PrimaryTable<TData>({isLoading, rowSize}: PrimaryTablePr
                                     className={cn(
                                         "absolute top-0 left-0 w-full flex items-center border-t border-border",
                                         {
-                                            "bg-cta/20 hover:bg-cta/30": row.getIsSelected()
+                                            "bg-cta/20 hover:bg-cta/30": row.getCanSelect() ? row.getIsSelected() : false
                                         }
                                     )}
                                     style={{height: `${item.size}px`, transform: `translateY(${item.start}px)`}}
