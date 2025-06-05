@@ -42,7 +42,7 @@ export default function ClientTable() {
                 multipleSelection: true,
                 selectedRows,
                 onRowSelected: setSelectedRows,
-                onDelete: () => {}
+                onDelete: () => console.log("DELETED")
             }}
             sortingOptions={{
                 enabled: true,
