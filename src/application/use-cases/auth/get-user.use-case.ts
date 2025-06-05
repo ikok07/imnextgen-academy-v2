@@ -7,20 +7,25 @@ export type IGetUserUseCase = ReturnType<typeof getUserUseCase>;
 export const getUserUseCase = (
     authenticationService: IAuthenticationService,
     profilesRepository: IProfilesRepository
-)=> async (excludeDbProfile?: boolean) => {
+)=> async (excludeDbProfile?: boolean, dbUserNullOnError?: boolean) => {
     const userObject = await authenticationService.getUser();
 
     let fullProfile: FullProfile | null = null;
     if (userObject.user?.id && !excludeDbProfile) {
-        const rawResponse = await profilesRepository.getProfileById(userObject.user?.id);
-        fullProfile = {
-            ...rawResponse[0].profile,
-            roles: []
-        };
+        try {
+            const rawResponse = await profilesRepository.getProfileById(userObject.user?.id);
+            fullProfile = {
+                ...rawResponse[0].profile,
+                roles: []
+            };
 
-        rawResponse.forEach(response => {
-            fullProfile!.roles.push(response.role.type);
-        });
+            rawResponse.forEach(response => {
+                fullProfile!.roles.push(response.role.type);
+            });
+        } catch (e) {
+            console.error("Profile not found in db!");
+            if (!dbUserNullOnError) throw e;
+        }
     }
 
     return {
