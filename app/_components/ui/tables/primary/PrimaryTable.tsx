@@ -12,13 +12,16 @@ import {useVirtualizer} from "@tanstack/react-virtual";
 import PrimaryTableBodySkeleton from "@/app/_components/ui/tables/primary/PrimaryTableBodySkeleton";
 import PrimarySelectionOptionsDropdown
     from "@/app/_components/ui/tables/primary/selection-options/PrimarySelectionOptionsDropdown";
+import {Loader2} from "lucide-react"
+import PrimaryLoader from "@/app/_components/ui/loaders/PrimaryLoader";
 
 type PrimaryTableProps = {
     isLoading?: boolean,
+    isRefetching?: boolean,
     rowSize?: number
 }
 
-export default function PrimaryTable<TData>({isLoading, rowSize}: PrimaryTableProps) {
+export default function PrimaryTable<TData>({isLoading, isRefetching, rowSize}: PrimaryTableProps) {
     const {table, filterOptions, paginationOptions, selectionOptions} = useTable<TData>();
     const bodyWrapperRef = useRef<HTMLDivElement>(null);
     const rowVirtualizer = useVirtualizer({
@@ -36,7 +39,10 @@ export default function PrimaryTable<TData>({isLoading, rowSize}: PrimaryTablePr
     return <div className="grid grid-rows-[auto_1fr] space-y-3 w-full max-w-max h-full">
         <div className="flex items-center justify-between">
             {filterOptions?.enabled && <PrimaryTableFilterSelector />}
-            <PrimarySelectionOptionsDropdown />
+            <div className="flex items-center gap-3">
+                {isRefetching && <PrimaryLoader className="w-5 aspect-square" />}
+                <PrimarySelectionOptionsDropdown />
+            </div>
         </div>
         <div className="grid grid-rows-[auto_1fr] overflow-auto border border-border rounded-lg">
             <div style={{width: `${totalTableWidth}px`}}>
