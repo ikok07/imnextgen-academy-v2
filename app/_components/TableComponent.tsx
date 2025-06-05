@@ -78,6 +78,9 @@ export default function TableComponent() {
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
+        filterFns: {
+            complexFilter: () => true
+        },
         state: {
             sorting: sorting,
             columnFilters

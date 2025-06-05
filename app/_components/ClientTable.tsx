@@ -34,8 +34,8 @@ export default function ClientTable() {
 
     return <div className="w-[30rem] h-[30rem]">
         <TableProvider<{name: string, age: number}>
-            initialColumns={columns}
-            initialData={data}
+            columns={columns}
+            data={data}
             selectionOptions={{
                 enabled: true,
                 multipleSelection: true,
