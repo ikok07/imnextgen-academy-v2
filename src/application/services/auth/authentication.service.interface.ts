@@ -17,4 +17,5 @@ export type GetUserResponse = z.infer<typeof getUserResponseSchema>;
 
 export interface IAuthenticationService {
     getUser(): Promise<GetUserResponse>;
+    deleteUser(userId: string): Promise<User>;
 }
