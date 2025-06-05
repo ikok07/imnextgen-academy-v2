@@ -323,6 +323,13 @@
       "when": 1749131610974,
       "tag": "0045_delete-signed-up-users-for-meeting-on-user-delete",
       "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "7",
+      "when": 1749131711971,
+      "tag": "0046_delete-user-role-on-user-deletion",
+      "breakpoints": true
     }
   ]
 }
