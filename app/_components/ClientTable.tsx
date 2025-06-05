@@ -6,6 +6,7 @@ import {useEffect, useRef, useState} from "react";
 import {PaginationState} from "@tanstack/table-core";
 import PrimaryTable from "./ui/tables/primary/PrimaryTable";
 import {SetupQuestion} from "@/drizzle/schema/setup_questions";
+import {IoGlobe} from "react-icons/io5";
 
 const columnHelper = createColumnHelper<{ name: string, age: number }>();
 
