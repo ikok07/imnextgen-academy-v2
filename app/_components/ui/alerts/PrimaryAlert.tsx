@@ -34,7 +34,7 @@ export default function PrimaryAlert({trigger, title, description, cancel, accep
         const timeout = setTimeout(() => document.body.style.pointerEvents = props.open ? "none" : "auto", 200);
         return () => clearTimeout(timeout);
     }, [props.open]);
-    
+
     return <AlertDialog {...props}>
         <AlertDialogTrigger className={triggerClassName}>
             {trigger}

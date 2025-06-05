@@ -14,6 +14,7 @@ import PrimarySelectionOptionsDropdown
     from "@/app/_components/ui/tables/primary/selection-options/PrimarySelectionOptionsDropdown";
 import {Loader2} from "lucide-react"
 import PrimaryLoader from "@/app/_components/ui/loaders/PrimaryLoader";
+import PrimaryTableEmpty from "./PrimaryTableEmpty";
 
 type PrimaryTableProps = {
     isLoading?: boolean,
@@ -65,29 +66,32 @@ export default function PrimaryTable<TData>({isLoading, isRefetching, rowSize}: 
                 className="overflow-auto"
                 ref={bodyWrapperRef}
             >
-                <Table>
-                    <TableBody className="relative w-full h-full" style={{height: `${rowVirtualizer.getTotalSize()}px`}}>
-                        {isLoading ? Array.from({length: 10}).map((_, index) => <PrimaryTableBodySkeleton columns={table.getAllColumns()} key={index} />) :
-                            virtualRows.map(item => {
-                                const row = table.getRowModel().rows[item.index];
-                                return <TableRow
-                                    key={item.key}
-                                    className={cn(
-                                        "absolute top-0 left-0 w-full flex items-center border-t border-border",
-                                        {
-                                            "bg-cta/20 hover:bg-cta/30": row.getIsSelected()
-                                        }
-                                    )}
-                                    style={{height: `${item.size}px`, transform: `translateY(${item.start}px)`}}
-                                >
-                                    {row.getVisibleCells().map(cell => {
-                                        return <TableResizeCell cell={cell} />
-                                    })}
-                                </TableRow>
-                            })
-                        }
-                    </TableBody>
-                </Table>
+                {virtualRows.length === 0 ? <PrimaryTableEmpty /> :
+                    <Table>
+                        <TableBody className="relative w-full h-full" style={{height: `${rowVirtualizer.getTotalSize()}px`}}>
+                            {isLoading ? Array.from({length: 10}).map((_, index) => <PrimaryTableBodySkeleton columns={table.getAllColumns()} key={index} />) :
+                                virtualRows.map(item => {
+                                    const row = table.getRowModel().rows[item.index];
+                                    return <TableRow
+                                        key={item.key}
+                                        className={cn(
+                                            "absolute top-0 left-0 w-full flex items-center border-t border-border",
+                                            {
+                                                "bg-cta/20 hover:bg-cta/30": row.getIsSelected()
+                                            }
+                                        )}
+                                        style={{height: `${item.size}px`, transform: `translateY(${item.start}px)`}}
+                                    >
+                                        {row.getVisibleCells().map(cell => {
+                                            return <TableResizeCell cell={cell} />
+                                        })}
+                                    </TableRow>
+                                })
+                            }
+                        </TableBody>
+                    </Table>
+                }
+
             </div>
         </div>
         <div className="w-full grid">
