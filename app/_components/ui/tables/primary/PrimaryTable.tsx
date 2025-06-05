@@ -10,6 +10,8 @@ import PrimaryTableFilterSelector from "@/app/_components/ui/tables/primary/filt
 import PrimaryTablePageSelector from "@/app/_components/ui/tables/primary/pagination/PrimaryTablePageSelector";
 import {useVirtualizer} from "@tanstack/react-virtual";
 import PrimaryTableBodySkeleton from "@/app/_components/ui/tables/primary/PrimaryTableBodySkeleton";
+import PrimarySelectionOptionsDropdown
+    from "@/app/_components/ui/tables/primary/selection-options/PrimarySelectionOptionsDropdown";
 
 type PrimaryTableProps = {
     isLoading?: boolean,
@@ -17,7 +19,7 @@ type PrimaryTableProps = {
 }
 
 export default function PrimaryTable<TData>({isLoading, rowSize}: PrimaryTableProps) {
-    const {table, filterOptions, paginationOptions} = useTable<TData>();
+    const {table, filterOptions, paginationOptions, selectionOptions} = useTable<TData>();
     const bodyWrapperRef = useRef<HTMLDivElement>(null);
     const rowVirtualizer = useVirtualizer({
         count: table.getRowModel().rows.length,
@@ -32,8 +34,9 @@ export default function PrimaryTable<TData>({isLoading, rowSize}: PrimaryTablePr
     }, [table.getState().columnSizing]);
 
     return <div className="grid grid-rows-[auto_1fr] space-y-3 w-full max-w-max h-full">
-        <div>
+        <div className="flex items-center justify-between">
             {filterOptions?.enabled && <PrimaryTableFilterSelector />}
+            <PrimarySelectionOptionsDropdown />
         </div>
         <div className="grid grid-rows-[auto_1fr] overflow-auto border border-border rounded-lg">
             <div style={{width: `${totalTableWidth}px`}}>
