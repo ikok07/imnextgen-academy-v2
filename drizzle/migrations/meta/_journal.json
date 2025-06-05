@@ -316,6 +316,13 @@
       "when": 1749059292300,
       "tag": "0044_add-user-roles",
       "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "7",
+      "when": 1749131610974,
+      "tag": "0045_delete-signed-up-users-for-meeting-on-user-delete",
+      "breakpoints": true
     }
   ]
 }
