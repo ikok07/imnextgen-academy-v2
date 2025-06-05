@@ -30,7 +30,7 @@ export default function PrimaryTable<TData>({isLoading}: PrimaryTableProps) {
         return Math.max(table.getTotalSize() + 10, 200);
     }, [table.getState().columnSizing]);
 
-    return <div className="grid grid-rows-[auto_1fr] space-y-3 w-max max-w-full h-full">
+    return <div className="grid grid-rows-[auto_1fr] space-y-3 w-full max-w-max h-full">
         <div>
             {filterOptions?.enabled && <PrimaryTableFilterSelector />}
         </div>
