@@ -7,7 +7,8 @@ type SelectionDisabledOptions = {
     multipleSelection?: undefined,
     selectedRows?: undefined,
     onRowSelected?: undefined,
-    onDelete?: undefined
+    onDelete?: undefined,
+    otherOptions?: undefined
 }
 type SelectionEnabledOptions = {
     enabled: true,

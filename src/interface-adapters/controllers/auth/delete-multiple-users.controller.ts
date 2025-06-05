@@ -15,5 +15,5 @@ export const deleteMultipleUsersController = (
 
     if (userIds.some(id => user.id === id)) throw new Error("You cannot delete your account!");
 
-    return Promise.all(userIds.map(id => deleteUserUseCase(id!)));
+    return await Promise.all(userIds.map(id => deleteUserUseCase(id!)));
 }

@@ -5,25 +5,49 @@ import PrimaryTable from "@/app/_components/ui/tables/primary/PrimaryTable";
 import useErrorQuery from "@/app/_hooks/useErrorQuery";
 import {getAllProfiles} from "@/app/actions";
 import {useMemo, useState} from "react";
-import {createColumnHelper, RowSelectionState, SortingState} from "@tanstack/react-table";
+import {createColumnHelper, Row, RowSelectionState, SortingState} from "@tanstack/react-table";
 import {FullProfile} from "@/src/entities/models/auth/full-profile";
 import {PaginationState} from "@tanstack/table-core";
 import SecondaryButton from "@/app/_components/ui/buttons/SecondaryButton";
+import useErrorMutation from "@/app/_hooks/useErrorMutation";
+import {deleteMultipleUsers} from "@/app/dashboard/admin/actions";
+import { toast } from "sonner";
+import {useQueryClient} from "react-query";
 
 const columnHelper = createColumnHelper<FullProfile>();
 
 export default function AdminUsersTable() {
-    const {data: allProfilesQuery, isLoading: isLoadingAllProfiles} = useErrorQuery({
-        queryFn: () => getAllProfiles(),
-        queryKey: ["allProfiles"]
-    });
-
+    const queryClient = useQueryClient();
     const [selectedRows, setSelectedRows] = useState<RowSelectionState>({});
     const [pagination, setPagination] = useState<PaginationState>({
         pageSize: 10,
         pageIndex: 0
     });
     const [sortedFields, setSortedFields] = useState<SortingState>([]);
+
+    const {data: allProfilesQuery, isLoading: isLoadingAllProfiles, isRefetching: isRefetchingAllProfiles} = useErrorQuery({
+        queryFn: () => getAllProfiles(),
+        queryKey: ["allProfiles"],
+        onError() {
+            toast.error("Потребителите не можаха да бъдат заредени");
+        }
+    });
+
+    const {mutate: deleteSelectedUsers, isLoading: isDeletingSelectedUsers} = useErrorMutation({
+        mutationFn: (rows: Row<any>[]) => deleteMultipleUsers(rows.flatMap(row => row.getValue("user_id"))),
+        onMutate() {
+          toast.loading("Изтриване на потребители");
+        },
+        onSuccess() {
+            toast.dismiss();
+            toast.success("Потребителите бяха изтрити успешно!");
+            queryClient.invalidateQueries(["allProfiles"]);
+        },
+        onError() {
+            toast.dismiss();
+            toast.error("Потребителите не можаха да бъдат изтрити!");
+        }
+    });
 
     const columns = useMemo(() => {
         return [
@@ -85,9 +109,9 @@ export default function AdminUsersTable() {
             selectedRows,
             onRowSelected: setSelectedRows,
             multipleSelection: true,
-            onDelete: (rows) => console.log(rows)
+            onDelete: (rows) => deleteSelectedUsers(rows)
         }}
     >
-        <PrimaryTable isLoading={isLoadingAllProfiles} rowSize={50} />
+        <div className={`${isDeletingSelectedUsers ? "pointer-events-none opacity-80" : ""}`}><PrimaryTable isLoading={isLoadingAllProfiles} isRefetching={isRefetchingAllProfiles} rowSize={50} /></div>
     </TableProvider>
 }
