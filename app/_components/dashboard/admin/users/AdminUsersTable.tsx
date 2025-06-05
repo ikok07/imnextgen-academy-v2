@@ -13,6 +13,16 @@ import useErrorMutation from "@/app/_hooks/useErrorMutation";
 import {deleteMultipleUsers} from "@/app/dashboard/admin/actions";
 import { toast } from "sonner";
 import {useQueryClient} from "react-query";
+// import AdminUserDetailsModal from "@/app/_components/dashboard/admin/users/AdminUserDetailsModal";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent, DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@/app/_components/ui/shadcn/dialog";
+import {IoClose} from "react-icons/io5";
 
 const columnHelper = createColumnHelper<FullProfile>();
 
@@ -75,7 +85,10 @@ export default function AdminUsersTable() {
             }),
             columnHelper.display({
                 id: "open_btn",
-                cell: ({row}) => <div className="flex items-center justify-center"><SecondaryButton>Управление</SecondaryButton></div>,
+                cell: ({row}) => <Dialog>
+                    <DialogTrigger><div className="flex items-center justify-center"><SecondaryButton>Управление</SecondaryButton></div></DialogTrigger>
+                    {/*<AdminUserDetailsModal fullProfile={row.original}/>*/}
+                </Dialog>,
                 enableResizing: false
             })
         ];
@@ -87,31 +100,33 @@ export default function AdminUsersTable() {
         // @ts-ignore
     }, [(allProfilesQuery?.value)])
 
-    return <TableProvider<FullProfile>
-        columns={columns}
-        data={data}
-        paginationOptions={{
-            enabled: true,
-            pagination,
-            onPaginationChange: setPagination,
-            clientSidePagination: true
-        }}
-        sortingOptions={{
-            enabled: true,
-            sortedFields,
-            onSortingChange: setSortedFields
-        }}
-        filterOptions={{
-            enabled: true
-        }}
-        selectionOptions={{
-            enabled: true,
-            selectedRows,
-            onRowSelected: setSelectedRows,
-            multipleSelection: true,
-            onDelete: (rows) => deleteSelectedUsers(rows)
-        }}
-    >
-        <div className={`${isDeletingSelectedUsers ? "pointer-events-none opacity-80" : ""}`}><PrimaryTable isLoading={isLoadingAllProfiles} isRefetching={isRefetchingAllProfiles} rowSize={50} /></div>
-    </TableProvider>
+    return <>
+        <TableProvider<FullProfile>
+            columns={columns}
+            data={data}
+            paginationOptions={{
+                enabled: true,
+                pagination,
+                onPaginationChange: setPagination,
+                clientSidePagination: true
+            }}
+            sortingOptions={{
+                enabled: true,
+                sortedFields,
+                onSortingChange: setSortedFields
+            }}
+            filterOptions={{
+                enabled: true
+            }}
+            selectionOptions={{
+                enabled: true,
+                selectedRows,
+                onRowSelected: setSelectedRows,
+                multipleSelection: true,
+                onDelete: (rows) => deleteSelectedUsers(rows)
+            }}
+        >
+            <div className={`${isDeletingSelectedUsers ? "pointer-events-none opacity-80" : ""}`}><PrimaryTable isLoading={isLoadingAllProfiles} isRefetching={isRefetchingAllProfiles} rowSize={50} /></div>
+        </TableProvider>
+    </>
 }
