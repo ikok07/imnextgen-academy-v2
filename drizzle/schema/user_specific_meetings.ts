@@ -3,6 +3,7 @@ import {sql} from "drizzle-orm";
 import {createInsertSchema, createSelectSchema} from "drizzle-zod";
 import {z} from "zod";
 import {profilesTable} from "@/drizzle/schema/profiles";
+import {meetingPlatformEnum} from "@/drizzle/schema/meetings";
 
 export const userSpecificMeetingsTable = pgTable("user_specific_meetings", {
     id: text("id").notNull().primaryKey().default(sql`gen_random_uuid()`),
@@ -11,7 +12,9 @@ export const userSpecificMeetingsTable = pgTable("user_specific_meetings", {
         onUpdate: "cascade"
     }),
     date: integer("date").notNull(),
-    duration_minutes: integer("duration_minutes").notNull()
+    duration_minutes: integer("duration_minutes").notNull(),
+    platform: meetingPlatformEnum(),
+    url: text("url").notNull()
 });
 
 export const userSpecificMeetingSchema = createSelectSchema(userSpecificMeetingsTable);
