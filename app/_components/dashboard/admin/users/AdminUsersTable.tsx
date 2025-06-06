@@ -23,6 +23,7 @@ import {
     DialogTrigger
 } from "@/app/_components/ui/shadcn/dialog";
 import {IoClose} from "react-icons/io5";
+import AdminUserDetailsModal from "./AdminUserDetailsModal";
 
 const columnHelper = createColumnHelper<FullProfile>();
 
@@ -85,9 +86,9 @@ export default function AdminUsersTable() {
             }),
             columnHelper.display({
                 id: "open_btn",
-                cell: ({row}) => <Dialog>
+                cell: ({row}) => <Dialog open={true}>
                     <DialogTrigger><div className="flex items-center justify-center"><SecondaryButton>Управление</SecondaryButton></div></DialogTrigger>
-                    {/*<AdminUserDetailsModal fullProfile={row.original}/>*/}
+                    <AdminUserDetailsModal fullProfile={row.original} />
                 </Dialog>,
                 enableResizing: false
             })
