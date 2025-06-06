@@ -2,13 +2,18 @@ import {
     IGetSpecificMeetingsByUserIdUseCase
 } from "@/src/application/use-cases/meetings/user-specific-meetings/get-specific-meetings-by-user-id.use-case";
 import {InputParseError} from "@/src/entities/errors/common";
+import {
+    GetSpecificMeetingsByUserIdOptions, getSpecificMeetingsByUserIdOptionsSchema
+} from "@/src/application/repositories/meetings/user-specific-meetings.repository.interface";
 
 export type IGetSpecificMeetingsByUserIdController = ReturnType<typeof getSpecificMeetingsByUserIdController>;
 
 export const getSpecificMeetingsByUserIdController = (
     getSpecificMeetingsByUserIdUseCase: IGetSpecificMeetingsByUserIdUseCase
-) => async (userId: string | undefined, timezoneOffsetMin?: number | undefined, startDate?: number | undefined) => {
-    if (!userId) throw new InputParseError("Invalid userId!");
+) => async (opts: Partial<GetSpecificMeetingsByUserIdOptions>) => {
 
-    return getSpecificMeetingsByUserIdUseCase(userId, timezoneOffsetMin, startDate);
+    const {data: parsedOpts, error} = getSpecificMeetingsByUserIdOptionsSchema.safeParse(opts);
+    if (error) throw new InputParseError(`Invalid options! ${error}`);
+
+    return getSpecificMeetingsByUserIdUseCase(parsedOpts);
 }

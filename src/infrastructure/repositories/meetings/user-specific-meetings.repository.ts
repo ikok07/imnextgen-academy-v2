@@ -1,5 +1,6 @@
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
 import {
+    GetSpecificMeetingsByUserIdOptions,
     IUserSpecificMeetingsRepository
 } from "@/src/application/repositories/meetings/user-specific-meetings.repository.interface";
 import {
@@ -9,14 +10,15 @@ import {
 } from "@/drizzle/schema/user_specific_meetings";
 import {DatabaseError} from "@/src/entities/errors/db/database";
 import {and, eq, gte, lt, SQL} from "drizzle-orm";
-import {addHours, millisecondsToMinutes, startOfDay} from "date-fns";
-import {meetingDateTable} from "@/drizzle/schema/meeting_dates";
+import {addHours, startOfDay} from "date-fns";
 
 export class UserSpecificMeetingsRepository extends BaseRepository implements IUserSpecificMeetingsRepository {
-    getSpecificMeetingsByUserId(userId: string, timezoneOffsetMin: number, startDate?: number): Promise<UserSpecificMeeting[]> {
+    getSpecificMeetingsByUserId({userId, timezoneOffsetMin, startDate, meetingType}: GetSpecificMeetingsByUserIdOptions): Promise<UserSpecificMeeting[]> {
         try {
             const userIdPredicate = eq(userSpecificMeetingsTable.profile_id, userId);
             let startDatePredicate: SQL<unknown> | undefined;
+            let typePredicate: SQL<unknown> | undefined;
+
             if (startDate) {
                 const utcStartDate = startDate + timezoneOffsetMin * 60 * 1000;
                 const dayStart = Math.floor(startOfDay(utcStartDate).valueOf() / 1000);
@@ -24,7 +26,10 @@ export class UserSpecificMeetingsRepository extends BaseRepository implements IU
                 startDatePredicate = and(gte(userSpecificMeetingsTable.date, dayStart), lt(userSpecificMeetingsTable.date, dayEnd))
             }
 
-            const wherePredicate = startDate ? and(userIdPredicate, startDatePredicate) : userIdPredicate;
+            if (meetingType) typePredicate = eq(userSpecificMeetingsTable.type, meetingType);
+
+            const wherePredicate = and(userIdPredicate, startDatePredicate, typePredicate);
+
             return this.queryDB(db => {
                 return db.query.userSpecificMeetingsTable.findMany({where: wherePredicate})
             })

@@ -1,4 +1,5 @@
 import {
+    GetSpecificMeetingsByUserIdOptions,
     IUserSpecificMeetingsRepository
 } from "@/src/application/repositories/meetings/user-specific-meetings.repository.interface";
 
@@ -6,6 +7,6 @@ export type IGetSpecificMeetingsByUserIdUseCase = ReturnType<typeof getSpecificM
 
 export const getSpecificMeetingsByUserIdUseCase = (
     userSpecificMeetingsRepository: IUserSpecificMeetingsRepository
-) => async (userId: string, timezoneOffsetMin: number = -(new Date().getTimezoneOffset()), startDate?: number) => {
-    return userSpecificMeetingsRepository.getSpecificMeetingsByUserId(userId, timezoneOffsetMin, startDate)
+) => async (opts: GetSpecificMeetingsByUserIdOptions) => {
+    return userSpecificMeetingsRepository.getSpecificMeetingsByUserId(opts);
 }
