@@ -23,7 +23,9 @@ import {
     DialogTrigger
 } from "@/app/_components/ui/shadcn/dialog";
 import {IoClose} from "react-icons/io5";
-import AdminUserDetailsModal from "./AdminUserDetailsModal";
+import {
+    AdminUserDetailsModal
+} from "@/app/_components/dashboard/admin/users/modal/AdminUserDetailsModal";
 
 const columnHelper = createColumnHelper<FullProfile>();
 
