@@ -351,6 +351,13 @@
       "when": 1749231525817,
       "tag": "0049_add-specific-meeting-type",
       "breakpoints": true
+    },
+    {
+      "idx": 50,
+      "version": "7",
+      "when": 1749231677668,
+      "tag": "0050_make-specific-meeting-type-not-null",
+      "breakpoints": true
     }
   ]
 }
