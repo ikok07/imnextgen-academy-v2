@@ -6,6 +6,6 @@ export type IGetSpecificMeetingsByUserIdUseCase = ReturnType<typeof getSpecificM
 
 export const getSpecificMeetingsByUserIdUseCase = (
     userSpecificMeetingsRepository: IUserSpecificMeetingsRepository
-) => async (userId: string, timezoneOffsetMin: number = new Date().getTimezoneOffset(), startDate?: number) => {
+) => async (userId: string, timezoneOffsetMin: number = -(new Date().getTimezoneOffset()), startDate?: number) => {
     return userSpecificMeetingsRepository.getSpecificMeetingsByUserId(userId, timezoneOffsetMin, startDate)
 }
