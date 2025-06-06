@@ -17,7 +17,7 @@ export const userSpecificMeetingsTable = pgTable("user_specific_meetings", {
     duration_minutes: integer("duration_minutes").notNull(),
     platform: meetingPlatformEnum(),
     url: text("url").notNull(),
-    type: userSpecificMeetingTypeEnum()
+    type: userSpecificMeetingTypeEnum().notNull()
 });
 
 export const userSpecificMeetingTypeSchema = createSelectSchema(userSpecificMeetingTypeEnum);
