@@ -72,7 +72,7 @@ export default function PrimaryTable<TData>({isLoading, isRefetching, rowSize}: 
                             Array.from({length: 10}).map((_, index) => <PrimaryTableBodySkeleton columns={table.getAllColumns()} key={index} />) :
 
                             virtualRows.length === 0 ? <PrimaryTableEmpty /> :
-                                
+
                             virtualRows.map(item => {
                                 const row = table.getRowModel().rows[item.index];
                                 return <TableRow

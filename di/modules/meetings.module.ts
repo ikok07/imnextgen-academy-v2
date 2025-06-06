@@ -75,6 +75,36 @@ import {
 import {
     removeSignedUpUserController
 } from "@/src/interface-adapters/controllers/meetings/meeting-signed-up-users/remove-signed-up-user.controller";
+import {
+    getSpecificMeetingsByUserIdUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/get-specific-meetings-by-user-id.use-case";
+import {
+    getSpecificMeetingsByUserIdController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/get-specific-meetings-by-user-id.controller";
+import {
+    addUserSpecificMeetingUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/add-user-specific-meeting.use-case";
+import {
+    addUserSpecificMeetingController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/add-user-specific-meeting.controller";
+import {
+    updateUserSpecificMeetingUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/update-user-specific-meeting.use-case";
+import {
+    updateUserSpecificMeetingController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/update-user-specific-meeting.controller";
+import {
+    removeUserSpecificMeetingUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/remove-user-specific-meeting.use-case";
+import {
+    removeUserSpecificMeetingController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/remove-user-specific-meeting.controller";
+import {
+    IUserSpecificMeetingsRepository
+} from "@/src/application/repositories/meetings/user-specific-meetings.repository.interface";
+import {
+    UserSpecificMeetingsRepository
+} from "@/src/infrastructure/repositories/meetings/user-specific-meetings.repository";
 
 export function createMeetingsModule() {
     const meetingsModule = createModule();
@@ -226,6 +256,42 @@ export function createMeetingsModule() {
     meetingsModule
         .bind(DI_SYMBOLS.IRemoveSignedUpUserController)
         .toHigherOrderFunction(removeSignedUpUserController, [DI_SYMBOLS.IRemoveSignedUpUserUseCase]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IUserSpecificMeetingsRepository)
+        .toClass(UserSpecificMeetingsRepository);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IGetSpecificMeetingsByUserIdUseCase)
+        .toHigherOrderFunction(getSpecificMeetingsByUserIdUseCase, [DI_SYMBOLS.IUserSpecificMeetingsRepository]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IGetSpecificMeetingsByUserIdController)
+        .toHigherOrderFunction(getSpecificMeetingsByUserIdController, [DI_SYMBOLS.IGetSpecificMeetingsByUserIdUseCase]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IAddUserSpecificMeetingUseCase)
+        .toHigherOrderFunction(addUserSpecificMeetingUseCase, [DI_SYMBOLS.IUserSpecificMeetingsRepository]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IAddUserSpecificMeetingController)
+        .toHigherOrderFunction(addUserSpecificMeetingController, [DI_SYMBOLS.IAddUserSpecificMeetingUseCase]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IUpdateUserSpecificMeetingUseCase)
+        .toHigherOrderFunction(updateUserSpecificMeetingUseCase, [DI_SYMBOLS.IUserSpecificMeetingsRepository]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IUpdateUserSpecificMeetingController)
+        .toHigherOrderFunction(updateUserSpecificMeetingController, [DI_SYMBOLS.IUpdateUserSpecificMeetingUseCase]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IRemoveUserSpecificMeetingUseCase)
+        .toHigherOrderFunction(removeUserSpecificMeetingUseCase, [DI_SYMBOLS.IUserSpecificMeetingsRepository]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IRemoveUserSpecificMeetingController)
+        .toHigherOrderFunction(removeUserSpecificMeetingController, [DI_SYMBOLS.IRemoveUserSpecificMeetingUseCase]);
 
     return meetingsModule;
 }

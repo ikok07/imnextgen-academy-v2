@@ -75,6 +75,33 @@ import {
 import {
     IMeetingSignedUpUsersRepository
 } from "@/src/application/repositories/meetings/meeting-signed-up-users.repository.interface";
+import {
+    IGetSpecificMeetingsByUserIdUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/get-specific-meetings-by-user-id.use-case";
+import {
+    IGetSpecificMeetingsByUserIdController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/get-specific-meetings-by-user-id.controller";
+import {
+    IAddUserSpecificMeetingUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/add-user-specific-meeting.use-case";
+import {
+    IAddUserSpecificMeetingController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/add-user-specific-meeting.controller";
+import {
+    IUpdateUserSpecificMeetingUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/update-user-specific-meeting.use-case";
+import {
+    IUpdateUserSpecificMeetingController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/update-user-specific-meeting.controller";
+import {
+    IRemoveUserSpecificMeetingUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/remove-user-specific-meeting.use-case";
+import {
+    IRemoveUserSpecificMeetingController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/remove-user-specific-meeting.controller";
+import {
+    IUserSpecificMeetingsRepository
+} from "@/src/application/repositories/meetings/user-specific-meetings.repository.interface";
 
 export const MEETINGS_SYMBOLS = {
     IMeetingsRepository: Symbol.for("IMeetingsRepository"),
@@ -133,7 +160,21 @@ export const MEETINGS_SYMBOLS = {
     IAddSignedUpUserController: Symbol.for("IAddSignedUpUserController"),
 
     IRemoveSignedUpUserUseCase: Symbol.for("IRemoveSignedUpUserUseCase"),
-    IRemoveSignedUpUserController: Symbol.for('IRemoveSignedUpUserController')
+    IRemoveSignedUpUserController: Symbol.for('IRemoveSignedUpUserController'),
+
+    IUserSpecificMeetingsRepository: Symbol.for("IUserSpecificMeetingsRepository"),
+
+    IGetSpecificMeetingsByUserIdUseCase: Symbol.for("IGetSpecificMeetingsByUserIdUseCase"),
+    IGetSpecificMeetingsByUserIdController: Symbol.for("IGetSpecificMeetingsByUserIdController"),
+
+    IAddUserSpecificMeetingUseCase: Symbol.for("IAddUserSpecificMeetingUseCase"),
+    IAddUserSpecificMeetingController: Symbol.for("IAddUserSpecificMeetingController"),
+
+    IUpdateUserSpecificMeetingUseCase: Symbol.for("IUpdateUserSpecificMeetingUseCase"),
+    IUpdateUserSpecificMeetingController: Symbol.for("IUpdateUserSpecificMeetingController"),
+
+    IRemoveUserSpecificMeetingUseCase: Symbol.for("IRemoveUserSpecificMeetingUseCase"),
+    IRemoveUserSpecificMeetingController: Symbol.for("IRemoveUserSpecificMeetingController")
 }
 
 export interface MEETINGS_RETURN_TYPES {
@@ -192,7 +233,21 @@ export interface MEETINGS_RETURN_TYPES {
     IAddSignedUpUserController: IAddSignedUpUserController,
 
     IRemoveSignedUpUserUseCase: IRemoveSignedUpUserUseCase,
-    IRemoveSignedUpUserController: IRemoveSignedUpUserController
+    IRemoveSignedUpUserController: IRemoveSignedUpUserController,
+
+    IUserSpecificMeetingsRepository: IUserSpecificMeetingsRepository,
+
+    IGetSpecificMeetingsByUserIdUseCase: IGetSpecificMeetingsByUserIdUseCase,
+    IGetSpecificMeetingsByUserIdController: IGetSpecificMeetingsByUserIdController,
+
+    IAddUserSpecificMeetingUseCase: IAddUserSpecificMeetingUseCase,
+    IAddUserSpecificMeetingController: IAddUserSpecificMeetingController,
+
+    IUpdateUserSpecificMeetingUseCase: IUpdateUserSpecificMeetingUseCase,
+    IUpdateUserSpecificMeetingController: IUpdateUserSpecificMeetingController,
+
+    IRemoveUserSpecificMeetingUseCase: IRemoveUserSpecificMeetingUseCase,
+    IRemoveUserSpecificMeetingController: IRemoveUserSpecificMeetingController
 }
 
 
