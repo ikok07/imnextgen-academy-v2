@@ -16,13 +16,8 @@ import {useQueryClient} from "react-query";
 // import AdminUserDetailsModal from "@/app/_components/dashboard/admin/users/AdminUserDetailsModal";
 import {
     Dialog,
-    DialogClose,
-    DialogContent, DialogDescription,
-    DialogHeader,
-    DialogTitle,
     DialogTrigger
 } from "@/app/_components/ui/shadcn/dialog";
-import {IoClose} from "react-icons/io5";
 import {
     AdminUserDetailsModal
 } from "@/app/_components/dashboard/admin/users/modal/AdminUserDetailsModal";
