@@ -55,6 +55,7 @@ export class GoogleCalendarService implements ICalendarService {
             if (!res.data.items) return [];
 
             return res.data.items.map(obj => ({
+                id: obj.id,
                 start: new Date(obj.start!.dateTime || obj.start!.date!).valueOf(),
                 end: new Date(obj.end!.dateTime || obj.end!.date!).valueOf()
             })) as BookedCalendarEvent[];
