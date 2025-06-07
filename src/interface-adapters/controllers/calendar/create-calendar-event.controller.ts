@@ -16,9 +16,9 @@ export const createCalendarEventController = (
 ) => async (userId: string | undefined, opts: Partial<Omit<CreateCalendarEventOptions, "calendarId">>) => {
 
     if (!userId) throw new InputParseError("Invalid userId!");
-    const calendarId = await getCalendarIdByUserIdUseCase(userId);
+    const {calendar_id} = await getCalendarIdByUserIdUseCase(userId);
 
-    const {data: parsedOpts, error} = createCalendarEventOptionsSchema.safeParse({...opts, calendarId});
+    const {data: parsedOpts, error} = createCalendarEventOptionsSchema.safeParse({...opts, calendarId: calendar_id});
     if (error) throw new InputParseError(`Invalid options! ${error}`);
 
     return createCalendarEventUseCase(parsedOpts);
