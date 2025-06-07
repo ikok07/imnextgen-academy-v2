@@ -111,6 +111,8 @@ import {
 import {
     getSpecificMeetingsByMentorProfileIdController
 } from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/get-specific-meetings-by-mentor-profile-id.controller";
+import {IGetUserController} from "@/src/interface-adapters/controllers/auth/get-user.controller";
+import {ICheckAccessController} from "@/src/interface-adapters/controllers/auth/check-access.controller";
 
 export function createMeetingsModule() {
     const meetingsModule = createModule();
@@ -277,11 +279,11 @@ export function createMeetingsModule() {
 
     meetingsModule
         .bind(DI_SYMBOLS.IGetSpecificMeetingsByMentorProfileIdController)
-        .toHigherOrderFunction(getSpecificMeetingsByMentorProfileIdController, [DI_SYMBOLS.IGetSpecificMeetingsByMentorProfileIdUseCase]);
+        .toHigherOrderFunction(getSpecificMeetingsByMentorProfileIdController, [DI_SYMBOLS.IGetSpecificMeetingsByMentorProfileIdUseCase, DI_SYMBOLS.IGetUserController, DI_SYMBOLS.ICheckAccessController]);
 
     meetingsModule
         .bind(DI_SYMBOLS.IGetSpecificMeetingsByUserIdController)
-        .toHigherOrderFunction(getSpecificMeetingsByUserIdController, [DI_SYMBOLS.IGetSpecificMeetingsByUserIdUseCase]);
+        .toHigherOrderFunction(getSpecificMeetingsByUserIdController, [DI_SYMBOLS.IGetSpecificMeetingsByUserIdUseCase, DI_SYMBOLS.IGetUserController, DI_SYMBOLS.ICheckAccessController]);
 
     meetingsModule
         .bind(DI_SYMBOLS.IAddUserSpecificMeetingUseCase)
@@ -289,7 +291,7 @@ export function createMeetingsModule() {
 
     meetingsModule
         .bind(DI_SYMBOLS.IAddUserSpecificMeetingController)
-        .toHigherOrderFunction(addUserSpecificMeetingController, [DI_SYMBOLS.IAddUserSpecificMeetingUseCase]);
+        .toHigherOrderFunction(addUserSpecificMeetingController, [DI_SYMBOLS.IAddUserSpecificMeetingUseCase, DI_SYMBOLS.IGetUserController, DI_SYMBOLS.ICheckAccessController]);
 
     meetingsModule
         .bind(DI_SYMBOLS.IUpdateUserSpecificMeetingUseCase)
@@ -297,7 +299,7 @@ export function createMeetingsModule() {
 
     meetingsModule
         .bind(DI_SYMBOLS.IUpdateUserSpecificMeetingController)
-        .toHigherOrderFunction(updateUserSpecificMeetingController, [DI_SYMBOLS.IUpdateUserSpecificMeetingUseCase]);
+        .toHigherOrderFunction(updateUserSpecificMeetingController, [DI_SYMBOLS.IUpdateUserSpecificMeetingUseCase, DI_SYMBOLS.IGetUserController, DI_SYMBOLS.ICheckAccessController]);
 
     meetingsModule
         .bind(DI_SYMBOLS.IRemoveUserSpecificMeetingUseCase)
@@ -305,7 +307,7 @@ export function createMeetingsModule() {
 
     meetingsModule
         .bind(DI_SYMBOLS.IRemoveUserSpecificMeetingController)
-        .toHigherOrderFunction(removeUserSpecificMeetingController, [DI_SYMBOLS.IRemoveUserSpecificMeetingUseCase]);
+        .toHigherOrderFunction(removeUserSpecificMeetingController, [DI_SYMBOLS.IRemoveUserSpecificMeetingUseCase, DI_SYMBOLS.IGetUserController, DI_SYMBOLS.ICheckAccessController]);
 
     return meetingsModule;
 }

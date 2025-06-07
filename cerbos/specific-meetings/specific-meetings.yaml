@@ -31,7 +31,7 @@ resourcePolicy:
       effect: EFFECT_ALLOW
 
     - name: allow_users_to_access_their_specific_meetings
-      actions: [ "select", "update", "delete" ]
+      actions: ["select"]
       roles:
         - user
       condition:
