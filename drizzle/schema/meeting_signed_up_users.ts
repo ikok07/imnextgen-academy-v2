@@ -12,7 +12,7 @@ export const meetingSignedUpUsersTable = pgTable("meeting_signed_up_users", {
         onUpdate: "cascade"
     }),
     name: text("name").notNull(),
-    email: text("email").notNull(), // allow anonymous up users to sign up for meetings
+    email: text("email").notNull(), // allow anonymous up users to sign up for calendar
     phone: text("phone").notNull(),
     meeting_id: text("meeting_id").notNull().references(() => meetingsTable.id),
     meeting_start_date: integer("meeting_start_date").notNull(),
