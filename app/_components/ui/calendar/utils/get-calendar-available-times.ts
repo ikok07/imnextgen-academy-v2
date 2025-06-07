@@ -19,6 +19,8 @@ export function getCalendarAvailableTimes({dateMs, startHour, startMinutes, tota
         const currDate = startDate + minutesToMilliseconds(singleAppointmentDurationMinutes * i);
         const endOfCurrDate = currDate + minutesToMilliseconds(singleAppointmentDurationMinutes);
 
+        if (currDate < Date.now()) continue;
+
         if (bookedMeetingsDates.some(d => {
             const startDate = d.start;
             const endDate = d.end;

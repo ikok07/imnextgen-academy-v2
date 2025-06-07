@@ -12,6 +12,10 @@ export const calendarEventSchema = z.object({
     })
 });
 
+export const calendarRawResponse = z.object({
+    id: z.string()
+});
+
 export const getCalendarEventsOptionsSchema = z.object({
     timeMin: z.number().optional(),
     timeMax: z.number().optional(),
@@ -33,6 +37,8 @@ export const deleteCalendarEventOptionsSchema = z.object({
 })
 
 export type CalendarEvent = z.infer<typeof calendarEventSchema>;
+export type CalendarRawResponse = z.infer<typeof calendarRawResponse>;
+
 export type GetCalendarEventsOptions = z.infer<typeof getCalendarEventsOptionsSchema>;
 export type CreateCalendarEventOptions = z.infer<typeof createCalendarEventOptionsSchema>;
 export type UpdateCalendarEventOptions = z.infer<typeof updateCalendarEventOptionsSchema>;
@@ -40,7 +46,7 @@ export type DeleteCalendarEventOptions = z.infer<typeof deleteCalendarEventOptio
 
 export interface ICalendarService {
     getCalendarEvents(opts: GetCalendarEventsOptions): Promise<BookedCalendarEvent[]>
-    createCalendarEvent(opts: CreateCalendarEventOptions): Promise<CalendarEvent>
-    updateCalendarEvent(opts: UpdateCalendarEventOptions): Promise<CalendarEvent>
+    createCalendarEvent(opts: CreateCalendarEventOptions): Promise<CalendarRawResponse>
+    updateCalendarEvent(opts: UpdateCalendarEventOptions): Promise<CalendarRawResponse>
     deleteCalendarEvent(opts: DeleteCalendarEventOptions): Promise<void>
 }

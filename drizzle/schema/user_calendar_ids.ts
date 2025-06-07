@@ -9,8 +9,9 @@ export const userCalendarIdsTable = pgTable("user_calendar_ids", {
     profile_id: text("profile_id").notNull().references(() => profilesTable.id, {
         onDelete: "cascade",
         onUpdate: "cascade"
-    }),
-    calendar_id: text("calendar_id").notNull()
+    }).unique(),
+    calendar_id: text("calendar_id").notNull(),
+    meeting_url: text("meeting_url").notNull()
 });
 
 export const userCalendarIdSchema = createSelectSchema(userCalendarIdsTable);
