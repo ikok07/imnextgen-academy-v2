@@ -235,7 +235,7 @@ export interface MEETINGS_RETURN_TYPES {
     IGetMeetingExcludedDatesController: IGetMeetingExcludedDatesController,
 
     IGetMultipleMeetingsExcludedDatesForDateUseCase: IGetMultipleMeetingsExcludedDatesForDateUseCase,
-    IGetMultipleMeetingsExcludedDatesForDateController: IGetMultipleMeetingsExcludedDatesForDateController
+    IGetMultipleMeetingsExcludedDatesForDateController: IGetMultipleMeetingsExcludedDatesForDateController,
 
     IMeetingDatesRepository: IMeetingDatesRepository,
 
@@ -278,7 +278,7 @@ export interface MEETINGS_RETURN_TYPES {
 
     IMentorSchedulesRepository: IMentorSchedulesRepository,
 
-    IGetMentorScheduleUseCase: IGetMentorSchedulesUseCase,
+    IGetMentorSchedulesUseCase: IGetMentorSchedulesUseCase,
     IGetMentorSchedulesController: IGetMentorSchedulesController
 }
 

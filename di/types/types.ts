@@ -18,6 +18,7 @@ import {PAYMENTS_RETURN_TYPES, PAYMENTS_SYMBOLS} from "@/di/types/payments.types
 import {DSK_RETURN_TYPES, DSK_SYMBOLS} from "@/di/types/dsk.types";
 import {BANK_ORDERS_RETURN_TYPES, BANK_ORDERS_SYMBOLS} from "@/di/types/bank-orders.types";
 import {BACKEND_KEYS_RETURN_TYPES, BACKEND_KEYS_SYMBOLS} from "@/di/types/backend-keys.types";
+import {CALENDAR_RETURN_TYPES, CALENDAR_SYMBOLS} from "@/di/types/calendar.types";
 
 const MODULE_DI_SYMBOLS = {};
 
@@ -41,7 +42,8 @@ export const DI_SYMBOLS = {
     ...PAYMENTS_SYMBOLS,
     ...DSK_SYMBOLS,
     ...BANK_ORDERS_SYMBOLS,
-    ...BACKEND_KEYS_SYMBOLS
+    ...BACKEND_KEYS_SYMBOLS,
+    ...CALENDAR_SYMBOLS
 };
 
 export interface DI_RETURN_TYPES extends
@@ -62,5 +64,6 @@ export interface DI_RETURN_TYPES extends
     PAYMENTS_RETURN_TYPES,
     DSK_RETURN_TYPES,
     BANK_ORDERS_RETURN_TYPES,
-    BACKEND_KEYS_RETURN_TYPES
+    BACKEND_KEYS_RETURN_TYPES,
+    CALENDAR_RETURN_TYPES
 {}
