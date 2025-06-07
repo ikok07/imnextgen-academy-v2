@@ -4,7 +4,7 @@ import {Calendar} from "@/app/_components/ui/shadcn/calendar";
 import {Dispatch, SetStateAction, useMemo} from "react";
 import {Card} from "@/app/_components/ui/shadcn/card";
 import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
-import {IoTrash} from "react-icons/io5";
+import {IoAlarm, IoTrash} from "react-icons/io5";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/app/_components/ui/shadcn/tooltip";
 import useErrorQuery from "@/app/_hooks/useErrorQuery";
 import {getUserSpecificMeetingsByUserId} from "@/app/dashboard/admin/users/actions";
@@ -13,6 +13,7 @@ import AdminUserDetailsSalesMeetingRow
     from "@/app/_components/dashboard/admin/users/modal/sales-meetings/AdminUserDetailsSalesMeetingRow";
 import AdminUserDetailsSalesMeetingRowSkeleton
     from "@/app/_components/dashboard/admin/users/modal/sales-meetings/skeletons/AdminUserDetailsSalesMeetingRowSkeleton";
+import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
 
 type AdminUserDetailsSalesCalendarProps = {
     selectedDate: number,
@@ -45,12 +46,19 @@ export default function AdminUserDetailsSalesCalendar({selectedDate, setSelected
     const salesMeetingsContainer = useMemo(() => {
         if (isLoading) return Array.from({length: 4}).map((_, index) => <AdminUserDetailsSalesMeetingRowSkeleton key={index} />);
 
+        if (salesMeetings.length === 0) return <PrimaryErrorMessage
+            Icon={IoAlarm}
+            title="Няма запазени срещи"
+            message="Не бяха открити срещи с този потребител на избраната дата"
+            className="mt-3"
+        />
+
         return <>
             {salesMeetings.map((salesMeeting, index) => {
                 return <AdminUserDetailsSalesMeetingRow salesMeeting={salesMeeting} key={index} />
             })}
         </>
-    }, [salesMeetings.length, isLoading])
+    }, [salesMeetings.length, isLoading]);
 
     return <div className="grid grid-rows-[auto_1fr]">
         <Calendar
@@ -63,8 +71,7 @@ export default function AdminUserDetailsSalesCalendar({selectedDate, setSelected
         />
         <div className="mt-3 grid grid-rows-[auto_1fr]">
             <h4 className="text-lg font-semibold">Запазени срещи</h4>
-            {/*{TODO: Max height}*/}
-            <div className="space-y-4 mt-3 max-h-full overflow-auto">
+            <div className="space-y-4 mt-3 max-h-[17rem] overflow-auto">
                 {salesMeetingsContainer}
             </div>
         </div>

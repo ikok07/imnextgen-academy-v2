@@ -21,6 +21,7 @@ import {hoursToMilliseconds, minutesToMilliseconds} from "date-fns";
 import useErrorMutation from "@/app/_hooks/useErrorMutation";
 import {formatInTimeZone} from "date-fns-tz";
 import {toast} from "sonner";
+import {useQueryClient} from "react-query";
 
 type AdminUserDetailsSalesCreateFormProps = {
     selectedDate: number,
@@ -28,6 +29,8 @@ type AdminUserDetailsSalesCreateFormProps = {
 }
 
 export default function AdminUserDetailsSalesCreateForm({selectedDate, fullProfile}: AdminUserDetailsSalesCreateFormProps) {
+    const queryClient = useQueryClient();
+
     const [selectedMentorId, setSelectedMentorId] = useState<string | null>(null);
     const [selectedTime, setSelectedTime] = useState<number | null>(selectedDate);
 
@@ -70,8 +73,10 @@ export default function AdminUserDetailsSalesCreateForm({selectedDate, fullProfi
         onSuccess() {
             toast.success("Срещата беше създадена!");
             setSelectedTime(null);
+            queryClient.invalidateQueries([`calendar-events-${selectedMentorId}`]);
+            queryClient.invalidateQueries([`user-specific-meetings-${selectedDate}`]);
         }
-    })
+    });
 
     const allMentors = useMemo(() => {
         if (!mentorsQuery?.success) return [];

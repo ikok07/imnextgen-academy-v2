@@ -30,16 +30,14 @@ export function AdminUserDetailsModal({fullProfile}: AdminUserDetailsModalProps)
         </DialogHeader>
         <div className="grid grid-cols-[1fr_2.5fr]">
             <AdminUserDetailsInfoColumn fullProfile={fullProfile}/>
-            <div>
-                <Tabs className="grid grid-rows-[auto_1fr] h-full" defaultValue="individual_meetings">
-                    <TabsList className="mx-auto">
-                        <TabsTrigger value="individual_meetings">Sales срещи</TabsTrigger>
-                        <TabsTrigger value="general_meetings">Срещи</TabsTrigger>
-                        <TabsTrigger value="video_progress">Прогрес по видеа</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="individual_meetings"><AdminUserDetailsSalesMeetings fullProfile={fullProfile} /></TabsContent>
-                </Tabs>
-            </div>
+            <Tabs className="grid grid-rows-[auto_1fr] h-full" defaultValue="individual_meetings">
+                <TabsList className="mx-auto">
+                    <TabsTrigger value="individual_meetings">Sales срещи</TabsTrigger>
+                    <TabsTrigger value="general_meetings">Срещи</TabsTrigger>
+                    <TabsTrigger value="video_progress">Прогрес по видеа</TabsTrigger>
+                </TabsList>
+                <TabsContent value="individual_meetings"><AdminUserDetailsSalesMeetings fullProfile={fullProfile} /></TabsContent>
+            </Tabs>
         </div>
     </DialogContent>
 }

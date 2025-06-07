@@ -3,7 +3,7 @@
 import {createServerAction} from "@/app/_utils/createServerAction";
 import {getInjection} from "@/di/container";
 import {
-    CreateCalendarEventOptions,
+    CreateCalendarEventOptions, DeleteCalendarEventOptions,
     GetCalendarEventsOptions
 } from "@/src/application/services/calendar/calendar.service.interface";
 
@@ -43,5 +43,10 @@ export const bookSalesMeeting = createServerAction(async (userId: string | undef
         await getInjection("IDeleteCalendarEventController")(mentorId, {eventId: event.id})
         throw e;
     }
+});
+
+export const unbookSalesMeeting = createServerAction(async (specificMeetingId: string | undefined, mentorId: string | undefined, calendarEventOpts: Partial<Omit<DeleteCalendarEventOptions, "calendarId">>) => {
+    if (calendarEventOpts.eventId) await getInjection("IDeleteCalendarEventController")(mentorId, calendarEventOpts);
+    await getInjection("IRemoveUserSpecificMeetingController")(specificMeetingId, mentorId);
 })
 
