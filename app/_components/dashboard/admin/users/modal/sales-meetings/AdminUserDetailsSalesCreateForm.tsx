@@ -1,7 +1,7 @@
 "use client"
 
 import {FullProfile} from "@/src/entities/models/auth/full-profile";
-import {useEffect, useMemo, useState} from "react";
+import {Dispatch, SetStateAction, useEffect, useMemo, useState} from "react";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/app/_components/ui/shadcn/select";
 import CalendarAvailableTimeBox from "@/app/_components/ui/calendar/CalendarAvailableTimeBox";
 import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
@@ -25,13 +25,14 @@ import {useQueryClient} from "react-query";
 
 type AdminUserDetailsSalesCreateFormProps = {
     selectedDate: number,
-    fullProfile: FullProfile
+    fullProfile: FullProfile,
+    selectedMentorId: string | null,
+    setSelectedMentorId: Dispatch<SetStateAction<string | null>>
 }
 
-export default function AdminUserDetailsSalesCreateForm({selectedDate, fullProfile}: AdminUserDetailsSalesCreateFormProps) {
+export default function AdminUserDetailsSalesCreateForm({selectedDate, fullProfile, selectedMentorId, setSelectedMentorId}: AdminUserDetailsSalesCreateFormProps) {
     const queryClient = useQueryClient();
 
-    const [selectedMentorId, setSelectedMentorId] = useState<string | null>(null);
     const [selectedTime, setSelectedTime] = useState<number | null>(selectedDate);
 
     const {data: mentorsQuery, isLoading: isLoadingMentors} = useErrorQuery({

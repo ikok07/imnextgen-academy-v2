@@ -18,11 +18,11 @@ import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage
 type AdminUserDetailsSalesCalendarProps = {
     selectedDate: number,
     setSelectedDate: Dispatch<SetStateAction<number>>,
+    selectedMentorId: string | null
     userId: string
 }
 
-export default function AdminUserDetailsSalesCalendar({selectedDate, setSelectedDate, userId}: AdminUserDetailsSalesCalendarProps) {
-
+export default function AdminUserDetailsSalesCalendar({selectedDate, setSelectedDate, selectedMentorId, userId}: AdminUserDetailsSalesCalendarProps) {
     const {data: userSpecificMeetingsQuery, isLoading} = useErrorQuery({
         queryFn: () => getUserSpecificMeetingsByUserId({
             userId,
@@ -55,7 +55,7 @@ export default function AdminUserDetailsSalesCalendar({selectedDate, setSelected
 
         return <>
             {salesMeetings.map((salesMeeting, index) => {
-                return <AdminUserDetailsSalesMeetingRow salesMeeting={salesMeeting} key={index} />
+                return <AdminUserDetailsSalesMeetingRow salesMeeting={salesMeeting} selectedDate={selectedDate} selectedMentorId={selectedMentorId} key={index} />
             })}
         </>
     }, [salesMeetings.length, isLoading]);
@@ -68,10 +68,11 @@ export default function AdminUserDetailsSalesCalendar({selectedDate, setSelected
             onSelect={d => d ? setSelectedDate(d.getTime()) : {}}
             toMonth={addMonths(new Date(), 1)}
             locale={bg}
+            className="sm:justify-self-center"
         />
         <div className="mt-3 grid grid-rows-[auto_1fr]">
             <h4 className="text-lg font-semibold">Запазени срещи</h4>
-            <div className="space-y-4 mt-3 max-h-[17rem] overflow-auto">
+            <div className="space-y-4 mt-3 h-[17rem] overflow-auto">
                 {salesMeetingsContainer}
             </div>
         </div>

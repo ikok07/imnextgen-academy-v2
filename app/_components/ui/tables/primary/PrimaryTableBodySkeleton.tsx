@@ -10,7 +10,7 @@ export default function PrimaryTableBodySkeleton({columns}: PrimaryTableBodySkel
     return <TableRow>
         {columns.map((column, index) => {
             if (!column.accessorFn) {
-                return <TableCell style={{width: column.getSize()}}/>;
+                return <TableCell style={{width: column.getSize()}} key={index} />;
             }
 
             return <TableCell key={index} style={{width: column.getSize()}}>

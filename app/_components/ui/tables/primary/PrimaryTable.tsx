@@ -53,7 +53,7 @@ export default function PrimaryTable<TData>({isLoading, isRefetching, rowSize}: 
                             {table.getHeaderGroups().map(headerGroup => {
                                 return <TableRow key={headerGroup.id} className="hover:bg-background dark:hover:bg-background">
                                     {headerGroup.headers.map(header => {
-                                        return <TableResizeHead header={header}/>
+                                        return <TableResizeHead header={header} key={header.id} />
                                     })}
                                 </TableRow>
                             })}
@@ -86,7 +86,7 @@ export default function PrimaryTable<TData>({isLoading, isRefetching, rowSize}: 
                                     style={{height: `${item.size}px`, transform: `translateY(${item.start}px)`}}
                                 >
                                     {row.getVisibleCells().map(cell => {
-                                        return <TableResizeCell cell={cell} />
+                                        return <TableResizeCell cell={cell} key={cell.id}/>
                                     })}
                                 </TableRow>
                             })

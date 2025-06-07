@@ -49,6 +49,7 @@ export class GoogleCalendarService implements ICalendarService {
 
             if (formattedTimeMin) options.timeMin = formattedTimeMin;
             if (formattedTimeMax) options.timeMax = formattedTimeMax;
+
             const res = await calendar.events.list(options);
 
             if (!res.data.items) return [];

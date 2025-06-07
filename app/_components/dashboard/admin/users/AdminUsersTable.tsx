@@ -13,7 +13,7 @@ import useErrorMutation from "@/app/_hooks/useErrorMutation";
 import {deleteMultipleUsers} from "@/app/dashboard/admin/actions";
 import { toast } from "sonner";
 import {useQueryClient} from "react-query";
-// import AdminUserDetailsModal from "@/app/_components/dashboard/admin/users/AdminUserDetailsModal";
+
 import {
     Dialog,
     DialogTrigger
@@ -21,6 +21,7 @@ import {
 import {
     AdminUserDetailsModal
 } from "@/app/_components/dashboard/admin/users/modal/AdminUserDetailsModal";
+import AdminUsersTableWrapper from "@/app/_components/dashboard/admin/users/AdminUsersTableWrapper";
 
 const columnHelper = createColumnHelper<FullProfile>();
 
@@ -83,7 +84,7 @@ export default function AdminUsersTable() {
             }),
             columnHelper.display({
                 id: "open_btn",
-                cell: ({row}) => <Dialog open={true}>
+                cell: ({row}) => <Dialog>
                     <DialogTrigger><div className="flex items-center justify-center"><SecondaryButton>Управление</SecondaryButton></div></DialogTrigger>
                     <AdminUserDetailsModal fullProfile={row.original} />
                 </Dialog>,
@@ -96,7 +97,7 @@ export default function AdminUsersTable() {
         if (!allProfilesQuery || !allProfilesQuery.success || isLoadingAllProfiles) return [];
         return allProfilesQuery.value;
         // @ts-ignore
-    }, [(allProfilesQuery?.value)])
+    }, [(allProfilesQuery?.value)]);
 
     return <>
         <TableProvider<FullProfile>
@@ -124,7 +125,7 @@ export default function AdminUsersTable() {
                 onDelete: (rows) => deleteSelectedUsers(rows)
             }}
         >
-            <div className={`${isDeletingSelectedUsers ? "pointer-events-none opacity-80" : ""}`}><PrimaryTable isLoading={isLoadingAllProfiles} isRefetching={isRefetchingAllProfiles} rowSize={50} /></div>
+            <AdminUsersTableWrapper isDeletingSelectedUsers={isDeletingSelectedUsers} isLoadingAllProfiles={isLoadingAllProfiles} isRefetchingAllProfiles={isRefetchingAllProfiles} />
         </TableProvider>
     </>
 }

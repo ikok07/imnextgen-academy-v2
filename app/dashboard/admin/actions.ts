@@ -6,6 +6,8 @@ import {
     CreateCalendarEventOptions, DeleteCalendarEventOptions,
     GetCalendarEventsOptions
 } from "@/src/application/services/calendar/calendar.service.interface";
+import {UserSpecificMeeting} from "@/drizzle/schema/user_specific_meetings";
+import {minutesToMilliseconds} from "date-fns";
 
 export const deleteUser = createServerAction(async (userId: string | undefined) => {
     await getInjection("IDeleteUserController")(userId);
@@ -27,17 +29,18 @@ export const createCalendarEvent = createServerAction((userId: string | undefine
     return getInjection("ICreateCalendarEventController")(userId, opts);
 });
 
-export const bookSalesMeeting = createServerAction(async (userId: string | undefined, mentorId: string | undefined, opts: Partial<Omit<CreateCalendarEventOptions, "calendarId">>) => {
-    const event = await getInjection("ICreateCalendarEventController")(mentorId, opts);
+export const bookSalesMeeting = createServerAction(async (userId: string | undefined, mentorId: string | undefined, calendarEventOpts: Partial<Omit<CreateCalendarEventOptions, "calendarId">>) => {
+    const event = await getInjection("ICreateCalendarEventController")(mentorId, calendarEventOpts);
     try {
+        const {meeting_url} = await getInjection("IGetCalendarIdByUserIdController")(mentorId);
         await getInjection("IAddUserSpecificMeetingController")({
             profile_id: userId,
             mentor_profile_id: mentorId,
             platform: "zoom",
-            date: opts.event?.start?.dateTime ? Math.floor(new Date(opts.event?.start?.dateTime).valueOf() / 1000) : undefined,
+            date: calendarEventOpts.event?.start?.dateTime ? Math.floor(new Date(calendarEventOpts.event?.start?.dateTime).valueOf() / 1000) : undefined,
             duration_minutes: 30,
             type: "sales-meeting",
-            url: "https://google.com"
+            url: meeting_url
         })
     } catch (e) {
         await getInjection("IDeleteCalendarEventController")(mentorId, {eventId: event.id})
@@ -45,8 +48,14 @@ export const bookSalesMeeting = createServerAction(async (userId: string | undef
     }
 });
 
-export const unbookSalesMeeting = createServerAction(async (specificMeetingId: string | undefined, mentorId: string | undefined, calendarEventOpts: Partial<Omit<DeleteCalendarEventOptions, "calendarId">>) => {
-    if (calendarEventOpts.eventId) await getInjection("IDeleteCalendarEventController")(mentorId, calendarEventOpts);
-    await getInjection("IRemoveUserSpecificMeetingController")(specificMeetingId, mentorId);
+export const unbookSalesMeeting = createServerAction(async (salesMeeting: UserSpecificMeeting, mentorId: string | undefined) => {
+    const calendarEvents = await getInjection("IGetCalendarEventsController")(mentorId, {
+        timeMin: salesMeeting.date * 1000,
+        timeMax: salesMeeting.date * 1000 + minutesToMilliseconds(salesMeeting.duration_minutes + 1)
+    });
+    const validCalendarEvent = calendarEvents.find(event => event.start === salesMeeting.date * 1000);
+
+    if (validCalendarEvent) await getInjection("IDeleteCalendarEventController")(mentorId, {eventId: validCalendarEvent.id});
+    await getInjection("IRemoveUserSpecificMeetingController")(salesMeeting.id, mentorId);
 })
 
