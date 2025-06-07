@@ -13,7 +13,7 @@ resourcePolicy:
       actions: ["select"]
       roles:
         - mentor
-        - moderators
+        - moderator
       effect: EFFECT_ALLOW
 
     - name: allow_users_to_access_their_profiles
