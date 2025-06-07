@@ -13,7 +13,7 @@ type AdminUserDetailsSalesMeetingsProps = {
 export default function AdminUserDetailsSalesMeetings({fullProfile}: AdminUserDetailsSalesMeetingsProps) {
     const [selectedDate, setSelectedDate] = useState(startOfDay(Date.now()).valueOf());
 
-    return <div className="grid grid-cols-[auto_1fr] h-full">
+    return <div className="grid grid-cols-[1fr_1fr] h-full">
         <AdminUserDetailsSalesCalendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} userId={fullProfile.id} />
         <AdminUserDetailsSalesCreateForm selectedDate={selectedDate} fullProfile={fullProfile}/>
     </div>

@@ -1,5 +1,5 @@
 import {
-    CalendarEvent,
+    CalendarEvent, CalendarRawResponse,
     CreateCalendarEventOptions, DeleteCalendarEventOptions,
     GetCalendarEventsOptions,
     ICalendarService, UpdateCalendarEventOptions
@@ -61,7 +61,7 @@ export class GoogleCalendarService implements ICalendarService {
             throw new DatabaseError(`Failed to get google calendar events! Error: ${e}`);
         }
     }
-    async createCalendarEvent({calendarId, event}: CreateCalendarEventOptions): Promise<CalendarEvent> {
+    async createCalendarEvent({calendarId, event}: CreateCalendarEventOptions): Promise<CalendarRawResponse> {
         try {
             const calendar = await this.getCalendar();
 
@@ -72,12 +72,12 @@ export class GoogleCalendarService implements ICalendarService {
                 resource: event
             });
 
-            return data as CalendarEvent;
+            return data as CalendarRawResponse;
         } catch (e) {
             throw new DatabaseError(`Failed to create event! Error: ${e}`);
         }
     }
-    async updateCalendarEvent({calendarId, eventId, event}: UpdateCalendarEventOptions): Promise<CalendarEvent> {
+    async updateCalendarEvent({calendarId, eventId, event}: UpdateCalendarEventOptions): Promise<CalendarRawResponse> {
         try {
             const calendar = await this.getCalendar();
 
@@ -89,7 +89,7 @@ export class GoogleCalendarService implements ICalendarService {
                 resource: event
             });
 
-            return data as CalendarEvent;
+            return data as CalendarRawResponse;
         } catch (e) {
             throw new DatabaseError(`Failed to update event! Error: ${e}`);
         }
