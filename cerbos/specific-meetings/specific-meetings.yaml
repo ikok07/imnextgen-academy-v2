@@ -21,7 +21,7 @@ resourcePolicy:
         - mentor
       condition:
         match:
-          expr: "request.resource.mentor_profile_id == request.principal.id"
+          expr: "request.resource.attr.mentor_profile_id == request.principal.id"
       effect: EFFECT_ALLOW
 
     - name: allow_mentors_to_create_specific_meetings
@@ -36,5 +36,5 @@ resourcePolicy:
         - user
       condition:
         match:
-          expr: "request.resource.profile_id == request.principal.id"
+          expr: "request.resource.attr.profile_id == request.principal.id"
       effect: EFFECT_ALLOW
