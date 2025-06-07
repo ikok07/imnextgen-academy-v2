@@ -113,6 +113,13 @@ import {
 } from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/get-specific-meetings-by-mentor-profile-id.controller";
 import {IGetUserController} from "@/src/interface-adapters/controllers/auth/get-user.controller";
 import {ICheckAccessController} from "@/src/interface-adapters/controllers/auth/check-access.controller";
+import {MentorSchedulesRepository} from "@/src/infrastructure/repositories/meetings/mentor-schedules.repository";
+import {
+    getMentorSchedulesUseCase
+} from "@/src/application/use-cases/meetings/mentor-schedules/get-mentor-schedules.use-case";
+import {
+    getMentorSchedulesController
+} from "@/src/interface-adapters/controllers/meetings/mentor-schedules/get-mentor-schedules.controller";
 
 export function createMeetingsModule() {
     const meetingsModule = createModule();
@@ -308,6 +315,18 @@ export function createMeetingsModule() {
     meetingsModule
         .bind(DI_SYMBOLS.IRemoveUserSpecificMeetingController)
         .toHigherOrderFunction(removeUserSpecificMeetingController, [DI_SYMBOLS.IRemoveUserSpecificMeetingUseCase, DI_SYMBOLS.IGetUserController, DI_SYMBOLS.ICheckAccessController]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IMentorSchedulesRepository)
+        .toClass(MentorSchedulesRepository);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IGetMentorSchedulesUseCase)
+        .toHigherOrderFunction(getMentorSchedulesUseCase, [DI_SYMBOLS.IMentorSchedulesRepository]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IGetMentorSchedulesController)
+        .toHigherOrderFunction(getMentorSchedulesController, [DI_SYMBOLS.IGetMentorSchedulesUseCase]);
 
     return meetingsModule;
 }

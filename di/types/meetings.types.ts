@@ -108,6 +108,15 @@ import {
 import {
     IGetSpecificMeetingsByMentorProfileIdUseCase
 } from "@/src/application/use-cases/meetings/user-specific-meetings/get-specific-meetings-by-mentor-profile-id.use-case";
+import {
+    IMentorSchedulesRepository
+} from "@/src/application/repositories/meetings/mentor-schedules.repository.interface";
+import {
+    IGetMentorSchedulesUseCase
+} from "@/src/application/use-cases/meetings/mentor-schedules/get-mentor-schedules.use-case";
+import {
+    IGetMentorSchedulesController
+} from "@/src/interface-adapters/controllers/meetings/mentor-schedules/get-mentor-schedules.controller";
 
 export const MEETINGS_SYMBOLS = {
     IMeetingsRepository: Symbol.for("IMeetingsRepository"),
@@ -183,7 +192,12 @@ export const MEETINGS_SYMBOLS = {
     IUpdateUserSpecificMeetingController: Symbol.for("IUpdateUserSpecificMeetingController"),
 
     IRemoveUserSpecificMeetingUseCase: Symbol.for("IRemoveUserSpecificMeetingUseCase"),
-    IRemoveUserSpecificMeetingController: Symbol.for("IRemoveUserSpecificMeetingController")
+    IRemoveUserSpecificMeetingController: Symbol.for("IRemoveUserSpecificMeetingController"),
+
+    IMentorSchedulesRepository: Symbol.for("IMentorSchedulesRepository"),
+
+    IGetMentorSchedulesUseCase: Symbol.for("IGetMentorSchedulesUseCase"),
+    IGetMentorSchedulesController: Symbol.for("IGetMentorSchedulesController")
 }
 
 export interface MEETINGS_RETURN_TYPES {
@@ -260,7 +274,12 @@ export interface MEETINGS_RETURN_TYPES {
     IUpdateUserSpecificMeetingController: IUpdateUserSpecificMeetingController,
 
     IRemoveUserSpecificMeetingUseCase: IRemoveUserSpecificMeetingUseCase,
-    IRemoveUserSpecificMeetingController: IRemoveUserSpecificMeetingController
+    IRemoveUserSpecificMeetingController: IRemoveUserSpecificMeetingController,
+
+    IMentorSchedulesRepository: IMentorSchedulesRepository,
+
+    IGetMentorScheduleUseCase: IGetMentorSchedulesUseCase,
+    IGetMentorSchedulesController: IGetMentorSchedulesController
 }
 
 
