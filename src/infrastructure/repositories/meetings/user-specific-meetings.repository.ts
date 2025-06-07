@@ -23,6 +23,7 @@ export class UserSpecificMeetingsRepository extends BaseRepository implements IU
                 const utcStartDate = startDate + timezoneOffsetMin * 60 * 1000;
                 const dayStart = Math.floor(startOfDay(utcStartDate).valueOf() / 1000);
                 const dayEnd = Math.floor(addHours(startOfDay(utcStartDate).valueOf(), 24).valueOf() / 1000);
+                console.log(new Date(startDate));
                 startDatePredicate = and(gte(userSpecificMeetingsTable.date, dayStart), lt(userSpecificMeetingsTable.date, dayEnd))
             }
 

@@ -37,7 +37,7 @@ export function AdminUserDetailsModal({fullProfile}: AdminUserDetailsModalProps)
                         <TabsTrigger value="general_meetings">Срещи</TabsTrigger>
                         <TabsTrigger value="video_progress">Прогрес по видеа</TabsTrigger>
                     </TabsList>
-                    <TabsContent value="individual_meetings"><AdminUserDetailsSalesMeetings /></TabsContent>
+                    <TabsContent value="individual_meetings"><AdminUserDetailsSalesMeetings fullProfile={fullProfile} /></TabsContent>
                 </Tabs>
             </div>
         </div>

@@ -1,47 +1,71 @@
 import {addMonths} from "date-fns";
 import {bg} from "date-fns/locale";
 import {Calendar} from "@/app/_components/ui/shadcn/calendar";
-import {Dispatch, SetStateAction} from "react";
+import {Dispatch, SetStateAction, useMemo} from "react";
 import {Card} from "@/app/_components/ui/shadcn/card";
 import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
 import {IoTrash} from "react-icons/io5";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/app/_components/ui/shadcn/tooltip";
+import useErrorQuery from "@/app/_hooks/useErrorQuery";
+import {getUserSpecificMeetingsByUserId} from "@/app/dashboard/admin/users/actions";
+import { toast } from "sonner";
+import AdminUserDetailsSalesMeetingRow
+    from "@/app/_components/dashboard/admin/users/modal/sales-meetings/AdminUserDetailsSalesMeetingRow";
+import AdminUserDetailsSalesMeetingRowSkeleton
+    from "@/app/_components/dashboard/admin/users/modal/sales-meetings/skeletons/AdminUserDetailsSalesMeetingRowSkeleton";
 
 type AdminUserDetailsSalesCalendarProps = {
     selectedDate: number,
-    setSelectedDate: Dispatch<SetStateAction<number>>
+    setSelectedDate: Dispatch<SetStateAction<number>>,
+    userId: string
 }
 
-export default function AdminUserDetailsSalesCalendar({selectedDate, setSelectedDate}: AdminUserDetailsSalesCalendarProps) {
+export default function AdminUserDetailsSalesCalendar({selectedDate, setSelectedDate, userId}: AdminUserDetailsSalesCalendarProps) {
+
+    const {data: userSpecificMeetingsQuery, isLoading} = useErrorQuery({
+        queryFn: () => getUserSpecificMeetingsByUserId({
+            userId,
+            timezoneOffsetMin: -(new Date().getTimezoneOffset()),
+            startDate: selectedDate,
+            meetingType: "sales-meeting"
+        }),
+        queryKey: [`user-specific-meetings-${selectedDate}`],
+        onError() {
+            toast.error("Срещите не може да бъдат заредени!");
+        }
+    });
+
+    const salesMeetings = useMemo(() => {
+        if (!userSpecificMeetingsQuery?.success) return [];
+
+        return userSpecificMeetingsQuery.value;
+        // @ts-ignore
+    }, [userSpecificMeetingsQuery?.value.length]);
+
+    const salesMeetingsContainer = useMemo(() => {
+        if (isLoading) return Array.from({length: 4}).map((_, index) => <AdminUserDetailsSalesMeetingRowSkeleton key={index} />);
+
+        return <>
+            {salesMeetings.map((salesMeeting, index) => {
+                return <AdminUserDetailsSalesMeetingRow salesMeeting={salesMeeting} key={index} />
+            })}
+        </>
+    }, [salesMeetings.length, isLoading])
 
     return <div className="grid grid-rows-[auto_1fr]">
         <Calendar
             mode="single"
             selected={new Date(selectedDate)}
             required={true}
-            onSelect={d => d ? setSelectedDate(d.valueOf()) : {}}
+            onSelect={d => d ? setSelectedDate(d.getTime()) : {}}
             toMonth={addMonths(new Date(), 1)}
             locale={bg}
         />
         <div className="mt-3 grid grid-rows-[auto_1fr]">
             <h4 className="text-lg font-semibold">Запазени срещи</h4>
-            <div className="space-y-4 mt-3 max-h-[50%] overflow-auto">
-                <TooltipProvider>
-                    <Tooltip>
-                        <TooltipTrigger className={`w-full ${true ? "cursor-not-allowed" : ""}`}>
-                            <Card className="px-3 py-2 flex items-center justify-between">
-                                <div className="flex flex-col items-start">
-                                    <h6 className="font-semibold">Събота - 24.06.2026</h6>
-                                    <p className="text-sm text-primary/70">16:30 - 17:30</p>
-                                </div>
-                                <PrimaryButton className={`${true ? "pointer-events-none bg-border" : "bg-red-500 hover:bg-red-600"}`}><IoTrash /></PrimaryButton>
-                            </Card>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            <p>Срещата е прминала</p>
-                        </TooltipContent>
-                    </Tooltip>
-                </TooltipProvider>
+            {/*{TODO: Max height}*/}
+            <div className="space-y-4 mt-3 max-h-full overflow-auto">
+                {salesMeetingsContainer}
             </div>
         </div>
     </div>
