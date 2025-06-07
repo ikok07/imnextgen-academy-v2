@@ -105,6 +105,12 @@ import {
 import {
     UserSpecificMeetingsRepository
 } from "@/src/infrastructure/repositories/meetings/user-specific-meetings.repository";
+import {
+    getSpecificMeetingsByMentorProfileIdUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/get-specific-meetings-by-mentor-profile-id.use-case";
+import {
+    getSpecificMeetingsByMentorProfileIdController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/get-specific-meetings-by-mentor-profile-id.controller";
 
 export function createMeetingsModule() {
     const meetingsModule = createModule();
@@ -264,6 +270,14 @@ export function createMeetingsModule() {
     meetingsModule
         .bind(DI_SYMBOLS.IGetSpecificMeetingsByUserIdUseCase)
         .toHigherOrderFunction(getSpecificMeetingsByUserIdUseCase, [DI_SYMBOLS.IUserSpecificMeetingsRepository]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IGetSpecificMeetingsByMentorProfileIdUseCase)
+        .toHigherOrderFunction(getSpecificMeetingsByMentorProfileIdUseCase, [DI_SYMBOLS.IUserSpecificMeetingsRepository]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IGetSpecificMeetingsByMentorProfileIdController)
+        .toHigherOrderFunction(getSpecificMeetingsByMentorProfileIdController, [DI_SYMBOLS.IGetSpecificMeetingsByMentorProfileIdUseCase]);
 
     meetingsModule
         .bind(DI_SYMBOLS.IGetSpecificMeetingsByUserIdController)

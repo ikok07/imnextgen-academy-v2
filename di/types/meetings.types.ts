@@ -102,6 +102,12 @@ import {
 import {
     IUserSpecificMeetingsRepository
 } from "@/src/application/repositories/meetings/user-specific-meetings.repository.interface";
+import {
+    IGetSpecificMeetingsByMentorProfileIdController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/get-specific-meetings-by-mentor-profile-id.controller";
+import {
+    IGetSpecificMeetingsByMentorProfileIdUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/get-specific-meetings-by-mentor-profile-id.use-case";
 
 export const MEETINGS_SYMBOLS = {
     IMeetingsRepository: Symbol.for("IMeetingsRepository"),
@@ -167,6 +173,9 @@ export const MEETINGS_SYMBOLS = {
     IGetSpecificMeetingsByUserIdUseCase: Symbol.for("IGetSpecificMeetingsByUserIdUseCase"),
     IGetSpecificMeetingsByUserIdController: Symbol.for("IGetSpecificMeetingsByUserIdController"),
 
+    IGetSpecificMeetingsByMentorProfileIdUseCase: Symbol.for("IGetSpecificMeetingsByMentorProfileIdUseCase"),
+    IGetSpecificMeetingsByMentorProfileIdController: Symbol.for("IGetSpecificMeetingsByMentorProfileIdController"),
+
     IAddUserSpecificMeetingUseCase: Symbol.for("IAddUserSpecificMeetingUseCase"),
     IAddUserSpecificMeetingController: Symbol.for("IAddUserSpecificMeetingController"),
 
@@ -202,6 +211,7 @@ export interface MEETINGS_RETURN_TYPES {
 
     IGetMeetingRepeatDaysUseCase: IGetMeetingRepeatDaysUseCase,
     IGetMeetingRepeatDaysController: IGetMeetingRepeatDaysController,
+
     IGetMeetingsByRepeatingDayOfWeekUseCase: IGetMeetingsByRepeatingDayOfWeekUseCase,
     IGetMeetingsByRepeatingDayOfWeekController: IGetMeetingsByRepeatingDayOfWeekController,
 
@@ -239,6 +249,9 @@ export interface MEETINGS_RETURN_TYPES {
 
     IGetSpecificMeetingsByUserIdUseCase: IGetSpecificMeetingsByUserIdUseCase,
     IGetSpecificMeetingsByUserIdController: IGetSpecificMeetingsByUserIdController,
+
+    IGetSpecificMeetingsByMentorProfileIdUseCase: IGetSpecificMeetingsByMentorProfileIdUseCase,
+    IGetSpecificMeetingsByMentorProfileIdController: IGetSpecificMeetingsByMentorProfileIdController
 
     IAddUserSpecificMeetingUseCase: IAddUserSpecificMeetingUseCase,
     IAddUserSpecificMeetingController: IAddUserSpecificMeetingController,

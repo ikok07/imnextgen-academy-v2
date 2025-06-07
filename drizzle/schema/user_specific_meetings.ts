@@ -17,7 +17,11 @@ export const userSpecificMeetingsTable = pgTable("user_specific_meetings", {
     duration_minutes: integer("duration_minutes").notNull(),
     platform: meetingPlatformEnum(),
     url: text("url").notNull(),
-    type: userSpecificMeetingTypeEnum().notNull()
+    type: userSpecificMeetingTypeEnum().notNull(),
+    mentor_profile_id: text("mentor_profile_id").references(() => profilesTable.id, {
+        onDelete: "set null",
+        onUpdate: "cascade"
+    })
 });
 
 export const userSpecificMeetingTypeSchema = createSelectSchema(userSpecificMeetingTypeEnum);

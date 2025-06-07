@@ -4,7 +4,7 @@ import {createInsertSchema, createSelectSchema} from "drizzle-zod";
 import {z} from "zod";
 import {profilesTable} from "@/drizzle/schema/profiles";
 
-export const userRoles = pgEnum("user_roles_enum", ["user", "admin"]);
+export const userRoles = pgEnum("user_roles_enum", ["user", "admin", "mentor", "moderator"]);
 
 export const userRolesTable = pgTable("user_roles", {
     id: text("id").notNull().primaryKey().default(sql`gen_random_uuid()`),
