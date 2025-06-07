@@ -59,7 +59,7 @@ export interface CALENDAR_RETURN_TYPES {
 
     ICalendarIdsRepository: ICalendarIdsRepository,
 
-    IGetCalendarIdByUserId: IGetCalendarIdByUserIdUseCase,
+    IGetCalendarIdByUserIdUseCase: IGetCalendarIdByUserIdUseCase,
     IGetCalendarIdByUserIdController: IGetCalendarIdByUserIdController
 }
 
