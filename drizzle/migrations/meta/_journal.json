@@ -379,6 +379,13 @@
       "when": 1749282069749,
       "tag": "0053_add-mentor-profile-id-to-specific-meetings",
       "breakpoints": true
+    },
+    {
+      "idx": 54,
+      "version": "7",
+      "when": 1749295627143,
+      "tag": "0054_add-mentor-schedules",
+      "breakpoints": true
     }
   ]
 }
