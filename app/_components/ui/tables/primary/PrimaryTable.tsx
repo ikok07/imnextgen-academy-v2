@@ -86,7 +86,7 @@ export default function PrimaryTable<TData>({isLoading, isRefetching, rowSize}: 
                                     style={{height: `${item.size}px`, transform: `translateY(${item.start}px)`}}
                                 >
                                     {row.getVisibleCells().map(cell => {
-                                        return <TableResizeCell cell={cell} key={cell.id}/>
+                                        return <TableResizeCell cell={cell} key={cell.id} />
                                     })}
                                 </TableRow>
                             })
