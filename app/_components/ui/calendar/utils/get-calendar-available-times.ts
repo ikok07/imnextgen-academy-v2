@@ -1,4 +1,5 @@
 import {hoursToMilliseconds, minutesToMilliseconds, secondsToMilliseconds} from "date-fns";
+import {BookedCalendarEvent} from "@/src/entities/models/meetings/booked-calendar-event";
 
 type Options = {
     dateMs: number,
@@ -6,7 +7,7 @@ type Options = {
     startMinutes: number,
     totalDurationMinutes: number,
     singleAppointmentDurationMinutes: number,
-    bookedMeetingsDates: { date: number, durationMinutes: number }[]
+    bookedMeetingsDates: BookedCalendarEvent[]
 }
 
 export function getCalendarAvailableTimes({dateMs, startHour, startMinutes, totalDurationMinutes, singleAppointmentDurationMinutes, bookedMeetingsDates}: Options) {
@@ -16,11 +17,12 @@ export function getCalendarAvailableTimes({dateMs, startHour, startMinutes, tota
 
     for (let i = 0; i < Math.round(totalDurationMinutes / singleAppointmentDurationMinutes); i++) {
         const currDate = startDate + minutesToMilliseconds(singleAppointmentDurationMinutes * i);
+        const endOfCurrDate = currDate + minutesToMilliseconds(singleAppointmentDurationMinutes);
 
         if (bookedMeetingsDates.some(d => {
-            const startDate = d.date;
-            const endDate = d.date + minutesToMilliseconds(d.durationMinutes);
-            return startDate === currDate || (startDate < currDate && currDate < endDate);
+            const startDate = d.start;
+            const endDate = d.end;
+            return startDate === currDate || (startDate < currDate && currDate < endDate) || (endOfCurrDate > startDate && endOfCurrDate < endDate);
         })) continue;
 
         availableTimes.add(currDate);
