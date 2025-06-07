@@ -1,6 +1,6 @@
 import AdminUserDetailsSalesCalendar
     from "@/app/_components/dashboard/admin/users/modal/sales-meetings/AdminUserDetailsSalesCalendar";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {startOfDay} from "date-fns";
 import {FullProfile} from "@/src/entities/models/auth/full-profile";
 import AdminUserDetailsSalesCreateForm

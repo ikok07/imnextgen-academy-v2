@@ -11,3 +11,7 @@ export const deleteMultipleUsers = createServerAction(async (userIds: (string | 
     await getInjection("IDeleteMultipleUsersController")(userIds);
 });
 
+export const getMentorSchedules = createServerAction((userId: string | undefined) => {
+    return getInjection("IGetMentorSchedulesController")(userId);
+})
+
