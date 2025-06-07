@@ -27,7 +27,7 @@ resourcePolicy:
     - name: allow_mentors_to_create_specific_meetings
       actions: ["create"]
       roles:
-        -mentor
+        - mentor
       effect: EFFECT_ALLOW
 
     - name: allow_users_to_access_their_specific_meetings
