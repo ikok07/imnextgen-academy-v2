@@ -21,6 +21,9 @@ import {CalendarIdsRepository} from "@/src/infrastructure/repositories/calendar/
 import {
     getCalendarIdByUserIdUseCase
 } from "@/src/application/use-cases/calendar/calendar-ids/get-calendar-id-by-user-id.use-case";
+import {
+    getCalendarIdByUserIdController
+} from "@/src/interface-adapters/controllers/calendar/calendar-ids/get-calendar-id-by-user-id.controller";
 
 export function createCalendarModule() {
     const calendarModule = createModule();
@@ -68,6 +71,10 @@ export function createCalendarModule() {
     calendarModule
         .bind(DI_SYMBOLS.IGetCalendarIdByUserIdUseCase)
         .toHigherOrderFunction(getCalendarIdByUserIdUseCase, [DI_SYMBOLS.ICalendarIdsRepository]);
+
+    calendarModule
+        .bind(DI_SYMBOLS.IGetCalendarIdByUserIdController)
+        .toHigherOrderFunction(getCalendarIdByUserIdController, [DI_SYMBOLS.IGetCalendarIdByUserIdUseCase]);
 
     return calendarModule;
 }
