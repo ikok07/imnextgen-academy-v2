@@ -1,4 +1,4 @@
-import {integer, pgTable, text} from "drizzle-orm/pg-core";
+import {integer, pgTable, text, unique} from "drizzle-orm/pg-core";
 import {sql} from "drizzle-orm";
 import {createInsertSchema, createSelectSchema} from "drizzle-zod";
 import {z} from "zod";
@@ -10,7 +10,9 @@ export const mentorSchedulesTable = pgTable("mentor_schedules", {
     start_hour: integer("start_hour").notNull(),
     start_minutes: integer("start_minutes").notNull(),
     duration_minutes: integer("duration").notNull()
-});
+},(table) => ({
+    uniqueProfileDayOfWeek: unique().on(table.profile_id, table.day_of_week)
+}));
 
 export const mentorScheduleSchema = createSelectSchema(mentorSchedulesTable);
 export type MentorSchedule = z.infer<typeof mentorScheduleSchema>;
