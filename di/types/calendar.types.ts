@@ -17,6 +17,9 @@ import {ICalendarIdsRepository} from "@/src/application/repositories/calendar/ca
 import {
     IGetCalendarIdByUserIdUseCase
 } from "@/src/application/use-cases/calendar/calendar-ids/get-calendar-id-by-user-id.use-case";
+import {
+    IGetCalendarIdByUserIdController
+} from "@/src/interface-adapters/controllers/calendar/calendar-ids/get-calendar-id-by-user-id.controller";
 
 export const CALENDAR_SYMBOLS = {
     ICalendarService: Symbol.for("ICalendarService"),
@@ -35,7 +38,8 @@ export const CALENDAR_SYMBOLS = {
 
     ICalendarIdsRepository: Symbol.for("ICalendarIdsRepository"),
 
-    IGetCalendarIdByUserIdUseCase: Symbol.for("IGetCalendarIdByUserIdUseCase")
+    IGetCalendarIdByUserIdUseCase: Symbol.for("IGetCalendarIdByUserIdUseCase"),
+    IGetCalendarIdByUserIdController: Symbol.for("IGetCalendarIdByUserIdController")
 }
 
 export interface CALENDAR_RETURN_TYPES {
@@ -55,7 +59,8 @@ export interface CALENDAR_RETURN_TYPES {
 
     ICalendarIdsRepository: ICalendarIdsRepository,
 
-    IGetCalendarIdByUserId: IGetCalendarIdByUserIdUseCase
+    IGetCalendarIdByUserId: IGetCalendarIdByUserIdUseCase,
+    IGetCalendarIdByUserIdController: IGetCalendarIdByUserIdController
 }
 
 
