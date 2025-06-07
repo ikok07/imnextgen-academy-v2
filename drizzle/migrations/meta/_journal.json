@@ -358,6 +358,27 @@
       "when": 1749231677668,
       "tag": "0050_make-specific-meeting-type-not-null",
       "breakpoints": true
+    },
+    {
+      "idx": 51,
+      "version": "7",
+      "when": 1749281552739,
+      "tag": "0051_add-mentor-role",
+      "breakpoints": true
+    },
+    {
+      "idx": 52,
+      "version": "7",
+      "when": 1749281657123,
+      "tag": "0052_add-moderator-role",
+      "breakpoints": true
+    },
+    {
+      "idx": 53,
+      "version": "7",
+      "when": 1749282069749,
+      "tag": "0053_add-mentor-profile-id-to-specific-meetings",
+      "breakpoints": true
     }
   ]
 }

@@ -5,6 +5,7 @@ import {InputParseError} from "@/src/entities/errors/common";
 import {
     GetSpecificMeetingsByUserIdOptions, getSpecificMeetingsByUserIdOptionsSchema
 } from "@/src/application/repositories/meetings/user-specific-meetings.repository.interface";
+import {ICheckAccessController} from "@/src/interface-adapters/controllers/auth/check-access.controller";
 
 export type IGetSpecificMeetingsByUserIdController = ReturnType<typeof getSpecificMeetingsByUserIdController>;
 

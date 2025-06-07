@@ -7,6 +7,8 @@ resourcePolicy:
       actions: ["select", "insert", "update", "delete"]
       roles:
         - admin
+        - mentor
+        - moderator
       effect: EFFECT_ALLOW
 
     - name: allow_free_modules_to_everyone

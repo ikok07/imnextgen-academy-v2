@@ -9,6 +9,13 @@ resourcePolicy:
         - admin
       effect: EFFECT_ALLOW
 
+    - name: allow_mentors_and_moderators_to_read_all_users
+      actions: ["select"]
+      roles:
+        - mentor
+        - moderators
+      effect: EFFECT_ALLOW
+
     - name: allow_users_to_access_their_profiles
       actions: [ "select", "update", "delete" ]
       roles:
