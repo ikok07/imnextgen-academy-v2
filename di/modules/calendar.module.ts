@@ -24,6 +24,9 @@ import {
 import {
     getCalendarIdByUserIdController
 } from "@/src/interface-adapters/controllers/calendar/calendar-ids/get-calendar-id-by-user-id.controller";
+import {
+    IGetNotificationChannelByIdUseCase
+} from "@/src/application/use-cases/google-notification-channels/get-notification-channel-by-id.use-case";
 
 export function createCalendarModule() {
     const calendarModule = createModule();
@@ -62,7 +65,7 @@ export function createCalendarModule() {
 
     calendarModule
         .bind(DI_SYMBOLS.IDeleteCalendarEventController)
-        .toHigherOrderFunction(deleteCalendarEventController, [DI_SYMBOLS.IDeleteCalendarEventUseCase, DI_SYMBOLS.IGetCalendarIdByUserIdUseCase]);
+        .toHigherOrderFunction(deleteCalendarEventController, [DI_SYMBOLS.IDeleteCalendarEventUseCase, DI_SYMBOLS.IGetCalendarIdByUserIdUseCase, DI_SYMBOLS.IGetNotificationChannelByIdUseCase]);
 
     calendarModule
         .bind(DI_SYMBOLS.ICalendarIdsRepository)
