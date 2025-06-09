@@ -8,8 +8,26 @@ import { DatabaseError } from "@/src/entities/errors/db/database";
 import {google} from "googleapis";
 import {OAuth2Client} from "google-auth-library";
 import {BookedCalendarEvent} from "@/src/entities/models/meetings/booked-calendar-event";
+import crypto from "node:crypto";
+import {
+    IGoogleNotificationChannelsRepository
+} from "@/src/application/repositories/google-notification-channels/google-notification-channels.repository.interface";
 
 export class GoogleCalendarService implements ICalendarService {
+
+    private hashToken(str: string): string {
+        return crypto.createHmac("sha256", process.env.KEYS_SECRET!).update(str).digest("base64");
+    }
+
+    private generateToken() {
+        let token: string = 'token_imnextgen_';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        for (let i = 0; i < 32; i++ ) {
+            token += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return token;
+    }
 
     private getAuth() {
         const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY as string)
@@ -63,7 +81,7 @@ export class GoogleCalendarService implements ICalendarService {
             throw new DatabaseError(`Failed to get google calendar events! Error: ${e}`);
         }
     }
-    async createCalendarEvent({calendarId, event}: CreateCalendarEventOptions): Promise<CalendarRawResponse> {
+    async createCalendarEvent({calendarId, event, enableWatch}: CreateCalendarEventOptions): Promise<CalendarRawResponse> {
         try {
             const calendar = await this.getCalendar();
 
@@ -74,7 +92,20 @@ export class GoogleCalendarService implements ICalendarService {
                 resource: event
             });
 
-            return data as CalendarRawResponse;
+            let channelId: string | null | undefined;
+            const token = this.generateToken();
+            if (enableWatch) {
+                const watchResponse = await calendar.events.watch({
+                    calendarId,
+                    requestBody: {
+                        address: `${process.env.NEXT_PUBLIC_BASE_URL!}/api/v1/webhooks/google/notification-channels`,
+                        token
+                    }
+                });
+                channelId = watchResponse.data.id;
+            }
+
+            return {id: data.id, channel: channelId ? {id: channelId, token} : undefined} as CalendarRawResponse;
         } catch (e) {
             throw new DatabaseError(`Failed to create event! Error: ${e}`);
         }
@@ -104,7 +135,7 @@ export class GoogleCalendarService implements ICalendarService {
                 auth: this.getAuth(),
                 calendarId,
                 eventId
-            })
+            });
         } catch (e) {
             throw new DatabaseError(`Failed to delete event! Error: ${e}`);
         }
