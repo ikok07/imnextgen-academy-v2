@@ -14,17 +14,14 @@ import AdminUserDetailsSalesMeetingRow
 import AdminUserDetailsSalesMeetingRowSkeleton
     from "@/app/_components/dashboard/admin/users/modal/sales-meetings/skeletons/AdminUserDetailsSalesMeetingRowSkeleton";
 import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
-import {useAppUser} from "@/app/_hooks/auth/useAppUser";
-import {checkMultipleResourcesAccess} from "@/app/actions";
 
 type AdminUserDetailsSalesCalendarProps = {
     selectedDate: number,
     setSelectedDate: Dispatch<SetStateAction<number>>,
-    selectedMentorId: string | null
     userId: string
 }
 
-export default function AdminUserDetailsSalesCalendar({selectedDate, setSelectedDate, selectedMentorId, userId}: AdminUserDetailsSalesCalendarProps) {
+export default function AdminUserDetailsSalesCalendar({selectedDate, setSelectedDate, userId}: AdminUserDetailsSalesCalendarProps) {
     const {data: userSpecificMeetingsQuery, isLoading} = useErrorQuery({
         queryFn: () => getUserSpecificMeetingsByUserId({
             userId,
@@ -57,7 +54,7 @@ export default function AdminUserDetailsSalesCalendar({selectedDate, setSelected
 
         return <>
             {salesMeetings.map((salesMeeting, index) => {
-                return <AdminUserDetailsSalesMeetingRow salesMeeting={salesMeeting} selectedDate={selectedDate} selectedMentorId={selectedMentorId} key={index} />
+                return <AdminUserDetailsSalesMeetingRow salesMeeting={salesMeeting} selectedDate={selectedDate} key={index} />
             })}
         </>
     }, [salesMeetings.length, isLoading]);

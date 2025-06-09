@@ -13,16 +13,15 @@ import {useQueryClient} from "react-query";
 
 type AdminUserDetailsSalesMeetingRowProps = {
     salesMeeting: UserSpecificMeeting,
-    selectedDate: number,
-    selectedMentorId: string | null
+    selectedDate: number
 }
 
-export default function AdminUserDetailsSalesMeetingRow({salesMeeting, selectedDate, selectedMentorId}: AdminUserDetailsSalesMeetingRowProps) {
+export default function AdminUserDetailsSalesMeetingRow({salesMeeting, selectedDate}: AdminUserDetailsSalesMeetingRowProps) {
     const queryClient = useQueryClient();
     const isInThePast = useMemo(() => salesMeeting.date * 1000 < Date.now(), []);
 
     const {mutate: unbookSalesMeetingMethod, isLoading: isUnbookingSalesMeeting} = useErrorMutation({
-        mutationFn: () => unbookSalesMeeting(salesMeeting, selectedMentorId ?? undefined),
+        mutationFn: () => unbookSalesMeeting(salesMeeting),
         onError() {
             toast.error("Срещата не беше изтрита!");
         },

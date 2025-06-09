@@ -1,3 +1,6 @@
+import {NextResponse} from "next/server";
+
 export function POST() {
-    console.log("GOOGLE NOTIFICATION CHANNEL");
+
+    return NextResponse.json({status: "success"});
 }

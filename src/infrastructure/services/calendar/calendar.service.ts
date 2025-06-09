@@ -103,6 +103,7 @@ export class GoogleCalendarService implements ICalendarService {
                         token
                     }
                 });
+
                 if (!watchResponse.data.id || !watchResponse.data.resourceId) throw new Error("Failed to get watch response data!");
                 channelConfig = {id: watchResponse.data.id, internalResourceId: watchResponse.data.resourceId};
             }

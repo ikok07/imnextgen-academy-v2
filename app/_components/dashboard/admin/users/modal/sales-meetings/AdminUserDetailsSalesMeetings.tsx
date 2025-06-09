@@ -23,7 +23,7 @@ export default function AdminUserDetailsSalesMeetings({fullProfile}: AdminUserDe
     const [selectedMentorId, setSelectedMentorId] = useState<string | null>(null);
 
     return <div className="grid lg:grid-cols-2 h-full">
-        <AdminUserDetailsSalesCalendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} selectedMentorId={selectedMentorId} userId={fullProfile.id} />
+        <AdminUserDetailsSalesCalendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} userId={fullProfile.id} />
         <AdminUserDetailsSalesCreateForm selectedDate={selectedDate} selectedMentorId={selectedMentorId} setSelectedMentorId={setSelectedMentorId} fullProfile={fullProfile}/>
     </div>
 }
