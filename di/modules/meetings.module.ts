@@ -75,6 +75,54 @@ import {
 import {
     removeSignedUpUserController
 } from "@/src/interface-adapters/controllers/meetings/meeting-signed-up-users/remove-signed-up-user.controller";
+import {
+    getSpecificMeetingsByUserIdUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/get-specific-meetings-by-user-id.use-case";
+import {
+    getSpecificMeetingsByUserIdController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/get-specific-meetings-by-user-id.controller";
+import {
+    addUserSpecificMeetingUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/add-user-specific-meeting.use-case";
+import {
+    addUserSpecificMeetingController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/add-user-specific-meeting.controller";
+import {
+    updateUserSpecificMeetingUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/update-user-specific-meeting.use-case";
+import {
+    updateUserSpecificMeetingController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/update-user-specific-meeting.controller";
+import {
+    removeUserSpecificMeetingUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/remove-user-specific-meeting.use-case";
+import {
+    removeUserSpecificMeetingController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/remove-user-specific-meeting.controller";
+import {
+    IUserSpecificMeetingsRepository
+} from "@/src/application/repositories/meetings/user-specific-meetings.repository.interface";
+import {
+    UserSpecificMeetingsRepository
+} from "@/src/infrastructure/repositories/meetings/user-specific-meetings.repository";
+import {
+    getSpecificMeetingsByMentorProfileIdUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/get-specific-meetings-by-mentor-profile-id.use-case";
+import {
+    getSpecificMeetingsByMentorProfileIdController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/get-specific-meetings-by-mentor-profile-id.controller";
+import {IGetUserController} from "@/src/interface-adapters/controllers/auth/get-user.controller";
+import {ICheckAccessController} from "@/src/interface-adapters/controllers/auth/check-access.controller";
+import {MentorSchedulesRepository} from "@/src/infrastructure/repositories/meetings/mentor-schedules.repository";
+import {
+    getMentorSchedulesUseCase
+} from "@/src/application/use-cases/meetings/mentor-schedules/get-mentor-schedules.use-case";
+import {
+    getMentorSchedulesController
+} from "@/src/interface-adapters/controllers/meetings/mentor-schedules/get-mentor-schedules.controller";
+import {
+    ICheckResourcesAccessController
+} from "@/src/interface-adapters/controllers/auth/check-resources-access.controller";
 
 export function createMeetingsModule() {
     const meetingsModule = createModule();
@@ -226,6 +274,62 @@ export function createMeetingsModule() {
     meetingsModule
         .bind(DI_SYMBOLS.IRemoveSignedUpUserController)
         .toHigherOrderFunction(removeSignedUpUserController, [DI_SYMBOLS.IRemoveSignedUpUserUseCase]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IUserSpecificMeetingsRepository)
+        .toClass(UserSpecificMeetingsRepository);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IGetSpecificMeetingsByUserIdUseCase)
+        .toHigherOrderFunction(getSpecificMeetingsByUserIdUseCase, [DI_SYMBOLS.IUserSpecificMeetingsRepository]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IGetSpecificMeetingsByMentorProfileIdUseCase)
+        .toHigherOrderFunction(getSpecificMeetingsByMentorProfileIdUseCase, [DI_SYMBOLS.IUserSpecificMeetingsRepository]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IGetSpecificMeetingsByMentorProfileIdController)
+        .toHigherOrderFunction(getSpecificMeetingsByMentorProfileIdController, [DI_SYMBOLS.IGetSpecificMeetingsByMentorProfileIdUseCase, DI_SYMBOLS.IGetUserController, DI_SYMBOLS.ICheckResourcesAccessController]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IGetSpecificMeetingsByUserIdController)
+        .toHigherOrderFunction(getSpecificMeetingsByUserIdController, [DI_SYMBOLS.IGetSpecificMeetingsByUserIdUseCase, DI_SYMBOLS.IGetUserController, DI_SYMBOLS.ICheckResourcesAccessController]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IAddUserSpecificMeetingUseCase)
+        .toHigherOrderFunction(addUserSpecificMeetingUseCase, [DI_SYMBOLS.IUserSpecificMeetingsRepository]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IAddUserSpecificMeetingController)
+        .toHigherOrderFunction(addUserSpecificMeetingController, [DI_SYMBOLS.IAddUserSpecificMeetingUseCase, DI_SYMBOLS.IGetUserController, DI_SYMBOLS.ICheckAccessController]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IUpdateUserSpecificMeetingUseCase)
+        .toHigherOrderFunction(updateUserSpecificMeetingUseCase, [DI_SYMBOLS.IUserSpecificMeetingsRepository]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IUpdateUserSpecificMeetingController)
+        .toHigherOrderFunction(updateUserSpecificMeetingController, [DI_SYMBOLS.IUpdateUserSpecificMeetingUseCase, DI_SYMBOLS.IGetUserController, DI_SYMBOLS.ICheckAccessController]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IRemoveUserSpecificMeetingUseCase)
+        .toHigherOrderFunction(removeUserSpecificMeetingUseCase, [DI_SYMBOLS.IUserSpecificMeetingsRepository]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IRemoveUserSpecificMeetingController)
+        .toHigherOrderFunction(removeUserSpecificMeetingController, [DI_SYMBOLS.IRemoveUserSpecificMeetingUseCase, DI_SYMBOLS.IGetUserController, DI_SYMBOLS.ICheckAccessController]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IMentorSchedulesRepository)
+        .toClass(MentorSchedulesRepository);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IGetMentorSchedulesUseCase)
+        .toHigherOrderFunction(getMentorSchedulesUseCase, [DI_SYMBOLS.IMentorSchedulesRepository]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IGetMentorSchedulesController)
+        .toHigherOrderFunction(getMentorSchedulesController, [DI_SYMBOLS.IGetMentorSchedulesUseCase]);
 
     return meetingsModule;
 }

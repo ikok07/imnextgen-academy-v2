@@ -1,0 +1,1 @@
+ALTER TYPE "public"."user_roles_enum" ADD VALUE 'mentor';

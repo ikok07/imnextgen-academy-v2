@@ -1,4 +1,4 @@
-import {IGetAllProfilesForRoleUseCase} from "@/src/application/use-cases/auth/get-all-profiles-for-role.use-case";
+import {IGetAllProfilesForRoleUseCase} from "@/src/application/use-cases/auth/profiles/get-all-profiles-for-role.use-case";
 import {userRoleTypeSchema} from "@/drizzle/schema/user_roles";
 import {InputParseError} from "@/src/entities/errors/common";
 

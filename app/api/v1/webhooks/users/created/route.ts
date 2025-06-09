@@ -32,7 +32,7 @@ export async function POST(req: Request) {
             return NextResponse.json({status: "fail", error: "Invalid body!"}, {status: 400});
         }
 
-        await getInjection("ICreateProfileController")({
+        const newProfile = await getInjection("ICreateProfileController")({
             id: body.data.id,
             name: `${body.data.first_name} ${body.data.last_name}`,
             email: body.data.email_addresses[0].email_address,
@@ -50,9 +50,9 @@ export async function POST(req: Request) {
                 },
                 templateId: +process.env.BREVO_NEW_CUSTOMER_EMAIL_ID_BG!,
                 params: {
-                    "NAME": profile.name,
-                    "EMAIL": profile.email,
-                    "PHONE": profile.phone
+                    "NAME": newProfile.name,
+                    "EMAIL": newProfile.email,
+                    "PHONE": newProfile.phone
                 }
             })
         }

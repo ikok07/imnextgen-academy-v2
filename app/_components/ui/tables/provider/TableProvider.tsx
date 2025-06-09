@@ -38,9 +38,7 @@ export type AnyColumnDef<TData> =
 export type TableState<TData> = {
     table: Table<TData>,
     columns: AnyColumnDef<TData>[],
-    setColumns: Dispatch<SetStateAction<ColumnDef<TData>[]>>,
     data: TData[],
-    setData: Dispatch<SetStateAction<TData[]>>,
     refreshAddRow: boolean,
     setRefreshAddRow: Dispatch<SetStateAction<boolean>>,
     selectionOptions?: SelectionOptions,
@@ -53,8 +51,8 @@ const TableContext = createContext<TableState<any> | null>(null);
 
 type TableProviderProps<TData> = {
     children: ReactNode,
-    initialColumns: AnyColumnDef<TData>[],
-    initialData: TData[],
+    columns: AnyColumnDef<TData>[],
+    data: TData[],
     selectionOptions?: SelectionOptions,
     sortingOptions?: SortingOptions,
     filterOptions?: FilterOptions,
@@ -64,8 +62,8 @@ type TableProviderProps<TData> = {
 export default function TableProvider<TData>(
     {
         children,
-        initialColumns,
-        initialData,
+        columns,
+        data,
         selectionOptions,
         sortingOptions,
         filterOptions,
@@ -75,11 +73,8 @@ export default function TableProvider<TData>(
     const [refreshAddRow, setRefreshAddRow] = useState(false);
     const columnHelper = useMemo(createColumnHelper<TData>, []);
 
-    const [columns, setColumns] = useState<AnyColumnDef<TData>[]>(initialColumns);
-    const [data, setData] = useState<TData[]>(initialData);
-
     const modifiedColumns = useMemo(() => {
-        let newColumns = initialColumns;
+        let newColumns = columns;
         if (selectionOptions?.enabled) {
             newColumns = [columnHelper.display({
                 id: "selected",
@@ -122,10 +117,8 @@ export default function TableProvider<TData>(
 
     return <TableContext.Provider value={{
         table,
-        columns,
+        columns: modifiedColumns,
         data,
-        setColumns,
-        setData,
         refreshAddRow,
         setRefreshAddRow,
         selectionOptions,

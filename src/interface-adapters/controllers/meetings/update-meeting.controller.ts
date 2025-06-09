@@ -7,7 +7,7 @@ export const updateMeetingController = (
     updateMeetingUseCase: IUpdateMeetingUseCase
 ) => (id: string | undefined, data: object | undefined) => {
 
-    if (!id) throw new InputParseError("Invalid meetings id!");
+    if (!id) throw new InputParseError("Invalid calendar id!");
     if (!data) throw new InputParseError("Invalid data object!");
 
     return updateMeetingUseCase(id, data)

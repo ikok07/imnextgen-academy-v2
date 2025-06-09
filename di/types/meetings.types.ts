@@ -75,6 +75,48 @@ import {
 import {
     IMeetingSignedUpUsersRepository
 } from "@/src/application/repositories/meetings/meeting-signed-up-users.repository.interface";
+import {
+    IGetSpecificMeetingsByUserIdUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/get-specific-meetings-by-user-id.use-case";
+import {
+    IGetSpecificMeetingsByUserIdController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/get-specific-meetings-by-user-id.controller";
+import {
+    IAddUserSpecificMeetingUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/add-user-specific-meeting.use-case";
+import {
+    IAddUserSpecificMeetingController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/add-user-specific-meeting.controller";
+import {
+    IUpdateUserSpecificMeetingUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/update-user-specific-meeting.use-case";
+import {
+    IUpdateUserSpecificMeetingController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/update-user-specific-meeting.controller";
+import {
+    IRemoveUserSpecificMeetingUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/remove-user-specific-meeting.use-case";
+import {
+    IRemoveUserSpecificMeetingController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/remove-user-specific-meeting.controller";
+import {
+    IUserSpecificMeetingsRepository
+} from "@/src/application/repositories/meetings/user-specific-meetings.repository.interface";
+import {
+    IGetSpecificMeetingsByMentorProfileIdController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/get-specific-meetings-by-mentor-profile-id.controller";
+import {
+    IGetSpecificMeetingsByMentorProfileIdUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/get-specific-meetings-by-mentor-profile-id.use-case";
+import {
+    IMentorSchedulesRepository
+} from "@/src/application/repositories/meetings/mentor-schedules.repository.interface";
+import {
+    IGetMentorSchedulesUseCase
+} from "@/src/application/use-cases/meetings/mentor-schedules/get-mentor-schedules.use-case";
+import {
+    IGetMentorSchedulesController
+} from "@/src/interface-adapters/controllers/meetings/mentor-schedules/get-mentor-schedules.controller";
 
 export const MEETINGS_SYMBOLS = {
     IMeetingsRepository: Symbol.for("IMeetingsRepository"),
@@ -133,7 +175,29 @@ export const MEETINGS_SYMBOLS = {
     IAddSignedUpUserController: Symbol.for("IAddSignedUpUserController"),
 
     IRemoveSignedUpUserUseCase: Symbol.for("IRemoveSignedUpUserUseCase"),
-    IRemoveSignedUpUserController: Symbol.for('IRemoveSignedUpUserController')
+    IRemoveSignedUpUserController: Symbol.for('IRemoveSignedUpUserController'),
+
+    IUserSpecificMeetingsRepository: Symbol.for("IUserSpecificMeetingsRepository"),
+
+    IGetSpecificMeetingsByUserIdUseCase: Symbol.for("IGetSpecificMeetingsByUserIdUseCase"),
+    IGetSpecificMeetingsByUserIdController: Symbol.for("IGetSpecificMeetingsByUserIdController"),
+
+    IGetSpecificMeetingsByMentorProfileIdUseCase: Symbol.for("IGetSpecificMeetingsByMentorProfileIdUseCase"),
+    IGetSpecificMeetingsByMentorProfileIdController: Symbol.for("IGetSpecificMeetingsByMentorProfileIdController"),
+
+    IAddUserSpecificMeetingUseCase: Symbol.for("IAddUserSpecificMeetingUseCase"),
+    IAddUserSpecificMeetingController: Symbol.for("IAddUserSpecificMeetingController"),
+
+    IUpdateUserSpecificMeetingUseCase: Symbol.for("IUpdateUserSpecificMeetingUseCase"),
+    IUpdateUserSpecificMeetingController: Symbol.for("IUpdateUserSpecificMeetingController"),
+
+    IRemoveUserSpecificMeetingUseCase: Symbol.for("IRemoveUserSpecificMeetingUseCase"),
+    IRemoveUserSpecificMeetingController: Symbol.for("IRemoveUserSpecificMeetingController"),
+
+    IMentorSchedulesRepository: Symbol.for("IMentorSchedulesRepository"),
+
+    IGetMentorSchedulesUseCase: Symbol.for("IGetMentorSchedulesUseCase"),
+    IGetMentorSchedulesController: Symbol.for("IGetMentorSchedulesController")
 }
 
 export interface MEETINGS_RETURN_TYPES {
@@ -161,6 +225,7 @@ export interface MEETINGS_RETURN_TYPES {
 
     IGetMeetingRepeatDaysUseCase: IGetMeetingRepeatDaysUseCase,
     IGetMeetingRepeatDaysController: IGetMeetingRepeatDaysController,
+
     IGetMeetingsByRepeatingDayOfWeekUseCase: IGetMeetingsByRepeatingDayOfWeekUseCase,
     IGetMeetingsByRepeatingDayOfWeekController: IGetMeetingsByRepeatingDayOfWeekController,
 
@@ -170,7 +235,7 @@ export interface MEETINGS_RETURN_TYPES {
     IGetMeetingExcludedDatesController: IGetMeetingExcludedDatesController,
 
     IGetMultipleMeetingsExcludedDatesForDateUseCase: IGetMultipleMeetingsExcludedDatesForDateUseCase,
-    IGetMultipleMeetingsExcludedDatesForDateController: IGetMultipleMeetingsExcludedDatesForDateController
+    IGetMultipleMeetingsExcludedDatesForDateController: IGetMultipleMeetingsExcludedDatesForDateController,
 
     IMeetingDatesRepository: IMeetingDatesRepository,
 
@@ -192,7 +257,29 @@ export interface MEETINGS_RETURN_TYPES {
     IAddSignedUpUserController: IAddSignedUpUserController,
 
     IRemoveSignedUpUserUseCase: IRemoveSignedUpUserUseCase,
-    IRemoveSignedUpUserController: IRemoveSignedUpUserController
+    IRemoveSignedUpUserController: IRemoveSignedUpUserController,
+
+    IUserSpecificMeetingsRepository: IUserSpecificMeetingsRepository,
+
+    IGetSpecificMeetingsByUserIdUseCase: IGetSpecificMeetingsByUserIdUseCase,
+    IGetSpecificMeetingsByUserIdController: IGetSpecificMeetingsByUserIdController,
+
+    IGetSpecificMeetingsByMentorProfileIdUseCase: IGetSpecificMeetingsByMentorProfileIdUseCase,
+    IGetSpecificMeetingsByMentorProfileIdController: IGetSpecificMeetingsByMentorProfileIdController
+
+    IAddUserSpecificMeetingUseCase: IAddUserSpecificMeetingUseCase,
+    IAddUserSpecificMeetingController: IAddUserSpecificMeetingController,
+
+    IUpdateUserSpecificMeetingUseCase: IUpdateUserSpecificMeetingUseCase,
+    IUpdateUserSpecificMeetingController: IUpdateUserSpecificMeetingController,
+
+    IRemoveUserSpecificMeetingUseCase: IRemoveUserSpecificMeetingUseCase,
+    IRemoveUserSpecificMeetingController: IRemoveUserSpecificMeetingController,
+
+    IMentorSchedulesRepository: IMentorSchedulesRepository,
+
+    IGetMentorSchedulesUseCase: IGetMentorSchedulesUseCase,
+    IGetMentorSchedulesController: IGetMentorSchedulesController
 }
 
 
