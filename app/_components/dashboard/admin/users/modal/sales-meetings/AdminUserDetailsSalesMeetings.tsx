@@ -10,6 +10,7 @@ type AdminUserDetailsSalesMeetingsProps = {
     fullProfile: FullProfile
 }
 
+// TODO: 0. Fix user deleted ux
 // TODO: 1. Fix 'too much recursion' error when opening select menu
 // TODO: 2. Integrate google calendar webhooks
 // TODO: 3. Develop update event functionality
