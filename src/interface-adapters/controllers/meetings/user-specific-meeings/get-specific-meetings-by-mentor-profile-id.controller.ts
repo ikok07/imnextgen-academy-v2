@@ -26,6 +26,7 @@ export const getSpecificMeetingsByMentorProfileIdController = (
     if (!user || !dbProfile) throw new AccessError("Could not verify access! User could not be found!");
 
     const meetings = await getSpecificMeetingsByMentorProfileIdUseCase(parsedOpts);
+    if (meetings.length === 0) return [];
 
     const accessResults = await checkResourcesAccessController({
         principal: {
