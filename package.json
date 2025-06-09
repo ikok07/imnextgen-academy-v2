@@ -108,6 +108,6 @@
     "typescript": "^5"
   },
   "overrides": {
-    "@radix-ui/react-focus-scope": "1.1.1"
+    "@radix-ui/react-focus-scope": "1.0.4"
   }
 }

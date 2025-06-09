@@ -1,7 +1,6 @@
 "use client"
 
 import TableProvider from "@/app/_components/ui/tables/provider/TableProvider";
-import PrimaryTable from "@/app/_components/ui/tables/primary/PrimaryTable";
 import useErrorQuery from "@/app/_hooks/useErrorQuery";
 import {getAllProfiles} from "@/app/actions";
 import {useMemo, useState} from "react";
@@ -14,13 +13,6 @@ import {deleteMultipleUsers} from "@/app/dashboard/admin/actions";
 import { toast } from "sonner";
 import {useQueryClient} from "react-query";
 
-import {
-    Dialog,
-    DialogTrigger
-} from "@/app/_components/ui/shadcn/dialog";
-import {
-    AdminUserDetailsModal
-} from "@/app/_components/dashboard/admin/users/modal/AdminUserDetailsModal";
 import AdminUsersTableWrapper from "@/app/_components/dashboard/admin/users/AdminUsersTableWrapper";
 
 const columnHelper = createColumnHelper<FullProfile>();

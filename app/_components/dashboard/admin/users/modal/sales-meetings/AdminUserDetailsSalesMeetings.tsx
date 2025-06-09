@@ -10,9 +10,9 @@ type AdminUserDetailsSalesMeetingsProps = {
     fullProfile: FullProfile
 }
 
-// TODO: 0. Fix user deleted ux
-// TODO: 1. Fix 'too much recursion' error when opening select menu
+// DONE: 1. Fix 'too much recursion' error when opening select menu
 // TODO: 2. Integrate google calendar webhooks
+// TODO: 2.1 Fix mentor id undefined when deleting event
 // TODO: 3. Develop update event functionality
 // TODO: 4. Add option for variable event durations X
 // TODO: 5. Show the user it's sales meetings X
