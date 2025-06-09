@@ -7,6 +7,6 @@ export type IUpdateUserSpecificMeetingUseCase = ReturnType<typeof updateUserSpec
 
 export const updateUserSpecificMeetingUseCase = (
     userSpecificMeetingsRepository: IUserSpecificMeetingsRepository
-) => async (data: UserSpecificMeetingInsert) => {
+) => async (data: Partial<UserSpecificMeetingInsert>) => {
     return userSpecificMeetingsRepository.updateUserSpecificMeeting(data);
 }

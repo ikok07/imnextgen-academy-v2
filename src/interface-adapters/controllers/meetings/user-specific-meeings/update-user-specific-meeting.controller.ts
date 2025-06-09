@@ -35,8 +35,5 @@ export const updateUserSpecificMeetingController = (
 
     if (!hasAccess) throw new AccessError("Unauthorized action!");
 
-    const {data: parsedData, error} = userSpecificMeetingInsertSchema.safeParse(data);
-    if (error) throw new InputParseError(`Invalid data! ${error}`);
-
-    return updateUserSpecificMeetingUseCase(parsedData);
+    return updateUserSpecificMeetingUseCase(data);
 }

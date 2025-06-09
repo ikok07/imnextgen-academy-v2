@@ -27,6 +27,6 @@ export interface IUserSpecificMeetingsRepository {
     getSpecificMeetingsByUserId(opts: GetSpecificMeetingsByUserIdOptions): Promise<UserSpecificMeeting[]>;
     getSpecificMeetingsByMentorId(opts: GetSpecificMeetingsByMentorProfileIdOptions): Promise<UserSpecificMeeting[]>;
     addUserSpecificMeeting(data: UserSpecificMeetingInsert): Promise<UserSpecificMeeting>;
-    updateUserSpecificMeeting(data: UserSpecificMeetingInsert): Promise<UserSpecificMeeting>;
+    updateUserSpecificMeeting(data: Partial<UserSpecificMeetingInsert>): Promise<UserSpecificMeeting>;
     removeUserSpecificMeeting(id: string): Promise<void>;
 }
