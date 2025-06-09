@@ -72,7 +72,7 @@ export class UserSpecificMeetingsRepository extends BaseRepository implements IU
             throw new DatabaseError(`Failed to add user specific meetings! ${e}`);
         }
     }
-    updateUserSpecificMeeting(data: UserSpecificMeetingInsert): Promise<UserSpecificMeeting> {
+    updateUserSpecificMeeting(data: Partial<UserSpecificMeetingInsert>): Promise<UserSpecificMeeting> {
         try {
             return this.queryDB(async db => {
                 const result =  await db.update(userSpecificMeetingsTable).set(data).returning();

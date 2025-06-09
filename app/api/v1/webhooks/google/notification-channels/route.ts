@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
         const hashedToken = token ? crypto.createHmac("sha256", process.env.KEYS_SECRET!).update(token).digest("base64") : null;
         const state = req.headers.get("x-goog-resource-state") as "sync" | "exists";
 
-        if (state === "sync") return;
+        if (state !== "exists") return NextResponse.json({status: "success"});
 
         const notificationChannel = await getInjection("IGetNotificationChannelByIdController")({
             id: channelId ?? undefined
