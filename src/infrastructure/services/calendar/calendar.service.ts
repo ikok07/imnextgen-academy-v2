@@ -127,7 +127,7 @@ export class GoogleCalendarService implements ICalendarService {
             throw new DatabaseError(`Failed to update event! ${e}`);
         }
     }
-    async deleteCalendarEvent({calendarId, eventId}: DeleteCalendarEventOptions): Promise<void> {
+    async deleteCalendarEvent({calendarId, eventId, channelId}: DeleteCalendarEventOptions): Promise<void> {
         try {
             const calendar = await this.getCalendar();
 
@@ -136,6 +136,8 @@ export class GoogleCalendarService implements ICalendarService {
                 calendarId,
                 eventId
             });
+
+            if (channelId) await calendar.channels.stop({requestBody: {id: channelId, resourceId: eventId}});
         } catch (e) {
             throw new DatabaseError(`Failed to delete event! ${e}`);
         }

@@ -4,7 +4,7 @@ import {
 } from "@/drizzle/schema/google_notification_channels";
 
 export interface IGoogleNotificationChannelsRepository {
-    getNotificationChannelById(id: string): Promise<GoogleNotificationChannel>
+    getNotificationChannelById(resourceId: string): Promise<GoogleNotificationChannel>
     createNotificationChannel(data: GoogleNotificationChannelInsert): Promise<GoogleNotificationChannel>
     deleteNotificationChannel(resourceId: string): Promise<void>
 }
