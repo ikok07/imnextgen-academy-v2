@@ -9,6 +9,7 @@ import {google} from "googleapis";
 import {OAuth2Client} from "google-auth-library";
 import {BookedCalendarEvent} from "@/src/entities/models/meetings/booked-calendar-event";
 import {v4 as uuid4} from "uuid"
+import {addDays} from "date-fns";
 
 export class GoogleCalendarService implements ICalendarService {
 
@@ -113,7 +114,8 @@ export class GoogleCalendarService implements ICalendarService {
                         id: uuid4(),
                         address: `${process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_BASE_URL! : process.env.NEXT_PUBLIC_DEV_BASE_URL_HTTPS!}/api/v1/webhooks/google/notification-channels`,
                         type: "web_hook",
-                        token
+                        token,
+                        expiration: addDays(Date.now(), 30).valueOf().toString()
                     }
                 });
                 if (!watchResponse.data.id || !watchResponse.data.resourceId) throw new Error("Failed to get watch response data!");
