@@ -16,6 +16,7 @@ export const getSpecificMeetingsByUserIdOptionsSchema = z.object({
 }).and(getSpecificMeetingsGenericOptionsSchema);
 
 export const getSpecificMeetingsByMentorProfileIdOptionsSchema = z.object({
+    userId: z.string(),
     mentorProfileId: z.string()
 }).and(getSpecificMeetingsGenericOptionsSchema);
 

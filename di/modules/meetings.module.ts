@@ -120,6 +120,9 @@ import {
 import {
     getMentorSchedulesController
 } from "@/src/interface-adapters/controllers/meetings/mentor-schedules/get-mentor-schedules.controller";
+import {
+    ICheckResourcesAccessController
+} from "@/src/interface-adapters/controllers/auth/check-resources-access.controller";
 
 export function createMeetingsModule() {
     const meetingsModule = createModule();
@@ -286,11 +289,11 @@ export function createMeetingsModule() {
 
     meetingsModule
         .bind(DI_SYMBOLS.IGetSpecificMeetingsByMentorProfileIdController)
-        .toHigherOrderFunction(getSpecificMeetingsByMentorProfileIdController, [DI_SYMBOLS.IGetSpecificMeetingsByMentorProfileIdUseCase, DI_SYMBOLS.IGetUserController, DI_SYMBOLS.ICheckAccessController]);
+        .toHigherOrderFunction(getSpecificMeetingsByMentorProfileIdController, [DI_SYMBOLS.IGetSpecificMeetingsByMentorProfileIdUseCase, DI_SYMBOLS.IGetUserController, DI_SYMBOLS.ICheckResourcesAccessController]);
 
     meetingsModule
         .bind(DI_SYMBOLS.IGetSpecificMeetingsByUserIdController)
-        .toHigherOrderFunction(getSpecificMeetingsByUserIdController, [DI_SYMBOLS.IGetSpecificMeetingsByUserIdUseCase, DI_SYMBOLS.IGetUserController, DI_SYMBOLS.ICheckAccessController]);
+        .toHigherOrderFunction(getSpecificMeetingsByUserIdController, [DI_SYMBOLS.IGetSpecificMeetingsByUserIdUseCase, DI_SYMBOLS.IGetUserController, DI_SYMBOLS.ICheckResourcesAccessController]);
 
     meetingsModule
         .bind(DI_SYMBOLS.IAddUserSpecificMeetingUseCase)
