@@ -99,6 +99,7 @@ export class GoogleCalendarService implements ICalendarService {
                     calendarId,
                     requestBody: {
                         address: `${process.env.NEXT_PUBLIC_BASE_URL!}/api/v1/webhooks/google/notification-channels`,
+                        type: "web_hook",
                         token
                     }
                 });
