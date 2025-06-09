@@ -98,7 +98,7 @@ export class GoogleCalendarService implements ICalendarService {
                 const watchResponse = await calendar.events.watch({
                     calendarId,
                     requestBody: {
-                        address: `${process.env.NEXT_PUBLIC_BASE_URL!}/api/v1/webhooks/google/notification-channels`,
+                        address: `${process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_BASE_URL! : process.env.NEXT_PUBLIC_DEV_BASE_URL_HTTPS!}/api/v1/webhooks/google/notification-channels`,
                         type: "web_hook",
                         token
                     }
