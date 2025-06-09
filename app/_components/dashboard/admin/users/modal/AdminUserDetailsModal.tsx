@@ -11,12 +11,14 @@ import AdminUserDetailsInfoColumn from "@/app/_components/dashboard/admin/users/
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/app/_components/ui/shadcn/tabs";
 import AdminUserDetailsSalesMeetings
     from "@/app/_components/dashboard/admin/users/modal/sales-meetings/AdminUserDetailsSalesMeetings";
+import {Dispatch, SetStateAction} from "react";
 
 type AdminUserDetailsModalProps = {
-    fullProfile: FullProfile
+    fullProfile: FullProfile,
+    setOpenedUserDetails: Dispatch<SetStateAction<string | null>>
 }
 
-export function AdminUserDetailsModal({fullProfile}: AdminUserDetailsModalProps) {
+export function AdminUserDetailsModal({fullProfile, setOpenedUserDetails}: AdminUserDetailsModalProps) {
     return <DialogContent
         className="[&>button:last-child]:hidden grid grid-rows-[auto_1fr] w-[95%] max-w-[70rem] h-[90vh] overflow-auto md:overflow-hidden">
         <DialogHeader className="border-b border-border pb-4 text-left">
@@ -29,7 +31,7 @@ export function AdminUserDetailsModal({fullProfile}: AdminUserDetailsModalProps)
             <DialogDescription>Панел за управление на данните на потребителя</DialogDescription>
         </DialogHeader>
         <div className="grid md:grid-cols-[1fr_2.5fr] gap-y-10">
-            <AdminUserDetailsInfoColumn fullProfile={fullProfile}/>
+            <AdminUserDetailsInfoColumn fullProfile={fullProfile} setOpenedUserDetails={setOpenedUserDetails} />
             <Tabs className="grid grid-rows-[auto_1fr] h-full" defaultValue="individual_meetings">
                 <TabsList className="mx-auto gap-y-2 h-auto flex-col md:flex-row md:h-9">
                     <TabsTrigger value="individual_meetings">Sales срещи</TabsTrigger>

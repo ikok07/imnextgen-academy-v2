@@ -1,6 +1,6 @@
 import {AuthObject, User} from "@clerk/backend";
 import { z } from "zod";
-import {UserRole, userRoleSchema} from "@/src/entities/models/auth/user-roles";
+import {userRoleSchema} from "@/src/entities/models/auth/user-roles";
 
 export const getAllUsersForRoleOptionsSchema = z.object({
     role: userRoleSchema

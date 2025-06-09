@@ -10,18 +10,27 @@ import {useRouter} from "next/navigation";
 import useErrorMutation from "@/app/_hooks/useErrorMutation";
 import {deleteUser} from "@/app/dashboard/admin/actions";
 import {toast} from "sonner";
+import {Dispatch, SetStateAction} from "react";
+import {useQueryClient} from "react-query";
 
 type AdminUserDetailsInfoColumnProps = {
-    fullProfile: FullProfile
+    fullProfile: FullProfile,
+    setOpenedUserDetails: Dispatch<SetStateAction<string | null>>
 }
 
-export default function AdminUserDetailsInfoColumn({fullProfile}: AdminUserDetailsInfoColumnProps) {
+export default function AdminUserDetailsInfoColumn({fullProfile, setOpenedUserDetails}: AdminUserDetailsInfoColumnProps) {
+    const queryClient = useQueryClient();
     const router = useRouter();
 
     const {mutate: deleteUserMethod, isLoading: isDeletingUser} = useErrorMutation({
         mutationFn: () => deleteUser(fullProfile.id),
         onError() {
             toast.error("Профилът не може да бъде изтрит!");
+        },
+        onSuccess() {
+            toast.success("Потребителят беше изтрит!");
+            setOpenedUserDetails(null);
+            queryClient.invalidateQueries(["allProfiles"]);
         }
     });
 

@@ -24,6 +24,11 @@ import {
 import {
     getCalendarIdByUserIdController
 } from "@/src/interface-adapters/controllers/calendar/calendar-ids/get-calendar-id-by-user-id.controller";
+import {
+    IGetNotificationChannelByIdUseCase
+} from "@/src/application/use-cases/google-notification-channels/get-notification-channel-by-id.use-case";
+import { getCalendarEventUseCase } from "@/src/application/use-cases/calendar/get-calendar-event.use-case";
+import { getCalendarEventController } from "@/src/interface-adapters/controllers/calendar/get-calendar-event.controller";
 
 export function createCalendarModule() {
     const calendarModule = createModule();
@@ -31,6 +36,14 @@ export function createCalendarModule() {
     calendarModule
         .bind(DI_SYMBOLS.ICalendarService)
         .toClass(GoogleCalendarService)
+
+    calendarModule
+        .bind(DI_SYMBOLS.IGetCalendarEventUseCase)
+        .toHigherOrderFunction(getCalendarEventUseCase, [DI_SYMBOLS.ICalendarService]);
+
+    calendarModule
+        .bind(DI_SYMBOLS.IGetCalendarEventController)
+        .toHigherOrderFunction(getCalendarEventController, [DI_SYMBOLS.IGetCalendarEventUseCase]);
 
     calendarModule
         .bind(DI_SYMBOLS.IGetCalendarEventsUseCase)
@@ -42,7 +55,7 @@ export function createCalendarModule() {
 
     calendarModule
         .bind(DI_SYMBOLS.ICreateCalendarEventUseCase)
-        .toHigherOrderFunction(createCalendarEventUseCase, [DI_SYMBOLS.ICalendarService]);
+        .toHigherOrderFunction(createCalendarEventUseCase, [DI_SYMBOLS.ICalendarService, DI_SYMBOLS.ICreateNotificationChannelUseCase]);
 
     calendarModule
         .bind(DI_SYMBOLS.ICreateCalendarEventController)
@@ -58,15 +71,15 @@ export function createCalendarModule() {
 
     calendarModule
         .bind(DI_SYMBOLS.IDeleteCalendarEventUseCase)
-        .toHigherOrderFunction(deleteCalendarEventUseCase, [DI_SYMBOLS.ICalendarService]);
+        .toHigherOrderFunction(deleteCalendarEventUseCase, [DI_SYMBOLS.ICalendarService, DI_SYMBOLS.IDeleteNotificationChannelUseCase]);
 
     calendarModule
         .bind(DI_SYMBOLS.IDeleteCalendarEventController)
-        .toHigherOrderFunction(deleteCalendarEventController, [DI_SYMBOLS.IDeleteCalendarEventUseCase, DI_SYMBOLS.IGetCalendarIdByUserIdUseCase]);
+        .toHigherOrderFunction(deleteCalendarEventController, [DI_SYMBOLS.IDeleteCalendarEventUseCase, DI_SYMBOLS.IGetCalendarIdByUserIdUseCase, DI_SYMBOLS.IGetNotificationChannelByIdUseCase]);
 
     calendarModule
         .bind(DI_SYMBOLS.ICalendarIdsRepository)
-        .toClass(CalendarIdsRepository);
+        .toClass(CalendarIdsRepository, [DI_SYMBOLS.IGoogleNotificationChannelsRepository]);
 
     calendarModule
         .bind(DI_SYMBOLS.IGetCalendarIdByUserIdUseCase)
