@@ -41,7 +41,7 @@ export default function AdminUserDetailsSalesCreateForm({selectedDate, fullProfi
 
     const {data: mentorScheduleQuery, isLoading: isLoadingMentorSchedule, isFetching: isRefetchingMentorSchedule} = useErrorQuery({
         queryFn: () => getMentorSchedules(selectedMentorId ?? undefined),
-        queryKey: [`mentor-schedule-${selectedMentorId}`],
+        queryKey: ["mentor-schedule", selectedMentorId, selectedDate],
         enabled: !!selectedMentorId
     });
 
@@ -50,7 +50,7 @@ export default function AdminUserDetailsSalesCreateForm({selectedDate, fullProfi
             timeMin: selectedDate,
             timeMax: selectedDate + hoursToMilliseconds(24)
         }),
-        queryKey: [`calendar-events-${selectedMentorId}`],
+        queryKey: ["calendar-events", selectedMentorId, selectedDate],
         enabled: !!selectedMentorId
     });
 
@@ -74,8 +74,8 @@ export default function AdminUserDetailsSalesCreateForm({selectedDate, fullProfi
         onSuccess() {
             toast.success("Срещата беше създадена!");
             setSelectedTime(null);
-            queryClient.invalidateQueries([`calendar-events-${selectedMentorId}`]);
-            queryClient.invalidateQueries([`user-specific-meetings-${selectedDate}`]);
+            queryClient.invalidateQueries(["calendar-events"]);
+            queryClient.invalidateQueries(["user-specific-meetings", selectedDate]);
         }
     });
 

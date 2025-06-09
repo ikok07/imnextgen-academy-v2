@@ -13,10 +13,11 @@ import {useQueryClient} from "react-query";
 
 type AdminUserDetailsSalesMeetingRowProps = {
     salesMeeting: UserSpecificMeeting,
-    selectedDate: number
+    selectedDate: number,
+    selectedMentorId: string | null
 }
 
-export default function AdminUserDetailsSalesMeetingRow({salesMeeting, selectedDate}: AdminUserDetailsSalesMeetingRowProps) {
+export default function AdminUserDetailsSalesMeetingRow({salesMeeting, selectedDate, selectedMentorId}: AdminUserDetailsSalesMeetingRowProps) {
     const queryClient = useQueryClient();
     const isInThePast = useMemo(() => salesMeeting.date * 1000 < Date.now(), []);
 
@@ -27,7 +28,8 @@ export default function AdminUserDetailsSalesMeetingRow({salesMeeting, selectedD
         },
         onSuccess() {
             toast.success("Срещата е изтрита успешно!");
-            queryClient.invalidateQueries([`user-specific-meetings-${selectedDate}`]);
+            queryClient.invalidateQueries(["user-specific-meetings", selectedDate]);
+            queryClient.invalidateQueries(["calendar-events"]);
         }
     })
 

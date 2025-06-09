@@ -1,6 +1,6 @@
 import {
-    CalendarEvent, CalendarRawResponse,
-    CreateCalendarEventOptions, DeleteCalendarEventOptions,
+    CalendarRawResponse,
+    CreateCalendarEventOptions, DeleteCalendarEventOptions, GetCalendarEventOptions,
     GetCalendarEventsOptions,
     ICalendarService, UpdateCalendarEventOptions
 } from "@/src/application/services/calendar/calendar.service.interface";
@@ -108,7 +108,7 @@ export class GoogleCalendarService implements ICalendarService {
 
             let channelConfig: {id: string, internalResourceId: string} | undefined;
             const token = this.generateToken();
-            if (enableWatch) {
+            if (enableWatch && process.env.NODE_ENV === "production") {
                 const watchResponse = await calendar.events.watch({
                     calendarId,
                     requestBody: {
