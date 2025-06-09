@@ -16,6 +16,7 @@ export const calendarRawResponse = z.object({
     id: z.string(),
     channel: z.object({
         id: z.string(),
+        internalResourceId: z.string(),
         token: z.string()
     }).optional(),
 });
@@ -39,7 +40,10 @@ export const updateCalendarEventOptionsSchema = createCalendarEventOptionsSchema
 export const deleteCalendarEventOptionsSchema = z.object({
     calendarId: z.string(),
     eventId: z.string(),
-    channelId: z.string().optional()
+    channel: z.object({
+        id: z.string(),
+        internalResourceId: z.string()
+    }).optional(),
 })
 
 export type CalendarEvent = z.infer<typeof calendarEventSchema>;

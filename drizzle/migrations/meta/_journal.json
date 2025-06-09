@@ -428,6 +428,13 @@
       "when": 1749482681104,
       "tag": "0060_make-google-notification-channel-resource-id-unique",
       "breakpoints": true
+    },
+    {
+      "idx": 61,
+      "version": "7",
+      "when": 1749485976552,
+      "tag": "0061_add-channel-internal-resource-id-to-google-notification-channels",
+      "breakpoints": true
     }
   ]
 }

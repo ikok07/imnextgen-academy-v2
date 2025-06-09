@@ -90,7 +90,7 @@ export class GoogleCalendarService implements ICalendarService {
                 resource: event
             });
 
-            let channelId: string | null | undefined;
+            let channelConfig: {id: string, internalResourceId: string} | undefined;
             const token = this.generateToken();
             if (enableWatch) {
                 const watchResponse = await calendar.events.watch({
@@ -102,10 +102,11 @@ export class GoogleCalendarService implements ICalendarService {
                         token
                     }
                 });
-                channelId = watchResponse.data.id;
+                if (!watchResponse.data.id || !watchResponse.data.resourceId) throw new Error("Failed to get watch response data!");
+                channelConfig = {id: watchResponse.data.id, internalResourceId: watchResponse.data.resourceId};
             }
 
-            return {id: data.id, channel: channelId ? {id: channelId, token} : undefined} as CalendarRawResponse;
+            return {id: data.id, channel: channelConfig ? {...channelConfig, token} : undefined} as CalendarRawResponse;
         } catch (e) {
             throw new DatabaseError(`Failed to create event! ${e}`);
         }
@@ -127,7 +128,7 @@ export class GoogleCalendarService implements ICalendarService {
             throw new DatabaseError(`Failed to update event! ${e}`);
         }
     }
-    async deleteCalendarEvent({calendarId, eventId, channelId}: DeleteCalendarEventOptions): Promise<void> {
+    async deleteCalendarEvent({calendarId, eventId, channel}: DeleteCalendarEventOptions): Promise<void> {
         try {
             const calendar = await this.getCalendar();
 
@@ -137,7 +138,7 @@ export class GoogleCalendarService implements ICalendarService {
                 eventId
             });
 
-            if (channelId) await calendar.channels.stop({requestBody: {id: channelId, resourceId: eventId}});
+            if (channel) await calendar.channels.stop({requestBody: {id: channel.id, resourceId: channel.internalResourceId}});
         } catch (e) {
             throw new DatabaseError(`Failed to delete event! ${e}`);
         }
