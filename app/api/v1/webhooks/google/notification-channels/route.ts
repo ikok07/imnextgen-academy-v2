@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
         });
 
         await getInjection("ISystemUpdateUserSpecificMeetingController")({
-            date: currEvent.start,
+            date: currEvent.start / 1000,
             duration_minutes: millisecondsToMinutes(currEvent.end - currEvent.start)
         });
 
