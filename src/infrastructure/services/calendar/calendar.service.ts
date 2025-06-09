@@ -1,5 +1,4 @@
 import {
-    CalendarEvent,
     CalendarRawResponse,
     CreateCalendarEventOptions, DeleteCalendarEventOptions,
     GetCalendarEventsOptions,
@@ -10,9 +9,7 @@ import {google} from "googleapis";
 import {OAuth2Client} from "google-auth-library";
 import {BookedCalendarEvent} from "@/src/entities/models/meetings/booked-calendar-event";
 import crypto from "node:crypto";
-import {
-    IGoogleNotificationChannelsRepository
-} from "@/src/application/repositories/google-notification-channels/google-notification-channels.repository.interface";
+import {v4 as uuid4} from "uuid"
 
 export class GoogleCalendarService implements ICalendarService {
 
@@ -78,7 +75,7 @@ export class GoogleCalendarService implements ICalendarService {
                 end: new Date(obj.end!.dateTime || obj.end!.date!).valueOf()
             })) as BookedCalendarEvent[];
         } catch (e) {
-            throw new DatabaseError(`Failed to get google calendar events! Error: ${e}`);
+            throw new DatabaseError(`Failed to get google calendar events! ${e}`);
         }
     }
     async createCalendarEvent({calendarId, event, enableWatch}: CreateCalendarEventOptions): Promise<CalendarRawResponse> {
@@ -98,6 +95,7 @@ export class GoogleCalendarService implements ICalendarService {
                 const watchResponse = await calendar.events.watch({
                     calendarId,
                     requestBody: {
+                        id: uuid4(),
                         address: `${process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_BASE_URL! : process.env.NEXT_PUBLIC_DEV_BASE_URL_HTTPS!}/api/v1/webhooks/google/notification-channels`,
                         type: "web_hook",
                         token
@@ -108,7 +106,7 @@ export class GoogleCalendarService implements ICalendarService {
 
             return {id: data.id, channel: channelId ? {id: channelId, token} : undefined} as CalendarRawResponse;
         } catch (e) {
-            throw new DatabaseError(`Failed to create event! Error: ${e}`);
+            throw new DatabaseError(`Failed to create event! ${e}`);
         }
     }
     async updateCalendarEvent({calendarId, eventId, event}: UpdateCalendarEventOptions): Promise<CalendarRawResponse> {
@@ -125,7 +123,7 @@ export class GoogleCalendarService implements ICalendarService {
 
             return data as CalendarRawResponse;
         } catch (e) {
-            throw new DatabaseError(`Failed to update event! Error: ${e}`);
+            throw new DatabaseError(`Failed to update event! ${e}`);
         }
     }
     async deleteCalendarEvent({calendarId, eventId}: DeleteCalendarEventOptions): Promise<void> {
@@ -138,7 +136,7 @@ export class GoogleCalendarService implements ICalendarService {
                 eventId
             });
         } catch (e) {
-            throw new DatabaseError(`Failed to delete event! Error: ${e}`);
+            throw new DatabaseError(`Failed to delete event! ${e}`);
         }
     }
 }
