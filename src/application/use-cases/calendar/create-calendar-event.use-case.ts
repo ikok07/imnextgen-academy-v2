@@ -3,6 +3,7 @@ import {
     ICalendarService
 } from "@/src/application/services/calendar/calendar.service.interface";
 import { ICreateNotificationChannelUseCase } from "../google-notification-channels/create-notification-channel.use-case";
+import crypto from "node:crypto";
 
 export type ICreateCalendarEventUseCase = ReturnType<typeof createCalendarEventUseCase>;
 
@@ -15,9 +16,9 @@ export const createCalendarEventUseCase = (
     if (res.channel) {
         await createNotificationChannelUseCase({
             id: res.channel.id,
-            token: res.channel.token,
+            token: crypto.createHmac("sha256", process.env.KEYS_SECRET!).update(res.channel.token).digest("base64"),
             resource_id: res.id
-        })
+        });
     }
 
     return res;
