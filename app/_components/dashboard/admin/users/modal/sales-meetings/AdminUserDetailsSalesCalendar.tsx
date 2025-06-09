@@ -14,6 +14,8 @@ import AdminUserDetailsSalesMeetingRow
 import AdminUserDetailsSalesMeetingRowSkeleton
     from "@/app/_components/dashboard/admin/users/modal/sales-meetings/skeletons/AdminUserDetailsSalesMeetingRowSkeleton";
 import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
+import {useAppUser} from "@/app/_hooks/auth/useAppUser";
+import {checkMultipleResourcesAccess} from "@/app/actions";
 
 type AdminUserDetailsSalesCalendarProps = {
     selectedDate: number,

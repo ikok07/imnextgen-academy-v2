@@ -15,7 +15,7 @@ type AdminUserDetailsSalesMeetingsProps = {
 // TODO: 3. Develop update event functionality
 // TODO: 4. Add option for variable event durations X
 // TODO: 5. Show the user it's sales meetings X
-// TODO: 6. Fix access policies
+// TODO: 6. Fix access policies (make sure the mentors can see only them)
 
 export default function AdminUserDetailsSalesMeetings({fullProfile}: AdminUserDetailsSalesMeetingsProps) {
     const [selectedDate, setSelectedDate] = useState(startOfDay(Date.now()).valueOf());
