@@ -7,10 +7,10 @@ import {getInjection} from "@/di/container";
 import {generateSerializableUser} from "@/src/entities/utils/auth/generate-serializable-user";
 
 export default async function Page() {
-    const {user, auth: authObject, dbProfile} = await getInjection("IGetUserController")();
-    if (!authObject.userId || !user || !dbProfile) throw new Error("User not logged in!");
+    const {user, dbProfile} = await getInjection("IGetUserController")();
+    if (!user || !dbProfile) throw new Error("User not logged in!");
 
-    const subscriptionResponse = await getUserSubscription(authObject.userId);
+    const subscriptionResponse = await getUserSubscription(user.id);
     if (!subscriptionResponse.success) throw new Error("User's subscription is not available!")
 
     return <DashboardEventsProvider>
