@@ -20,9 +20,14 @@ import {
 import {
     IGetCalendarIdByUserIdController
 } from "@/src/interface-adapters/controllers/calendar/calendar-ids/get-calendar-id-by-user-id.controller";
+import {IGetCalendarEventUseCase} from "@/src/application/use-cases/calendar/get-calendar-event.use-case";
+import {IGetCalendarEventController} from "@/src/interface-adapters/controllers/calendar/get-calendar-event.controller";
 
 export const CALENDAR_SYMBOLS = {
     ICalendarService: Symbol.for("ICalendarService"),
+
+    IGetCalendarEventUseCase: Symbol.for("IGetCalendarEventUseCase"),
+    IGetCalendarEventController: Symbol.for("IGetCalendarEventController"),
 
     IGetCalendarEventsUseCase: Symbol.for("IGetCalendarEventsUseCase"),
     IGetCalendarEventsController: Symbol.for("IGetCalendarEventsController"),
@@ -44,6 +49,9 @@ export const CALENDAR_SYMBOLS = {
 
 export interface CALENDAR_RETURN_TYPES {
     ICalendarService: ICalendarService,
+
+    IGetCalendarEventUseCase: IGetCalendarEventUseCase,
+    IGetCalendarEventController: IGetCalendarEventController,
 
     IGetCalendarEventsUseCase: IGetCalendarEventsUseCase,
     IGetCalendarEventsController: IGetCalendarEventsController,

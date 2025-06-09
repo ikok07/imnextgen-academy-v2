@@ -13,7 +13,7 @@ export const updateUserSpecificMeetingController = (
     updateUserSpecificMeetingUseCase: IUpdateUserSpecificMeetingUseCase,
     getUserController: IGetUserController,
     checkAccessController: ICheckAccessController
-) => async (data: Partial<UserSpecificMeetingInsert>, mentorProfileId: string) => {
+) => async (data: Partial<UserSpecificMeetingInsert>, currMentorProfileId: string) => {
 
     const {user, dbProfile} = await getUserController();
     if (!user || !dbProfile) throw new AccessError("Could not verify access! User could not be found!");
@@ -27,7 +27,7 @@ export const updateUserSpecificMeetingController = (
             id: "specific-meeting",
             kind: "specific-meeting",
             attr: {
-                mentor_profile_id: mentorProfileId
+                mentor_profile_id: currMentorProfileId // Separate variable in case the updated meeting has other mentor profile id
             }
         },
         action: "update"

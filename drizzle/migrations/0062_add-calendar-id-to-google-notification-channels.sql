@@ -1,0 +1,1 @@
+ALTER TABLE "google_notification_channels" ADD COLUMN "calendar_id" text NOT NULL;
