@@ -25,7 +25,9 @@ export const deleteCalendarEventController = (
     const {data: parsedOpts, error} = deleteCalendarEventOptionsSchema.safeParse({...opts, calendarId: calendar_id});
     if (error) throw new InputParseError(`Invalid options! ${error}`);
 
-    const channel = await getNotificationChannelByIdUseCase(parsedOpts.eventId);
+    const channel = await getNotificationChannelByIdUseCase({
+        resourceId: parsedOpts.eventId
+    });
 
     return deleteCalendarEventUseCase({
         ...parsedOpts,

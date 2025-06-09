@@ -1,4 +1,5 @@
 import {
+    GetNotificationChannelByIdOptions,
     IGoogleNotificationChannelsRepository
 } from "@/src/application/repositories/google-notification-channels/google-notification-channels.repository.interface";
 
@@ -6,6 +7,6 @@ export type IGetNotificationChannelByIdUseCase = ReturnType<typeof getNotificati
 
 export const getNotificationChannelByIdUseCase = (
     googleNotificationChannelsRepository: IGoogleNotificationChannelsRepository
-) => async (resourceId: string) => {
-    return googleNotificationChannelsRepository.getNotificationChannelById(resourceId);
+) => async (opts: GetNotificationChannelByIdOptions) => {
+    return googleNotificationChannelsRepository.getNotificationChannelById(opts);
 }

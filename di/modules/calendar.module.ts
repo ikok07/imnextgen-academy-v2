@@ -27,6 +27,8 @@ import {
 import {
     IGetNotificationChannelByIdUseCase
 } from "@/src/application/use-cases/google-notification-channels/get-notification-channel-by-id.use-case";
+import { getCalendarEventUseCase } from "@/src/application/use-cases/calendar/get-calendar-event.use-case";
+import { getCalendarEventController } from "@/src/interface-adapters/controllers/calendar/get-calendar-event.controller";
 
 export function createCalendarModule() {
     const calendarModule = createModule();
@@ -34,6 +36,14 @@ export function createCalendarModule() {
     calendarModule
         .bind(DI_SYMBOLS.ICalendarService)
         .toClass(GoogleCalendarService)
+
+    calendarModule
+        .bind(DI_SYMBOLS.IGetCalendarEventUseCase)
+        .toHigherOrderFunction(getCalendarEventUseCase, [DI_SYMBOLS.ICalendarService]);
+
+    calendarModule
+        .bind(DI_SYMBOLS.IGetCalendarEventController)
+        .toHigherOrderFunction(getCalendarEventController, [DI_SYMBOLS.IGetCalendarEventUseCase]);
 
     calendarModule
         .bind(DI_SYMBOLS.IGetCalendarEventsUseCase)

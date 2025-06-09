@@ -123,6 +123,9 @@ import {
 import {
     ICheckResourcesAccessController
 } from "@/src/interface-adapters/controllers/auth/check-resources-access.controller";
+import {
+    systemUpdateUserSpecificMeetingController
+} from "@/src/interface-adapters/controllers/calendar/system-update-user-specific-meeting.controller";
 
 export function createMeetingsModule() {
     const meetingsModule = createModule();
@@ -310,6 +313,10 @@ export function createMeetingsModule() {
     meetingsModule
         .bind(DI_SYMBOLS.IUpdateUserSpecificMeetingController)
         .toHigherOrderFunction(updateUserSpecificMeetingController, [DI_SYMBOLS.IUpdateUserSpecificMeetingUseCase, DI_SYMBOLS.IGetUserController, DI_SYMBOLS.ICheckAccessController]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.ISystemUpdateUserSpecificMeetingController)
+        .toHigherOrderFunction(systemUpdateUserSpecificMeetingController, [DI_SYMBOLS.IUpdateUserSpecificMeetingUseCase]);
 
     meetingsModule
         .bind(DI_SYMBOLS.IRemoveUserSpecificMeetingUseCase)

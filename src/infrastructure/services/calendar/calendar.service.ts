@@ -8,14 +8,9 @@ import { DatabaseError } from "@/src/entities/errors/db/database";
 import {google} from "googleapis";
 import {OAuth2Client} from "google-auth-library";
 import {BookedCalendarEvent} from "@/src/entities/models/meetings/booked-calendar-event";
-import crypto from "node:crypto";
 import {v4 as uuid4} from "uuid"
 
 export class GoogleCalendarService implements ICalendarService {
-
-    private hashToken(str: string): string {
-        return crypto.createHmac("sha256", process.env.KEYS_SECRET!).update(str).digest("base64");
-    }
 
     private generateToken() {
         let token: string = 'token_imnextgen_';
@@ -42,6 +37,25 @@ export class GoogleCalendarService implements ICalendarService {
 
         const authClient = (await auth.getClient()) as OAuth2Client;
         return google.calendar({version: "v3", auth: authClient});
+    }
+
+    async getCalendarEvent({calendarId, eventId}: GetCalendarEventOptions): Promise<BookedCalendarEvent> {
+        try {
+            const calendar = await this.getCalendar();
+
+            const res = await calendar.events.get({calendarId, eventId});
+
+            if (!res.data) throw new Error("Event not found!");
+
+            return {
+                id: res.data.id,
+                calendarId,
+                start: new Date(res.data.start!.dateTime || res.data.start!.date!).valueOf(),
+                end: new Date(res.data.end!.dateTime || res.data.end!.date!).valueOf()
+            } as BookedCalendarEvent;
+        } catch (e) {
+            throw new DatabaseError(`Failed to get google calendar events! ${e}`);
+        }
     }
 
     async getCalendarEvents({timeMin, timeMax, calendarId}: GetCalendarEventsOptions): Promise<BookedCalendarEvent[]> {
@@ -72,6 +86,7 @@ export class GoogleCalendarService implements ICalendarService {
 
             return res.data.items.map(obj => ({
                 id: obj.id,
+                calendarId,
                 start: new Date(obj.start!.dateTime || obj.start!.date!).valueOf(),
                 end: new Date(obj.end!.dateTime || obj.end!.date!).valueOf()
             })) as BookedCalendarEvent[];

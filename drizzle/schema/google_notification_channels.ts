@@ -7,6 +7,7 @@ export const googleNotificationChannelsTable = pgTable("google_notification_chan
     token: text("token").notNull(),
     channel_internal_resource_id: text("channel_internal_resource_id").notNull(), // provided by google after channel creation
     resource_id: text("resource_id").notNull().unique(), // example: calendar event id
+    calendar_id: text("calendar_id").notNull(),
     expiration: text("expiration"),
 });
 

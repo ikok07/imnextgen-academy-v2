@@ -4,17 +4,23 @@ import {
     googleNotificationChannelsTable
 } from "@/drizzle/schema/google_notification_channels";
 import {
+    GetNotificationChannelByIdOptions,
     IGoogleNotificationChannelsRepository
 } from "@/src/application/repositories/google-notification-channels/google-notification-channels.repository.interface";
 import { DatabaseError } from "@/src/entities/errors/db/database";
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
-import {eq} from "drizzle-orm";
+import {eq, SQL} from "drizzle-orm";
 
 export class GoogleNotificationChannelsRepository extends BaseRepository implements IGoogleNotificationChannelsRepository {
-    getNotificationChannelById(resourceId: string): Promise<GoogleNotificationChannel> {
+    getNotificationChannelById(opts: GetNotificationChannelByIdOptions): Promise<GoogleNotificationChannel> {
         try {
+            let predicate: SQL<unknown> | undefined;
+            if (opts.id) predicate = eq(googleNotificationChannelsTable.id, opts.id);
+            if (opts.resourceId) predicate = eq(googleNotificationChannelsTable.resource_id, opts.resourceId);
+            if (opts.internalResourceId) predicate = eq(googleNotificationChannelsTable.channel_internal_resource_id, opts.internalResourceId);
+
             return this.queryDB(async db => {
-                const res = await db.query.googleNotificationChannelsTable.findFirst({where: eq(googleNotificationChannelsTable.resource_id, resourceId)});
+                const res = await db.query.googleNotificationChannelsTable.findFirst({where: predicate});
                 if (!res) throw new Error("Cannot find notification channel with this id!");
                 return res;
             })
