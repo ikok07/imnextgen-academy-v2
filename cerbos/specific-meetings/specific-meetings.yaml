@@ -1,0 +1,40 @@
+apiVersion: api.cerbos.dev/v1
+resourcePolicy:
+  resource: specific-meeting
+  version: default
+  rules:
+    - name: allow_admins_to_access_all_specific_meetings
+      actions: ["select", "create", "update", "delete"]
+      roles:
+        - admin
+      effect: EFFECT_ALLOW
+
+    - name: allow_moderators_to_read_all_specific_meetings
+      actions: ["select"]
+      roles:
+        - moderator
+      effect: EFFECT_ALLOW
+
+    - name: allow_mentors_to_read_update_and_delete_only_their_specific_meetings
+      actions: ["select", "update", "delete"]
+      roles:
+        - mentor
+      condition:
+        match:
+          expr: "request.resource.attr.mentor_profile_id == request.principal.id"
+      effect: EFFECT_ALLOW
+
+    - name: allow_mentors_to_create_specific_meetings
+      actions: ["create"]
+      roles:
+        - mentor
+      effect: EFFECT_ALLOW
+
+    - name: allow_users_to_access_their_specific_meetings
+      actions: ["select"]
+      roles:
+        - user
+      condition:
+        match:
+          expr: "request.resource.attr.profile_id == request.principal.id"
+      effect: EFFECT_ALLOW

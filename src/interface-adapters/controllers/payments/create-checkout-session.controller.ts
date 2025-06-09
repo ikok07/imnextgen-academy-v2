@@ -9,7 +9,7 @@ export const createCheckoutSessionController = (
 ) => async (opts: Partial<CreateCheckoutSessionOptions>) => {
 
     const {data: parsedOptions, error} = createCheckoutSessionOptionsSchema.safeParse(opts);
-    if (error) throw new InputParseError("Invalid options!");
+    if (error) throw new InputParseError(`Invalid options! ${error}`);
 
     return createCheckoutSessionUseCase(parsedOptions);
 }

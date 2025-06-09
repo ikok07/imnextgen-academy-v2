@@ -316,6 +316,90 @@
       "when": 1749059292300,
       "tag": "0044_add-user-roles",
       "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "7",
+      "when": 1749131610974,
+      "tag": "0045_delete-signed-up-users-for-meeting-on-user-delete",
+      "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "7",
+      "when": 1749131711971,
+      "tag": "0046_delete-user-role-on-user-deletion",
+      "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1749226710508,
+      "tag": "0047_add-user-specific-meetings",
+      "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "7",
+      "when": 1749229595204,
+      "tag": "0048_add-platform-and-url-to-user-specific-meetings",
+      "breakpoints": true
+    },
+    {
+      "idx": 49,
+      "version": "7",
+      "when": 1749231525817,
+      "tag": "0049_add-specific-meeting-type",
+      "breakpoints": true
+    },
+    {
+      "idx": 50,
+      "version": "7",
+      "when": 1749231677668,
+      "tag": "0050_make-specific-meeting-type-not-null",
+      "breakpoints": true
+    },
+    {
+      "idx": 51,
+      "version": "7",
+      "when": 1749281552739,
+      "tag": "0051_add-mentor-role",
+      "breakpoints": true
+    },
+    {
+      "idx": 52,
+      "version": "7",
+      "when": 1749281657123,
+      "tag": "0052_add-moderator-role",
+      "breakpoints": true
+    },
+    {
+      "idx": 53,
+      "version": "7",
+      "when": 1749282069749,
+      "tag": "0053_add-mentor-profile-id-to-specific-meetings",
+      "breakpoints": true
+    },
+    {
+      "idx": 54,
+      "version": "7",
+      "when": 1749295627143,
+      "tag": "0054_add-mentor-schedules",
+      "breakpoints": true
+    },
+    {
+      "idx": 55,
+      "version": "7",
+      "when": 1749314625635,
+      "tag": "0055_add-user-calendar-ids",
+      "breakpoints": true
+    },
+    {
+      "idx": 56,
+      "version": "7",
+      "when": 1749321757578,
+      "tag": "0056_add-meeting-url-to-calendar-ids-table",
+      "breakpoints": true
     }
   ]
 }

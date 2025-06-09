@@ -1,0 +1,2 @@
+ALTER TABLE "user_specific_meetings" ADD COLUMN "mentor_profile_id" text;--> statement-breakpoint
+ALTER TABLE "user_specific_meetings" ADD CONSTRAINT "user_specific_meetings_mentor_profile_id_profiles_id_fk" FOREIGN KEY ("mentor_profile_id") REFERENCES "public"."profiles"("id") ON DELETE set null ON UPDATE cascade;

@@ -11,12 +11,12 @@ type LayoutProps = {
 export default async function Layout({children}: LayoutProps) {
     const userResponse = await getUser();
 
-    if (!userResponse.success || !userResponse.value.user) throw new Error("Unable to get user!");
+    if (!userResponse.success || !userResponse.value.user || !userResponse.value.dbProfile) throw new Error("Unable to get user!");
 
     const accessResult = await checkAccess({
         principal: {
             id: userResponse.value.user.id,
-            roles: userResponse.value.user.publicMetadata["roles"] as string[]
+            roles: userResponse.value.dbProfile.roles
         },
         resource: {
             id: "administration",
@@ -33,7 +33,7 @@ export default async function Layout({children}: LayoutProps) {
 
     if (!accessResult.value) return redirect(Routes.dashboard.base);
 
-    return <div>
+    return <div className="grid">
         {children}
     </div>
 }

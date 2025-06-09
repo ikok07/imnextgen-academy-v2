@@ -1,4 +1,4 @@
-import {IDeleteProfileUseCase} from "@/src/application/use-cases/auth/delete-profile.use-case";
+import {IDeleteProfileUseCase} from "@/src/application/use-cases/auth/profiles/delete-profile.use-case";
 import {InputParseError} from "@/src/entities/errors/common";
 
 export type IDeleteProfileController = ReturnType<typeof deleteProfileController>;

@@ -10,7 +10,7 @@ export const addMeetingController = (
 
 
     const {data: meetingData, error} = meetingInsertSchema.safeParse(meeting);
-    if (error) throw new InputParseError("Invalid meetings object!");
+    if (error) throw new InputParseError("Invalid calendar object!");
 
     return addMeetingUseCase(meetingData)
 }

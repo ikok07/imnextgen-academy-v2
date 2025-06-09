@@ -13,7 +13,6 @@ export class CerbosService implements IAuthorizationService {
 
     async hasAccess(opts: CheckUserAccessOptions): Promise<boolean> {
         try {
-            console.log(opts);
             return this.cerbos.isAllowed(opts);
         } catch(e) {
             console.error(e);

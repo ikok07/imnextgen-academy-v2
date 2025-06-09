@@ -7,6 +7,8 @@ resourcePolicy:
       actions: [ "select", "insert", "update", "delete" ]
       roles:
         - admin
+        - moderator
+        - mentor
       effect: EFFECT_ALLOW
 
     - name: give_anyone_access_to_free_meetings

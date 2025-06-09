@@ -20,4 +20,12 @@ export class ClerkService implements IAuthenticationService {
             throw new AuthenticationError(`Failed to get user! ${e}`);
         }
     }
+
+    deleteUser(userId: string): Promise<User> {
+        try {
+            return this.client.users.deleteUser(userId);
+        } catch(e) {
+            throw new AuthenticationError(`Failed to delete user! ${e}`);
+        }
+    }
 }

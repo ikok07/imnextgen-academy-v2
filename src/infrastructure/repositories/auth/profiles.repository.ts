@@ -1,11 +1,12 @@
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
 import {
+    GetAllProfilesOptions,
     IProfilesRepository, RawProfileResponse,
     UpdateProfileOptions
 } from "@/src/application/repositories/auth/profiles.repository.interface";
 import {Profile, ProfileInsert, profilesTable} from "@/drizzle/schema/profiles";
 import { DatabaseError } from "@/src/entities/errors/db/database";
-import {eq, inArray} from "drizzle-orm";
+import {eq} from "drizzle-orm";
 import {userRolesTable, UserRoleType} from "@/drizzle/schema/user_roles";
 
 export class ProfilesRepository extends BaseRepository implements IProfilesRepository {
@@ -44,6 +45,28 @@ export class ProfilesRepository extends BaseRepository implements IProfilesRepos
             })
         } catch(e) {
             throw new DatabaseError(`Failed to get profile by email: ${e}`);
+        }
+    }
+
+    getAllProfiles({limit, offset}: GetAllProfilesOptions): Promise<RawProfileResponse> {
+        try {
+            return this.queryDB(async db => {
+                const baseQuery = db
+                    .select({
+                        profile: profilesTable,
+                        role: userRolesTable
+                    })
+                    .from(profilesTable)
+                    .innerJoin(userRolesTable, eq(userRolesTable.profile_id, profilesTable.id))
+                    .$dynamic();
+
+                if (limit) baseQuery.limit(limit);
+                if (offset) baseQuery.offset(offset);
+
+                return baseQuery;
+            });
+        } catch(e) {
+            throw new DatabaseError(`Failed to get all profiles: ${e}`);
         }
     }
 

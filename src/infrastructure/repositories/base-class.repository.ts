@@ -15,6 +15,8 @@ import * as bankOrders from "../../../drizzle/schema/bank_orders"
 import * as bankOrderProducts from "../../../drizzle/schema/bank_order_products"
 import * as backendKeys from "../../../drizzle/schema/backend_keys"
 import * as meetingSignedUpUsers from "../../../drizzle/schema/meeting_signed_up_users"
+import * as userSpecificMeetings from "../../../drizzle/schema/user_specific_meetings"
+import * as userCalendarIds from "../../../drizzle/schema/user_calendar_ids"
 
 import ws from "ws"
 
@@ -42,11 +44,12 @@ export class BaseRepository {
         ...bankOrders,
         ...bankOrderProducts,
         ...backendKeys,
-        ...meetingSignedUpUsers
+        ...meetingSignedUpUsers,
+        ...userSpecificMeetings,
+        ...userCalendarIds
     };
     constructor(authenticationService: IAuthenticationService) {
         this.authService = authenticationService;
-
     }
 
     protected async queryDB<T>(callback: (db: Omit<

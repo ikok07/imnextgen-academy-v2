@@ -6,6 +6,7 @@ import {useEffect, useRef, useState} from "react";
 import {PaginationState} from "@tanstack/table-core";
 import PrimaryTable from "./ui/tables/primary/PrimaryTable";
 import {SetupQuestion} from "@/drizzle/schema/setup_questions";
+import {IoGlobe} from "react-icons/io5";
 
 const columnHelper = createColumnHelper<{ name: string, age: number }>();
 
@@ -34,13 +35,14 @@ export default function ClientTable() {
 
     return <div className="w-[30rem] h-[30rem]">
         <TableProvider<{name: string, age: number}>
-            initialColumns={columns}
-            initialData={data}
+            columns={columns}
+            data={data}
             selectionOptions={{
                 enabled: true,
                 multipleSelection: true,
                 selectedRows,
-                onRowSelected: setSelectedRows
+                onRowSelected: setSelectedRows,
+                onDelete: () => console.log("DELETED")
             }}
             sortingOptions={{
                 enabled: true,
