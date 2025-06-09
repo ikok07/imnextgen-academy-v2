@@ -117,7 +117,7 @@ export class GoogleCalendarService implements ICalendarService {
                         address: `${process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_BASE_URL! : process.env.NEXT_PUBLIC_DEV_BASE_URL_HTTPS!}/api/v1/webhooks/google/notification-channels`,
                         type: "web_hook",
                         token,
-                        expiration: addDays(Date.now(), 30).valueOf().toString()
+                        expiration: addDays(Date.now(), 180).valueOf().toString()
                     }
                 });
 
