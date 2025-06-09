@@ -8,8 +8,24 @@ import { DatabaseError } from "@/src/entities/errors/db/database";
 import {google} from "googleapis";
 import {OAuth2Client} from "google-auth-library";
 import {BookedCalendarEvent} from "@/src/entities/models/meetings/booked-calendar-event";
+import crypto from "node:crypto";
+import {v4 as uuid4} from "uuid"
 
 export class GoogleCalendarService implements ICalendarService {
+
+    private hashToken(str: string): string {
+        return crypto.createHmac("sha256", process.env.KEYS_SECRET!).update(str).digest("base64");
+    }
+
+    private generateToken() {
+        let token: string = 'token_imnextgen_';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        for (let i = 0; i < 32; i++ ) {
+            token += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return token;
+    }
 
     private getAuth() {
         const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY as string)
@@ -60,10 +76,10 @@ export class GoogleCalendarService implements ICalendarService {
                 end: new Date(obj.end!.dateTime || obj.end!.date!).valueOf()
             })) as BookedCalendarEvent[];
         } catch (e) {
-            throw new DatabaseError(`Failed to get google calendar events! Error: ${e}`);
+            throw new DatabaseError(`Failed to get google calendar events! ${e}`);
         }
     }
-    async createCalendarEvent({calendarId, event}: CreateCalendarEventOptions): Promise<CalendarRawResponse> {
+    async createCalendarEvent({calendarId, event, enableWatch}: CreateCalendarEventOptions): Promise<CalendarRawResponse> {
         try {
             const calendar = await this.getCalendar();
 
@@ -74,9 +90,27 @@ export class GoogleCalendarService implements ICalendarService {
                 resource: event
             });
 
-            return data as CalendarRawResponse;
+            let channelConfig: {id: string, internalResourceId: string} | undefined;
+            const token = this.generateToken();
+            if (enableWatch) {
+                const watchResponse = await calendar.events.watch({
+                    calendarId,
+                    requestBody: {
+                        id: uuid4(),
+                        resourceId: data.id,
+                        address: `${process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_BASE_URL! : process.env.NEXT_PUBLIC_DEV_BASE_URL_HTTPS!}/api/v1/webhooks/google/notification-channels`,
+                        type: "web_hook",
+                        token
+                    }
+                });
+
+                if (!watchResponse.data.id || !watchResponse.data.resourceId) throw new Error("Failed to get watch response data!");
+                channelConfig = {id: watchResponse.data.id, internalResourceId: watchResponse.data.resourceId};
+            }
+
+            return {id: data.id, channel: channelConfig ? {...channelConfig, token} : undefined} as CalendarRawResponse;
         } catch (e) {
-            throw new DatabaseError(`Failed to create event! Error: ${e}`);
+            throw new DatabaseError(`Failed to create event! ${e}`);
         }
     }
     async updateCalendarEvent({calendarId, eventId, event}: UpdateCalendarEventOptions): Promise<CalendarRawResponse> {
@@ -93,10 +127,10 @@ export class GoogleCalendarService implements ICalendarService {
 
             return data as CalendarRawResponse;
         } catch (e) {
-            throw new DatabaseError(`Failed to update event! Error: ${e}`);
+            throw new DatabaseError(`Failed to update event! ${e}`);
         }
     }
-    async deleteCalendarEvent({calendarId, eventId}: DeleteCalendarEventOptions): Promise<void> {
+    async deleteCalendarEvent({calendarId, eventId, channel}: DeleteCalendarEventOptions): Promise<void> {
         try {
             const calendar = await this.getCalendar();
 
@@ -104,9 +138,11 @@ export class GoogleCalendarService implements ICalendarService {
                 auth: this.getAuth(),
                 calendarId,
                 eventId
-            })
+            });
+
+            if (channel) await calendar.channels.stop({requestBody: {id: channel.id, resourceId: channel.internalResourceId}});
         } catch (e) {
-            throw new DatabaseError(`Failed to delete event! Error: ${e}`);
+            throw new DatabaseError(`Failed to delete event! ${e}`);
         }
     }
 }

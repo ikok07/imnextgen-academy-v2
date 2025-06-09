@@ -1,7 +1,6 @@
 "use client"
 
 import TableProvider from "@/app/_components/ui/tables/provider/TableProvider";
-import PrimaryTable from "@/app/_components/ui/tables/primary/PrimaryTable";
 import useErrorQuery from "@/app/_hooks/useErrorQuery";
 import {getAllProfiles} from "@/app/actions";
 import {useMemo, useState} from "react";
@@ -14,19 +13,13 @@ import {deleteMultipleUsers} from "@/app/dashboard/admin/actions";
 import { toast } from "sonner";
 import {useQueryClient} from "react-query";
 
-import {
-    Dialog,
-    DialogTrigger
-} from "@/app/_components/ui/shadcn/dialog";
-import {
-    AdminUserDetailsModal
-} from "@/app/_components/dashboard/admin/users/modal/AdminUserDetailsModal";
 import AdminUsersTableWrapper from "@/app/_components/dashboard/admin/users/AdminUsersTableWrapper";
 
 const columnHelper = createColumnHelper<FullProfile>();
 
 export default function AdminUsersTable() {
     const queryClient = useQueryClient();
+    const [openedUserDetails, setOpenedUserDetails] = useState<string | null>(null); // user id or null
     const [selectedRows, setSelectedRows] = useState<RowSelectionState>({});
     const [pagination, setPagination] = useState<PaginationState>({
         pageSize: 10,
@@ -84,14 +77,13 @@ export default function AdminUsersTable() {
             }),
             columnHelper.display({
                 id: "open_btn",
-                cell: ({row}) => <Dialog>
-                    <DialogTrigger><div className="flex items-center justify-center"><SecondaryButton>Управление</SecondaryButton></div></DialogTrigger>
-                    <AdminUserDetailsModal fullProfile={row.original} />
-                </Dialog>,
+                cell: ({row}) => {
+                    return <div className="flex items-center justify-center"><SecondaryButton onClick={() => setOpenedUserDetails(row.original.id)}>Управление</SecondaryButton></div>
+                },
                 enableResizing: false
             })
         ];
-    }, []);
+    }, [openedUserDetails]);
 
     const data = useMemo(() => {
         if (!allProfilesQuery || !allProfilesQuery.success || isLoadingAllProfiles) return [];
@@ -125,7 +117,7 @@ export default function AdminUsersTable() {
                 onDelete: (rows) => deleteSelectedUsers(rows)
             }}
         >
-            <AdminUsersTableWrapper isDeletingSelectedUsers={isDeletingSelectedUsers} isLoadingAllProfiles={isLoadingAllProfiles} isRefetchingAllProfiles={isRefetchingAllProfiles} />
+            <AdminUsersTableWrapper isDeletingSelectedUsers={isDeletingSelectedUsers} isLoadingAllProfiles={isLoadingAllProfiles} isRefetchingAllProfiles={isRefetchingAllProfiles} openedUserDetails={openedUserDetails} setOpenedUserDetails={setOpenedUserDetails} />
         </TableProvider>
     </>
 }
