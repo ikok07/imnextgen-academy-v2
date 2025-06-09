@@ -5,7 +5,8 @@ import {z} from "zod";
 export const googleNotificationChannelsTable = pgTable("google_notification_channels", {
     id: text("id").notNull().primaryKey(),
     token: text("token").notNull(),
-    resource_id: text("resource_id").notNull().unique(),
+    channel_internal_resource_id: text("channel_internal_resource_id").notNull(), // provided by google after channel creation
+    resource_id: text("resource_id").notNull().unique(), // example: calendar event id
     expiration: text("expiration"),
 });
 

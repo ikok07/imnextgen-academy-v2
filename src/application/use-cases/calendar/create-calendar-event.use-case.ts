@@ -17,7 +17,8 @@ export const createCalendarEventUseCase = (
         await createNotificationChannelUseCase({
             id: res.channel.id,
             token: crypto.createHmac("sha256", process.env.KEYS_SECRET!).update(res.channel.token).digest("base64"),
-            resource_id: res.id
+            resource_id: res.id,
+            channel_internal_resource_id: res.channel.internalResourceId
         });
     }
 

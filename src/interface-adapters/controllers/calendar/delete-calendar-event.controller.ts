@@ -27,5 +27,11 @@ export const deleteCalendarEventController = (
 
     const channel = await getNotificationChannelByIdUseCase(parsedOpts.eventId);
 
-    return deleteCalendarEventUseCase({...parsedOpts, channelId: channel.id});
+    return deleteCalendarEventUseCase({
+        ...parsedOpts,
+        channel: {
+            id: channel.id,
+            internalResourceId: channel.channel_internal_resource_id
+        }
+    });
 }
