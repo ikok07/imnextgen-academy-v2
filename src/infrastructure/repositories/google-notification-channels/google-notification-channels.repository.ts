@@ -11,10 +11,10 @@ import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repos
 import {eq} from "drizzle-orm";
 
 export class GoogleNotificationChannelsRepository extends BaseRepository implements IGoogleNotificationChannelsRepository {
-    getNotificationChannelById(id: string): Promise<GoogleNotificationChannel> {
+    getNotificationChannelById(resourceId: string): Promise<GoogleNotificationChannel> {
         try {
             return this.queryDB(async db => {
-                const res = await db.query.googleNotificationChannelsTable.findFirst({where: eq(googleNotificationChannelsTable.id, id)});
+                const res = await db.query.googleNotificationChannelsTable.findFirst({where: eq(googleNotificationChannelsTable.resource_id, resourceId)});
                 if (!res) throw new Error("Cannot find notification channel with this id!");
                 return res;
             })

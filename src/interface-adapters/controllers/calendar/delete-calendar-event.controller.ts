@@ -7,12 +7,16 @@ import {InputParseError} from "@/src/entities/errors/common";
 import {
     IGetCalendarIdByUserIdUseCase
 } from "@/src/application/use-cases/calendar/calendar-ids/get-calendar-id-by-user-id.use-case";
+import {
+    IGetNotificationChannelByIdUseCase
+} from "@/src/application/use-cases/google-notification-channels/get-notification-channel-by-id.use-case";
 
 export type IDeleteCalendarEventController = ReturnType<typeof deleteCalendarEventController>;
 
 export const deleteCalendarEventController = (
     deleteCalendarEventUseCase: IDeleteCalendarEventUseCase,
-    getCalendarIdByUserIdUseCase: IGetCalendarIdByUserIdUseCase
+    getCalendarIdByUserIdUseCase: IGetCalendarIdByUserIdUseCase,
+    getNotificationChannelByIdUseCase: IGetNotificationChannelByIdUseCase
 ) => async (userId: string | undefined, opts: Partial<Omit<DeleteCalendarEventOptions, "calendarId">>) => {
 
     if (!userId) throw new InputParseError("Invalid userId!");
@@ -21,5 +25,7 @@ export const deleteCalendarEventController = (
     const {data: parsedOpts, error} = deleteCalendarEventOptionsSchema.safeParse({...opts, calendarId: calendar_id});
     if (error) throw new InputParseError(`Invalid options! ${error}`);
 
-    return deleteCalendarEventUseCase(parsedOpts);
+    const channel = await getNotificationChannelByIdUseCase(parsedOpts.eventId);
+
+    return deleteCalendarEventUseCase({...parsedOpts, channelId: channel.id});
 }

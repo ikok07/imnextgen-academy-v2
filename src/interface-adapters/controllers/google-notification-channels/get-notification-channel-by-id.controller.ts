@@ -7,9 +7,9 @@ export type IGetNotificationChannelByIdController = ReturnType<typeof getNotific
 
 export const getNotificationChannelByIdController = (
     getNotificationChannelByIdUseCase: IGetNotificationChannelByIdUseCase
-) => async (id: string | undefined) => {
+) => async (resourceId: string | undefined) => {
 
-    if (!id) throw new InputParseError("Invalid id!");
+    if (!resourceId) throw new InputParseError("Invalid resourceId!");
 
-    return getNotificationChannelByIdUseCase(id);
+    return getNotificationChannelByIdUseCase(resourceId);
 }

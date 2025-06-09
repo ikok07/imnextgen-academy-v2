@@ -38,7 +38,8 @@ export const updateCalendarEventOptionsSchema = createCalendarEventOptionsSchema
 
 export const deleteCalendarEventOptionsSchema = z.object({
     calendarId: z.string(),
-    eventId: z.string()
+    eventId: z.string(),
+    channelId: z.string().optional()
 })
 
 export type CalendarEvent = z.infer<typeof calendarEventSchema>;

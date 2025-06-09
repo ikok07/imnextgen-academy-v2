@@ -6,6 +6,6 @@ export type IGetNotificationChannelByIdUseCase = ReturnType<typeof getNotificati
 
 export const getNotificationChannelByIdUseCase = (
     googleNotificationChannelsRepository: IGoogleNotificationChannelsRepository
-) => async (id: string) => {
-    return googleNotificationChannelsRepository.getNotificationChannelById(id);
+) => async (resourceId: string) => {
+    return googleNotificationChannelsRepository.getNotificationChannelById(resourceId);
 }
