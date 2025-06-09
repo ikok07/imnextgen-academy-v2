@@ -8,13 +8,16 @@ import {
 import {ICheckAccessController} from "@/src/interface-adapters/controllers/auth/check-access.controller";
 import {IGetUserController} from "@/src/interface-adapters/controllers/auth/get-user.controller";
 import {AccessError} from "@/src/entities/models/auth/access";
+import {
+    ICheckResourcesAccessController
+} from "@/src/interface-adapters/controllers/auth/check-resources-access.controller";
 
 export type IGetSpecificMeetingsByUserIdController = ReturnType<typeof getSpecificMeetingsByUserIdController>;
 
 export const getSpecificMeetingsByUserIdController = (
     getSpecificMeetingsByUserIdUseCase: IGetSpecificMeetingsByUserIdUseCase,
     getUserController: IGetUserController,
-    checkAccessController: ICheckAccessController
+    checkResourcesAccessController: ICheckResourcesAccessController
 ) => async (opts: Partial<GetSpecificMeetingsByUserIdOptions>) => {
 
     const {data: parsedOpts, error} = getSpecificMeetingsByUserIdOptionsSchema.safeParse(opts);
@@ -23,22 +26,25 @@ export const getSpecificMeetingsByUserIdController = (
     const {user, dbProfile} = await getUserController();
     if (!user || !dbProfile) throw new AccessError("Could not verify access! User could not be found!");
 
-    const hasAccess = await checkAccessController({
+    const meetings = await getSpecificMeetingsByUserIdUseCase(parsedOpts);
+
+    const accessResults = await checkResourcesAccessController({
         principal: {
             id: user.id,
             roles: dbProfile.roles
         },
-        resource: {
-            id: "specific-meeting",
-            kind: "specific-meeting",
-            attr: {
-                profile_id: opts.userId
-            }
-        },
-        action: "select"
+        resources: meetings.map(m => ({
+            resource: {
+                id: m.id,
+                kind: "specific-meeting",
+                attr: {
+                    profile_id: opts.userId,
+                    mentor_profile_id: m.mentor_profile_id
+                }
+            },
+            actions: ["select"]
+        })),
     });
 
-    if (!hasAccess) throw new AccessError("Unauthorized action!");
-
-    return getSpecificMeetingsByUserIdUseCase(parsedOpts);
+    return meetings.filter(m => accessResults.some(r => r.resourceId === m.id && r.actions["select"] === "EFFECT_ALLOW"));
 }
