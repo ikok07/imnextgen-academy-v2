@@ -10,20 +10,23 @@ import Testimonials from "@/app/_components/home/testimonials/Testimonials";
 import StartNow from "@/app/_components/home/start-now/StartNow";
 import Footer from "@/app/_components/home/footer/Footer";
 import HomepageNavbar from "@/app/_components/home/nav/HomepageNavbar";
+import HomepageClientWrapper from "@/app/_components/home/HomepageClientWrapper";
 
 export default async function Home() {
-  return <main className="homepage space-y-10">
-    <HomepageNavbar />
-    <Hero />
-    <Tiles />
-    <Suitable />
-    <Technologies />
-    <GraphicDesign />
-    <Mentoring />
-    <Team />
-    <Partners />
-    <Testimonials />
-    <StartNow />
-    <Footer />
-  </main>
+  return <HomepageClientWrapper>
+    <main className="homepage space-y-10">
+      <HomepageNavbar />
+      <Hero />
+      <Tiles />
+      <Suitable />
+      <Technologies />
+      <GraphicDesign />
+      <Mentoring />
+      <Team />
+      <Partners />
+      <Testimonials />
+      <StartNow />
+      <Footer />
+    </main>
+  </HomepageClientWrapper>
 }

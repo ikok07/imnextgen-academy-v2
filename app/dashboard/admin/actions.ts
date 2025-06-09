@@ -48,14 +48,14 @@ export const bookSalesMeeting = createServerAction(async (userId: string | undef
     }
 });
 
-export const unbookSalesMeeting = createServerAction(async (salesMeeting: UserSpecificMeeting, mentorId: string | undefined) => {
-    const calendarEvents = await getInjection("IGetCalendarEventsController")(mentorId, {
+export const unbookSalesMeeting = createServerAction(async (salesMeeting: UserSpecificMeeting) => {
+    const calendarEvents = await getInjection("IGetCalendarEventsController")(salesMeeting.mentor_profile_id ?? undefined, {
         timeMin: salesMeeting.date * 1000,
         timeMax: salesMeeting.date * 1000 + minutesToMilliseconds(salesMeeting.duration_minutes + 1)
     });
     const validCalendarEvent = calendarEvents.find(event => event.start === salesMeeting.date * 1000);
 
-    if (validCalendarEvent) await getInjection("IDeleteCalendarEventController")(mentorId, {eventId: validCalendarEvent.id});
-    await getInjection("IRemoveUserSpecificMeetingController")(salesMeeting.id, mentorId);
+    if (validCalendarEvent) await getInjection("IDeleteCalendarEventController")(salesMeeting.mentor_profile_id ?? undefined, {eventId: validCalendarEvent.id});
+    await getInjection("IRemoveUserSpecificMeetingController")(salesMeeting.id, salesMeeting.mentor_profile_id ?? undefined);
 })
 

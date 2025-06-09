@@ -8,11 +8,10 @@ import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
 import useErrorQuery from "@/app/_hooks/useErrorQuery";
 import {getAllProfilesForRole} from "@/app/actions";
 import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
-import {IoCalendar, IoPerson} from "react-icons/io5";
+import {IoAlertCircle, IoCalendar, IoPerson} from "react-icons/io5";
 import CalendarAvailableTimeBoxSkeleton from "@/app/_components/ui/calendar/CalendarAvailableTimeBoxSkeleton";
 import {
     bookSalesMeeting,
-    createCalendarEvent,
     getCalendarEvents,
     getMentorSchedules
 } from "@/app/dashboard/admin/actions";
@@ -42,16 +41,16 @@ export default function AdminUserDetailsSalesCreateForm({selectedDate, fullProfi
 
     const {data: mentorScheduleQuery, isLoading: isLoadingMentorSchedule, isFetching: isRefetchingMentorSchedule} = useErrorQuery({
         queryFn: () => getMentorSchedules(selectedMentorId ?? undefined),
-        queryKey: [`mentor-schedule-${selectedMentorId}`],
+        queryKey: ["mentor-schedule", selectedMentorId, selectedDate],
         enabled: !!selectedMentorId
     });
 
-    const {data: mentorCalendarEventsQuery, isLoading: isLoadingMentorCalendarEvents, isFetching: isRefetchingMentorCalendarEvents} = useErrorQuery({
+    const {data: mentorCalendarEventsQuery, isLoading: isLoadingMentorCalendarEvents, isFetching: isRefetchingMentorCalendarEvents, error: mentorCalendarError} = useErrorQuery({
         queryFn: () => getCalendarEvents(selectedMentorId!, {
             timeMin: selectedDate,
             timeMax: selectedDate + hoursToMilliseconds(24)
         }),
-        queryKey: [`calendar-events-${selectedMentorId}`],
+        queryKey: ["calendar-events", selectedMentorId, selectedDate],
         enabled: !!selectedMentorId
     });
 
@@ -66,7 +65,8 @@ export default function AdminUserDetailsSalesCreateForm({selectedDate, fullProfi
                 end: {
                     dateTime: formatInTimeZone(selectedTime! + minutesToMilliseconds(30), "Europe/Sofia", "yyyy-MM-dd'T'HH:mm:ssxxx")
                 }
-            }
+            },
+            enableWatch: true
         }),
         onError() {
             toast.error("Срещата не беше създадена!");
@@ -74,8 +74,8 @@ export default function AdminUserDetailsSalesCreateForm({selectedDate, fullProfi
         onSuccess() {
             toast.success("Срещата беше създадена!");
             setSelectedTime(null);
-            queryClient.invalidateQueries([`calendar-events-${selectedMentorId}`]);
-            queryClient.invalidateQueries([`user-specific-meetings-${selectedDate}`]);
+            queryClient.invalidateQueries(["calendar-events"]);
+            queryClient.invalidateQueries(["user-specific-meetings", selectedDate]);
         }
     });
 
@@ -119,6 +119,13 @@ export default function AdminUserDetailsSalesCreateForm({selectedDate, fullProfi
             Icon={IoPerson}
             title="Избери ментор"
             message="Избери ментор, за да видиш свободните му часове"
+            className="my-6"
+        />;
+
+        if (mentorCalendarError) return <PrimaryErrorMessage
+            Icon={IoAlertCircle}
+            title="Възникна грешка"
+            message="Менторът не е конфигуриран правилно. Моля, свържи се с екипа ни!"
             className="my-6"
         />;
 

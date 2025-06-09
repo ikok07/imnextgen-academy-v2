@@ -1,0 +1,1 @@
+ALTER TABLE "google_notification_channels" ADD CONSTRAINT "google_notification_channels_resource_id_unique" UNIQUE("resource_id");

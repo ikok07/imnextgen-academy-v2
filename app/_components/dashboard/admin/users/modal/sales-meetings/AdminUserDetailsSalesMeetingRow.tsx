@@ -22,13 +22,14 @@ export default function AdminUserDetailsSalesMeetingRow({salesMeeting, selectedD
     const isInThePast = useMemo(() => salesMeeting.date * 1000 < Date.now(), []);
 
     const {mutate: unbookSalesMeetingMethod, isLoading: isUnbookingSalesMeeting} = useErrorMutation({
-        mutationFn: () => unbookSalesMeeting(salesMeeting, selectedMentorId ?? undefined),
+        mutationFn: () => unbookSalesMeeting(salesMeeting),
         onError() {
             toast.error("Срещата не беше изтрита!");
         },
         onSuccess() {
             toast.success("Срещата е изтрита успешно!");
-            queryClient.invalidateQueries([`user-specific-meetings-${selectedDate}`]);
+            queryClient.invalidateQueries(["user-specific-meetings", selectedDate]);
+            queryClient.invalidateQueries(["calendar-events"]);
         }
     })
 
