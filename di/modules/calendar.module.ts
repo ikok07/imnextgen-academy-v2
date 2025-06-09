@@ -42,7 +42,7 @@ export function createCalendarModule() {
 
     calendarModule
         .bind(DI_SYMBOLS.ICreateCalendarEventUseCase)
-        .toHigherOrderFunction(createCalendarEventUseCase, [DI_SYMBOLS.ICalendarService]);
+        .toHigherOrderFunction(createCalendarEventUseCase, [DI_SYMBOLS.ICalendarService, DI_SYMBOLS.ICreateNotificationChannelUseCase]);
 
     calendarModule
         .bind(DI_SYMBOLS.ICreateCalendarEventController)
@@ -58,7 +58,7 @@ export function createCalendarModule() {
 
     calendarModule
         .bind(DI_SYMBOLS.IDeleteCalendarEventUseCase)
-        .toHigherOrderFunction(deleteCalendarEventUseCase, [DI_SYMBOLS.ICalendarService]);
+        .toHigherOrderFunction(deleteCalendarEventUseCase, [DI_SYMBOLS.ICalendarService, DI_SYMBOLS.IDeleteNotificationChannelUseCase]);
 
     calendarModule
         .bind(DI_SYMBOLS.IDeleteCalendarEventController)
@@ -66,7 +66,7 @@ export function createCalendarModule() {
 
     calendarModule
         .bind(DI_SYMBOLS.ICalendarIdsRepository)
-        .toClass(CalendarIdsRepository);
+        .toClass(CalendarIdsRepository, [DI_SYMBOLS.IGoogleNotificationChannelsRepository]);
 
     calendarModule
         .bind(DI_SYMBOLS.IGetCalendarIdByUserIdUseCase)

@@ -1,0 +1,1 @@
+ALTER TABLE "google_notification_channels" ALTER COLUMN "expiration" DROP NOT NULL;
