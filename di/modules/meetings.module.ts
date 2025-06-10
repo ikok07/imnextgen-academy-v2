@@ -28,10 +28,10 @@ import {getMeetingDatesUseCase} from "@/src/application/use-cases/meetings/meeti
 import {MeetingDatesRepository} from "@/src/infrastructure/repositories/meetings/meeting-dates.repository";
 import { getMeetingExcludedDatesController } from "@/src/interface-adapters/controllers/meetings/meeting-excluded-dates/get-meeting-excluded-dates.controller";
 import { getMeetingDatesController } from "@/src/interface-adapters/controllers/meetings/meeting-dates/get-meeting-dates.controller";
-import {getFullMeetingByIdUseCase} from "@/src/application/use-cases/meetings/get-full-meeting-by-id.use-case";
+import {getFullRegularMeetingByIdUseCase} from "@/src/application/use-cases/meetings/get-full-regular-meeting-by-id-use.case";
 import {
-    getFullMeetingByIdController
-} from "@/src/interface-adapters/controllers/meetings/get-full-meeting-by-id.controller";
+    getFullRegularMeetingByIdController
+} from "@/src/interface-adapters/controllers/meetings/get-full-regular-meeting-by-id.controller";
 import {
     getMeetingsByRepeatingDayOfWeekUseCase
 } from "@/src/application/use-cases/meetings/meeting-repeat-days/get-meetings-by-repeating-day-of-week.use-case";
@@ -126,6 +126,12 @@ import {
 import {
     systemUpdateUserSpecificMeetingController
 } from "@/src/interface-adapters/controllers/calendar/system-update-user-specific-meeting.controller";
+import {
+    getFullSpecificMeetingByUserIdUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/get-full-specific-meeting-by-user-id.use-case";
+import {
+    getFullSpecificMeetingByUserIdController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/get-full-specific-meeting-by-user-id.controller";
 
 export function createMeetingsModule() {
     const meetingsModule = createModule();
@@ -143,12 +149,20 @@ export function createMeetingsModule() {
         .toHigherOrderFunction(getMeetingsController, [DI_SYMBOLS.IGetMeetingsUseCase]);
 
     meetingsModule
-        .bind(DI_SYMBOLS.IGetFullMeetingByIdUseCase)
-        .toHigherOrderFunction(getFullMeetingByIdUseCase, [DI_SYMBOLS.IMeetingsRepository]);
+        .bind(DI_SYMBOLS.IGetFullRegularMeetingByIdUseCase)
+        .toHigherOrderFunction(getFullRegularMeetingByIdUseCase, [DI_SYMBOLS.IMeetingsRepository]);
 
     meetingsModule
-        .bind(DI_SYMBOLS.IGetFullMeetingByIdController)
-        .toHigherOrderFunction(getFullMeetingByIdController, [DI_SYMBOLS.IGetFullMeetingByIdUseCase]);
+        .bind(DI_SYMBOLS.IGetFullRegularMeetingByIdController)
+        .toHigherOrderFunction(getFullRegularMeetingByIdController, [DI_SYMBOLS.IGetFullRegularMeetingByIdUseCase]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IGetFullSpecificMeetingByUserIdUseCase)
+        .toHigherOrderFunction(getFullSpecificMeetingByUserIdUseCase, [DI_SYMBOLS.IUserSpecificMeetingsRepository]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IGetFullSpecificMeetingByUserIdController)
+        .toHigherOrderFunction(getFullSpecificMeetingByUserIdController, [DI_SYMBOLS.IGetFullSpecificMeetingByUserIdUseCase, DI_SYMBOLS.IGetUserUseCase, DI_SYMBOLS.ICheckResourcesAccessUseCase]);
 
     meetingsModule
         .bind(DI_SYMBOLS.IGetMeetingByIdUseCase)

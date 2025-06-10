@@ -8,7 +8,7 @@ import {z} from "zod";
 const getSpecificMeetingsGenericOptionsSchema = z.object({
     timezoneOffsetMin: z.number(),
     startDate: z.number().optional(),
-    meetingType: userSpecificMeetingTypeSchema
+    meetingType: userSpecificMeetingTypeSchema.optional()
 });
 
 export const getSpecificMeetingsByUserIdOptionsSchema = z.object({
@@ -26,6 +26,7 @@ export type GetSpecificMeetingsByMentorProfileIdOptions = z.infer<typeof getSpec
 export interface IUserSpecificMeetingsRepository {
     getSpecificMeetingsByUserId(opts: GetSpecificMeetingsByUserIdOptions): Promise<UserSpecificMeeting[]>;
     getSpecificMeetingsByMentorId(opts: GetSpecificMeetingsByMentorProfileIdOptions): Promise<UserSpecificMeeting[]>;
+    // getFullSpecificMeetingsByUserId(): Promise<void>
     addUserSpecificMeeting(data: UserSpecificMeetingInsert): Promise<UserSpecificMeeting>;
     updateUserSpecificMeeting(data: Partial<UserSpecificMeetingInsert>): Promise<UserSpecificMeeting>;
     removeUserSpecificMeeting(id: string): Promise<void>;
