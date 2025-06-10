@@ -1,6 +1,9 @@
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
-import {ISetupQuestionsRepository} from "@/src/application/repositories/setup/setup-questions.repository.interface";
-import { SetupQuestion } from "@/drizzle/schema/setup_questions";
+import {
+    GetUserSetupQuestionsRawResponse,
+    ISetupQuestionsRepository
+} from "@/src/application/repositories/setup/setup-questions.repository.interface";
+import {SetupQuestion, setupQuestionsTable} from "@/drizzle/schema/setup_questions";
 import { DatabaseError } from "@/src/entities/errors/db/database";
 import {
     UserSetupQuestion,
@@ -20,10 +23,17 @@ export class SetupQuestionsRepository extends BaseRepository implements ISetupQu
             throw new DatabaseError(`Failed to get setup questions! ${e}`);
         }
     }
-    getUserSetupQuestions(userId: string): Promise<UserSetupQuestion[]> {
+    getUserSetupQuestions(userId: string): Promise<GetUserSetupQuestionsRawResponse> {
         try {
             return this.queryDB(db => {
-                return db.query.userSetupQuestionsTable.findMany();
+                return db
+                    .select({
+                        userSetupQuestion: userSetupQuestionsTable,
+                        setupQuestion: setupQuestionsTable
+                    })
+                    .from(userSetupQuestionsTable)
+                    .where(eq(userSetupQuestionsTable.profile_id, userId))
+                    .innerJoin(setupQuestionsTable, eq(setupQuestionsTable.id, userSetupQuestionsTable.question_id));
             })
         } catch(e) {
             throw new DatabaseError(`Failed to get user setup questions! ${e}`);
