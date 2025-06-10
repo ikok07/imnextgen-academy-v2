@@ -1,29 +1,31 @@
-import {FullMeeting} from "@/drizzle/schema/meetings";
 import {z} from "zod";
 import {
     addMinutes,
     endOfDay,
     getHours,
     getMinutes,
-    isSameDay,
     millisecondsToHours,
     millisecondsToMinutes,
     startOfDay
 } from "date-fns";
 import {getTimezoneOffset} from "date-fns-tz/getTimezoneOffset";
 import {UTCDate} from "@date-fns/utc";
+import {FullMeeting} from "@/src/entities/models/meetings/full-meeting";
 
-export const fullMeetingStartTimeSchema = z.object({
+export const fullRegularMeetingStartTimeSchema = z.object({
     timestamp: z.number(),
     hours: z.number(),
     minutes: z.number()
 });
 
-export type FullMeetingStartTime = z.infer<typeof fullMeetingStartTimeSchema>;
+export type FullRegularMeetingStartTime = z.infer<typeof fullRegularMeetingStartTimeSchema>;
 
-export function getFullMeetingStartTime(fullMeeting: FullMeeting, targetDate: number): FullMeetingStartTime | undefined  {
+export function getFullRegularMeetingStartTime(fullMeeting: FullMeeting, targetDate: number): FullRegularMeetingStartTime | undefined  {
+    if (fullMeeting.meetingType !== "regular") return undefined;
+
     const targetDateSeconds = Math.floor(targetDate / 1000);
     const repeatedDay = fullMeeting.repeat_days.find(v => v.day_of_week === new Date(targetDate).getDay());
+
     if (repeatedDay) {
         return {
             timestamp: addMinutes(targetDate, repeatedDay.start_hour_utc * 60 + repeatedDay.start_minutes_utc + millisecondsToMinutes(getTimezoneOffset("Europe/Sofia"))).valueOf(),

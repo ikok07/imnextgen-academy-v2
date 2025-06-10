@@ -449,6 +449,13 @@
       "when": 1749548212320,
       "tag": "0063_add-preferred-meeting-duration-to-mentor-schedules",
       "breakpoints": true
+    },
+    {
+      "idx": 64,
+      "version": "7",
+      "when": 1749565954686,
+      "tag": "0064_make-user-speicific-meeting-platform-not-null",
+      "breakpoints": true
     }
   ]
 }

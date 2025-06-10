@@ -15,7 +15,7 @@ export const userSpecificMeetingsTable = pgTable("user_specific_meetings", {
     }),
     date: integer("date").notNull(),
     duration_minutes: integer("duration_minutes").notNull(),
-    platform: meetingPlatformEnum(),
+    platform: meetingPlatformEnum().notNull(),
     url: text("url").notNull(),
     type: userSpecificMeetingTypeEnum().notNull(),
     mentor_profile_id: text("mentor_profile_id").references(() => profilesTable.id, {

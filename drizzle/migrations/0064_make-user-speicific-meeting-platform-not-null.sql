@@ -1,0 +1,1 @@
+ALTER TABLE "user_specific_meetings" ALTER COLUMN "platform" SET NOT NULL;
