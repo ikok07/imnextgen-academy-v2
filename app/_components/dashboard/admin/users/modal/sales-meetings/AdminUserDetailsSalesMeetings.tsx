@@ -14,8 +14,9 @@ type AdminUserDetailsSalesMeetingsProps = {
 // DONE: 2. Integrate google calendar webhooks
 // DONE: 3  Fix modal overflow
 // DONE: 4. Add option for variable event durations X
-// TODO: 5. Show the user it's sales meetings X
-// TODO: 6. Fix access policies (make sure the mentors can see only them)
+// DONE: 5. Show the user it's sales meetings X
+// DONE: 6. Fix access policies (make sure the mentors can see only them)
+// TODO: 7. Add title, description, etc. to user specific meetings
 
 export default function AdminUserDetailsSalesMeetings({fullProfile}: AdminUserDetailsSalesMeetingsProps) {
     const [selectedDate, setSelectedDate] = useState(startOfDay(Date.now()).valueOf());

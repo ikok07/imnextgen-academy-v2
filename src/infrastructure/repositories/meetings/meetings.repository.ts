@@ -1,8 +1,8 @@
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
 import {
-    GetFullMeetingByIdResults,
-    GetMultipleFullMeetingsByIdOptions,
-    GetSingleFullMeetingByIdOptions,
+    GetFullRegularMeetingByIdResults,
+    GetMultipleRegularFullMeetingsByIdOptions,
+    GetSingleRegularFullMeetingByIdOptions,
     IMeetingsRepository
 } from "@/src/application/repositories/meetings/meetings.repository.interface";
 import {Meeting, MeetingInsert, meetingsTable} from "@/drizzle/schema/meetings";
@@ -24,7 +24,7 @@ export class MeetingsRepository extends BaseRepository implements IMeetingsRepos
         }
     }
 
-    getFullMeetingById(options: GetSingleFullMeetingByIdOptions | GetMultipleFullMeetingsByIdOptions): Promise<GetFullMeetingByIdResults | undefined> {
+    getFullRegularMeetingById(options: GetSingleRegularFullMeetingByIdOptions | GetMultipleRegularFullMeetingsByIdOptions): Promise<GetFullRegularMeetingByIdResults | undefined> {
         try {
             return this.queryDB(async db => {
                 const results = await db

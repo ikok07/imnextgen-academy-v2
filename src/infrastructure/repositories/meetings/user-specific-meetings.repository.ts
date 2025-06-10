@@ -61,6 +61,29 @@ export class UserSpecificMeetingsRepository extends BaseRepository implements IU
         }
     }
 
+    // getFullSpecificMeetingsByUserId({userId, timezoneOffsetMin, startDate, meetingType}: GetSpecificMeetingsByUserIdOptions): Promise<void> {
+    //     try {
+    //         const userIdPredicate = eq(userSpecificMeetingsTable.profile_id, userId);
+    //         let startDatePredicate: SQL<unknown> | undefined;
+    //         let typePredicate: SQL<unknown> | undefined;
+    //
+    //         if (startDate) startDatePredicate = this.getStartDatePredicate(startDate, timezoneOffsetMin);
+    //
+    //         if (meetingType) typePredicate = eq(userSpecificMeetingsTable.type, meetingType);
+    //
+    //         const wherePredicate = and(userIdPredicate, startDatePredicate, typePredicate);
+    //
+    //         return this.queryDB(db => {
+    //             return db
+    //                 .select()
+    //                 .from(userSpecificMeetingsTable)
+    //                 .where(wherePredicate)
+    //         })
+    //     } catch (e) {
+    //         throw new DatabaseError(`Failed to get full specific meetings by user id! ${e}`);
+    //     }
+    // }
+
     addUserSpecificMeeting(data: UserSpecificMeetingInsert): Promise<UserSpecificMeeting> {
         try {
             return this.queryDB(async db => {

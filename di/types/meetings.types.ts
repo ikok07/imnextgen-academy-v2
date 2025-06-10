@@ -30,8 +30,8 @@ import {
     IMeetingExcludedDatesRepository
 } from "@/src/application/repositories/meetings/meeting-excluded-dates.repository.interface";
 import {IMeetingDatesRepository} from "@/src/application/repositories/meetings/meeting-dates.repository.interface";
-import {IGetFullMeetingByIdUseCase} from "@/src/application/use-cases/meetings/get-full-meeting-by-id.use-case";
-import { IGetFullMeetingByIdController } from "@/src/interface-adapters/controllers/meetings/get-full-meeting-by-id.controller";
+import {IGetFullRegularMeetingByIdUseCase} from "@/src/application/use-cases/meetings/get-full-regular-meeting-by-id-use.case";
+import { IGetFullRegularMeetingByIdController } from "@/src/interface-adapters/controllers/meetings/get-full-regular-meeting-by-id.controller";
 import {
     IGetMeetingsByRepeatingDayOfWeekUseCase
 } from "@/src/application/use-cases/meetings/meeting-repeat-days/get-meetings-by-repeating-day-of-week.use-case";
@@ -120,6 +120,12 @@ import {
 import {
     ISystemUpdateUserSpecificMeetingController
 } from "@/src/interface-adapters/controllers/calendar/system-update-user-specific-meeting.controller";
+import {
+    IGetFullSpecificMeetingByUserIdController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/get-full-specific-meeting-by-user-id.controller";
+import {
+    IGetFullSpecificMeetingByUserIdUseCase
+} from "@/src/application/use-cases/meetings/user-specific-meetings/get-full-specific-meeting-by-user-id.use-case";
 
 export const MEETINGS_SYMBOLS = {
     IMeetingsRepository: Symbol.for("IMeetingsRepository"),
@@ -127,8 +133,11 @@ export const MEETINGS_SYMBOLS = {
     IGetMeetingsUseCase: Symbol.for("IGetMeetingsUseCase"),
     IGetMeetingsController: Symbol.for("IGetMeetingsController"),
 
-    IGetFullMeetingByIdUseCase: Symbol.for("IGetFullMeetingByIdUseCase"),
-    IGetFullMeetingByIdController: Symbol.for("IGetFullMeetingByIdController"),
+    IGetFullRegularMeetingByIdUseCase: Symbol.for("IGetFullRegularMeetingByIdUseCase"),
+    IGetFullRegularMeetingByIdController: Symbol.for("IGetFullRegularMeetingByIdController"),
+
+    IGetFullSpecificMeetingByUserIdUseCase: Symbol.for("IGetFullSpecificMeetingByUserIdUseCase"),
+    IGetFullSpecificMeetingByUserIdController: Symbol.for("IGetFullSpecificMeetingByUserIdController"),
 
     IGetMeetingByIdUseCase: Symbol.for("IGetMeetingByIdUseCase"),
     IGetMeetingByIdController: Symbol.for("IGetMeetingByIdController"),
@@ -210,8 +219,11 @@ export interface MEETINGS_RETURN_TYPES {
     IGetMeetingsUseCase: IGetMeetingsUseCase,
     IGetMeetingsController: IGetMeetingsController,
 
-    IGetFullMeetingByIdUseCase: IGetFullMeetingByIdUseCase,
-    IGetFullMeetingByIdController: IGetFullMeetingByIdController,
+    IGetFullRegularMeetingByIdUseCase: IGetFullRegularMeetingByIdUseCase,
+    IGetFullRegularMeetingByIdController: IGetFullRegularMeetingByIdController,
+
+    IGetFullSpecificMeetingByUserIdUseCase: IGetFullSpecificMeetingByUserIdUseCase,
+    IGetFullSpecificMeetingByUserIdController: IGetFullSpecificMeetingByUserIdController
 
     IGetMeetingByIdUseCase: IGetMeetingByIdUseCase,
     IGetMeetingByIdController: IGetMeetingByIdController,

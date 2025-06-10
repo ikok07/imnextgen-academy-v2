@@ -28,9 +28,3 @@ export type Meeting = z.infer<typeof meetingSchema>;
 
 export const meetingInsertSchema = createInsertSchema(meetingsTable);
 export type MeetingInsert = z.infer<typeof meetingInsertSchema>;
-
-export type FullMeeting =
-    Meeting &
-    {repeat_days: Omit<MeetingRepeatDay, "meeting_id">[]} &
-    {excluded_dates: Omit<MeetingExcludedDate, "meeting_id">[]} &
-    {meeting_dates: Omit<MeetingDate, "meeting_id">[]}
