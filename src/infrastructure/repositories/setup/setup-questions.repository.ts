@@ -20,7 +20,7 @@ export class SetupQuestionsRepository extends BaseRepository implements ISetupQu
             throw new DatabaseError(`Failed to get setup questions! ${e}`);
         }
     }
-    getUserSetupQuestions(): Promise<UserSetupQuestion[]> {
+    getUserSetupQuestions(userId: string): Promise<UserSetupQuestion[]> {
         try {
             return this.queryDB(db => {
                 return db.query.userSetupQuestionsTable.findMany();

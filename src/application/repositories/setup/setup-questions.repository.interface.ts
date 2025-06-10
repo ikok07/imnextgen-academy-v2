@@ -3,6 +3,6 @@ import {UserSetupQuestion, UserSetupQuestionInsert} from "@/drizzle/schema/user_
 
 export interface ISetupQuestionsRepository {
     getSetupQuestions(): Promise<SetupQuestion[]>
-    getUserSetupQuestions(): Promise<UserSetupQuestion[]>
+    getUserSetupQuestions(userId: string): Promise<UserSetupQuestion[]>
     setUserSetupQuestions(userId: string, answers: UserSetupQuestionInsert[]): Promise<void>
 }
