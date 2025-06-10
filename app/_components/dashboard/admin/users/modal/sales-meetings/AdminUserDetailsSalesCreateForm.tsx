@@ -8,7 +8,7 @@ import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
 import useErrorQuery from "@/app/_hooks/useErrorQuery";
 import {getAllProfilesForRole} from "@/app/actions";
 import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
-import {IoAlertCircle, IoCalendar, IoPerson} from "react-icons/io5";
+import {IoAlertCircle, IoCalendar, IoPerson, IoTimer} from "react-icons/io5";
 import CalendarAvailableTimeBoxSkeleton from "@/app/_components/ui/calendar/CalendarAvailableTimeBoxSkeleton";
 import {
     bookSalesMeeting,
@@ -21,6 +21,8 @@ import useErrorMutation from "@/app/_hooks/useErrorMutation";
 import {formatInTimeZone} from "date-fns-tz";
 import {toast} from "sonner";
 import {useQueryClient} from "react-query";
+import AdminUserDetailsSalesCreateMeetingSelects
+    from "@/app/_components/dashboard/admin/users/modal/sales-meetings/AdminUserDetailsSalesCreateMeetingSelects";
 
 type AdminUserDetailsSalesCreateFormProps = {
     selectedDate: number,
@@ -33,11 +35,7 @@ export default function AdminUserDetailsSalesCreateForm({selectedDate, fullProfi
     const queryClient = useQueryClient();
 
     const [selectedTime, setSelectedTime] = useState<number | null>(selectedDate);
-
-    const {data: mentorsQuery, isLoading: isLoadingMentors} = useErrorQuery({
-        queryFn: () => getAllProfilesForRole("mentor"),
-        queryKey: ["mentors"]
-    });
+    const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
 
     const {data: mentorScheduleQuery, isLoading: isLoadingMentorSchedule, isFetching: isRefetchingMentorSchedule} = useErrorQuery({
         queryFn: () => getMentorSchedules(selectedMentorId ?? undefined),
@@ -55,19 +53,7 @@ export default function AdminUserDetailsSalesCreateForm({selectedDate, fullProfi
     });
 
     const {mutate: createCalendarEventMethod, isLoading: isCreatingCalendarEventMethod} = useErrorMutation({
-        mutationFn: () => bookSalesMeeting(fullProfile.id, selectedMentorId!, {
-            event: {
-                summary: `Sales среща с ${fullProfile.name}`,
-                description: `Име: ${fullProfile.name}\nИмейл: ${fullProfile.email}\nТелефон: ${fullProfile.phone}`,
-                start: {
-                    dateTime: formatInTimeZone(selectedTime!, "Europe/Sofia", "yyyy-MM-dd'T'HH:mm:ssxxx")
-                },
-                end: {
-                    dateTime: formatInTimeZone(selectedTime! + minutesToMilliseconds(30), "Europe/Sofia", "yyyy-MM-dd'T'HH:mm:ssxxx")
-                }
-            },
-            enableWatch: true
-        }),
+        mutationFn: () => bookSalesMeeting(fullProfile, selectedMentorId!, selectedTime ?? undefined, selectedDuration ?? 30),
         onError() {
             toast.error("Срещата не беше създадена!");
         },
@@ -79,48 +65,45 @@ export default function AdminUserDetailsSalesCreateForm({selectedDate, fullProfi
         }
     });
 
-    const allMentors = useMemo(() => {
-        if (!mentorsQuery?.success) return [];
-
-        return mentorsQuery.value;
-        // @ts-ignore
-    }, [mentorsQuery?.value]);
+    const selectedDateMentorSchedule = useMemo(() => {
+        if (!mentorScheduleQuery?.success) return undefined;
+        return mentorScheduleQuery.value.days.find(d => d.dayOfWeek === new Date(selectedDate).getDay());
+    }, [selectedMentorId, isRefetchingMentorSchedule]);
 
     const availableTimes = useMemo(() => {
-        if (!mentorScheduleQuery?.success) return [];
-        if (!mentorCalendarEventsQuery?.success) return [];
-
-        const selectedMentorScheduleDay = mentorScheduleQuery.value.days.find(d => d.dayOfWeek === new Date(selectedDate).getDay());
-        if (!selectedMentorScheduleDay) return [];
+        if (!mentorCalendarEventsQuery?.success || !selectedDateMentorSchedule || !selectedDuration) return [];
 
         return getCalendarAvailableTimes({
             dateMs: selectedDate,
-            startHour: selectedMentorScheduleDay.startHour,
-            startMinutes: selectedMentorScheduleDay.startMinutes,
-            totalDurationMinutes: selectedMentorScheduleDay.durationMinutes,
-            singleAppointmentDurationMinutes: 30,
+            startHour: selectedDateMentorSchedule.startHour,
+            startMinutes: selectedDateMentorSchedule.startMinutes,
+            totalDurationMinutes: selectedDateMentorSchedule.durationMinutes,
+            singleAppointmentDurationMinutes: selectedDuration,
             bookedMeetingsDates: mentorCalendarEventsQuery.value
         });
         // @ts-ignore
-    }, [isRefetchingMentorSchedule, isRefetchingMentorCalendarEvents, selectedDate]);
-
-    useEffect(() => {
-        setSelectedTime(null);
-    }, [selectedDate]);
+    }, [isRefetchingMentorSchedule, isRefetchingMentorCalendarEvents, selectedDate, selectedDuration]);
 
     const availableTimesContainer = useMemo(() => {
-        if (isLoadingMentors || isLoadingMentorSchedule || isLoadingMentorCalendarEvents) return <div className="grid grid-cols-2 gap-4 self-start">
-            {Array.from({length: 6}).map((_, index) => {
-                return <CalendarAvailableTimeBoxSkeleton key={index} />
-            })}
-        </div>
-
         if (!selectedMentorId) return <PrimaryErrorMessage
             Icon={IoPerson}
             title="Избери ментор"
             message="Избери ментор, за да видиш свободните му часове"
             className="my-6"
         />;
+
+        if (!selectedDuration) return <PrimaryErrorMessage
+            Icon={IoTimer}
+            title="Избери продължителност"
+            message="Избери продължителност, за да видиш свободните часове"
+            className="my-6"
+        />;
+
+        if (isLoadingMentorSchedule || isLoadingMentorCalendarEvents) return <div className="grid grid-cols-2 gap-4 self-start">
+            {Array.from({length: 6}).map((_, index) => {
+                return <CalendarAvailableTimeBoxSkeleton key={index} />
+            })}
+        </div>
 
         if (mentorCalendarError) return <PrimaryErrorMessage
             Icon={IoAlertCircle}
@@ -149,21 +132,24 @@ export default function AdminUserDetailsSalesCreateForm({selectedDate, fullProfi
             </div>
             <PrimaryButton className="w-full" disabled={!selectedTime} loading={isCreatingCalendarEventMethod} onClick={() => createCalendarEventMethod()}>Създаване</PrimaryButton>
         </>
-    }, [selectedTime, isLoadingMentors, isLoadingMentorSchedule, isLoadingMentorCalendarEvents, selectedMentorId, availableTimes, isCreatingCalendarEventMethod])
+    }, [selectedTime, selectedDuration, isLoadingMentorSchedule, isLoadingMentorCalendarEvents, selectedMentorId, availableTimes, isCreatingCalendarEventMethod]);
 
-    return <div className="grid grid-rows-[auto_1fr]">
+    useEffect(() => {
+        setSelectedTime(null);
+    }, [selectedDate]);
+
+    return <div className="grid grid-rows-[auto_auto_1fr]">
         <h3 className="text-xl font-semibold mt-3">Създаване на среща</h3>
         <div className="mt-5 w-[95%] max-w-[20rem] mx-auto grid grid-rows-[auto_1fr_auto] gap-y-5">
-            <Select disabled={isLoadingMentors || isCreatingCalendarEventMethod} value={selectedMentorId ?? undefined} onValueChange={v => setSelectedMentorId(v)}>
-                <SelectTrigger>
-                    <SelectValue placeholder="Ментор" />
-                </SelectTrigger>
-                <SelectContent>
-                    {allMentors.map((mentor, index) => {
-                        return <SelectItem value={mentor.id} key={index}>{mentor.name} ({mentor.email})</SelectItem>
-                    })}
-                </SelectContent>
-            </Select>
+            <AdminUserDetailsSalesCreateMeetingSelects
+                isCreatingCalendarEventMethod={isCreatingCalendarEventMethod}
+                isLoadingMentorSchedule={isLoadingMentorSchedule}
+                isRefetchingMentorSchedule={isRefetchingMentorSchedule}
+                selectedDateMentorSchedule={selectedDateMentorSchedule}
+                selectedMentorId={selectedMentorId}
+                setSelectedDuration={setSelectedDuration}
+                setSelectedMentorId={setSelectedMentorId}
+            />
             {availableTimesContainer}
         </div>
     </div>
