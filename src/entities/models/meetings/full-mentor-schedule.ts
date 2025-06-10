@@ -6,7 +6,8 @@ export const fullMentorScheduleSchema = z.object({
         dayOfWeek: z.number(),
         startHour: z.number(),
         startMinutes: z.number(),
-        durationMinutes: z.number()
+        durationMinutes: z.number(),
+        preferred_duration_minutes: z.number().optional()
     }))
 });
 
