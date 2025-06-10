@@ -13,7 +13,7 @@ export const createCalendarEventUseCase = (
 ) => async (opts: CreateCalendarEventOptions) => {
     const res = await calendarService.createCalendarEvent(opts);
 
-    if (res.channel) {
+    if (res.channel && process.env.NODE_ENV === "production") {
         await createNotificationChannelUseCase({
             id: res.channel.id,
             token: crypto.createHmac("sha256", process.env.KEYS_SECRET!).update(res.channel.token).digest("base64"),
