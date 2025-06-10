@@ -43,7 +43,7 @@ export default function DashboardEventsListItem({hasAccess, fullMeeting, user, i
         <Card className={`${hasAccess ? "cursor-pointer" : "cursor-not-allowed"} flex gap-3 h-[6.5rem] group hover:translate-x-1.5 hover:bg-secondary/70 dark:hover:bg-border/50 transition-all duration-200 ease-in-out`}>
             <div className="relative hidden xs:block w-[30%] h-full rounded-l-xl overflow-hidden">
                 <img
-                    alt="test image"
+                    alt={fullMeeting.title}
                     src={fullMeeting.image_url}
                     className="absolute inset-0 w-full h-full object-cover"
                 />
