@@ -157,7 +157,7 @@ export class GoogleCalendarService implements ICalendarService {
                 eventId
             });
 
-            if (channel) await calendar.channels.stop({requestBody: {id: channel.id, resourceId: channel.internalResourceId}});
+            if (channel && process.env.NODE_ENV === "production") await calendar.channels.stop({requestBody: {id: channel.id, resourceId: channel.internalResourceId}});
         } catch (e) {
             throw new DatabaseError(`Failed to delete event! ${e}`);
         }
