@@ -1,0 +1,1 @@
+ALTER TABLE "mentor_schedules" ADD COLUMN "preferred_meeting_duration_minutes" integer;
