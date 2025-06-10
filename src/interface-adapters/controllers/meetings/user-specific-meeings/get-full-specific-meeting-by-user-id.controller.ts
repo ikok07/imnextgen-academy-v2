@@ -21,6 +21,8 @@ export const getFullSpecificMeetingByUserIdController = (
 
     const fullSpecificMeetings = await getFullSpecificMeetingByUserIdUseCase(parsedOpts);
 
+    if (fullSpecificMeetings.length === 0) return [];
+
     const {dbProfile} = await getUserUseCase();
     if (!dbProfile) throw new AccessError("Could not verify access! Database profile could not be found!");
 

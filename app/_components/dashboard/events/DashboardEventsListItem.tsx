@@ -45,7 +45,7 @@ export default function DashboardEventsListItem({hasAccess, fullMeeting, user, i
                 <img
                     alt="test image"
                     src={fullMeeting.image_url}
-                    className="object-cover"
+                    className="absolute inset-0 w-full h-full object-cover"
                 />
             </div>
             <div className="p-2 flex-1 overflow-hidden">
