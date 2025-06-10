@@ -3,6 +3,7 @@ import {checkAccess, getUser} from "@/app/actions";
 import {redirect} from "next/navigation";
 import {Routes} from "@/app/_utils/nav/routes";
 import {getNavLinks} from "@/app/_utils/nav/navlinks";
+import SetActiveLinkComponent from "@/app/_components/dashboard/nav/SetActiveLinkComponent";
 
 type LayoutProps = {
     children: ReactNode
@@ -33,7 +34,9 @@ export default async function Layout({children}: LayoutProps) {
 
     if (!accessResult.value) return redirect(Routes.dashboard.base);
 
-    return <div className="grid">
-        {children}
-    </div>
+    return <SetActiveLinkComponent linkId="allUsers">
+        <div className="grid">
+            {children}
+        </div>
+    </SetActiveLinkComponent>
 }
