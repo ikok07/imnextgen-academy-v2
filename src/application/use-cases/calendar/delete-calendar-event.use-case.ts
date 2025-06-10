@@ -13,5 +13,7 @@ export const deleteCalendarEventUseCase = (
     deleteNotificationChannelUseCase: IDeleteNotificationChannelUseCase
 ) => async (opts: DeleteCalendarEventOptions) => {
     await calendarService.deleteCalendarEvent(opts);
-    await deleteNotificationChannelUseCase(opts.eventId);
+    if (process.env.NODE_ENV === "production" && opts.channel) {
+        await deleteNotificationChannelUseCase(opts.eventId);
+    }
 }
