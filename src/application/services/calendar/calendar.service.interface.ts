@@ -17,7 +17,8 @@ export const calendarRawResponse = z.object({
     channel: z.object({
         id: z.string(),
         internalResourceId: z.string(),
-        token: z.string()
+        token: z.string(),
+        expiration: z.string().optional().nullable()
     }).optional(),
 });
 
@@ -35,7 +36,7 @@ export const getCalendarEventsOptionsSchema = z.object({
 export const createCalendarEventOptionsSchema = z.object({
     calendarId: z.string(),
     event: calendarEventSchema,
-    enableWatch: z.boolean().optional()
+    enableWatch: z.boolean().optional(),
 });
 
 export const updateCalendarEventOptionsSchema = createCalendarEventOptionsSchema.omit({enableWatch: true}).and(z.object({

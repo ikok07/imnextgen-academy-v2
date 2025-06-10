@@ -12,8 +12,8 @@ type AdminUserDetailsSalesMeetingsProps = {
 
 // DONE: 1. Fix 'too much recursion' error when opening select menu
 // DONE: 2. Integrate google calendar webhooks
-// TODO: 3. Develop update event functionality
-// TODO: 4. Add option for variable event durations X
+// DONE: 3  Fix modal overflow
+// DONE: 4. Add option for variable event durations X
 // TODO: 5. Show the user it's sales meetings X
 // TODO: 6. Fix access policies (make sure the mentors can see only them)
 

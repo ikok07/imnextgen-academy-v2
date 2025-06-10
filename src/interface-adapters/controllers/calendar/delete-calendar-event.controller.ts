@@ -10,6 +10,7 @@ import {
 import {
     IGetNotificationChannelByIdUseCase
 } from "@/src/application/use-cases/google-notification-channels/get-notification-channel-by-id.use-case";
+import {GoogleNotificationChannel} from "@/drizzle/schema/google_notification_channels";
 
 export type IDeleteCalendarEventController = ReturnType<typeof deleteCalendarEventController>;
 
@@ -25,15 +26,20 @@ export const deleteCalendarEventController = (
     const {data: parsedOpts, error} = deleteCalendarEventOptionsSchema.safeParse({...opts, calendarId: calendar_id});
     if (error) throw new InputParseError(`Invalid options! ${error}`);
 
-    const channel = await getNotificationChannelByIdUseCase({
-        resourceId: parsedOpts.eventId
-    });
+    let channel: GoogleNotificationChannel | undefined;
+    if (process.env.NODE_ENV === "production") {
+        try {
+            channel = await getNotificationChannelByIdUseCase({
+                resourceId: parsedOpts.eventId
+            });
+        } catch (e) {}
+    }
 
     return deleteCalendarEventUseCase({
         ...parsedOpts,
-        channel: {
+        channel: channel ? {
             id: channel.id,
             internalResourceId: channel.channel_internal_resource_id
-        }
+        } : undefined
     });
 }
