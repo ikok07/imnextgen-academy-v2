@@ -3,11 +3,13 @@
 import {createServerAction} from "@/app/_utils/createServerAction";
 import {getInjection} from "@/di/container";
 import {
-    CreateCalendarEventOptions, DeleteCalendarEventOptions,
+    CreateCalendarEventOptions,
     GetCalendarEventsOptions
 } from "@/src/application/services/calendar/calendar.service.interface";
 import {UserSpecificMeeting} from "@/drizzle/schema/user_specific_meetings";
-import {minutesToMilliseconds} from "date-fns";
+import {millisecondsToMinutes, minutesToMilliseconds} from "date-fns";
+import {FullProfile} from "@/src/entities/models/auth/full-profile";
+import {formatInTimeZone} from "date-fns-tz";
 
 export const deleteUser = createServerAction(async (userId: string | undefined) => {
     await getInjection("IDeleteUserController")(userId);
@@ -29,16 +31,36 @@ export const createCalendarEvent = createServerAction((userId: string | undefine
     return getInjection("ICreateCalendarEventController")(userId, opts);
 });
 
-export const bookSalesMeeting = createServerAction(async (userId: string | undefined, mentorId: string | undefined, calendarEventOpts: Partial<Omit<CreateCalendarEventOptions, "calendarId">>) => {
+export const bookSalesMeeting = createServerAction(async (fullProfile: FullProfile, mentorId: string, selectedTime: number | undefined, selectedDuration: number) => {
+    if (!selectedTime) return;
+
+    const setupQuestions = await getInjection("IGetUserSetupQuestionsController")(fullProfile.id);
+
+    const calendarEventOpts: Partial<Omit<CreateCalendarEventOptions, "calendarId">> = {
+        event: {
+            summary: `Sales среща с ${fullProfile.name}`,
+            description: `Име: ${fullProfile.name}\nИмейл: ${fullProfile.email}\nТелефон: ${fullProfile.phone}\n${setupQuestions.map(q => `${q.question} - ${q.answer}`).join('\n')}`,
+            start: {
+                dateTime: formatInTimeZone(selectedTime, "Europe/Sofia", "yyyy-MM-dd'T'HH:mm:ssxxx")
+            },
+            end: {
+                dateTime: formatInTimeZone(selectedTime + minutesToMilliseconds(selectedDuration), "Europe/Sofia", "yyyy-MM-dd'T'HH:mm:ssxxx")
+            }
+        },
+        enableWatch: true
+    }
     const event = await getInjection("ICreateCalendarEventController")(mentorId, calendarEventOpts);
     try {
         const {meeting_url} = await getInjection("IGetCalendarIdByUserIdController")(mentorId);
+        const startDate = calendarEventOpts.event?.start?.dateTime;
+        const endDate = calendarEventOpts.event?.end?.dateTime;
+
         await getInjection("IAddUserSpecificMeetingController")({
-            profile_id: userId,
+            profile_id: fullProfile.id,
             mentor_profile_id: mentorId,
             platform: "zoom",
-            date: calendarEventOpts.event?.start?.dateTime ? Math.floor(new Date(calendarEventOpts.event?.start?.dateTime).valueOf() / 1000) : undefined,
-            duration_minutes: 30,
+            date: startDate  ? Math.floor(new Date(startDate).valueOf() / 1000) : undefined,
+            duration_minutes: !!startDate && !!endDate ? millisecondsToMinutes(new Date(endDate).valueOf() - new Date(startDate).valueOf()) : 30,
             type: "sales-meeting",
             url: meeting_url
         })

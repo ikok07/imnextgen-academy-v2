@@ -11,6 +11,10 @@ import {setUserSetupQuestionsUseCase} from "@/src/application/use-cases/setup/se
 import {
     setUserSetupQuestionsController
 } from "@/src/interface-adapters/controllers/setup/set-user-setup-questions.controller";
+import {getUserSetupQuestionsUseCase} from "@/src/application/use-cases/setup/get-user-setup-questions.use-case";
+import {
+    getUserSetupQuestionsController
+} from "@/src/interface-adapters/controllers/setup/get-user-setup-questions.controller";
 
 export function createSetupQuestionsModule() {
     const setupQuestionsModule = createModule();
@@ -26,6 +30,14 @@ export function createSetupQuestionsModule() {
     setupQuestionsModule
         .bind(DI_SYMBOLS.IGetSetupQuestionController)
         .toHigherOrderFunction(getSetupQuestionsController, [DI_SYMBOLS.IGetSetupQuestionsUseCase]);
+
+    setupQuestionsModule
+        .bind(DI_SYMBOLS.IGetUserSetupQuestionsUseCase)
+        .toHigherOrderFunction(getUserSetupQuestionsUseCase, [DI_SYMBOLS.ISetupQuestionsRepository]);
+
+    setupQuestionsModule
+        .bind(DI_SYMBOLS.IGetUserSetupQuestionsController)
+        .toHigherOrderFunction(getUserSetupQuestionsController, [DI_SYMBOLS.IGetUserSetupQuestionsUseCase]);
 
     setupQuestionsModule
         .bind(DI_SYMBOLS.ISetUserSetupQuestionsUseCase)

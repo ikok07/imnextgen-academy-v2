@@ -53,11 +53,6 @@ export default function AdminUsersTable() {
 
     const columns = useMemo(() => {
         return [
-            columnHelper.accessor(row => row.id, {
-                id: "user_id",
-                header: "ID",
-                filterFn: "complexFilter"
-            }),
             columnHelper.accessor(row => row.name, {
                 id: "name",
                 header: "Име",
@@ -67,7 +62,13 @@ export default function AdminUsersTable() {
             columnHelper.accessor(row => row.email, {
                 id: "email",
                 header: "Имейл",
-                size: 300,
+                size: 200,
+                filterFn: "complexFilter"
+            }),
+            columnHelper.accessor(row => row.phone, {
+                id: "phone",
+                header: "Телефон",
+                size: 200,
                 filterFn: "complexFilter"
             }),
             columnHelper.accessor(row => row.roles.sort().join(", "), {

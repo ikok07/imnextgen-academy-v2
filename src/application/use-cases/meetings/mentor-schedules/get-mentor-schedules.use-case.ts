@@ -16,7 +16,8 @@ export const getMentorSchedulesUseCase = (
             dayOfWeek: r.day_of_week,
             startHour: r.start_hour,
             startMinutes: r.start_minutes,
-            durationMinutes: r.duration_minutes
+            durationMinutes: r.duration_minutes,
+            preferred_duration_minutes: r.preferred_meeting_duration_minutes
         }))
     } as FullMentorSchedule;
 }

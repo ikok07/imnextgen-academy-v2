@@ -106,7 +106,7 @@ export class GoogleCalendarService implements ICalendarService {
                 resource: event
             });
 
-            let channelConfig: {id: string, internalResourceId: string} | undefined;
+            let channelConfig: {id: string, internalResourceId: string, expiration: string | undefined | null} | undefined;
             const token = this.generateToken();
             if (enableWatch && process.env.NODE_ENV === "production") {
                 const watchResponse = await calendar.events.watch({
@@ -122,7 +122,7 @@ export class GoogleCalendarService implements ICalendarService {
                 });
 
                 if (!watchResponse.data.id || !watchResponse.data.resourceId) throw new Error("Failed to get watch response data!");
-                channelConfig = {id: watchResponse.data.id, internalResourceId: watchResponse.data.resourceId};
+                channelConfig = {id: watchResponse.data.id, internalResourceId: watchResponse.data.resourceId, expiration: watchResponse.data.expiration};
             }
 
             return {id: data.id, channel: channelConfig ? {...channelConfig, token} : undefined} as CalendarRawResponse;
@@ -157,7 +157,7 @@ export class GoogleCalendarService implements ICalendarService {
                 eventId
             });
 
-            if (channel) await calendar.channels.stop({requestBody: {id: channel.id, resourceId: channel.internalResourceId}});
+            if (channel && process.env.NODE_ENV === "production") await calendar.channels.stop({requestBody: {id: channel.id, resourceId: channel.internalResourceId}});
         } catch (e) {
             throw new DatabaseError(`Failed to delete event! ${e}`);
         }

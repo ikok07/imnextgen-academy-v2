@@ -442,6 +442,13 @@
       "when": 1749494116789,
       "tag": "0062_add-calendar-id-to-google-notification-channels",
       "breakpoints": true
+    },
+    {
+      "idx": 63,
+      "version": "7",
+      "when": 1749548212320,
+      "tag": "0063_add-preferred-meeting-duration-to-mentor-schedules",
+      "breakpoints": true
     }
   ]
 }

@@ -20,7 +20,7 @@ type AdminUserDetailsModalProps = {
 
 export function AdminUserDetailsModal({fullProfile, setOpenedUserDetails}: AdminUserDetailsModalProps) {
     return <DialogContent
-        className="[&>button:last-child]:hidden grid grid-rows-[auto_1fr] w-[95%] max-w-[70rem] h-[90vh] overflow-auto md:overflow-hidden">
+        className="[&>button:last-child]:hidden grid grid-rows-[auto_1fr] w-[95%] max-w-[70rem] h-[90vh] overflow-auto">
         <DialogHeader className="border-b border-border pb-4 text-left">
             <div className="flex items-center justify-between">
                 <DialogTitle className="text-xl">

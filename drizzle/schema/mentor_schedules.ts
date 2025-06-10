@@ -9,7 +9,8 @@ export const mentorSchedulesTable = pgTable("mentor_schedules", {
     day_of_week: integer("day_of_week").notNull(),
     start_hour: integer("start_hour").notNull(),
     start_minutes: integer("start_minutes").notNull(),
-    duration_minutes: integer("duration").notNull()
+    duration_minutes: integer("duration").notNull(),
+    preferred_meeting_duration_minutes: integer("preferred_meeting_duration_minutes")
 },(table) => ({
     uniqueProfileDayOfWeek: unique().on(table.profile_id, table.day_of_week)
 }));
