@@ -1,23 +1,24 @@
 import {
-    GetMultipleFullMeetingsByIdOptions,
-    GetSingleFullMeetingByIdOptions,
+    GetMultipleRegularFullMeetingsByIdOptions,
+    GetSingleRegularFullMeetingByIdOptions,
     IMeetingsRepository
 } from "@/src/application/repositories/meetings/meetings.repository.interface";
-import {FullMeeting} from "@/drizzle/schema/meetings";
+import {FullRegularMeeting} from "@/src/entities/models/meetings/full-meeting";
 
-export type IGetFullMeetingByIdUseCase = ReturnType<typeof getFullMeetingByIdUseCase>;
+export type IGetFullRegularMeetingByIdUseCase = ReturnType<typeof getFullRegularMeetingByIdUseCase>;
 
-export const getFullMeetingByIdUseCase = (
+export const getFullRegularMeetingByIdUseCase = (
     meetingsRepository: IMeetingsRepository
-) => async (options: GetSingleFullMeetingByIdOptions | GetMultipleFullMeetingsByIdOptions) => {
-    const fullMeetingsRawResults = await meetingsRepository.getFullMeetingById(options);
+) => async (options: GetSingleRegularFullMeetingByIdOptions | GetMultipleRegularFullMeetingsByIdOptions) => {
+    const fullMeetingsRawResults = await meetingsRepository.getFullRegularMeetingById(options);
     if (!fullMeetingsRawResults) return undefined;
 
-    const fullMeetings = new Map<string, FullMeeting>();
+    const fullMeetings = new Map<string, FullRegularMeeting>();
 
     for (const result of fullMeetingsRawResults) {
         if (!fullMeetings.has(result.meeting.id)) {
             fullMeetings.set(result.meeting.id, {
+                meetingType: "regular",
                 ...result.meeting,
                 meeting_dates: [],
                 repeat_days: [],

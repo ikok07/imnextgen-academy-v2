@@ -7,7 +7,7 @@ import { format } from "date-fns";
 import useErrorQuery from "@/app/_hooks/useErrorQuery";
 import {getFullMeetingsForDate} from "@/app/dashboard/events/actions";
 import {useCallback} from "react";
-import {getFullMeetingStartTime} from "@/src/entities/utils/meetings/get-full-meeting-start-time.util";
+import {getFullRegularMeetingStartTime} from "@/src/entities/utils/meetings/get-full-regular-meeting-start-time.util";
 import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
 import {IoCloudOffline, IoSearch} from "react-icons/io5";
 import DashboardEventsListItemSkeleton from "@/app/_components/dashboard/events/DashboardEventsListItemSkeleton";
@@ -25,7 +25,7 @@ export default function DashboardEventsList({user, userRoles, subscriptionTier}:
     const {selectedDate} = useDashboardEvents();
 
     const {data: fullMeetingsQuery, isLoading, isError} = useErrorQuery({
-        queryFn: () => getFullMeetingsForDate(selectedDate, new Date().getTimezoneOffset(), user.emailAddress),
+        queryFn: () => getFullMeetingsForDate(selectedDate, new Date().getTimezoneOffset(), user.id, user.emailAddress),
         queryKey: `full-meetings-${selectedDate}`,
     });
 
@@ -72,9 +72,9 @@ export default function DashboardEventsList({user, userRoles, subscriptionTier}:
         />
 
         return fullMeetingsQuery.value.sort((a, b) => {
-            const aStartTime = getFullMeetingStartTime(a, selectedDate);
+            const aStartTime = getFullRegularMeetingStartTime(a, selectedDate);
             if (!aStartTime) return -1;
-            const bStartTime = getFullMeetingStartTime(b, selectedDate);
+            const bStartTime = getFullRegularMeetingStartTime(b, selectedDate);
             if (!bStartTime) return 1;
 
             return aStartTime.hours - bStartTime.hours !== 0 ? aStartTime.hours - bStartTime.hours : aStartTime.minutes - bStartTime.minutes;
