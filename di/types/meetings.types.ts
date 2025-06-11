@@ -129,6 +129,12 @@ import {
 import {
     ISystemGetUserSpecificMeetingsByUserIdController
 } from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/system-get-user-specific-meetings-by-user-id.controller";
+import {
+    IBookSalesMeetingController
+} from "@/src/interface-adapters/controllers/meetings/sales-meetings/book-sales-meeting.controller";
+import {
+    IUnbookSalesMeetingController
+} from "@/src/interface-adapters/controllers/meetings/sales-meetings/unbook-sales-meeting.controller";
 
 export const MEETINGS_SYMBOLS = {
     IMeetingsRepository: Symbol.for("IMeetingsRepository"),
@@ -214,7 +220,10 @@ export const MEETINGS_SYMBOLS = {
     IMentorSchedulesRepository: Symbol.for("IMentorSchedulesRepository"),
 
     IGetMentorSchedulesUseCase: Symbol.for("IGetMentorSchedulesUseCase"),
-    IGetMentorSchedulesController: Symbol.for("IGetMentorSchedulesController")
+    IGetMentorSchedulesController: Symbol.for("IGetMentorSchedulesController"),
+
+    IBookSalesMeetingController: Symbol.for("IBookSalesMeetingController"),
+    IUnbookSalesMeetingController: Symbol.for("IUnbookSalesMeetingController")
 }
 
 export interface MEETINGS_RETURN_TYPES {
@@ -302,6 +311,9 @@ export interface MEETINGS_RETURN_TYPES {
 
     IGetMentorSchedulesUseCase: IGetMentorSchedulesUseCase,
     IGetMentorSchedulesController: IGetMentorSchedulesController
+
+    IBookSalesMeetingController: IBookSalesMeetingController,
+    IUnbookSalesMeetingController: IUnbookSalesMeetingController
 }
 
 

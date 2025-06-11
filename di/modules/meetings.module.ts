@@ -85,7 +85,7 @@ import {
     addUserSpecificMeetingUseCase
 } from "@/src/application/use-cases/meetings/user-specific-meetings/add-user-specific-meeting.use-case";
 import {
-    addUserSpecificMeetingController
+    addUserSpecificMeetingController, IAddUserSpecificMeetingController
 } from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/add-user-specific-meeting.controller";
 import {
     updateUserSpecificMeetingUseCase
@@ -97,6 +97,7 @@ import {
     removeUserSpecificMeetingUseCase
 } from "@/src/application/use-cases/meetings/user-specific-meetings/remove-user-specific-meeting.use-case";
 import {
+    IRemoveUserSpecificMeetingController,
     removeUserSpecificMeetingController
 } from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/remove-user-specific-meeting.controller";
 import {
@@ -135,6 +136,31 @@ import {
 import {
     ISystemGetUserSpecificMeetingsByUserIdController, systemGetUserSpecificMeetingsByUserIdController
 } from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/system-get-user-specific-meetings-by-user-id.controller";
+import {
+    bookSalesMeetingController,
+    IBookSalesMeetingController
+} from "@/src/interface-adapters/controllers/meetings/sales-meetings/book-sales-meeting.controller";
+import {
+    IGetUserSetupQuestionsController
+} from "@/src/interface-adapters/controllers/setup/get-user-setup-questions.controller";
+import {
+    ICreateCalendarEventController
+} from "@/src/interface-adapters/controllers/calendar/create-calendar-event.controller";
+import {
+    IGetCalendarIdByUserIdController
+} from "@/src/interface-adapters/controllers/calendar/calendar-ids/get-calendar-id-by-user-id.controller";
+import {
+    IDeleteCalendarEventController
+} from "@/src/interface-adapters/controllers/calendar/delete-calendar-event.controller";
+import {
+    IStartSalesMeetingAutomationController
+} from "@/src/interface-adapters/controllers/automations/start-sales-meeting-automation.controller";
+import {
+    IGetCalendarEventsController
+} from "@/src/interface-adapters/controllers/calendar/get-calendar-events.controller";
+import {
+    unbookSalesMeetingController
+} from "@/src/interface-adapters/controllers/meetings/sales-meetings/unbook-sales-meeting.controller";
 
 export function createMeetingsModule() {
     const meetingsModule = createModule();
@@ -358,6 +384,31 @@ export function createMeetingsModule() {
     meetingsModule
         .bind(DI_SYMBOLS.IGetMentorSchedulesController)
         .toHigherOrderFunction(getMentorSchedulesController, [DI_SYMBOLS.IGetMentorSchedulesUseCase]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IBookSalesMeetingController)
+        .toHigherOrderFunction(
+            bookSalesMeetingController,
+            [
+                DI_SYMBOLS.IGetUserSetupQuestionsController,
+                DI_SYMBOLS.ICreateCalendarEventController,
+                DI_SYMBOLS.IGetCalendarIdByUserIdController,
+                DI_SYMBOLS.IAddUserSpecificMeetingController,
+                DI_SYMBOLS.IDeleteCalendarEventController,
+                DI_SYMBOLS.IStartSalesMeetingAutomationController
+            ]
+        )
+
+    meetingsModule
+        .bind(DI_SYMBOLS.IUnbookSalesMeetingController)
+        .toHigherOrderFunction(
+            unbookSalesMeetingController,
+            [
+                DI_SYMBOLS.IGetCalendarEventsController,
+                DI_SYMBOLS.IDeleteCalendarEventController,
+                DI_SYMBOLS.IRemoveUserSpecificMeetingController
+            ]
+        )
 
     return meetingsModule;
 }
