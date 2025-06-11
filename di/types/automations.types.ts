@@ -7,6 +7,7 @@ import {
 import {
     IStartSalesMeetingAutomationUseCase
 } from "@/src/application/use-cases/automations/start-sales-meeting-automation.use-case";
+import {IAutomationsService} from "@/src/application/services/automations/automations.service.interface";
 
 export const AUTOMATIONS_SYMBOLS = {
     IAutomationsRepository: Symbol.for("IAutomationsRepository"),
@@ -21,6 +22,7 @@ export const AUTOMATIONS_SYMBOLS = {
 
 export interface AUTOMATIONS_RETURN_TYPES {
     IAutomationsRepository: IAutomationsRepository,
+    IAutomationsService: IAutomationsService,
 
     IGetAutomationUseCase: IGetAutomationUseCase,
     IGetAutomationController: IGetAutomationController,

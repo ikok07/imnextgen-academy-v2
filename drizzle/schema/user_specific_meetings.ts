@@ -3,7 +3,7 @@ import {sql} from "drizzle-orm";
 import {createInsertSchema, createSelectSchema} from "drizzle-zod";
 import {z} from "zod";
 import {profilesTable} from "@/drizzle/schema/profiles";
-import {meetingPlatformEnum} from "@/drizzle/schema/meetings";
+import {meetingAccessEnum, meetingPlatformEnum} from "@/drizzle/schema/meetings";
 
 export const userSpecificMeetingTypeEnum = pgEnum("user_specific_meeting_type_enum", ["sales-meeting"]);
 
@@ -13,6 +13,10 @@ export const userSpecificMeetingsTable = pgTable("user_specific_meetings", {
         onDelete: "cascade",
         onUpdate: "cascade"
     }),
+    title: text("title").notNull(),
+    description: text("description").notNull(),
+    access: meetingAccessEnum().notNull().default("free"),
+    image_url: text("image_url").notNull(),
     date: integer("date").notNull(),
     duration_minutes: integer("duration_minutes").notNull(),
     platform: meetingPlatformEnum().notNull(),
