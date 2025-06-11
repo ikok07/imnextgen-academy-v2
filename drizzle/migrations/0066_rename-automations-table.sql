@@ -1,0 +1,1 @@
+ALTER TABLE "zapier_automations" RENAME TO "automations";
