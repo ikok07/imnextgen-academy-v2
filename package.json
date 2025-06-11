@@ -56,6 +56,7 @@
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.39.3",
     "drizzle-zod": "^0.7.0",
+    "facebook-nodejs-business-sdk": "^22.0.3",
     "googleapis": "^150.0.1",
     "install": "^0.13.0",
     "js-cookie": "^3.0.5",
@@ -93,6 +94,7 @@
   },
   "devDependencies": {
     "@mep-agency/next-iubenda": "^1.0.0-alpha5",
+    "@types/facebook-nodejs-business-sdk": "^22.0.0",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^18",

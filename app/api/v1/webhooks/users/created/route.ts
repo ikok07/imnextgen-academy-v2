@@ -2,7 +2,7 @@ import {z} from "zod";
 import {NextResponse} from "next/server";
 import {clerkWebhookProtect} from "@/app/api/v1/webhooks/protect";
 import {getInjection} from "@/di/container";
-import axios from "axios";
+import {EventRequest, ServerEvent} from "facebook-nodejs-business-sdk"
 
 const requestBodySchema = z.object({
     type: z.literal("user.created"),
@@ -55,6 +55,18 @@ export async function POST(req: Request) {
                     "PHONE": newProfile.phone
                 }
             })
+        }
+
+        try {
+            const serverEvent = new ServerEvent()
+                .setEventName("CompleteRegistration")
+                .setEventTime(Date.now() / 1000)
+                .setActionSource("website")
+                .setEventSourceUrl(process.env.NEXT_PUBLIC_BASE_URL!);
+
+            new EventRequest(process.env.FB_CONVERSION_API_KEY, process.env.NEXT_PUBLIC_FB_PIXEL_ID!).setEvents([serverEvent]);
+        } catch (e) {
+            console.error(`Facebook Pixel event failed: ${e}`);
         }
 
         return NextResponse.json({status: "success"});

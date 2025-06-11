@@ -18,6 +18,7 @@ import * as meetingSignedUpUsers from "../../../drizzle/schema/meeting_signed_up
 import * as userSpecificMeetings from "../../../drizzle/schema/user_specific_meetings"
 import * as userCalendarIds from "../../../drizzle/schema/user_calendar_ids"
 import * as googleNotificationChannels from "../../../drizzle/schema/google_notification_channels"
+import * as automations from "../../../drizzle/schema/automations"
 
 import ws from "ws"
 
@@ -48,7 +49,8 @@ export class BaseRepository {
         ...meetingSignedUpUsers,
         ...userSpecificMeetings,
         ...userCalendarIds,
-        ...googleNotificationChannels
+        ...googleNotificationChannels,
+        ...automations
     };
     constructor(authenticationService: IAuthenticationService) {
         this.authService = authenticationService;

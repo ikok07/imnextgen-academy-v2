@@ -11,7 +11,7 @@ export default function HomepageClientWrapper({children}: HomepageClientWrapperP
         import("react-facebook-pixel")
             .then(x => x.default)
             .then((ReactPixel) => {
-                ReactPixel.init(process.env.FB_PIXEL_ID!);
+                ReactPixel.init(process.env.NEXT_PUBLIC_FB_PIXEL_ID!);
                 ReactPixel.pageView();
             });
     }, []);
