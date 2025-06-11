@@ -4,7 +4,7 @@ import {z} from "zod";
 
 const bodySchema = z.object({
     userId: z.string(),
-    meetingDateTimestamp: z.number()
+    meetingDateTimestamp: z.coerce.number()
 });
 
 export async function POST(req: NextRequest) {
