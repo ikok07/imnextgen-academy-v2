@@ -236,7 +236,7 @@ export interface MEETINGS_RETURN_TYPES {
     IGetFullRegularMeetingByIdController: IGetFullRegularMeetingByIdController,
 
     IGetFullSpecificMeetingByUserIdUseCase: IGetFullSpecificMeetingByUserIdUseCase,
-    IGetFullSpecificMeetingByUserIdController: IGetFullSpecificMeetingByUserIdController
+    IGetFullSpecificMeetingByUserIdController: IGetFullSpecificMeetingByUserIdController,
 
     IGetMeetingByIdUseCase: IGetMeetingByIdUseCase,
     IGetMeetingByIdController: IGetMeetingByIdController,
@@ -282,7 +282,7 @@ export interface MEETINGS_RETURN_TYPES {
     IGetSignedUpUserForMeetingUseCase: IGetSignedUpUserForMeetingUseCase,
     IGetSignedUpUserForMeetingController: IGetSignedUpUserForMeetingController,
 
-    IAddSignedUpUserUseCase: IAddSignedUpUserUseCase
+    IAddSignedUpUserUseCase: IAddSignedUpUserUseCase,
     IAddSignedUpUserController: IAddSignedUpUserController,
 
     IRemoveSignedUpUserUseCase: IRemoveSignedUpUserUseCase,

@@ -477,6 +477,13 @@
       "when": 1749649311954,
       "tag": "0067_add-automation-type",
       "breakpoints": true
+    },
+    {
+      "idx": 68,
+      "version": "7",
+      "when": 1749658425660,
+      "tag": "0068_extend-user-speicific-meetings",
+      "breakpoints": true
     }
   ]
 }
