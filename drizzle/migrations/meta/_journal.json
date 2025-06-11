@@ -456,6 +456,27 @@
       "when": 1749565954686,
       "tag": "0064_make-user-speicific-meeting-platform-not-null",
       "breakpoints": true
+    },
+    {
+      "idx": 65,
+      "version": "7",
+      "when": 1749648985526,
+      "tag": "0065_add-zapier-automations",
+      "breakpoints": true
+    },
+    {
+      "idx": 66,
+      "version": "7",
+      "when": 1749649134025,
+      "tag": "0066_rename-automations-table",
+      "breakpoints": true
+    },
+    {
+      "idx": 67,
+      "version": "7",
+      "when": 1749649311954,
+      "tag": "0067_add-automation-type",
+      "breakpoints": true
     }
   ]
 }
