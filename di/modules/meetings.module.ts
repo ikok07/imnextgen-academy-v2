@@ -125,13 +125,16 @@ import {
 } from "@/src/interface-adapters/controllers/auth/check-resources-access.controller";
 import {
     systemUpdateUserSpecificMeetingController
-} from "@/src/interface-adapters/controllers/calendar/system-update-user-specific-meeting.controller";
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/system-update-user-specific-meeting.controller";
 import {
     getFullSpecificMeetingByUserIdUseCase
 } from "@/src/application/use-cases/meetings/user-specific-meetings/get-full-specific-meeting-by-user-id.use-case";
 import {
     getFullSpecificMeetingByUserIdController
 } from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/get-full-specific-meeting-by-user-id.controller";
+import {
+    ISystemGetUserSpecificMeetingsByUserIdController, systemGetUserSpecificMeetingsByUserIdController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/system-get-user-specific-meetings-by-user-id.controller";
 
 export function createMeetingsModule() {
     const meetingsModule = createModule();
@@ -311,6 +314,10 @@ export function createMeetingsModule() {
     meetingsModule
         .bind(DI_SYMBOLS.IGetSpecificMeetingsByUserIdController)
         .toHigherOrderFunction(getSpecificMeetingsByUserIdController, [DI_SYMBOLS.IGetSpecificMeetingsByUserIdUseCase, DI_SYMBOLS.IGetUserController, DI_SYMBOLS.ICheckResourcesAccessController]);
+
+    meetingsModule
+        .bind(DI_SYMBOLS.ISystemGetUserSpecificMeetingsByUserIdController)
+        .toHigherOrderFunction(systemGetUserSpecificMeetingsByUserIdController, [DI_SYMBOLS.IGetSpecificMeetingsByUserIdUseCase]);
 
     meetingsModule
         .bind(DI_SYMBOLS.IAddUserSpecificMeetingUseCase)
