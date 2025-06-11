@@ -119,13 +119,16 @@ import {
 } from "@/src/interface-adapters/controllers/meetings/mentor-schedules/get-mentor-schedules.controller";
 import {
     ISystemUpdateUserSpecificMeetingController
-} from "@/src/interface-adapters/controllers/calendar/system-update-user-specific-meeting.controller";
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/system-update-user-specific-meeting.controller";
 import {
     IGetFullSpecificMeetingByUserIdController
 } from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/get-full-specific-meeting-by-user-id.controller";
 import {
     IGetFullSpecificMeetingByUserIdUseCase
 } from "@/src/application/use-cases/meetings/user-specific-meetings/get-full-specific-meeting-by-user-id.use-case";
+import {
+    ISystemGetUserSpecificMeetingsByUserIdController
+} from "@/src/interface-adapters/controllers/meetings/user-specific-meeings/system-get-user-specific-meetings-by-user-id.controller";
 
 export const MEETINGS_SYMBOLS = {
     IMeetingsRepository: Symbol.for("IMeetingsRepository"),
@@ -196,6 +199,7 @@ export const MEETINGS_SYMBOLS = {
 
     IGetSpecificMeetingsByMentorProfileIdUseCase: Symbol.for("IGetSpecificMeetingsByMentorProfileIdUseCase"),
     IGetSpecificMeetingsByMentorProfileIdController: Symbol.for("IGetSpecificMeetingsByMentorProfileIdController"),
+    ISystemGetUserSpecificMeetingsByUserIdController: Symbol.for("ISystemGetUserSpecificMeetingsByUserIdController"),
 
     IAddUserSpecificMeetingUseCase: Symbol.for("IAddUserSpecificMeetingUseCase"),
     IAddUserSpecificMeetingController: Symbol.for("IAddUserSpecificMeetingController"),
@@ -281,7 +285,8 @@ export interface MEETINGS_RETURN_TYPES {
     IGetSpecificMeetingsByUserIdController: IGetSpecificMeetingsByUserIdController,
 
     IGetSpecificMeetingsByMentorProfileIdUseCase: IGetSpecificMeetingsByMentorProfileIdUseCase,
-    IGetSpecificMeetingsByMentorProfileIdController: IGetSpecificMeetingsByMentorProfileIdController
+    IGetSpecificMeetingsByMentorProfileIdController: IGetSpecificMeetingsByMentorProfileIdController,
+    ISystemGetUserSpecificMeetingsByUserIdController: ISystemGetUserSpecificMeetingsByUserIdController,
 
     IAddUserSpecificMeetingUseCase: IAddUserSpecificMeetingUseCase,
     IAddUserSpecificMeetingController: IAddUserSpecificMeetingController,
