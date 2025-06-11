@@ -10,14 +10,6 @@ type AdminUserDetailsSalesMeetingsProps = {
     fullProfile: FullProfile
 }
 
-// DONE: 1. Fix 'too much recursion' error when opening select menu
-// DONE: 2. Integrate google calendar webhooks
-// DONE: 3  Fix modal overflow
-// DONE: 4. Add option for variable event durations X
-// DONE: 5. Show the user it's sales meetings X
-// DONE: 6. Fix access policies (make sure the mentors can see only them)
-// TODO: 7. Add title, description, etc. to user specific meetings
-
 export default function AdminUserDetailsSalesMeetings({fullProfile}: AdminUserDetailsSalesMeetingsProps) {
     const [selectedDate, setSelectedDate] = useState(startOfDay(Date.now()).valueOf());
     const [selectedMentorId, setSelectedMentorId] = useState<string | null>(null);

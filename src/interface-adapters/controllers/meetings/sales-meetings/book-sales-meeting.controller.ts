@@ -75,6 +75,10 @@ export const bookSalesMeetingController = (
         const {meeting_url} = await getCalendarIdByUserIdController(mentorId);
         meetingUrl = meeting_url;
         await addUserSpecificMeetingController({
+            title: "Среща с ментор",
+            description: "Нека обсъдим пътя ти в академията към кариера в ИТ сферата",
+            image_url: "/api/v1/assets?bucket=academy-v2&path=sales_meeting.jpg",
+            access: "free",
             profile_id: fullProfile.id,
             mentor_profile_id: mentorId,
             platform: "zoom",
