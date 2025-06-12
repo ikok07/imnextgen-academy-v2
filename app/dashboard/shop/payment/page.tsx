@@ -86,7 +86,7 @@ async function InnerContent(props: z.infer<typeof searchParamsSchema>) {
             <PaymentPageClientContent
                 user={serializableUser}
                 productIds={productIds}
-                email={customerId ?? userResponse.value.user.emailAddresses[0].emailAddress}
+                email={customerId ? undefined : userResponse.value.user.emailAddresses[0].emailAddress}
                 phoneNumber={userResponse.value.user.phoneNumbers[0].phoneNumber}
                 customerId={customerId}
                 userHasSubscription={userHasSubscription}
