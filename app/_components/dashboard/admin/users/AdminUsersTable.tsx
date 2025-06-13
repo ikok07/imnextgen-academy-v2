@@ -19,7 +19,7 @@ const columnHelper = createColumnHelper<FullProfile>();
 
 export default function AdminUsersTable() {
     const queryClient = useQueryClient();
-    const [openedUserDetails, setOpenedUserDetails] = useState<string | null>("user_2y3XLXX5Q14Z0Sq2qnqikdJMfiQ" ?? null); // user id or null
+    const [openedUserDetails, setOpenedUserDetails] = useState<string | null>(null); // user id or null "user_2y3XLXX5Q14Z0Sq2qnqikdJMfiQ"
     const [selectedRows, setSelectedRows] = useState<RowSelectionState>({});
     const [pagination, setPagination] = useState<PaginationState>({
         pageSize: 10,
