@@ -88,7 +88,7 @@ export class UserSpecificMeetingsRepository extends BaseRepository implements IU
                 await db.delete(userSpecificMeetingsTable).where(eq(userSpecificMeetingsTable.id, id));
             });
         } catch (e) {
-            throw new DatabaseError(`Failed to update user specific meetings! ${e}`);
+            throw new DatabaseError(`Failed to remove user specific meetings! ${e}`);
         }
     }
 }
