@@ -75,13 +75,15 @@ async function InnerContent(props: z.infer<typeof searchParamsSchema>) {
             emailAddress: userResponse.value.user.emailAddresses[0].emailAddress,
             phoneNumber: userResponse.value.user.phoneNumbers[0].phoneNumber
         }
+
+        const customerId = userResponse.value.dbProfile.payment_customer_id ?? undefined;
         return <PaymentPageProvider>
             <PaymentPageClientContent
                 user={serializableUser}
                 productIds={productIds}
-                email={userResponse.value.user.emailAddresses[0].emailAddress}
+                email={customerId ? undefined : userResponse.value.user.emailAddresses[0].emailAddress}
                 phoneNumber={userResponse.value.user.phoneNumbers[0].phoneNumber}
-                customerId={userResponse.value.dbProfile.payment_customer_id ?? undefined}
+                customerId={customerId}
                 userHasSubscription={userHasSubscription}
                 hasSubscriptionSearchParam={parsedProps.searchParams.hasSubscription}
                 tierId={!userHasSubscription && parsedProps.searchParams.hasSubscription === "true" ? (await getInjection("IGetFullSubscriptionTiersByProductIdsController")(productIds))[0].id : undefined}

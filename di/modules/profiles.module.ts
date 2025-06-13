@@ -17,6 +17,12 @@ import {
 } from "@/src/interface-adapters/controllers/auth/profiles/get-all-profiles-for-role.controller";
 import {getAllProfilesUseCase} from "@/src/application/use-cases/auth/profiles/get-all-profiles.use-case";
 import {getAllProfilesController} from "@/src/interface-adapters/controllers/auth/profiles/get-all-profiles.controller";
+import {
+    getProfileByCustomerIdUseCase
+} from "@/src/application/use-cases/auth/profiles/get-profile-by-customer-id.use-case";
+import {
+    getProfileByCustomerIdController
+} from "@/src/interface-adapters/controllers/auth/profiles/get-profile-by-customer-id.controller";
 
 export function createProfilesModule() {
     const profilesModule = createModule();
@@ -56,6 +62,14 @@ export function createProfilesModule() {
     profilesModule
         .bind(DI_SYMBOLS.IGetProfileByEmailController)
         .toHigherOrderFunction(getProfileByEmailController, [DI_SYMBOLS.IGetProfileByEmailUseCase]);
+
+    profilesModule
+        .bind(DI_SYMBOLS.IGetProfileByCustomerIdUseCase)
+        .toHigherOrderFunction(getProfileByCustomerIdUseCase, [DI_SYMBOLS.ProfilesRepository]);
+
+    profilesModule
+        .bind(DI_SYMBOLS.IGetProfileByCustomerIdController)
+        .toHigherOrderFunction(getProfileByCustomerIdController, [DI_SYMBOLS.IGetProfileByCustomerIdUseCase]);
 
     profilesModule
         .bind(DI_SYMBOLS.ICreateProfileUseCase)
