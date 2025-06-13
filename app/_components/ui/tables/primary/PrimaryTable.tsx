@@ -12,7 +12,6 @@ import {useVirtualizer} from "@tanstack/react-virtual";
 import PrimaryTableBodySkeleton from "@/app/_components/ui/tables/primary/PrimaryTableBodySkeleton";
 import PrimarySelectionOptionsDropdown
     from "@/app/_components/ui/tables/primary/selection-options/PrimarySelectionOptionsDropdown";
-import {Loader2} from "lucide-react"
 import PrimaryLoader from "@/app/_components/ui/loaders/PrimaryLoader";
 import PrimaryTableEmpty from "./PrimaryTableEmpty";
 
@@ -63,7 +62,7 @@ export default function PrimaryTable<TData>({isLoading, isRefetching, rowSize}: 
             </div>
             <div
                 style={{width: `${totalTableWidth}px`}}
-                className="overflow-auto"
+                className="grid overflow-auto"
                 ref={bodyWrapperRef}
             >
                 <Table>
