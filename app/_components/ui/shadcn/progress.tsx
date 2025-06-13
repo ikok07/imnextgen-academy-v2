@@ -6,7 +6,7 @@ import { cn } from "@/app/_utils/cn"
 const Progress = React.forwardRef<
   React.ElementRef<typeof ProgressPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> & {sliderClassName?: string}
->(({ className, value, sliderClassName, ...props }, ref) => (
+>(({ className, value, sliderClassName,  ...props }, ref) => (
   <ProgressPrimitive.Root
     ref={ref}
     className={cn(

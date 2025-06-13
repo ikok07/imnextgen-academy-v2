@@ -77,7 +77,7 @@ export default function PrimaryTable<TData>({isLoading, isRefetching, rowSize}: 
                                 return <TableRow
                                     key={item.key}
                                     className={cn(
-                                        "absolute top-0 left-0 w-full flex items-center border-t border-border",
+                                        "absolute top-0 left-0 w-full flex items-center border-t border-border z-20",
                                         {
                                             "bg-cta/20 hover:bg-cta/30": row.getCanSelect() ? row.getIsSelected() : false
                                         }
