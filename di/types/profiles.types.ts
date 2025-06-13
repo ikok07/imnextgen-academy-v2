@@ -17,12 +17,19 @@ import {IGetAllProfilesUseCase} from "@/src/application/use-cases/auth/profiles/
 import {
     IGetAllProfilesController
 } from "@/src/interface-adapters/controllers/auth/profiles/get-all-profiles.controller";
+import {
+    IGetProfileByCustomerIdUseCase
+} from "@/src/application/use-cases/auth/profiles/get-profile-by-customer-id.use-case";
+import {
+    IGetProfileByCustomerIdController
+} from "@/src/interface-adapters/controllers/auth/profiles/get-profile-by-customer-id.controller";
 
 export const PROFILE_SYMBOLS = {
     ProfilesRepository: Symbol.for("ProfilesRepository"),
 
     IGetProfileUseCase: Symbol.for("IGetProfileUseCase"),
     IGetProfileByEmailUseCase: Symbol.for("IGetProfileByEmailUseCase"),
+    IGetProfileByCustomerIdUseCase: Symbol.for("IGetProfileByCustomerIdUseCase"),
     IGetAllProfilesUseCase: Symbol.for("IGetAllProfilesUseCase"),
     IGetAllProfilesController: Symbol.for("IGetAllProfilesController"),
     IGetAllProfilesForRoleUseCase: Symbol.for("IGetAllProfilesForRoleUseCase"),
@@ -34,6 +41,7 @@ export const PROFILE_SYMBOLS = {
 
     IGetProfileController: Symbol.for("IGetProfileController"),
     IGetProfileByEmailController: Symbol.for("IGetProfileByEmailController"),
+    IGetProfileByCustomerIdController: Symbol.for("IGetProfileByCustomerIdController"),
     IDeleteProfileUseCase: Symbol.for("IDeleteProfileUseCase"),
     IDeleteProfileController: Symbol.for("IDeleteProfileController")
 }
@@ -43,6 +51,7 @@ export interface PROFILE_RETURN_TYPES {
 
     IGetProfileUseCase: IGetProfileUseCase,
     IGetProfileByEmailUseCase: IGetProfileByEmailUseCase,
+    IGetProfileByCustomerIdUseCase: IGetProfileByCustomerIdUseCase,
     IGetAllProfilesUseCase: IGetAllProfilesUseCase,
     IGetAllProfilesController: IGetAllProfilesController,
     IGetAllProfilesForRoleUseCase: IGetAllProfilesForRoleUseCase,
@@ -54,6 +63,7 @@ export interface PROFILE_RETURN_TYPES {
 
     IGetProfileController: IGetProfileController,
     IGetProfileByEmailController: IGetProfileByEmailController,
+    IGetProfileByCustomerIdController: IGetProfileByCustomerIdController,
     IDeleteProfileUseCase: IDeleteProfileUseCase,
     IDeleteProfileController: IDeleteProfileController
 }
