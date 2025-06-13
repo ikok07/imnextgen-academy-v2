@@ -11,6 +11,7 @@ import StartNow from "@/app/_components/home/start-now/StartNow";
 import Footer from "@/app/_components/home/footer/Footer";
 import HomepageNavbar from "@/app/_components/home/nav/HomepageNavbar";
 import HomepageClientWrapper from "@/app/_components/home/HomepageClientWrapper";
+import {EventRequest, ServerEvent, UserData} from "facebook-nodejs-business-sdk";
 
 // TODO: 1. Require accepted cookies for facebook pixel
 // TODO: 2. Fix users table in Safari
