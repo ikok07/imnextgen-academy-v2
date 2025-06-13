@@ -56,18 +56,10 @@ async function handleSubscriptionDisable(event: Stripe.CustomerSubscriptionDelet
 async function handleCheckoutComplete(event: Stripe.CheckoutSessionCompletedEvent) {
     let profile: FullProfile | undefined;
     if (event.data.object.customer) {
-        profile = await getInjection("IGetProfileByCustomerIdController")((event.data.object.customer as string | undefined));;
+        profile = await getInjection("IGetProfileByCustomerIdController")((event.data.object.customer as string | undefined));
     } else {
         profile = await getInjection("IGetProfileByEmailController")(event.data.object.customer_email ?? undefined);
     }
-
-    // if (typeof event.data.object.subscription === "string") {
-    //     const subscription = await getInjection("IGetSubscriptionController")(event.data.object.subscription);
-    //     await getInjection("ICreateUserSubscriptionUseCase")({
-    //         profile_id: profile.id,
-    //         tier_id: subscription.metadata.tier_id
-    //     });
-    // }
 
     const lineItems = (await getInjection("IGetCheckoutSessionsLineItemsController")(event.data.object.id)).filter(i => i.price?.type !== "recurring");
     if (lineItems.length > 0) {
