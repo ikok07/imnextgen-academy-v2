@@ -12,6 +12,11 @@ import Footer from "@/app/_components/home/footer/Footer";
 import HomepageNavbar from "@/app/_components/home/nav/HomepageNavbar";
 import HomepageClientWrapper from "@/app/_components/home/HomepageClientWrapper";
 
+// TODO: 1. Require accepted cookies for facebook pixel
+// TODO: 2. Fix users table in Safari
+// TODO: 3. Support custom preferred specific meeting durations
+// TODO: 4. Update figma database models
+
 export default async function Home() {
   return <HomepageClientWrapper>
     <main className="homepage space-y-10">
