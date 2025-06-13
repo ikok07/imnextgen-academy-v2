@@ -17,6 +17,12 @@ import {checkFinishedVideoUseCase} from "@/src/application/use-cases/media/video
 import {
     checkFinishedVideoController
 } from "@/src/interface-adapters/controllers/media/videos/finished-videos/check-finished-video.controller";
+import {
+    getFinishedVideosForSectionUseCase
+} from "@/src/application/use-cases/media/videos/finished-videos/get-finished-videos-for-section.use-case";
+import {
+    getFinishedVideosForSectionController
+} from "@/src/interface-adapters/controllers/media/videos/finished-videos/get-finished-videos-for-section.controller";
 
 export function createClassroomFinishedVideosModule() {
     const classroomFinishedVideosModule = createModule();
@@ -32,6 +38,14 @@ export function createClassroomFinishedVideosModule() {
     classroomFinishedVideosModule
         .bind(DI_SYMBOLS.IGetFinishedVideosController)
         .toHigherOrderFunction(getFinishedVideosController, [DI_SYMBOLS.IGetFinishedVideosUseCase]);
+
+    classroomFinishedVideosModule
+        .bind(DI_SYMBOLS.IGetFinishedVideosForSectionUseCase)
+        .toHigherOrderFunction(getFinishedVideosForSectionUseCase, [DI_SYMBOLS.IFinishedVideosRepository]);
+
+    classroomFinishedVideosModule
+        .bind(DI_SYMBOLS.IGetFinishedVideosForSectionController)
+        .toHigherOrderFunction(getFinishedVideosForSectionController, [DI_SYMBOLS.IGetFinishedVideosForSectionUseCase]);
 
     classroomFinishedVideosModule
         .bind(DI_SYMBOLS.IAddFinishedVideoUseCase)

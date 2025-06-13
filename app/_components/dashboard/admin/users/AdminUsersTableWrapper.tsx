@@ -2,7 +2,7 @@
 
 import PrimaryTable from "@/app/_components/ui/tables/primary/PrimaryTable";
 import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
-import {Dialog, DialogTrigger} from "@/app/_components/ui/shadcn/dialog";
+import {Dialog} from "@/app/_components/ui/shadcn/dialog";
 import {AdminUserDetailsModal} from "@/app/_components/dashboard/admin/users/modal/AdminUserDetailsModal";
 import {Dispatch, SetStateAction} from "react";
 import {useTable} from "@/app/_components/ui/tables/provider/TableProvider";
