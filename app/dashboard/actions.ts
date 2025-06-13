@@ -16,7 +16,7 @@ export const getSectionsForModule = createServerAction((moduleId: string | undef
     return getInjection("IGetSectionsForModuleController")(moduleId);
 });
 
-export const getVideosForSection = createServerAction((sectionId: string) => {
+export const getVideosForSection = createServerAction((sectionId: string | undefined | null) => {
     return getInjection("IGetVideosForSectionController")(sectionId);
 });
 
