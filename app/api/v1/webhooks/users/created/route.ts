@@ -57,17 +57,17 @@ export async function POST(req: Request) {
             })
         }
 
-        try {
-            const serverEvent = new ServerEvent()
-                .setEventName("CompleteRegistration")
-                .setEventTime(Date.now() / 1000)
-                .setActionSource("website")
-                .setUserData(new UserData().setExternalId(body.data.id).setEmail(newProfile.email).setPhone(newProfile.phone).setFirstName(body.data.first_name).setLastName(body.data.last_name))
-                .setEventSourceUrl(process.env.NEXT_PUBLIC_BASE_URL!);
+        const serverEvent = new ServerEvent()
+            .setEventName("CompleteRegistration")
+            .setEventTime(Math.floor(Date.now() / 1000))
+            .setActionSource("website")
+            .setUserData(new UserData().setExternalId(body.data.id).setEmail(newProfile.email.toLowerCase().trim()).setPhone(newProfile.phone).setFirstName(body.data.first_name).setLastName(body.data.last_name))
+            .setEventSourceUrl(process.env.NEXT_PUBLIC_BASE_URL!);
 
+        try {
             await new EventRequest(process.env.FB_CONVERSION_API_KEY, process.env.NEXT_PUBLIC_FB_PIXEL_ID!).setEvents([serverEvent]).execute();
         } catch (e) {
-            console.error(`Facebook Pixel event failed: ${e}`);
+            console.error(`Facebook Pixel event failed: ${e} | SERVER EVENT: ${serverEvent}`);
         }
 
         return NextResponse.json({status: "success"});
