@@ -13,12 +13,17 @@ import {
 } from "@/src/interface-adapters/controllers/media/videos/finished-videos/remove-finished-video.controller";
 import { ICheckFinishedVideoController } from "@/src/interface-adapters/controllers/media/videos/finished-videos/check-finished-video.controller";
 import { ICheckFinishedVideoUseCase } from "@/src/application/use-cases/media/videos/finished-videos/check-finished-video.use-case";
+import { IGetFinishedVideosForSectionUseCase } from "@/src/application/use-cases/media/videos/finished-videos/get-finished-videos-for-section.use-case";
+import { IGetFinishedVideosForSectionController } from "@/src/interface-adapters/controllers/media/videos/finished-videos/get-finished-videos-for-section.controller";
 
 export const CLASSROOM_FINISHED_VIDEOS_SYMBOLS = {
     IFinishedVideosRepository: Symbol.for("IFinishedVideosRepository"),
 
     IGetFinishedVideosUseCase: Symbol.for("IGetFinishedVideosUseCase"),
     IGetFinishedVideosController: Symbol.for("IGetFinishedVideosController"),
+
+    IGetFinishedVideosForSectionUseCase: Symbol.for("IGetFinishedVideosForSectionUseCase"),
+    IGetFinishedVideosForSectionController: Symbol.for("IGetFinishedVideosForSectionController"),
 
     IAddFinishedVideoUseCase: Symbol.for("IAddFinishedVideoUseCase"),
     IAddFinishedVideoController: Symbol.for("IAddFinishedVideoController"),
@@ -35,6 +40,9 @@ export interface CLASSROOM_FINISHED_VIDEOS_RETURN_TYPES {
 
     IGetFinishedVideosUseCase: IGetFinishedVideosUseCase,
     IGetFinishedVideosController: IGetFinishedVideosController,
+
+    IGetFinishedVideosForSectionUseCase: IGetFinishedVideosForSectionUseCase,
+    IGetFinishedVideosForSectionController: IGetFinishedVideosForSectionController,
 
     IAddFinishedVideoUseCase: IAddFinishedVideoUseCase,
     IAddFinishedVideoController: IAddFinishedVideoController,

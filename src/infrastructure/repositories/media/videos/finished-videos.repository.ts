@@ -37,7 +37,38 @@ export class FinishedVideosRepository extends BaseRepository implements IFinishe
                 return {finishedVideos, percentage: Math.round((finishedVideos.length / videosCount) * 100)}
             })
         } catch(e) {
-            throw new DatabaseError(`Failed to get finished videos! ${e}`)
+            throw new DatabaseError(`Failed to get finished videos for module! ${e}`)
+        }
+    }
+
+    getFinishedVideosForSection(moduleId: string, sectionId: string, userId: string): Promise<FinishedVideosResponse> {
+        try {
+            return this.queryDB(async db => {
+                const finishedVideos = (await db.select({
+                    finishedVideo: finishedVideosTable
+                })
+                    .from(finishedVideosTable)
+                    .innerJoin(videosTable, eq(finishedVideosTable.video_id, videosTable.id))
+                    .innerJoin(sectionsTable, eq(sectionsTable.id, videosTable.section_id))
+                    .innerJoin(modulesTable, eq(modulesTable.id, sectionsTable.module_id))
+                    .where(and(
+                        eq(finishedVideosTable.profile_id, userId),
+                        eq(sectionsTable.id, sectionId),
+                        eq(modulesTable.id, moduleId)
+                    ))
+                    .execute()).map(r => r.finishedVideo);
+
+                const [{count: videosCount}] = await db.select({count: count()})
+                    .from(videosTable)
+                    .innerJoin(sectionsTable, eq(sectionsTable.id, videosTable.section_id))
+                    .innerJoin(modulesTable, eq(modulesTable.id, sectionsTable.module_id))
+                    .where(and(eq(modulesTable.id, moduleId), eq(sectionsTable.id, sectionId)))
+                    .execute();
+
+                return {finishedVideos, percentage: Math.round((finishedVideos.length / videosCount) * 100)}
+            })
+        } catch(e) {
+            throw new DatabaseError(`Failed to get finished videos for section! ${e}`)
         }
     }
 
