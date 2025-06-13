@@ -48,6 +48,25 @@ export class ProfilesRepository extends BaseRepository implements IProfilesRepos
         }
     }
 
+    async getProfileByCustomerId(customerId: string): Promise<RawProfileResponse> {
+        try {
+            return this.queryDB(async db => {
+                const result = await db
+                    .select({
+                        profile: profilesTable,
+                        role: userRolesTable
+                    })
+                    .from(profilesTable)
+                    .where(eq(profilesTable.payment_customer_id, customerId))
+                    .innerJoin(userRolesTable, eq(userRolesTable.profile_id, profilesTable.id));
+                if (result.length === 0 || !result[0].profile) throw new Error("Could not find profile with this customer id!");
+                return result;
+            })
+        } catch(e) {
+            throw new DatabaseError(`Failed to get profile by customer id: ${e}`);
+        }
+    }
+
     getAllProfiles({limit, offset}: GetAllProfilesOptions): Promise<RawProfileResponse> {
         try {
             return this.queryDB(async db => {
