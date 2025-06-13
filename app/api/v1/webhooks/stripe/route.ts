@@ -1,6 +1,8 @@
 import {NextRequest, NextResponse} from "next/server";
 import {getInjection} from "@/di/container";
 import Stripe from "stripe";
+import {Profile} from "@/drizzle/schema/profiles";
+import {FullProfile} from "@/src/entities/models/auth/full-profile";
 
 export async function POST(req: NextRequest) {
     const event = await getInjection("IValidateWebhookController")(await req.text(), req.headers.get("stripe-signature") ?? undefined, process.env.STRIPE_WEBHOOK_SECRET!);
@@ -34,7 +36,7 @@ async function handleSubscriptionEnable(event: Stripe.CustomerSubscriptionCreate
     const customer = await getInjection("IGetCustomerController")(event.data.object.customer as string);
     if (customer.deleted) return NextResponse.json({error: "Customer deleted!"}, {status: 401});
 
-    const profile = await getInjection("IGetProfileByEmailController")(customer.email ?? undefined);
+    const profile = await getInjection("IGetProfileByCustomerIdController")(customer.id);
 
     await getInjection("ICreateUserSubscriptionUseCase")({
         profile_id: profile.id,
@@ -46,21 +48,18 @@ async function handleSubscriptionDisable(event: Stripe.CustomerSubscriptionDelet
     const customer = await getInjection("IGetCustomerController")(event.data.object.customer as string);
     if (customer.deleted) return NextResponse.json({error: "Customer deleted!"}, {status: 401});
 
-    const profile = await getInjection("IGetProfileByEmailController")(customer.email ?? undefined);
+    const profile = await getInjection("IGetProfileByCustomerIdController")(customer.id);
 
     await getInjection("IRemoveUserSubscriptionController")(profile.id);
 }
 
 async function handleCheckoutComplete(event: Stripe.CheckoutSessionCompletedEvent) {
-    const profile = await getInjection("IGetProfileByEmailController")(event.data.object.customer_email ?? undefined);
-
-    // if (typeof event.data.object.subscription === "string") {
-    //     const subscription = await getInjection("IGetSubscriptionController")(event.data.object.subscription);
-    //     await getInjection("ICreateUserSubscriptionUseCase")({
-    //         profile_id: profile.id,
-    //         tier_id: subscription.metadata.tier_id
-    //     });
-    // }
+    let profile: FullProfile | undefined;
+    if (event.data.object.customer) {
+        profile = await getInjection("IGetProfileByCustomerIdController")((event.data.object.customer as string | undefined));
+    } else {
+        profile = await getInjection("IGetProfileByEmailController")(event.data.object.customer_email ?? undefined);
+    }
 
     const lineItems = (await getInjection("IGetCheckoutSessionsLineItemsController")(event.data.object.id)).filter(i => i.price?.type !== "recurring");
     if (lineItems.length > 0) {
