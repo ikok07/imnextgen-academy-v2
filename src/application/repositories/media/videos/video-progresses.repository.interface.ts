@@ -1,4 +1,3 @@
-import {ProgressVideo} from "@/src/entities/models/media/videos/ProgressVideo";
 import {z} from "zod";
 import {VideoProgresses, VideoProgressesInsert, videoProgressesSchema} from "@/drizzle/schema/video_progresses";
 import {videosSchema} from "@/drizzle/schema/videos";
