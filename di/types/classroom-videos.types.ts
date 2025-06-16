@@ -27,6 +27,12 @@ import {
     ISetVideoProgressUseCase
 } from "@/src/application/use-cases/media/videos/video-progresses/set-video-progress.use-case";
 import { ISetVideoProgressController } from "@/src/interface-adapters/controllers/media/videos/video-progresses/set-video-progress.controller";
+import {
+    IGetVideoProgressByVideoIdUseCase
+} from "@/src/application/use-cases/media/videos/video-progresses/get-video-progress-by-video-id.use-case";
+import {
+    IGetVideoProgressByVideoIdController
+} from "@/src/interface-adapters/controllers/media/videos/video-progresses/get-video-progress-by-video-id.controller";
 
 export const CLASSROOM_VIDEOS_SYMBOLS = {
     IVideosService: Symbol.for("IVideosService"),
@@ -45,6 +51,9 @@ export const CLASSROOM_VIDEOS_SYMBOLS = {
     IGetSignedTokensController: Symbol.for("IGetSignedTokensController"),
 
     IVideoProgressesRepository: Symbol.for("IVideoProgressesRepository"),
+
+    IGetVideoProgressByVideoIdUseCase: Symbol.for("IGetVideoProgressByVideoIdUseCase"),
+    IGetVideoProgressByVideoIdController: Symbol.for("IGetVideoProgressByVideoIdController"),
 
     IGetVideoProgressesForModuleUseCase: Symbol.for("IGetVideoProgressesForModuleUseCase"),
     IGetVideoProgressesForModuleController: Symbol.for("IGetVideoProgressesForModuleController"),
@@ -73,6 +82,9 @@ export interface CLASSROOM_VIDEOS_RETURN_TYPES {
     IGetSignedTokensController: IGetSignedTokensController,
 
     IVideoProgressesRepository: IVideoProgressesRepository,
+
+    IGetVideoProgressByVideoIdUseCase: IGetVideoProgressByVideoIdUseCase,
+    IGetVideoProgressByVideoIdController: IGetVideoProgressByVideoIdController
 
     IGetVideoProgressesForModuleUseCase: IGetVideoProgressesForModuleUseCase,
     IGetVideoProgressesForModuleController: IGetVideoProgressesForModuleController,
