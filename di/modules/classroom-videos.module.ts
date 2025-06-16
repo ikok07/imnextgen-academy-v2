@@ -36,6 +36,12 @@ import {
 import {
     setVideoProgressController
 } from "@/src/interface-adapters/controllers/media/videos/video-progresses/set-video-progress.controller";
+import {
+    getVideoProgressByVideoIdUseCase
+} from "@/src/application/use-cases/media/videos/video-progresses/get-video-progress-by-video-id.use-case";
+import {
+    getVideoProgressByVideoIdController
+} from "@/src/interface-adapters/controllers/media/videos/video-progresses/get-video-progress-by-video-id.controller";
 
 export function createVideosModule() {
     const videosModule = createModule();
@@ -83,6 +89,14 @@ export function createVideosModule() {
     videosModule
         .bind(DI_SYMBOLS.IVideoProgressesRepository)
         .toClass(VideoProgressesRepository);
+
+    videosModule
+        .bind(DI_SYMBOLS.IGetVideoProgressByVideoIdUseCase)
+        .toHigherOrderFunction(getVideoProgressByVideoIdUseCase, [DI_SYMBOLS.IVideoProgressesRepository]);
+
+    videosModule
+        .bind(DI_SYMBOLS.IGetVideoProgressByVideoIdController)
+        .toHigherOrderFunction(getVideoProgressByVideoIdController, [DI_SYMBOLS.IGetVideoProgressByVideoIdUseCase]);
 
     videosModule
         .bind(DI_SYMBOLS.IGetVideoProgressesForModuleUseCase)

@@ -11,7 +11,26 @@ import {videosTable} from "@/drizzle/schema/videos";
 import {modulesTable} from "@/drizzle/schema/modules";
 
 export class VideoProgressesRepository extends BaseRepository implements IVideoProgressesRepository {
-    getVideoProgressesForModule(userId: string, moduleId: string): Promise<GetVideoProgressesResponse> {
+    getVideoProgressByVideoId(userId: string, videoId: string): Promise<GetVideoProgressesResponse | undefined> {
+        try {
+            return this.queryDB(async db => {
+                const res = await db
+                    .select({
+                        videoProgress: videoProgressesTable,
+                        video: videosTable
+                    })
+                    .from(videoProgressesTable)
+                    .innerJoin(videosTable, eq(videosTable.id, videoProgressesTable.video_id))
+                    .where(and(eq(videoProgressesTable.profile_id, userId), eq(videoProgressesTable.video_id, videoId)));
+
+                return res[0];
+            })
+        } catch (e) {
+            throw new DatabaseError(`Failed to get progress videos by video id! ${e}`);
+        }
+    }
+
+    getVideoProgressesForModule(userId: string, moduleId: string): Promise<GetVideoProgressesResponse[]> {
         try {
             return this.queryDB(db => {
                 return db
@@ -31,7 +50,7 @@ export class VideoProgressesRepository extends BaseRepository implements IVideoP
         }
     }
 
-    getVideoProgressesForSection(userId: string, sectionId: string): Promise<GetVideoProgressesResponse> {
+    getVideoProgressesForSection(userId: string, sectionId: string): Promise<GetVideoProgressesResponse[]> {
         try {
             return this.queryDB(db => {
                 return db
