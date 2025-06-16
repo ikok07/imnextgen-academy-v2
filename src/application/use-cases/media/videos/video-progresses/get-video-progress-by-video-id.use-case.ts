@@ -9,5 +9,5 @@ export const getVideoProgressByVideoIdUseCase = (
 ) => async (userId: string, videoId: string) => {
     const result = await videoProgressesRepository.getVideoProgressByVideoId(userId, videoId);
     if (!result) return undefined;
-    return {video: result.video, progress: result.videoProgress}
+    return {video: result.video, progress: result.videoProgress.progress_percentage}
 }
