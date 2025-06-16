@@ -11,6 +11,7 @@ import {IoCheckmarkCircle, IoEllipseOutline} from "react-icons/io5";
 import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
 import {Progress} from "@/app/_components/ui/shadcn/progress";
 import {Card} from "@/app/_components/ui/shadcn/card";
+import {getVideoProgressByVideoId} from "@/app/dashboard/admin/actions";
 
 type AdminUserDetailsUserProgressVideoRowProps = {
     video: Video,
@@ -24,15 +25,35 @@ export default function AdminUserDetailsUserProgressVideoRow({video, userId}: Ad
         onError() {
             toast.error("Видеото не може да бъде проверено дали е завършено!");
         }
-    })
+    });
+
+    const {data: videoProgressQuery, isLoading: isLoadingVideoProgress} = useErrorQuery({
+        queryFn: () => getVideoProgressByVideoId(userId, video.id),
+        queryKey: ["video-progress", userId, video.id],
+        onError() {
+            toast.error("Прогресът на видеото не може да бъде зареден!");
+        }
+    });
 
     const videoFinished = useMemo(() => {
         if (videoFinishedQuery?.success) return videoFinishedQuery.value;
         // @ts-ignore
     }, [videoFinishedQuery?.value]);
 
-    return <Card className="px-3 py-2 self-start flex items-center justify-between">
-        <h4>{video.title}</h4>
-        {videoFinished ? <IoCheckmarkCircle className="text-cta text-xl"/> : <IoEllipseOutline className="text-primary/70 text-xl"/>}
+    const videoProgress = useMemo(() => {
+        if (videoFinished) return 100;
+        if (videoProgressQuery?.success) return videoProgressQuery.value?.progress;
+        // @ts-ignore
+    }, [videoProgressQuery?.value, videoFinished]);
+
+    return <Card className="px-3 py-2 self-start grid">
+        <div className="grid grid-cols-[1fr_auto] items-center mb-1">
+            <h4 className="line-clamp-1">{video.title}</h4>
+            {videoFinished ? <IoCheckmarkCircle className="text-cta text-xl"/> : <IoEllipseOutline className="text-primary/70 text-xl"/>}
+        </div>
+        <div className="flex items-center gap-3">
+            <Progress value={videoProgress ?? 0} sliderClassName={"bg-cta dark:bg-white"} className="flex-1"/>
+            <h5 className="font-black text-cta text-sm">{videoProgress ?? 0}%</h5>
+        </div>
     </Card>;
 }

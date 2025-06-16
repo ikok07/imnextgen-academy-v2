@@ -40,5 +40,9 @@ export const bookSalesMeeting = createServerAction(async (fullProfile: FullProfi
 
 export const unbookSalesMeeting = createServerAction(async (salesMeeting: UserSpecificMeeting | undefined) => {
     await getInjection("IUnbookSalesMeetingController")(salesMeeting);
+});
+
+export const getVideoProgressByVideoId = createServerAction((userId: string | undefined, videoId: string | undefined) => {
+    return getInjection("IGetVideoProgressByVideoIdController")(userId, videoId);
 })
 
