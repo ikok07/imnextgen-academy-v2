@@ -17,7 +17,7 @@ export const getSectionsForModule = createServerAction((moduleId: string | undef
     return getInjection("IGetSectionsForModuleController")(moduleId);
 });
 
-export const getVideosForSection = createServerAction((sectionId: string) => {
+export const getVideosForSection = createServerAction((sectionId: string | undefined | null) => {
     return getInjection("IGetVideosForSectionController")(sectionId);
 });
 
@@ -27,6 +27,10 @@ export const getVideosForModule = createServerAction((moduleId: string) => {
 
 export const getFinishedVideos = createServerAction((moduleId: string | undefined | null, userId: string | undefined | null) => {
     return getInjection("IGetFinishedVideosController")(moduleId, userId);
+});
+
+export const getFinishedVideosForSection = createServerAction((moduleId: string | undefined | null, sectionId: string | undefined | null, userId: string | undefined | null) => {
+    return getInjection("IGetFinishedVideosForSectionController")(moduleId, sectionId, userId);
 });
 
 export const checkFinishedVideo = createServerAction((videoId: string | undefined, userId: string | undefined) => {

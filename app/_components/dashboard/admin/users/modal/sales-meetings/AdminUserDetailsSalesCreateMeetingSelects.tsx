@@ -30,6 +30,16 @@ export default function AdminUserDetailsSalesCreateMeetingSelects({selectedMento
         // @ts-ignore
     }, [mentorsQuery?.value]);
 
+    const preferredDuration = useMemo(() => selectedDateMentorSchedule?.preferred_duration_minutes, [selectedDateMentorSchedule?.preferred_duration_minutes]);
+    const durationOptions = useMemo(() => {
+        const options = Array.from({length: 4}).map((_, index) => (index + 1) * 15);
+        if (preferredDuration && !options.some(duration => duration === preferredDuration)) {
+            options.push(preferredDuration);
+            options.sort();
+        }
+        return options;
+    }, [preferredDuration]);
+
     const durationSelectorDisabled = !selectedMentorId || !selectedDateMentorSchedule || isLoadingMentors || isLoadingMentorSchedule || isRefetchingMentorSchedule || isCreatingCalendarEventMethod;
 
     return <>
@@ -57,9 +67,8 @@ export default function AdminUserDetailsSalesCreateMeetingSelects({selectedMento
                 </Tooltip>
             </TooltipProvider>
             <SelectContent>
-                {Array.from({length: 4}).map((_, index) => {
-                    const minutes = (index + 1) * 15;
-                    return <SelectItem value={minutes.toString()} key={index}>{minutes} мин. {selectedDateMentorSchedule && selectedDateMentorSchedule?.preferred_duration_minutes === minutes && "(предпочитана)"}</SelectItem>
+                {durationOptions.map((duration, index) => {
+                    return <SelectItem value={duration.toString()} key={index}>{duration} мин. {selectedDateMentorSchedule && preferredDuration === duration && "(предпочитана)"}</SelectItem>
                 })}
             </SelectContent>
         </Select>

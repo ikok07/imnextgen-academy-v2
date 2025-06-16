@@ -11,12 +11,12 @@ import StartNow from "@/app/_components/home/start-now/StartNow";
 import Footer from "@/app/_components/home/footer/Footer";
 import HomepageNavbar from "@/app/_components/home/nav/HomepageNavbar";
 import HomepageClientWrapper from "@/app/_components/home/HomepageClientWrapper";
-import {EventRequest, ServerEvent, UserData} from "facebook-nodejs-business-sdk";
 
-// TODO: 1. Require accepted cookies for facebook pixel
-// TODO: 2. Fix users table in Safari
-// TODO: 3. Support custom preferred specific meeting durations
-// TODO: 4. Update figma database models
+// TODO: 0. Change landing page logos (from email)
+// TODO: 1. Implement admin progress tracking
+// TODO: 1.1 Extract states in a context provider
+// TODO: 1.2 Track video progress every 25% of the video.
+// TODO: 2. Update figma database models
 
 export default async function Home() {
   return <HomepageClientWrapper>
