@@ -5,7 +5,7 @@ import {
 } from "@/src/application/repositories/media/videos/video-progresses.repository.interface";
 import { DatabaseError } from "@/src/entities/errors/db/database";
 import {VideoProgresses, VideoProgressesInsert, videoProgressesTable} from "@/drizzle/schema/video_progresses";
-import {and, eq} from "drizzle-orm";
+import {and, eq, sql} from "drizzle-orm";
 import {sectionsTable} from "@/drizzle/schema/sections";
 import {videosTable} from "@/drizzle/schema/videos";
 import {modulesTable} from "@/drizzle/schema/modules";
@@ -56,7 +56,8 @@ export class VideoProgressesRepository extends BaseRepository implements IVideoP
                     target: [videoProgressesTable.profile_id, videoProgressesTable.video_id],
                     set: {
                         progress_percentage: data.progress_percentage
-                    }
+                    },
+                    setWhere: sql`${videoProgressesTable.progress_percentage} < ${data.progress_percentage}`
                 }).returning())[0]
             });
         } catch (e) {
