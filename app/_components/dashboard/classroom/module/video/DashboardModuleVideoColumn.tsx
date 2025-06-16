@@ -10,7 +10,7 @@ import {FinishedVideosResponse} from "@/src/application/repositories/media/video
 import {VideosForModuleResponse} from "@/src/application/use-cases/media/videos/get-videos-for-module.use-case";
 import MuxVideoPlayer from "@/app/_components/ui/players/MuxVideoPlayer";
 import useErrorQuery from "@/app/_hooks/useErrorQuery";
-import {addFinishedVideo, getSignedTokens} from "@/app/dashboard/actions";
+import {addFinishedVideo, getSignedTokens, setVideoProgress} from "@/app/dashboard/actions";
 import {Tokens} from "@mux/mux-player";
 import {useMemo, useState} from "react";
 import useErrorMutation from "@/app/_hooks/useErrorMutation";
@@ -51,6 +51,10 @@ export default function DashboardModuleVideoColumn({moduleId, userId, videos, fi
             toast.error("Видеото не беше отбелязано като изгледано успешно!");
         }
     });
+
+    const {mutate: setVideoProgressMethod} = useErrorMutation({
+        mutationFn: (percentage: number) => setVideoProgress({profile_id: userId, video_id: activeVideoId ?? undefined, progress_percentage: percentage})
+    });
     
     const tokens: Tokens | undefined  = useMemo(() => {
         if (signedTokensQuery?.success) {
@@ -86,6 +90,9 @@ export default function DashboardModuleVideoColumn({moduleId, userId, videos, fi
                 }
                 onTimeUpdate={(curr, total) => {
                     const progress = curr / total;
+                    const normalPercentage = Math.floor(progress * 100);
+
+                    if (normalPercentage > 0 && normalPercentage % 10 === 0) setVideoProgressMethod(normalPercentage);
                     if (progress > 0.97 &&
                         !finishedVideoAutomaticallyAdded &&
                         finishedVideosResult.success &&

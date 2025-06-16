@@ -484,6 +484,13 @@
       "when": 1749658425660,
       "tag": "0068_extend-user-speicific-meetings",
       "breakpoints": true
+    },
+    {
+      "idx": 69,
+      "version": "7",
+      "when": 1750078780971,
+      "tag": "0069_add-video-progresses",
+      "breakpoints": true
     }
   ]
 }

@@ -8,6 +8,31 @@ import {IGetVideoByIdController} from "@/src/interface-adapters/controllers/medi
 import {IGetSignedTokensController} from "@/src/interface-adapters/controllers/media/videos/get-signed-tokens.controller";
 import {IGetSignedTokensUseCase,} from "@/src/application/use-cases/media/videos/get-signed-tokens.use-case";
 import {IVideosService} from "@/src/application/services/media/videos/videos.service.interface";
+import {
+    IVideoProgressesRepository
+} from "@/src/application/repositories/media/videos/video-progresses.repository.interface";
+import {
+    IGetVideoProgressesForModuleUseCase
+} from "@/src/application/use-cases/media/videos/video-progresses/get-video-progresses-for-module.use-case";
+import {
+    IGetVideoProgressesForModuleController
+} from "@/src/interface-adapters/controllers/media/videos/video-progresses/get-video-progresses-for-module.controller";
+import {
+    IGetVideoProgressesForSectionUseCase
+} from "@/src/application/use-cases/media/videos/video-progresses/get-video-progresses-for-section.use-case";
+import {
+    IGetVideoProgressesForSectionController
+} from "@/src/interface-adapters/controllers/media/videos/video-progresses/get-video-progresses-for-section.controller";
+import {
+    ISetVideoProgressUseCase
+} from "@/src/application/use-cases/media/videos/video-progresses/set-video-progress.use-case";
+import { ISetVideoProgressController } from "@/src/interface-adapters/controllers/media/videos/video-progresses/set-video-progress.controller";
+import {
+    IGetVideoProgressByVideoIdUseCase
+} from "@/src/application/use-cases/media/videos/video-progresses/get-video-progress-by-video-id.use-case";
+import {
+    IGetVideoProgressByVideoIdController
+} from "@/src/interface-adapters/controllers/media/videos/video-progresses/get-video-progress-by-video-id.controller";
 
 export const CLASSROOM_VIDEOS_SYMBOLS = {
     IVideosService: Symbol.for("IVideosService"),
@@ -23,7 +48,21 @@ export const CLASSROOM_VIDEOS_SYMBOLS = {
     IGetVideoByIdController: Symbol.for("IGetVideoByIdController"),
 
     IGetSignedTokensUseCase: Symbol.for("IGetSignedTokensUseCase"),
-    IGetSignedTokensController: Symbol.for("IGetSignedTokensController")
+    IGetSignedTokensController: Symbol.for("IGetSignedTokensController"),
+
+    IVideoProgressesRepository: Symbol.for("IVideoProgressesRepository"),
+
+    IGetVideoProgressByVideoIdUseCase: Symbol.for("IGetVideoProgressByVideoIdUseCase"),
+    IGetVideoProgressByVideoIdController: Symbol.for("IGetVideoProgressByVideoIdController"),
+
+    IGetVideoProgressesForModuleUseCase: Symbol.for("IGetVideoProgressesForModuleUseCase"),
+    IGetVideoProgressesForModuleController: Symbol.for("IGetVideoProgressesForModuleController"),
+
+    IGetVideoProgressesForSectionUseCase: Symbol.for("IGetVideoProgressesForSectionUseCase"),
+    IGetVideoProgressesForSectionController: Symbol.for("IGetVideoProgressesForSectionController"),
+
+    ISetVideoProgressUseCase: Symbol.for("ISetVideoProgressUseCase"),
+    ISetVideoProgressController: Symbol.for("ISetVideoProgressController")
 }
 
 export interface CLASSROOM_VIDEOS_RETURN_TYPES {
@@ -40,5 +79,19 @@ export interface CLASSROOM_VIDEOS_RETURN_TYPES {
     IGetVideoByIdController: IGetVideoByIdController,
 
     IGetSignedTokensUseCase: IGetSignedTokensUseCase,
-    IGetSignedTokensController: IGetSignedTokensController
+    IGetSignedTokensController: IGetSignedTokensController,
+
+    IVideoProgressesRepository: IVideoProgressesRepository,
+
+    IGetVideoProgressByVideoIdUseCase: IGetVideoProgressByVideoIdUseCase,
+    IGetVideoProgressByVideoIdController: IGetVideoProgressByVideoIdController
+
+    IGetVideoProgressesForModuleUseCase: IGetVideoProgressesForModuleUseCase,
+    IGetVideoProgressesForModuleController: IGetVideoProgressesForModuleController,
+
+    IGetVideoProgressesForSectionUseCase: IGetVideoProgressesForSectionUseCase,
+    IGetVideoProgressesForSectionController: IGetVideoProgressesForSectionController,
+
+    ISetVideoProgressUseCase: ISetVideoProgressUseCase,
+    ISetVideoProgressController: ISetVideoProgressController
 }

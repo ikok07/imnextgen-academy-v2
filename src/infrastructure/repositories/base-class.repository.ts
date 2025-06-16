@@ -19,6 +19,7 @@ import * as userSpecificMeetings from "../../../drizzle/schema/user_specific_mee
 import * as userCalendarIds from "../../../drizzle/schema/user_calendar_ids"
 import * as googleNotificationChannels from "../../../drizzle/schema/google_notification_channels"
 import * as automations from "../../../drizzle/schema/automations"
+import * as videoProgresses from "../../../drizzle/schema/video_progresses"
 
 import ws from "ws"
 
@@ -50,7 +51,8 @@ export class BaseRepository {
         ...userSpecificMeetings,
         ...userCalendarIds,
         ...googleNotificationChannels,
-        ...automations
+        ...automations,
+        ...videoProgresses
     };
     constructor(authenticationService: IAuthenticationService) {
         this.authService = authenticationService;
