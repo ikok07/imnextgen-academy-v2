@@ -7,7 +7,7 @@ export type IGetFinishedVideosForAllSectionsInModuleController = ReturnType<type
 
 export const getFinishedVideosForAllSectionsInModuleController = (
     getFinishedVideosForAllSectionsInModuleUseCase: IGetFinishedVideosForAllSectionsInModuleUseCase
-) => async (moduleId: string | undefined, userId: string | undefined) => {
+) => async (moduleId: string | undefined | null, userId: string | undefined | null) => {
 
     if (!moduleId) throw new InputParseError("Invalid moduleId!");
     if (!userId) throw new InputParseError("Invalid userId!");
