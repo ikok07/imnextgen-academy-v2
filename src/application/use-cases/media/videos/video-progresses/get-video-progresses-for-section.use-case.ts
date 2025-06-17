@@ -1,7 +1,7 @@
 import {
     IVideoProgressesRepository
 } from "@/src/application/repositories/media/videos/video-progresses.repository.interface";
-import {ProgressVideo} from "@/src/entities/models/media/videos/ProgressVideo";
+import {ProgressVideo} from "@/src/entities/models/media/videos/progress-video";
 
 export type IGetVideoProgressesForSectionUseCase = ReturnType<typeof getVideoProgressesForSectionUseCase>;
 
