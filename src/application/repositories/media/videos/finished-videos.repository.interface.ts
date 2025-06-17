@@ -1,10 +1,11 @@
-import {FinishedVideo} from "@/drizzle/schema/finished_videos";
+import {FinishedVideo, finishedVideoSchema} from "@/drizzle/schema/finished_videos";
 import {z} from "zod";
+import {fullFinishedVideoSchema} from "@/src/entities/models/media/videos/full-finished-video";
 
 export const finishedVideosResponseSchema = z.object({
-    finishedVideos: z.array(z.custom<FinishedVideo>()),
+    finishedVideos: z.array(fullFinishedVideoSchema),
     percentage: z.number()
-})
+});
 
 export type FinishedVideosResponse = z.infer<typeof finishedVideosResponseSchema>;
 
