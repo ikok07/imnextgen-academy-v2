@@ -6,19 +6,11 @@ import AdminUserDetailsUserProgressSectionRowSkeleton
     from "@/app/_components/dashboard/admin/users/modal/user-progress/skeletons/AdminUserDetailsUserProgressSectionRowSkeleton";
 import AdminUserDetailsUserProgressSectionRow
     from "@/app/_components/dashboard/admin/users/modal/user-progress/AdminUserDetailsUserProgressSectionRow";
-import {Section} from "@/drizzle/schema/sections";
-import {Dispatch, SetStateAction} from "react";
+import {useUserProgress} from "@/app/_providers/UserProgressProvider";
 
-type AdminUserDetailsUserProgressSectionsProps = {
-    selectedModuleId: string | null,
-    isLoading: boolean,
-    sections: Section[] | undefined,
-    userId: string,
-    selectedSectionId: string | null,
-    setSelectedSectionId: Dispatch<SetStateAction<string | null>>
-}
+export default function AdminUserDetailsUserProgressSections() {
+    const {sectionsForModule, selectedModuleId, isLoadingModuleSections, isLoadingFinishedVideosForAllSectionInModule} = useUserProgress()
 
-export default function AdminUserDetailsUserProgressSections({selectedModuleId, isLoading, sections, userId, selectedSectionId, setSelectedSectionId}: AdminUserDetailsUserProgressSectionsProps) {
     if (!selectedModuleId) {
         return <PrimaryErrorMessage
             Icon={IoAlbums}
@@ -27,14 +19,11 @@ export default function AdminUserDetailsUserProgressSections({selectedModuleId, 
         />
     }
 
-    if (isLoading) return Array.from({length: 7}).map((_, index) => <AdminUserDetailsUserProgressSectionRowSkeleton key={index} />)
+    if (isLoadingModuleSections || isLoadingFinishedVideosForAllSectionInModule) return Array.from({length: 7}).map((_, index) => <AdminUserDetailsUserProgressSectionRowSkeleton key={index} />)
 
-    return sections?.sort((a, b) => a.order_number - b.order_number)?.map((section, index) => {
+    return sectionsForModule?.sort((a, b) => a.order_number - b.order_number)?.map((section, index) => {
         return <AdminUserDetailsUserProgressSectionRow
             section={section}
-            userId={userId}
-            selectedSectionId={selectedSectionId}
-            setSelectedSectionId={setSelectedSectionId}
             key={index}
         />
     });

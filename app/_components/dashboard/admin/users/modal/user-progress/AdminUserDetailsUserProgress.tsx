@@ -13,17 +13,7 @@ type AdminUserDetailsUserProgressProps = {
 }
 
 export default function AdminUserDetailsUserProgress({fullProfile}: AdminUserDetailsUserProgressProps) {
-    const {selectedModuleId,
-        setSelectedModuleId,
-        selectedSectionId,
-        setSelectedSectionId,
-        allModules,
-        sectionsForModule,
-        videosForSection,
-        isLoadingAllModules,
-        isLoadingModuleSections,
-        isLoadingSectionVideos
-    } = useUserProgress();
+    const {selectedModuleId, setSelectedModuleId, allModules, isLoadingAllModules} = useUserProgress();
 
     return <div className="grid lg:grid-rows-[auto_1fr] lg:grid-cols-[1.5fr_2fr] h-[40rem] overflow-hidden gap-4 px-2">
         <div className="space-y-2">
@@ -52,23 +42,13 @@ export default function AdminUserDetailsUserProgress({fullProfile}: AdminUserDet
         <div className="grid grid-rows-[auto_1fr] space-y-2 row-start-2 min-h-0">
             <h4 className="text-lg font-semibold">Секции</h4>
             <div className="grid auto-rows-max gap-y-2 overflow-auto scrollbar-hide">
-                <AdminUserDetailsUserProgressSections
-                    selectedModuleId={selectedModuleId}
-                    isLoading={isLoadingModuleSections}
-                    sections={sectionsForModule}
-                    userId={fullProfile.id}
-                    selectedSectionId={selectedSectionId}
-                    setSelectedSectionId={setSelectedSectionId}
-                />
+                <AdminUserDetailsUserProgressSections />
             </div>
         </div>
         <div className="grid grid-rows-[auto_1fr] space-y-2 row-start-3 lg:row-start-2 min-h-0">
             <h4 className="text-lg font-semibold">Видеа</h4>
             <div className="grid auto-rows-max gap-y-2 overflow-auto scrollbar-hide">
                 <AdminUserDetailsUserProgressVideos
-                    selectedSectionId={selectedSectionId}
-                    isLoading={isLoadingSectionVideos}
-                    videos={videosForSection}
                     userId={fullProfile.id}
                 />
             </div>
