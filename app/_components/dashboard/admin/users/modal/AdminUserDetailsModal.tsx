@@ -35,7 +35,7 @@ export function AdminUserDetailsModal({fullProfile, setOpenedUserDetails}: Admin
         </DialogHeader>
         <div className="grid md:grid-cols-[1fr_2.5fr] gap-y-10">
             <AdminUserDetailsInfoColumn fullProfile={fullProfile} setOpenedUserDetails={setOpenedUserDetails} />
-            <UserProgressProvider>
+            <UserProgressProvider userId={fullProfile.id}>
                 <Tabs className="grid grid-rows-[auto_1fr] h-full" defaultValue="individual_meetings">
                     <TabsList className="mx-auto gap-y-2 h-auto flex-col md:flex-row md:h-9">
                         <TabsTrigger value="individual_meetings">Sales срещи</TabsTrigger>

@@ -1,5 +1,6 @@
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
 import {
+    FinishedVideosForAllSectionsRawResponse,
     FinishedVideosResponse,
     IFinishedVideosRepository
 } from "@/src/application/repositories/media/videos/finished-videos.repository.interface";
@@ -9,13 +10,15 @@ import {and, count, eq} from "drizzle-orm";
 import {videosTable} from "@/drizzle/schema/videos";
 import {sectionsTable} from "@/drizzle/schema/sections";
 import {modulesTable} from "@/drizzle/schema/modules";
+import {FullFinishedVideo} from "@/src/entities/models/media/videos/full-finished-video";
 
 export class FinishedVideosRepository extends BaseRepository implements IFinishedVideosRepository {
     getFinishedVideosForModule(moduleId: string, userId: string): Promise<FinishedVideosResponse> {
         try {
             return this.queryDB(async db => {
                 const finishedVideos = (await db.select({
-                    finishedVideo: finishedVideosTable
+                    finishedVideo: finishedVideosTable,
+                    video: videosTable
                 })
                     .from(finishedVideosTable)
                     .innerJoin(videosTable, eq(finishedVideosTable.video_id, videosTable.id))
@@ -25,7 +28,7 @@ export class FinishedVideosRepository extends BaseRepository implements IFinishe
                         eq(finishedVideosTable.profile_id, userId),
                         eq(modulesTable.id, moduleId)
                     ))
-                    .execute()).map(r => r.finishedVideo);
+                    .execute()).map(r => ({...r.finishedVideo, ...r.video})) as FullFinishedVideo[];
 
                 const [{count: videosCount}] = await db.select({count: count()})
                     .from(videosTable)
@@ -41,11 +44,50 @@ export class FinishedVideosRepository extends BaseRepository implements IFinishe
         }
     }
 
+    getFinishedVideosForAllSectionsInModule(moduleId: string, userId: string): Promise<FinishedVideosForAllSectionsRawResponse> {
+        try {
+            return this.queryDB(async db => {
+                const finishedVideos = await db.select({
+                    finishedVideo: finishedVideosTable,
+                    video: videosTable,
+                    section: sectionsTable
+                })
+                    .from(finishedVideosTable)
+                    .innerJoin(videosTable, eq(finishedVideosTable.video_id, videosTable.id))
+                    .innerJoin(sectionsTable, eq(sectionsTable.id, videosTable.section_id))
+                    .innerJoin(modulesTable, eq(modulesTable.id, sectionsTable.module_id))
+                    .where(and(
+                        eq(finishedVideosTable.profile_id, userId),
+                        eq(modulesTable.id, moduleId)
+                    ));
+
+                const sectionVideoCounts = await db.select({
+                    sectionId: sectionsTable.id,
+                    count: count()
+                })
+                    .from(videosTable)
+                    .innerJoin(sectionsTable, eq(sectionsTable.id, videosTable.section_id))
+                    .innerJoin(modulesTable, eq(modulesTable.id, sectionsTable.module_id))
+                    .where(eq(modulesTable.id, moduleId))
+                    .groupBy(sectionsTable.id);
+
+                const sectionCountMap = new Map(
+                    sectionVideoCounts.map(item => [item.sectionId, item.count])
+                );
+
+                return finishedVideos.map(obj => ({...obj, videosCount: sectionCountMap.get(obj.section.id) || 0}));
+            })
+        } catch(e) {
+            throw new DatabaseError(`Failed to get finished videos for all sections in module! ${e}`)
+        }
+    }
+
     getFinishedVideosForSection(moduleId: string, sectionId: string, userId: string): Promise<FinishedVideosResponse> {
         try {
             return this.queryDB(async db => {
                 const finishedVideos = (await db.select({
-                    finishedVideo: finishedVideosTable
+                    finishedVideo: finishedVideosTable,
+                    video: videosTable
                 })
                     .from(finishedVideosTable)
                     .innerJoin(videosTable, eq(finishedVideosTable.video_id, videosTable.id))
@@ -56,7 +98,7 @@ export class FinishedVideosRepository extends BaseRepository implements IFinishe
                         eq(sectionsTable.id, sectionId),
                         eq(modulesTable.id, moduleId)
                     ))
-                    .execute()).map(r => r.finishedVideo);
+                    .execute()).map(r => ({...r.finishedVideo, ...r.video})) as FullFinishedVideo[];
 
                 const [{count: videosCount}] = await db.select({count: count()})
                     .from(videosTable)

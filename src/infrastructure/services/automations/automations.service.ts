@@ -13,7 +13,7 @@ export class AutomationsService implements IAutomationsService {
                 hour,
                 date,
                 meetingUrl,
-                currentTimestamp: Date.now() / 1000,
+                currentTimestamp: Math.floor(Date.now() / 1000),
                 meetingTimestamp: meetingStartDateSeconds
             });
         } catch (e) {
