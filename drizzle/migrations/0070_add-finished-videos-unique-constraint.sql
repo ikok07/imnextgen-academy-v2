@@ -1,0 +1,1 @@
+ALTER TABLE "finished_videos" ADD CONSTRAINT "finished_videos_profile_id_video_id_unique" UNIQUE("profile_id","video_id");
