@@ -1,5 +1,6 @@
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
 import {
+    FinishedVideosForAllSectionsRawResponse,
     FinishedVideosResponse,
     IFinishedVideosRepository
 } from "@/src/application/repositories/media/videos/finished-videos.repository.interface";
@@ -40,6 +41,44 @@ export class FinishedVideosRepository extends BaseRepository implements IFinishe
             })
         } catch(e) {
             throw new DatabaseError(`Failed to get finished videos for module! ${e}`)
+        }
+    }
+
+    getFinishedVideosForAllSectionsInModule(moduleId: string, userId: string): Promise<FinishedVideosForAllSectionsRawResponse> {
+        try {
+            return this.queryDB(async db => {
+                const finishedVideos = await db.select({
+                    finishedVideo: finishedVideosTable,
+                    video: videosTable,
+                    section: sectionsTable
+                })
+                    .from(finishedVideosTable)
+                    .innerJoin(videosTable, eq(finishedVideosTable.video_id, videosTable.id))
+                    .innerJoin(sectionsTable, eq(sectionsTable.id, videosTable.section_id))
+                    .innerJoin(modulesTable, eq(modulesTable.id, sectionsTable.module_id))
+                    .where(and(
+                        eq(finishedVideosTable.profile_id, userId),
+                        eq(modulesTable.id, moduleId)
+                    ));
+
+                const sectionVideoCounts = await db.select({
+                    sectionId: sectionsTable.id,
+                    count: count()
+                })
+                    .from(videosTable)
+                    .innerJoin(sectionsTable, eq(sectionsTable.id, videosTable.section_id))
+                    .innerJoin(modulesTable, eq(modulesTable.id, sectionsTable.module_id))
+                    .where(eq(modulesTable.id, moduleId))
+                    .groupBy(sectionsTable.id);
+
+                const sectionCountMap = new Map(
+                    sectionVideoCounts.map(item => [item.sectionId, item.count])
+                );
+
+                return finishedVideos.map(obj => ({...obj, videosCount: sectionCountMap.get(obj.section.id) || 0}));
+            })
+        } catch(e) {
+            throw new DatabaseError(`Failed to get finished videos for all sections in module! ${e}`)
         }
     }
 
