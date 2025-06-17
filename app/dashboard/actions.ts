@@ -33,7 +33,7 @@ export const getFinishedVideosForSection = createServerAction((moduleId: string 
     return getInjection("IGetFinishedVideosForSectionController")(moduleId, sectionId, userId);
 });
 
-export const getFinishedVideosForAllSectionsInModule = createServerAction((moduleId: string | undefined | null, sectionId: string | undefined | null, userId: string | undefined | null) =>  {
+export const getFinishedVideosForAllSectionsInModule = createServerAction((moduleId: string | undefined | null, userId: string | undefined | null) =>  {
     return getInjection("IGetFinishedVideosForAllSectionsInModuleController")(moduleId, userId);
 });
 
