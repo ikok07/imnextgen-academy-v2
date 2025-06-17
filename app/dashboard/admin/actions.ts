@@ -42,7 +42,7 @@ export const unbookSalesMeeting = createServerAction(async (salesMeeting: UserSp
     await getInjection("IUnbookSalesMeetingController")(salesMeeting);
 });
 
-export const getVideoProgressByVideoId = createServerAction((userId: string | undefined, videoId: string | undefined) => {
-    return getInjection("IGetVideoProgressByVideoIdController")(userId, videoId);
-})
+export const getVideoProgressForSection = createServerAction((userId: string | undefined, sectionId: string | undefined) => {
+    return getInjection("IGetVideoProgressesForSectionController")(userId, sectionId);
+});
 

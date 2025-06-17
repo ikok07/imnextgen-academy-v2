@@ -4,18 +4,16 @@ import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage
 import {IoList} from "react-icons/io5";
 import AdminUserDetailsUserProgressSectionRowSkeleton
     from "@/app/_components/dashboard/admin/users/modal/user-progress/skeletons/AdminUserDetailsUserProgressSectionRowSkeleton";
-import {Video} from "@/drizzle/schema/videos";
 import AdminUserDetailsUserProgressVideoRow
     from "@/app/_components/dashboard/admin/users/modal/user-progress/AdminUserDetailsUserProgressVideoRow";
+import {useUserProgress} from "@/app/_providers/UserProgressProvider";
 
 type AdminUserDetailsUserProgressVideosProps = {
-    selectedSectionId: string | null,
-    isLoading: boolean,
-    videos: Video[] | undefined,
     userId: string,
 }
 
-export default function AdminUserDetailsUserProgressVideos({selectedSectionId, isLoading, videos, userId}: AdminUserDetailsUserProgressVideosProps) {
+export default function AdminUserDetailsUserProgressVideos({userId}: AdminUserDetailsUserProgressVideosProps) {
+    const {selectedSectionId, videosForSection, isLoadingSectionVideos, isLoadingVideoProgressesForSection} = useUserProgress();
     if (!selectedSectionId) {
         return <PrimaryErrorMessage
             Icon={IoList}
@@ -24,9 +22,9 @@ export default function AdminUserDetailsUserProgressVideos({selectedSectionId, i
         />
     }
 
-    if (isLoading) return Array.from({length: 7}).map((_, index) => <AdminUserDetailsUserProgressSectionRowSkeleton key={index} />)
+    if (isLoadingSectionVideos || isLoadingVideoProgressesForSection) return Array.from({length: 7}).map((_, index) => <AdminUserDetailsUserProgressSectionRowSkeleton key={index} />)
 
-    return videos?.sort((a, b) => a.order_number - b.order_number)?.map((video, index) => {
+    return videosForSection?.sort((a, b) => a.order_number - b.order_number)?.map((video, index) => {
         return <AdminUserDetailsUserProgressVideoRow
             video={video}
             userId={userId}

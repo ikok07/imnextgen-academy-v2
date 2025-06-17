@@ -7,10 +7,10 @@ export type IGetVideoProgressesForSectionController = ReturnType<typeof getVideo
 
 export const getVideoProgressesForSectionController = (
     getVideoProgressesForSectionUseCase: IGetVideoProgressesForSectionUseCase
-) => async (userId: string | undefined, moduleId: string | undefined) => {
+) => async (userId: string | undefined, sectionId: string | undefined) => {
 
     if (!userId) throw new InputParseError("Invalid userId!");
-    if (!moduleId) throw new InputParseError("Invalid moduleId!");
+    if (!sectionId) throw new InputParseError("Invalid sectionId!");
     
-    return getVideoProgressesForSectionUseCase(userId, moduleId);
+    return getVideoProgressesForSectionUseCase(userId, sectionId);
 }

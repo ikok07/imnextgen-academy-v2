@@ -12,12 +12,6 @@ import Footer from "@/app/_components/home/footer/Footer";
 import HomepageNavbar from "@/app/_components/home/nav/HomepageNavbar";
 import HomepageClientWrapper from "@/app/_components/home/HomepageClientWrapper";
 
-// DONE: 0. Change landing page logos (from email)
-// DONE: 1. Implement admin progress tracking
-// DONE: 1.1 Extract states in a context provider
-// DONE: 1.2 Track video progress every 10% of the video.
-// TODO: 2. Update figma database models
-
 export default async function Home() {
   return <HomepageClientWrapper>
     <main className="homepage space-y-10">
