@@ -1,7 +1,7 @@
 "use client"
 
 import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
-import {IoAlbums} from "react-icons/io5";
+import {IoAlbums, IoSearch} from "react-icons/io5";
 import AdminUserDetailsUserProgressSectionRowSkeleton
     from "@/app/_components/dashboard/admin/users/modal/user-progress/skeletons/AdminUserDetailsUserProgressSectionRowSkeleton";
 import AdminUserDetailsUserProgressSectionRow
@@ -20,6 +20,12 @@ export default function AdminUserDetailsUserProgressSections() {
     }
 
     if (isLoadingModuleSections || isLoadingFinishedVideosForAllSectionInModule) return Array.from({length: 7}).map((_, index) => <AdminUserDetailsUserProgressSectionRowSkeleton key={index} />)
+
+    if (!sectionsForModule || sectionsForModule.length === 0) return <PrimaryErrorMessage
+        Icon={IoSearch}
+        title="Липсват секции"
+        message="Не са налични секции за този модул"
+    />
 
     return sectionsForModule?.sort((a, b) => a.order_number - b.order_number)?.map((section, index) => {
         return <AdminUserDetailsUserProgressSectionRow
