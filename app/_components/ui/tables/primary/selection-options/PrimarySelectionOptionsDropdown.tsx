@@ -38,10 +38,10 @@ export default function PrimarySelectionOptionsDropdown() {
         />
         <DropdownMenu>
             <DropdownMenuTrigger disabled={Object.keys(selectionOptions.selectedRows).length === 0}>
-                <SecondaryButton className={`${Object.keys(selectionOptions.selectedRows).length > 0 ? "visible animate-in slide-in-from-left-2 fade-in" : "invisible animate-out slide-out-to-right-2 fade-out"} transition-all duration-200 ease-in-out px-2`}><IoMenu /></SecondaryButton>
+                <SecondaryButton className={`${Object.keys(selectionOptions.selectedRows).length > 0 || selectionOptions.showWhenNoSelection ? "visible animate-in slide-in-from-left-2 fade-in" : "invisible animate-out slide-out-to-right-2 fade-out"} transition-all duration-200 ease-in-out px-2`}><IoMenu /></SecondaryButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-                {selectionOptions.onDelete &&
+                {selectionOptions.onDelete && Object.keys(selectionOptions.selectedRows).length > 0 &&
                     <>
                         <DropdownMenuItem onClick={() => setCloseAlertOpened(true)} className="cursor-pointer grid grid-cols-[auto_1fr] text-red-500">
                             <IoTrash />
