@@ -37,7 +37,7 @@ export default function PrimarySelectionOptionsDropdown() {
             acceptClassName="bg-red-500 hover:bg-red-600"
         />
         <DropdownMenu>
-            <DropdownMenuTrigger disabled={Object.keys(selectionOptions.selectedRows).length === 0 || selectionOptions.showWhenNoSelection}>
+            <DropdownMenuTrigger disabled={Object.keys(selectionOptions.selectedRows).length === 0 && selectionOptions.showWhenNoSelection}>
                 <SecondaryButton className={`${Object.keys(selectionOptions.selectedRows).length > 0 || selectionOptions.showWhenNoSelection ? "visible animate-in slide-in-from-left-2 fade-in" : "invisible animate-out slide-out-to-right-2 fade-out"} transition-all duration-200 ease-in-out px-2`}><IoMenu /></SecondaryButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
