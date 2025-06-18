@@ -11,6 +11,12 @@ import { IGetModulesByProductIdsController } from "@/src/interface-adapters/cont
 import {
     IGetModulesByProductIdsUseCase
 } from "@/src/application/use-cases/media/modules/get-modules-by-product-ids.use-case";
+import { ICreateModuleController } from "@/src/interface-adapters/controllers/media/modules/create-module.controller";
+import {ICreateModuleUseCase} from "@/src/application/use-cases/media/modules/create-module.use-case";
+import {IUpdateModuleController} from "@/src/interface-adapters/controllers/media/modules/update-module.controller";
+import { IUpdateModuleUseCase } from "@/src/application/use-cases/media/modules/update-module.use-case";
+import {IDeleteModuleUseCase} from "@/src/application/use-cases/media/modules/delete-module.use-case";
+import {IDeleteModuleController} from "@/src/interface-adapters/controllers/media/modules/delete-module.controller";
 
 export const CLASSROOM_MODULES_SYMBOLS = {
     IModulesRepository: Symbol.for("IModulesRepository"),
@@ -25,7 +31,16 @@ export const CLASSROOM_MODULES_SYMBOLS = {
     IGetModuleByIdController: Symbol.for("IGetModuleByIdController"),
 
     IGetPaidModulesUseCase: Symbol.for("IGetPaidModulesUseCase"),
-    IGetPaidModulesController: Symbol.for("IGetPaidModulesController")
+    IGetPaidModulesController: Symbol.for("IGetPaidModulesController"),
+
+    ICreateModuleUseCase: Symbol.for("ICreateModuleUseCase"),
+    ICreateModuleController: Symbol.for("ICreateModuleController"),
+
+    IUpdateModuleUseCase: Symbol.for("IUpdateModuleUseCase"),
+    IUpdateModuleController: Symbol.for("IUpdateModuleController"),
+
+    IDeleteModuleUseCase: Symbol.for("IDeleteModuleUseCase"),
+    IDeleteModuleController: Symbol.for("IDeleteModuleController")
 }
 
 export interface CLASSROOM_MODULES_RETURN_TYPES {
@@ -41,5 +56,14 @@ export interface CLASSROOM_MODULES_RETURN_TYPES {
     IGetModuleByIdController: IGetModuleByIdController,
 
     IGetPaidModulesUseCase: IGetPaidModulesUseCase,
-    IGetPaidModulesController: IGetPaidModulesController
+    IGetPaidModulesController: IGetPaidModulesController,
+
+    ICreateModuleUseCase: ICreateModuleUseCase,
+    ICreateModuleController: ICreateModuleController,
+
+    IUpdateModuleUseCase: IUpdateModuleUseCase,
+    IUpdateModuleController: IUpdateModuleController,
+
+    IDeleteModuleUseCase: IDeleteModuleUseCase,
+    IDeleteModuleController: IDeleteModuleController
 }

@@ -13,6 +13,12 @@ import {
 import {
     getModulesByProductIdsController
 } from "@/src/interface-adapters/controllers/media/modules/get-modules-by-product-ids.controller";
+import {createModuleUseCase} from "@/src/application/use-cases/media/modules/create-module.use-case";
+import {createModuleController} from "@/src/interface-adapters/controllers/media/modules/create-module.controller";
+import {updateModuleUseCase} from "@/src/application/use-cases/media/modules/update-module.use-case";
+import {updateModuleController} from "@/src/interface-adapters/controllers/media/modules/update-module.controller";
+import {deleteModuleUseCase} from "@/src/application/use-cases/media/modules/delete-module.use-case";
+import {deleteModuleController} from "@/src/interface-adapters/controllers/media/modules/delete-module.controller";
 
 export function createClassroomModulesModule() {
     const classroomModulesModule = createModule();
@@ -52,6 +58,30 @@ export function createClassroomModulesModule() {
     classroomModulesModule
         .bind(DI_SYMBOLS.IGetPaidModulesController)
         .toHigherOrderFunction(getPaidModulesController, [DI_SYMBOLS.IGetPaidModulesUseCase]);
+
+    classroomModulesModule
+        .bind(DI_SYMBOLS.ICreateModuleUseCase)
+        .toHigherOrderFunction(createModuleUseCase, [DI_SYMBOLS.IModulesRepository]);
+
+    classroomModulesModule
+        .bind(DI_SYMBOLS.ICreateModuleController)
+        .toHigherOrderFunction(createModuleController, [DI_SYMBOLS.ICreateModuleUseCase]);
+
+    classroomModulesModule
+        .bind(DI_SYMBOLS.IUpdateModuleUseCase)
+        .toHigherOrderFunction(updateModuleUseCase, [DI_SYMBOLS.IModulesRepository]);
+
+    classroomModulesModule
+        .bind(DI_SYMBOLS.IUpdateModuleController)
+        .toHigherOrderFunction(updateModuleController, [DI_SYMBOLS.IUpdateModuleUseCase]);
+
+    classroomModulesModule
+        .bind(DI_SYMBOLS.IDeleteModuleUseCase)
+        .toHigherOrderFunction(deleteModuleUseCase, [DI_SYMBOLS.IModulesRepository]);
+
+    classroomModulesModule
+        .bind(DI_SYMBOLS.IDeleteModuleController)
+        .toHigherOrderFunction(deleteModuleController, [DI_SYMBOLS.IDeleteModuleUseCase]);
 
     return classroomModulesModule;
 }
