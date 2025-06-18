@@ -1,0 +1,15 @@
+import AdminTableHeading from "@/app/_components/dashboard/admin/AdminTableHeading";
+import AdminModulesTable from "@/app/_components/dashboard/admin/media/modules/AdminModulesTable";
+
+// TODO: 1. Finish module creation
+// TODO: 2. Add delete module functionality
+// TODO: 3. Create module details page
+// TODO: 4. List sections for module
+// TODO: 5. Add section creation and deletion functionality
+
+export default function Page() {
+    return <div className="grid grid-rows-[auto_1fr] w-[95%] max-w-max h-[90vh] mx-auto">
+        <AdminTableHeading>Модули</AdminTableHeading>
+        <AdminModulesTable />
+    </div>
+}
