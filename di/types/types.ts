@@ -24,6 +24,7 @@ import {
     GOOGLE_NOTIFICATION_CHANNELS_RETURN_TYPES
 } from "@/di/types/google-notification-types.types";
 import {AUTOMATIONS_RETURN_TYPES, AUTOMATIONS_SYMBOLS} from "@/di/types/automations.types";
+import {STORAGE_RETURN_TYPES, STORAGE_SYMBOLS} from "@/di/types/storage.types";
 
 const MODULE_DI_SYMBOLS = {};
 
@@ -50,7 +51,8 @@ export const DI_SYMBOLS = {
     ...BACKEND_KEYS_SYMBOLS,
     ...CALENDAR_SYMBOLS,
     ...GOOGLE_NOTIFICATION_CHANNELS_SYMBOLS,
-    ...AUTOMATIONS_SYMBOLS
+    ...AUTOMATIONS_SYMBOLS,
+    ...STORAGE_SYMBOLS
 };
 
 export interface DI_RETURN_TYPES extends
@@ -74,5 +76,6 @@ export interface DI_RETURN_TYPES extends
     BACKEND_KEYS_RETURN_TYPES,
     CALENDAR_RETURN_TYPES,
     GOOGLE_NOTIFICATION_CHANNELS_RETURN_TYPES,
-    AUTOMATIONS_RETURN_TYPES
+    AUTOMATIONS_RETURN_TYPES,
+    STORAGE_RETURN_TYPES
 {}
