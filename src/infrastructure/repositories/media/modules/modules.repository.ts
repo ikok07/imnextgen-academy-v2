@@ -81,8 +81,8 @@ export class ModulesRepository extends BaseRepository implements IModulesReposit
                     const moduleToUpdate = await tx.select().from(modulesTable).where(eq(modulesTable.id, moduleId)).then(rows => rows[0]);
                     if (!moduleToUpdate) throw new Error("Module not found!");
 
-                    const moduleToReorder = data.order_number ? await tx.select().from(modulesTable).where(eq(modulesTable.order_number, data.order_number)).then(rows => rows[0]) : undefined;
-                    if (data.order_number != undefined) {
+                    const moduleToReorder = data.order_number !== undefined && data.order_number !== null ? await tx.select().from(modulesTable).where(eq(modulesTable.order_number, data.order_number)).then(rows => rows[0]) : undefined;
+                    if (data.order_number !== undefined && data.order_number !== null) {
                         if (!moduleToReorder) throw new Error("The module on the target order number could not be found!");
                         await tx.update(modulesTable).set({order_number: moduleToUpdate.order_number}).where(eq(modulesTable.id, moduleToReorder.id));
                     }
