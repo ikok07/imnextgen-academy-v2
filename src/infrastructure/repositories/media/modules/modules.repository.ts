@@ -79,23 +79,15 @@ export class ModulesRepository extends BaseRepository implements IModulesReposit
             const res = await this.queryDB(db => {
                 return db.transaction(async tx => {
                     const moduleToUpdate = await tx.select().from(modulesTable).where(eq(modulesTable.id, moduleId)).then(rows => rows[0]);
-                    const txResponse = await tx.update(modulesTable).set(data).where(eq(modulesTable.id, moduleId)).returning();
+                    if (!moduleToUpdate) throw new Error("Module not found!");
 
-                    if (!!data?.order_number && moduleToUpdate.order_number != data.order_number) {
-                        const updatedModules = await tx.select().from(modulesTable).then(rows => rows.sort((a, b) => a.order_number - b.order_number));
-                        const updates: Promise<any>[] = [];
-                        for (let i = 0; i < updatedModules.length; i++) {
-                            if (updatedModules[i].order_number !== i) {
-                                updates.push(
-                                    tx.update(modulesTable).set({order_number: i}).where(eq(modulesTable.id, updatedModules[i].id))
-                                )
-                            }
-                        }
-
-                        await Promise.all(updates);
+                    const moduleToReorder = data.order_number ? await tx.select().from(modulesTable).where(eq(modulesTable.order_number, data.order_number)).then(rows => rows[0]) : undefined;
+                    if (data.order_number) {
+                        if (!moduleToReorder) throw new Error("The module on the target order number could not be found!");
+                        await tx.update(modulesTable).set({order_number: moduleToUpdate.order_number}).where(eq(modulesTable.id, moduleToReorder.id));
                     }
 
-                    return txResponse;
+                    return tx.update(modulesTable).set(data).where(eq(modulesTable.id, moduleId)).returning();
                 });
             });
             if (res.length === 0) throw new Error("Failed to update module in database!");

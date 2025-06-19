@@ -6,7 +6,7 @@ export type IUpdateModuleController = ReturnType<typeof updateModuleController>;
 
 export const updateModuleController = (
     updateModuleUseCase: IUpdateModuleUseCase
-) => async (moduleId: string, data: Partial<ModuleInsert>) => {
+) => async (moduleId: string | undefined, data: Partial<ModuleInsert>) => {
 
     if (!moduleId) throw new InputParseError("Invalid moduleId!");
 
