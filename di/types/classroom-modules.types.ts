@@ -17,6 +17,12 @@ import {IUpdateModuleController} from "@/src/interface-adapters/controllers/medi
 import { IUpdateModuleUseCase } from "@/src/application/use-cases/media/modules/update-module.use-case";
 import {IDeleteModuleUseCase} from "@/src/application/use-cases/media/modules/delete-module.use-case";
 import {IDeleteModuleController} from "@/src/interface-adapters/controllers/media/modules/delete-module.controller";
+import {
+    IDeleteMultipleModulesUseCase
+} from "@/src/application/use-cases/media/modules/delete-multiple-modules.use-case";
+import {
+    IDeleteMultipleModulesController
+} from "@/src/interface-adapters/controllers/media/modules/delete-multiple-modules.controller";
 
 export const CLASSROOM_MODULES_SYMBOLS = {
     IModulesRepository: Symbol.for("IModulesRepository"),
@@ -40,7 +46,10 @@ export const CLASSROOM_MODULES_SYMBOLS = {
     IUpdateModuleController: Symbol.for("IUpdateModuleController"),
 
     IDeleteModuleUseCase: Symbol.for("IDeleteModuleUseCase"),
-    IDeleteModuleController: Symbol.for("IDeleteModuleController")
+    IDeleteModuleController: Symbol.for("IDeleteModuleController"),
+
+    IDeleteMultipleModulesUseCase: Symbol.for("IDeleteMultipleModulesUseCase"),
+    IDeleteMultipleModulesController: Symbol.for("IDeleteMultipleModulesController")
 }
 
 export interface CLASSROOM_MODULES_RETURN_TYPES {
@@ -65,5 +74,8 @@ export interface CLASSROOM_MODULES_RETURN_TYPES {
     IUpdateModuleController: IUpdateModuleController,
 
     IDeleteModuleUseCase: IDeleteModuleUseCase,
-    IDeleteModuleController: IDeleteModuleController
+    IDeleteModuleController: IDeleteModuleController,
+
+    IDeleteMultipleModulesUseCase: IDeleteMultipleModulesUseCase,
+    IDeleteMultipleModulesController: IDeleteMultipleModulesController
 }

@@ -19,6 +19,10 @@ import {updateModuleUseCase} from "@/src/application/use-cases/media/modules/upd
 import {updateModuleController} from "@/src/interface-adapters/controllers/media/modules/update-module.controller";
 import {deleteModuleUseCase} from "@/src/application/use-cases/media/modules/delete-module.use-case";
 import {deleteModuleController} from "@/src/interface-adapters/controllers/media/modules/delete-module.controller";
+import {
+    deleteMultipleModulesController
+} from "@/src/interface-adapters/controllers/media/modules/delete-multiple-modules.controller";
+import {deleteMultipleModulesUseCase} from "@/src/application/use-cases/media/modules/delete-multiple-modules.use-case";
 
 export function createClassroomModulesModule() {
     const classroomModulesModule = createModule();
@@ -82,6 +86,14 @@ export function createClassroomModulesModule() {
     classroomModulesModule
         .bind(DI_SYMBOLS.IDeleteModuleController)
         .toHigherOrderFunction(deleteModuleController, [DI_SYMBOLS.IDeleteModuleUseCase]);
+
+    classroomModulesModule
+        .bind(DI_SYMBOLS.IDeleteMultipleModulesUseCase)
+        .toHigherOrderFunction(deleteMultipleModulesUseCase, [DI_SYMBOLS.IModulesRepository]);
+
+    classroomModulesModule
+        .bind(DI_SYMBOLS.IDeleteMultipleModulesController)
+        .toHigherOrderFunction(deleteMultipleModulesController, [DI_SYMBOLS.IDeleteMultipleModulesUseCase]);
 
     return classroomModulesModule;
 }

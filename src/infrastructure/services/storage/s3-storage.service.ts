@@ -1,9 +1,9 @@
 import {
-    DeleteFileOptions,
+    DeleteFileOptions, DeleteMultipleFilesOptions,
     IS3StorageService,
     UploadFileOptions
 } from "@/src/application/services/storage/s3-storage.service.interface";
-import {DeleteObjectCommand, PutObjectCommand, S3Client} from "@aws-sdk/client-s3";
+import {DeleteObjectCommand, DeleteObjectsCommand, PutObjectCommand, S3Client} from "@aws-sdk/client-s3";
 import {S3StorageError} from "@/src/entities/errors/storage/s3-storage";
 
 export class S3StorageService implements IS3StorageService {
@@ -46,6 +46,19 @@ export class S3StorageService implements IS3StorageService {
             }));
         } catch (e) {
             throw new S3StorageError(`Failed to delete file ${key} in bucket: ${bucket}! ${e}`);
+        }
+    }
+    async deleteMultipleFiles({bucket, keys}: DeleteMultipleFilesOptions): Promise<void> {
+        try {
+            await this.client.send(new DeleteObjectsCommand({
+                Bucket: bucket,
+                Delete: {
+                    Objects: keys.map(k => ({Key: k})),
+                    Quiet: true
+                }
+            }));
+        } catch (e) {
+            throw new S3StorageError(`Failed to delete files '${keys.join(", ")}' in bucket: ${bucket}! ${e}`);
         }
     }
 }
