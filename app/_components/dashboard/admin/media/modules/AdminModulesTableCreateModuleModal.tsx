@@ -14,6 +14,7 @@ import useErrorMutation from "@/app/_hooks/useErrorMutation";
 import {uploadModule} from "@/app/dashboard/admin/media/actions";
 import { toast } from "sonner";
 import {useQueryClient} from "react-query";
+import {getModuleAccessLabel} from "@/app/_utils/modules/getModuleAccessLabel";
 
 type AdminModulesTableCreateModuleModalProps = {
     onClose: () => void
@@ -116,7 +117,7 @@ export default function AdminModulesTableCreateModuleModal({onClose}: AdminModul
                 defaultValue="free"
                 placeholder="Достъп"
                 onValueChange={v => setAccessLevel(v as z.infer<typeof moduleAccessEnumSchema>)}
-                options={moduleAccessEnum.enumValues.map((value) => ({value}))}
+                options={moduleAccessEnum.enumValues.map((value) => ({value: getModuleAccessLabel(value)}))}
             />
         </div>
         <PrimaryButton

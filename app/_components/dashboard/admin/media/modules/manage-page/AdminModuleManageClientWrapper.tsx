@@ -3,6 +3,7 @@
 import {ReactNode, useEffect} from "react";
 import {useBreadcrumb} from "@/app/_providers/BreadcrumbProvider";
 import {Module} from "@/drizzle/schema/modules";
+import {AdminManageModuleProvider} from "@/app/_providers/AdminManageModuleProvider";
 
 type AdminModuleManageClientWrapperProps = {
     module: Module,
@@ -24,5 +25,7 @@ export default function AdminModuleManageClientWrapper({module, children}: Admin
         }
     }, [isLoaded]);
 
-    return children;
+    return <AdminManageModuleProvider module={module}>
+        {children}
+    </AdminManageModuleProvider>;
 }
