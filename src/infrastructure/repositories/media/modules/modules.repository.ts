@@ -2,7 +2,7 @@ import {Module, ModuleInsert, modulesTable} from "@/drizzle/schema/modules";
 import {IModulesRepository} from "@/src/application/repositories/media/modules/modules.repository.interface";
 import {DatabaseError} from "@/src/entities/errors/db/database";
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
-import {eq, inArray, or} from "drizzle-orm";
+import {eq, gt, inArray, or, sql} from "drizzle-orm";
 
 export class ModulesRepository extends BaseRepository implements IModulesRepository {
     getModules(): Promise<Module[]> {
@@ -88,7 +88,19 @@ export class ModulesRepository extends BaseRepository implements IModulesReposit
     async deleteModule(moduleId: string): Promise<void> {
         try {
             await this.queryDB(db => {
-                return db.delete(modulesTable).where(eq(modulesTable.id, moduleId));
+                return db.transaction(async tx => {
+                    const moduleToDelete = await tx.select().from(modulesTable).where(eq(modulesTable.id, moduleId)).then(rows => rows[0]);
+
+                    if (!moduleToDelete) throw new Error("Module not found!");
+
+                    await tx.delete(modulesTable).where(eq(modulesTable.id, moduleId));
+
+                    await tx.update(modulesTable)
+                        .set({
+                            order_number: sql`${modulesTable.order_number} - 1`
+                        })
+                        .where(gt(modulesTable.order_number, moduleToDelete.order_number));
+                });
             });
         } catch(e) {
             throw new DatabaseError(`Failed to update module! ${e}`)
@@ -98,8 +110,24 @@ export class ModulesRepository extends BaseRepository implements IModulesReposit
     async deleteMultipleModules(moduleIds: string[]): Promise<void> {
         try {
             await this.queryDB(db => {
-                return db.delete(modulesTable).where(inArray(modulesTable.id, moduleIds));
+                return db.transaction(async tx => {
+                    await tx.delete(modulesTable).where(inArray(modulesTable.id, moduleIds));
+
+                    const remainingModules = await tx.select().from(modulesTable).then(rows => rows.sort((a, b) => a.order_number - b.order_number));
+
+                    const updates: Promise<any>[] = [];
+                    for (let i = 0; i < remainingModules.length; i++) {
+                        if (remainingModules[i].order_number !== i) {
+                            updates.push(
+                                tx.update(modulesTable).set({order_number: i}).where(eq(modulesTable.id, remainingModules[i].id))
+                            )
+                        }
+                    }
+
+                    await Promise.all(updates);
+                });
             });
+            return
         } catch(e) {
             throw new DatabaseError(`Failed to update module! ${e}`)
         }
