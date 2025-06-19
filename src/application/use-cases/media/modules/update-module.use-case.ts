@@ -5,6 +5,6 @@ export type IUpdateModuleUseCase = ReturnType<typeof updateModuleUseCase>;
 
 export const updateModuleUseCase = (
     modulesRepository: IModulesRepository
-) => async (data: Partial<ModuleInsert>) => {
-    return modulesRepository.updateModule(data);
+) => async (moduleId: string, data: Partial<ModuleInsert>) => {
+    return modulesRepository.updateModule(moduleId, data);
 }

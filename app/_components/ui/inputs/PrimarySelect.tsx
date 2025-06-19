@@ -4,10 +4,10 @@ import { Label } from "../shadcn/label"
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../shadcn/select"
 import {ComponentProps} from "react";
 
-type PrimarySelectProps = ComponentProps<typeof Select> & {options: {label?: string, value: string}[], label?: string, placeholder?: string, defaultValue?: string}
+type PrimarySelectProps = ComponentProps<typeof Select> & {options: {label?: string, value: string}[], label?: string, placeholder?: string, defaultValue?: string, className?: string}
 
-export default function PrimarySelect({options, label, placeholder, defaultValue, ...props}: PrimarySelectProps) {
-    return <div>
+export default function PrimarySelect({options, label, placeholder, defaultValue, className, ...props}: PrimarySelectProps) {
+    return <div className={className}>
         <Label className="mb-0.5">{label}</Label>
         <Select {...props}>
             <SelectTrigger defaultValue={defaultValue}>
