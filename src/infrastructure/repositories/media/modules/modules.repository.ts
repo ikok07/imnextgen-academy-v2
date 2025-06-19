@@ -51,6 +51,16 @@ export class ModulesRepository extends BaseRepository implements IModulesReposit
         }
     }
 
+    getModulesByIds(ids: string[]): Promise<Module[]> {
+        try {
+            return this.queryDB(db => {
+                return db.query.modulesTable.findMany({where: inArray(modulesTable.id, ids)});
+            });
+        } catch(e) {
+            throw new DatabaseError(`Failed to get modules! ${e}`)
+        }
+    }
+
     async createModule(data: ModuleInsert): Promise<Module> {
         try {
             const res = await this.queryDB(db => {
