@@ -17,6 +17,8 @@ import {IoAddCircle} from "react-icons/io5";
 import {Dialog, DialogContent} from "@/app/_components/ui/shadcn/dialog";
 import AdminModulesTableCreateModuleModal
     from "@/app/_components/dashboard/admin/media/modules/AdminModulesTableCreateModuleModal";
+import useErrorMutation from "@/app/_hooks/useErrorMutation";
+import {deleteModules} from "@/app/dashboard/admin/media/actions";
 
 const columnHelper = createColumnHelper<Module>();
 
@@ -39,12 +41,22 @@ export default function AdminModulesTable() {
         }
     });
 
+    const {mutate: deleteModulesMethod, isLoading: isDeletingModules} = useErrorMutation({
+        mutationFn: (moduleIds: string[]) => deleteModules(moduleIds),
+        onSuccess() {
+            queryClient.refetchQueries(["allModules"])
+        },
+        onError() {
+            toast.error("Модулите не можаха да бъдат изтрити!");
+        }
+    })
+
     const data = useMemo(() => {
         if (!allModulesQuery?.success || isLoadingAllModules) return [];
 
         return allModulesQuery.value.sort((a, b) => a.order_number - b.order_number);
         // @ts-ignore
-    }, [allModulesQuery?.value])
+    }, [allModulesQuery?.value, isLoadingAllModules, isRefetchingAllModules]);
 
     const columns = useMemo(() => {
         return [
@@ -75,8 +87,13 @@ export default function AdminModulesTable() {
     }, []);
 
     return <>
-        {<Dialog open={createModuleModalOpened || true} onOpenChange={v => setCreateModuleModalOpened(v)}>
-            <DialogContent className="[&>button:last-child]:hidden">
+        {<Dialog
+            open={createModuleModalOpened}
+            onOpenChange={v => {
+                setCreateModuleModalOpened(v);
+            }}
+        >
+            <DialogContent className="[&>button:last-child]:hidden w-[95%] max-w-[30rem]">
                 <AdminModulesTableCreateModuleModal onClose={() => setCreateModuleModalOpened(false)} />
             </DialogContent>
         </Dialog>}
@@ -104,6 +121,7 @@ export default function AdminModulesTable() {
                 selectedRows,
                 onRowSelected: setSelectedRows,
                 multipleSelection: true,
+                onDelete: (rows) => deleteModulesMethod(rows.map(r => r.original.id)),
                 otherOptions: [
                     {
                         Icon: IoAddCircle,
@@ -112,10 +130,9 @@ export default function AdminModulesTable() {
                         className: "text-cta"
                     }
                 ],
-                onDelete: (rows) => console.log(rows)
             }}
         >
-            <AdminModulesTableWrapper isLoadingAllModules={isLoadingAllModules} isRefetchingAllModules={isRefetchingAllModules} />
+            <AdminModulesTableWrapper isDeletingModules={isDeletingModules} isLoadingAllModules={isLoadingAllModules} isRefetchingAllModules={isRefetchingAllModules} />
         </TableProvider>
     </>
 }

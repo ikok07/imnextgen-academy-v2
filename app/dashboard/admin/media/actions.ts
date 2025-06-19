@@ -12,16 +12,40 @@ export const uploadModule = createServerAction(async (opts:{imgFileBuffer: Uint8
 }) => {
     try {
         const imgURI = await getInjection("IUploadSmallFileController")({
-            bucket: "asd",
-            key: opts.fileName ?? undefined,
+            bucket: process.env.R2_MODULES_IMAGES_BUCKET,
+            key: opts.fileName ? `${Math.floor(Date.now() / 1000)}-${opts.fileName}` : undefined,
             body: opts.imgFileBuffer ? Buffer.from(opts.imgFileBuffer) : undefined,
             contentType: opts.fileType ?? undefined
         });
+
+        const allModules = (await getInjection("IGetModulesController")()).sort((a, b) => a.order_number - b.order_number);
+
+        await getInjection("ICreateModuleController")({
+            title: opts.title ?? undefined,
+            description: opts.description ?? undefined,
+            access: opts.accessLevel ?? undefined,
+            order_number: allModules.length > 0 ? allModules[allModules.length - 1].order_number + 1 : 0,
+            image_url: imgURI
+        })
     } catch (e) {
         if (e instanceof S3StorageError) {
+            console.error(e);
             throw new ServerActionError({id: "upload-failed", message: "Снимката не може да бъде качена!"});
         }
         throw e;
     }
-
 });
+
+export const deleteModules = createServerAction(async (moduleIds: string[]) => {
+    const modules = await getInjection("IGetModulesByIdsController")(moduleIds);
+    const imagePaths = modules.filter(m => !!m.image_url && new URLSearchParams(`${process.env.NEXT_PUBLIC_BASE_URL}${m.image_url}`).get("path")).map(m => new URLSearchParams(m.image_url!).get("path")!);
+
+    await getInjection("IDeleteMultipleModulesController")(moduleIds);
+
+    if (imagePaths.length > 0) {
+        await getInjection("IDeleteMultipleFilesController")({
+            bucket: process.env.R2_MODULES_IMAGES_BUCKET,
+            keys: imagePaths
+        });
+    }
+})

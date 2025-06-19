@@ -5,7 +5,7 @@ import {moduleAccessEnum, moduleAccessEnumSchema} from "@/drizzle/schema/modules
 import PrimarySelect from "@/app/_components/ui/inputs/PrimarySelect";
 import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
 import {IoClose, IoCloudUpload} from "react-icons/io5";
-import {useEffect, useMemo, useState} from "react";
+import {useMemo, useState} from "react";
 import {z} from "zod";
 import {handleParse, trackErrors} from "@/app/_utils/handleInputValidation";
 import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
@@ -13,13 +13,14 @@ import { Input } from "@/app/_components/ui/shadcn/input";
 import useErrorMutation from "@/app/_hooks/useErrorMutation";
 import {uploadModule} from "@/app/dashboard/admin/media/actions";
 import { toast } from "sonner";
-import {ServerActionError} from "@/app/_utils/createServerAction";
+import {useQueryClient} from "react-query";
 
 type AdminModulesTableCreateModuleModalProps = {
     onClose: () => void
 }
 
 export default function AdminModulesTableCreateModuleModal({onClose}: AdminModulesTableCreateModuleModalProps) {
+    const queryClient = useQueryClient();
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [title, setTitle] = useState<string | null>(null);
     const [description, setDescription] = useState<string | null>(null);
@@ -29,7 +30,7 @@ export default function AdminModulesTableCreateModuleModal({onClose}: AdminModul
 
     const {mutate: uploadModuleMethod, isLoading: isUploadingModule} = useErrorMutation({
         mutationFn: async () => {
-            return uploadModule({
+            const res = await uploadModule({
                 imgFileBuffer: imageFile ? new Uint8Array(await imageFile.arrayBuffer()) : undefined,
                 fileName: imageFile?.name,
                 fileType: imageFile?.type,
@@ -37,6 +38,12 @@ export default function AdminModulesTableCreateModuleModal({onClose}: AdminModul
                 description,
                 accessLevel
             });
+            await queryClient.refetchQueries(["allModules"]);
+            return res;
+        },
+        onSuccess() {
+            toast.success("Модулът е създаден успешно!");
+            onClose();
         },
         onError(e) {
             toast.error(e.id === "upload-failed" ? e.message : "Модулът не може да бъде създаден!");
@@ -70,6 +77,8 @@ export default function AdminModulesTableCreateModuleModal({onClose}: AdminModul
                         title="Качване на снимка"
                         message="Натисни тук, за да качиш снимка на модула"
                         className="border border-border h-full"
+                        titleClassName="text-[1rem] xs:text-2xl"
+                        descriptionClassName="text-[0.85rem] xs:text-sm"
                     />}
             </div>
         </label>
