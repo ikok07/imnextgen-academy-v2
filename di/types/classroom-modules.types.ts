@@ -23,6 +23,8 @@ import {
 import {
     IDeleteMultipleModulesController
 } from "@/src/interface-adapters/controllers/media/modules/delete-multiple-modules.controller";
+import {IGetModulesByIdsUseCase} from "@/src/application/use-cases/media/modules/get-modules-by-ids.use-case";
+import { IGetModulesByIdsController } from "@/src/interface-adapters/controllers/media/modules/get-modules-by-ids.controller";
 
 export const CLASSROOM_MODULES_SYMBOLS = {
     IModulesRepository: Symbol.for("IModulesRepository"),
@@ -35,6 +37,9 @@ export const CLASSROOM_MODULES_SYMBOLS = {
 
     IGetModuleByIdUseCase: Symbol.for("IGetModuleByIdUseCase"),
     IGetModuleByIdController: Symbol.for("IGetModuleByIdController"),
+
+    IGetModulesByIdsUseCase: Symbol.for("IGetModulesByIdsUseCase"),
+    IGetModulesByIdsController: Symbol.for("IGetModulesByIdsController"),
 
     IGetPaidModulesUseCase: Symbol.for("IGetPaidModulesUseCase"),
     IGetPaidModulesController: Symbol.for("IGetPaidModulesController"),
@@ -63,6 +68,9 @@ export interface CLASSROOM_MODULES_RETURN_TYPES {
 
     IGetModuleByIdUseCase: IGetModuleByIdUseCase,
     IGetModuleByIdController: IGetModuleByIdController,
+
+    IGetModulesByIdsUseCase: IGetModulesByIdsUseCase,
+    IGetModulesByIdsController: IGetModulesByIdsController,
 
     IGetPaidModulesUseCase: IGetPaidModulesUseCase,
     IGetPaidModulesController: IGetPaidModulesController,

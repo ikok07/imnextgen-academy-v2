@@ -23,6 +23,8 @@ import {
     deleteMultipleModulesController
 } from "@/src/interface-adapters/controllers/media/modules/delete-multiple-modules.controller";
 import {deleteMultipleModulesUseCase} from "@/src/application/use-cases/media/modules/delete-multiple-modules.use-case";
+import {getModulesByIdsUseCase} from "@/src/application/use-cases/media/modules/get-modules-by-ids.use-case";
+import { getModulesByIdsController } from "@/src/interface-adapters/controllers/media/modules/get-modules-by-ids.controller";
 
 export function createClassroomModulesModule() {
     const classroomModulesModule = createModule();
@@ -54,6 +56,14 @@ export function createClassroomModulesModule() {
     classroomModulesModule
         .bind(DI_SYMBOLS.IGetModuleByIdController)
         .toHigherOrderFunction(getModuleByIdController, [DI_SYMBOLS.IGetModuleByIdUseCase]);
+
+    classroomModulesModule
+        .bind(DI_SYMBOLS.IGetModulesByIdsUseCase)
+        .toHigherOrderFunction(getModulesByIdsUseCase, [DI_SYMBOLS.IModulesRepository]);
+
+    classroomModulesModule
+        .bind(DI_SYMBOLS.IGetModulesByIdsController)
+        .toHigherOrderFunction(getModulesByIdsController, [DI_SYMBOLS.IGetModulesByIdsUseCase]);
 
     classroomModulesModule
         .bind(DI_SYMBOLS.IGetPaidModulesUseCase)
