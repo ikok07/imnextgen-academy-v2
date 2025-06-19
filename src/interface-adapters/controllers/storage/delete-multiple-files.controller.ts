@@ -9,7 +9,7 @@ export type IDeleteMultipleFilesController = ReturnType<typeof deleteMultipleFil
 
 export const deleteMultipleFilesController = (
     deleteMultipleFilesUseCase: IDeleteMultipleFilesUseCase
-) => async (opts: DeleteMultipleFilesOptions) => {
+) => async (opts: Partial<DeleteMultipleFilesOptions>) => {
 
     const {data: parsedOpts, error} = deleteMultipleFilesOptionsSchema.safeParse(opts);
     if (error) throw new InputParseError(`Invalid options! ${error}`);
