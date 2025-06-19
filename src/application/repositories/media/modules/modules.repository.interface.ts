@@ -7,7 +7,7 @@ export interface IModulesRepository {
     getModulesByIds(ids: string[]): Promise<Module[]>
     getPaidModules(): Promise<Module[]>
     createModule(data: ModuleInsert): Promise<Module>
-    updateModule(data: Partial<ModuleInsert>): Promise<Module>
+    updateModule(moduleId: string, data: Partial<ModuleInsert>): Promise<Module>
     deleteModule(moduleId: string): Promise<void>
     deleteMultipleModules(moduleIds: string[]): Promise<void>
 }

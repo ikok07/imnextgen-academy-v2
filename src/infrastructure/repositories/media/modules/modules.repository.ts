@@ -3,6 +3,7 @@ import {IModulesRepository} from "@/src/application/repositories/media/modules/m
 import {DatabaseError} from "@/src/entities/errors/db/database";
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
 import {eq, gt, inArray, or, sql} from "drizzle-orm";
+import {PgTransaction} from "drizzle-orm/pg-core";
 
 export class ModulesRepository extends BaseRepository implements IModulesRepository {
     getModules(): Promise<Module[]> {
@@ -73,10 +74,29 @@ export class ModulesRepository extends BaseRepository implements IModulesReposit
         }
     }
 
-    async updateModule(data: Partial<ModuleInsert>): Promise<Module> {
+    async updateModule(moduleId: string, data: Partial<ModuleInsert>): Promise<Module> {
         try {
             const res = await this.queryDB(db => {
-                return db.update(modulesTable).set(data).returning();
+                return db.transaction(async tx => {
+                    const moduleToUpdate = await tx.select().from(modulesTable).where(eq(modulesTable.id, moduleId)).then(rows => rows[0]);
+                    const txResponse = await tx.update(modulesTable).set(data).where(eq(modulesTable.id, moduleId)).returning();
+
+                    if (!!data?.order_number && moduleToUpdate.order_number != data.order_number) {
+                        const updatedModules = await tx.select().from(modulesTable).then(rows => rows.sort((a, b) => a.order_number - b.order_number));
+                        const updates: Promise<any>[] = [];
+                        for (let i = 0; i < updatedModules.length; i++) {
+                            if (updatedModules[i].order_number !== i) {
+                                updates.push(
+                                    tx.update(modulesTable).set({order_number: i}).where(eq(modulesTable.id, updatedModules[i].id))
+                                )
+                            }
+                        }
+
+                        await Promise.all(updates);
+                    }
+
+                    return txResponse;
+                });
             });
             if (res.length === 0) throw new Error("Failed to update module in database!");
             return res[0];
