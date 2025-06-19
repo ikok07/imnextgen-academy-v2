@@ -8,4 +8,5 @@ export interface IModulesRepository {
     createModule(data: ModuleInsert): Promise<Module>
     updateModule(data: Partial<ModuleInsert>): Promise<Module>
     deleteModule(moduleId: string): Promise<void>
+    deleteMultipleModules(moduleIds: string[]): Promise<void>
 }

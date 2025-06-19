@@ -84,4 +84,14 @@ export class ModulesRepository extends BaseRepository implements IModulesReposit
             throw new DatabaseError(`Failed to update module! ${e}`)
         }
     }
+
+    async deleteMultipleModules(moduleIds: string[]): Promise<void> {
+        try {
+            await this.queryDB(db => {
+                return db.delete(modulesTable).where(inArray(modulesTable.id, moduleIds));
+            });
+        } catch(e) {
+            throw new DatabaseError(`Failed to update module! ${e}`)
+        }
+    }
 }

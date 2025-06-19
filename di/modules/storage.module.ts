@@ -5,6 +5,10 @@ import {uploadSmallFileUseCase} from "@/src/application/use-cases/storage/upload
 import { uploadSmallFileController } from "@/src/interface-adapters/controllers/storage/upload-small-file.controller";
 import {deleteFileUseCase} from "@/src/application/use-cases/storage/delete-file.use-case";
 import {deleteFileController} from "@/src/interface-adapters/controllers/storage/delete-file.controller";
+import {
+    deleteMultipleFilesController
+} from "@/src/interface-adapters/controllers/storage/delete-multiple-files.controller";
+import {deleteMultipleFilesUseCase} from "@/src/application/use-cases/storage/delete-multiple-files.use-case";
 
 export function createStorageModule() {
     const storageModule = createModule();
@@ -28,6 +32,14 @@ export function createStorageModule() {
     storageModule
         .bind(DI_SYMBOLS.IDeleteFileController)
         .toHigherOrderFunction(deleteFileController, [DI_SYMBOLS.IDeleteFileUseCase]);
+
+    storageModule
+        .bind(DI_SYMBOLS.IDeleteMultipleFilesUseCase)
+        .toHigherOrderFunction(deleteMultipleFilesUseCase, [DI_SYMBOLS.IS3StorageService]);
+
+    storageModule
+        .bind(DI_SYMBOLS.IDeleteMultipleFilesController)
+        .toHigherOrderFunction(deleteMultipleFilesController, [DI_SYMBOLS.IDeleteMultipleFilesUseCase]);
 
     return storageModule;
 }
