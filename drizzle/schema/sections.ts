@@ -6,7 +6,7 @@ import {z} from "zod";
 
 export const sectionsTable = pgTable("sections", {
     id: text("id").notNull().primaryKey().default(sql`gen_random_uuid()`),
-    module_id: text("module_id").references(() => modulesTable.id, {
+    module_id: text("module_id").notNull().references(() => modulesTable.id, {
         onUpdate: "cascade",
         onDelete: "set null"
     }),
