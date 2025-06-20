@@ -28,26 +28,6 @@ export default function AdminModulesManagePageProperties({module, allModules}: A
         nonDiscountedPriceId, setNonDiscountedPriceId
     } = useAdminManageModule();
 
-    useEffect(() => {
-        const customStripeProductId = stripeProductId === "" ? null : stripeProductId;
-        const customNonDiscountedPrice = nonDiscountedPriceId === "" ? null : nonDiscountedPriceId;
-        setHasChanges(
-            access != module.access ||
-            Number(orderNumber) != module.order_number ||
-            customStripeProductId != module.stripe_product_id ||
-            customNonDiscountedPrice != module.non_discounted_price_id
-        );
-    }, [access, orderNumber, stripeProductId, nonDiscountedPriceId, module]);
-
-    useEffect(() => {
-        if (editMode) {
-            setAccess(module.access);
-            setOrderNumber(module.order_number.toString());
-            setStripeProductId(module.stripe_product_id);
-            setNonDiscountedPriceId(module.non_discounted_price_id);
-        }
-    }, [editMode]);
-
     return <div className="grid grid-cols-2 items-center gap-5 mt-4">
         <AdminMediaItemPropertyBox
             Icon={IoKeyOutline}

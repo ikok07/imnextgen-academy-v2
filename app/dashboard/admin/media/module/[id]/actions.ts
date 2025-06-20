@@ -1,9 +1,28 @@
 "use server"
 
-import {createServerAction} from "@/app/_utils/createServerAction";
+import {createServerAction, ServerActionError} from "@/app/_utils/createServerAction";
 import {getInjection} from "@/di/container";
 import {ModuleInsert} from "@/drizzle/schema/modules";
 
-export const updateModule = createServerAction((moduleId: string | undefined, data: Partial<ModuleInsert>) => {
-   return getInjection("IUpdateModuleController")(moduleId, data);
+export const updateModule = createServerAction(async (moduleId: string | undefined, image: {new: Uint8Array, fileName: string, fileType: string, oldURI: string | undefined} | undefined, data: Partial<ModuleInsert>) => {
+   let newImageUrl: string | undefined;
+   if (image) {
+      if (image.new.length > 300_000) throw new ServerActionError({id: "image-size", message: "Снимката не трябва да надвишава 300kb!"});
+
+      newImageUrl = await getInjection("IUploadSmallFileController")({
+         bucket: process.env.R2_MODULES_IMAGES_BUCKET,
+         key: `${Math.floor(Date.now() / 1000)}-${image.fileName}`,
+         body: Buffer.from(image.new),
+         contentType: image.fileType
+      });
+
+      if (image.oldURI) {
+         await getInjection("IDeleteFileController")({
+            bucket: process.env.R2_MODULES_IMAGES_BUCKET,
+            key: new URLSearchParams(image.oldURI).get("path") ?? undefined
+         });
+      }
+   }
+
+   return getInjection("IUpdateModuleController")(moduleId, {...data, image_url: newImageUrl});
 });

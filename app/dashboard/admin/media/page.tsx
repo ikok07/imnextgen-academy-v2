@@ -4,11 +4,11 @@ import AdminModulesTable from "@/app/_components/dashboard/admin/media/modules/A
 // DONE: 1. Finish module creation
 // DONE: 2. Add delete module functionality
 // TODO: 3. Create module details page
-// TODO: 3.1 Add update module's image option
-// TODO: 3.1 Add module details page skeleton
+// DONE: 3.1 Add update module's image option
 // TODO: 4. List sections for module
 // TODO: 5. Make design responsive
-// TODO: 6. Add section creation and deletion functionality
+// TODO: 6. Add skeletons to module details page
+// TODO: 7. Add section creation and deletion functionality
 
 export default function Page() {
     return <div className="grid grid-rows-[auto_1fr] w-[95%] max-w-max h-[90vh] mx-auto">

@@ -21,6 +21,7 @@ export default function AdminModuleManagePageHeaderButtons() {
         setEditMode,
         errors,
         hasChanges,
+        newProfileImage,
         access,
         orderNumber,
         stripeProductId,
@@ -28,12 +29,23 @@ export default function AdminModuleManagePageHeaderButtons() {
     } = useAdminManageModule();
 
     const {mutate: updateModuleMethod, isLoading: isUpdatingModule} = useErrorMutation({
-        mutationFn: () => updateModule(module?.id, {
-            access: (access as z.infer<typeof moduleAccessEnumSchema>) ?? undefined,
-            order_number: !orderNumber || isNaN(+orderNumber) ? undefined : +orderNumber,
-            stripe_product_id: stripeProductId ?? undefined,
-            non_discounted_price_id: nonDiscountedPriceId ?? undefined
-        }),
+        mutationFn: async () => {
+            return updateModule(
+                module?.id,
+                newProfileImage ? {
+                    new: new Uint8Array(await newProfileImage.arrayBuffer()),
+                    fileName: newProfileImage.name,
+                    fileType: newProfileImage.type,
+                    oldURI: module?.image_url ?? undefined
+                } : undefined,
+                {
+                    access: (access as z.infer<typeof moduleAccessEnumSchema>) ?? undefined,
+                    order_number: !orderNumber || isNaN(+orderNumber) ? undefined : +orderNumber,
+                    stripe_product_id: stripeProductId ?? undefined,
+                    non_discounted_price_id: nonDiscountedPriceId ?? undefined
+                }
+            )
+        },
         onSuccess() {
             queryClient.refetchQueries(["module", module?.id]);
             setEditMode(false);

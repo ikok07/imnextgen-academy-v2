@@ -15,6 +15,8 @@ export const adminManageModuleStateSchema = z.object({
     setErrors: z.custom<Dispatch<SetStateAction<string[]>>>(),
     hasChanges: z.boolean(),
     setHasChanges: z.custom<Dispatch<SetStateAction<boolean>>>(),
+    newProfileImage: z.custom<File>().nullable(),
+    setNewProfileImage: z.custom<Dispatch<SetStateAction<File | null>>>(),
     access: z.string().nullable(),
     setAccess: z.custom<Dispatch<SetStateAction<string | null>>>(),
     orderNumber: z.string().nullable(),
@@ -39,6 +41,7 @@ export function AdminManageModuleProvider({children, module}: AdminManageModuleP
     const [errors, setErrors] = useState<string[]>([]);
     const [hasChanges, setHasChanges] = useState(false);
 
+    const [newProfileImage, setNewProfileImage] = useState<File | null>(null);
     const [access, setAccess] = useState<string | null>(module.access);
     const [orderNumber, setOrderNumber] = useState<string | null>(module.order_number.toString());
     const [stripeProductId, setStripeProductId] = useState<string | null>(module.stripe_product_id);
@@ -50,10 +53,34 @@ export function AdminManageModuleProvider({children, module}: AdminManageModuleP
         initialData: {success: true, value: module}
     });
 
+    useEffect(() => {
+        if (!editMode) {
+            setNewProfileImage(null);
+            setAccess(module.access);
+            setOrderNumber(module.order_number.toString());
+            setStripeProductId(module.stripe_product_id);
+            setNonDiscountedPriceId(module.non_discounted_price_id);
+        }
+    }, [editMode]);
+
     const clientModule = useMemo(() => {
         if (moduleQuery?.success) return moduleQuery.value;
         // @ts-ignore
     }, [moduleQuery?.value, isLoadingModule, isRefetchingModule]);
+
+    useEffect(() => {
+        if (clientModule) {
+            const customStripeProductId = stripeProductId === "" ? null : stripeProductId;
+            const customNonDiscountedPrice = nonDiscountedPriceId === "" ? null : nonDiscountedPriceId;
+            setHasChanges(
+                !!newProfileImage ||
+                access != clientModule.access ||
+                Number(orderNumber) != clientModule.order_number ||
+                customStripeProductId != clientModule.stripe_product_id ||
+                customNonDiscountedPrice != clientModule.non_discounted_price_id
+            );
+        }
+    }, [newProfileImage, access, orderNumber, stripeProductId, nonDiscountedPriceId, clientModule]);
 
     return <AdminManageModuleContext.Provider value={{
         module: clientModule,
@@ -64,6 +91,7 @@ export function AdminManageModuleProvider({children, module}: AdminManageModuleP
         setErrors,
         hasChanges,
         setHasChanges,
+        newProfileImage, setNewProfileImage,
         access, setAccess,
         orderNumber, setOrderNumber,
         stripeProductId, setStripeProductId,
