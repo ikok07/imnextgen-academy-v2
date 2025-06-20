@@ -100,7 +100,7 @@ export class ModulesRepository extends BaseRepository implements IModulesReposit
 
                             return a.order_number - b.order_number;
                         }));
-
+                        console.log(updatedModules);
                         for (let i = 0; i < updatedModules.length; i++) {
                             await tx.update(modulesTable).set({order_number: i}).where(eq(modulesTable.id, updatedModules[i].id));
                         }

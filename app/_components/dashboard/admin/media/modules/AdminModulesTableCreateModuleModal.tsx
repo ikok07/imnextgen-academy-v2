@@ -5,7 +5,7 @@ import {moduleAccessEnum, moduleAccessEnumSchema} from "@/drizzle/schema/modules
 import PrimarySelect from "@/app/_components/ui/inputs/PrimarySelect";
 import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
 import {IoClose, IoCloudUpload} from "react-icons/io5";
-import {useEffect, useMemo, useState} from "react";
+import {FormEvent, useEffect, useMemo, useState} from "react";
 import {z} from "zod";
 import {handleParse, trackErrors} from "@/app/_utils/handleInputValidation";
 import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
@@ -52,9 +52,15 @@ export default function AdminModulesTableCreateModuleModal({onClose}: AdminModul
         }
     });
 
-    const buttonActive = useMemo(() => errors.length > 0 || !imageFile || !accessLevel, [errors.length, imageFile, accessLevel])
+    const buttonDisabled = useMemo(() => errors.length > 0 || !imageFile || !accessLevel, [errors.length, imageFile, accessLevel])
 
-    return <div>
+    function handleSubmit(e: FormEvent) {
+        e.preventDefault();
+        if (buttonDisabled) return;
+        uploadModuleMethod();
+    }
+
+    return <form onSubmit={handleSubmit}>
         <div className="flex items-center justify-between pb-2 border-b border-border">
             <h4 className="text-lg">Създаване на модул</h4>
             <button onClick={onClose}><IoClose className="text-2xl hover:text-cta transition-all duration-200"/></button>
@@ -124,16 +130,16 @@ export default function AdminModulesTableCreateModuleModal({onClose}: AdminModul
                 defaultValue="free"
                 placeholder="Достъп"
                 onValueChange={v => setAccessLevel(v as z.infer<typeof moduleAccessEnumSchema>)}
-                options={moduleAccessEnum.enumValues.map((value) => ({value: getModuleAccessLabel(value)}))}
+                options={moduleAccessEnum.enumValues.map((value) => ({label: getModuleAccessLabel(value), value}))}
             />
         </div>
         <PrimaryButton
             className="w-full mt-4"
-            disabled={buttonActive}
+            disabled={buttonDisabled}
             loading={isUploadingModule}
-            onClick={() => uploadModuleMethod()}
+            type="submit"
         >
             Създаване
         </PrimaryButton>
-    </div>
+    </form>
 }

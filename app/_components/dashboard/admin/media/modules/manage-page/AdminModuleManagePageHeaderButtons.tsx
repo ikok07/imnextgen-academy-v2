@@ -22,6 +22,8 @@ export default function AdminModuleManagePageHeaderButtons() {
         errors,
         hasChanges,
         newProfileImage,
+        title,
+        description,
         access,
         orderNumber,
         stripeProductId,
@@ -39,6 +41,8 @@ export default function AdminModuleManagePageHeaderButtons() {
                     oldURI: module?.image_url ?? undefined
                 } : undefined,
                 {
+                    title: title ?? undefined,
+                    description: description ?? undefined,
                     access: (access as z.infer<typeof moduleAccessEnumSchema>) ?? undefined,
                     order_number: !orderNumber || isNaN(+orderNumber) ? undefined : +orderNumber,
                     stripe_product_id: stripeProductId ?? undefined,

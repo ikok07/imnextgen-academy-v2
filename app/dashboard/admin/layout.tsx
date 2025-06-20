@@ -34,9 +34,7 @@ export default async function Layout({children}: LayoutProps) {
 
     if (!accessResult.value) return redirect(Routes.dashboard.base);
 
-    return <SetActiveLinkComponent linkId="allUsers">
-        <div className="grid h-full">
-            {children}
-        </div>
-    </SetActiveLinkComponent>
+    return <div className="grid h-full">
+        {children}
+    </div>
 }

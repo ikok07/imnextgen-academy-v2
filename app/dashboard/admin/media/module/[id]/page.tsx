@@ -13,11 +13,15 @@ import AdminModuleManageDetailsPageSkeleton
 import AdminModuleManageSectionsTable
     from "@/app/_components/dashboard/admin/media/modules/manage-page/sections-table/AdminModuleManageSectionsTable";
 
+export const revalidate = 0;
+
 const propsSchema = z.object({
     params: z.object({
         id: z.string()
     })
 })
+
+// TODO: 1. Make module's title and description updatable
 
 export default async function Page(props: z.infer<typeof propsSchema>) {
     return <Suspense fallback={<AdminModuleManageDetailsPageSkeleton />}>

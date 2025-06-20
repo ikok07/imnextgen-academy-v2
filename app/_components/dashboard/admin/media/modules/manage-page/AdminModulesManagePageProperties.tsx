@@ -27,7 +27,7 @@ export default function AdminModulesManagePageProperties({module, allModules}: A
         nonDiscountedPriceId, setNonDiscountedPriceId
     } = useAdminManageModule();
 
-    return <div className={`grid ${!editMode ? "grid-cols-2" : ""} items-center gap-5 mt-4`}>
+    return <div className={`grid ${!editMode ? "grid-cols-2" : "sm:grid-cols-2"} items-center gap-5 mt-4`}>
         <AdminMediaItemPropertyBox
             Icon={IoKeyOutline}
             label="Достъп"

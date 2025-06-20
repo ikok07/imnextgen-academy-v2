@@ -1,7 +1,7 @@
 "use client"
 
 import {IoClose} from "react-icons/io5";
-import {useMemo, useState} from "react";
+import {FormEvent, useMemo, useState} from "react";
 import PrimaryInput from "@/app/_components/ui/inputs/PrimaryInput";
 import {handleParse, trackErrors} from "@/app/_utils/handleInputValidation";
 import {z} from "zod";
@@ -20,8 +20,6 @@ export default function AdminSectionCreateModal({moduleId, onClose}: AdminSectio
     const queryClient = useQueryClient();
     const [title, setTitle] = useState<string | null>(null);
     const [errors, setErrors] = useState<string[]>([]);
-
-    const buttonActive = useMemo(() => errors.length > 0, [errors.length]);
 
     const {mutate: createSectionMethod, isLoading: isCreatingSection} = useErrorMutation({
         mutationFn: async () => {
@@ -42,9 +40,17 @@ export default function AdminSectionCreateModal({moduleId, onClose}: AdminSectio
         onError() {
             toast.error("Секцията не може да бъде създадена!");
         }
-    })
+    });
 
-    return <div>
+    const buttonDisabled = useMemo(() => errors.length > 0, [errors.length]);
+
+    function handleSubmit(e: FormEvent) {
+        e.preventDefault();
+        if (buttonDisabled) return;
+        createSectionMethod();
+    }
+
+    return <form onSubmit={handleSubmit}>
         <div className="flex items-center justify-between pb-2 border-b border-border">
             <h4 className="text-lg">Създаване на секция</h4>
             <button onClick={onClose}><IoClose className="text-2xl hover:text-cta transition-all duration-200"/></button>
@@ -66,11 +72,11 @@ export default function AdminSectionCreateModal({moduleId, onClose}: AdminSectio
         </div>
         <PrimaryButton
             className="w-full mt-4"
-            disabled={buttonActive}
+            type="submit"
+            disabled={buttonDisabled}
             loading={isCreatingSection}
-            onClick={() => createSectionMethod()}
         >
             Създаване
         </PrimaryButton>
-    </div>
+    </form>
 }
