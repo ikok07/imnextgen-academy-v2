@@ -76,12 +76,13 @@ export class ModulesRepository extends BaseRepository implements IModulesReposit
 
     async updateModule(moduleId: string, data: Partial<ModuleInsert>): Promise<Module> {
         try {
-            const res = await this.queryDB(db => {
+            return this.queryDB(db => {
                 return db.transaction(async tx => {
                     const moduleToUpdate = await tx.select().from(modulesTable).where(eq(modulesTable.id, moduleId)).then(rows => rows[0]);
                     if (!moduleToUpdate) throw new Error("Module not found!");
 
                     const res = await tx.update(modulesTable).set(data).where(eq(modulesTable.id, moduleId)).returning();
+                    if (res.length === 0) throw new Error("Failed to update module in database!");
 
                     if (data.order_number !== undefined && data.order_number !== null) {
                         const newNumberIsHigher = data.order_number > moduleToUpdate.order_number;
@@ -105,11 +106,9 @@ export class ModulesRepository extends BaseRepository implements IModulesReposit
                         }
                     }
 
-                    return res;
+                    return res[0];
                 });
             });
-            if (res.length === 0) throw new Error("Failed to update module in database!");
-            return res[0];
         } catch(e) {
             throw new DatabaseError(`Failed to update module! ${e}`)
         }

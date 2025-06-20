@@ -5,6 +5,6 @@ export type IUpdateSectionUseCase = ReturnType<typeof updateSectionUseCase>;
 
 export const updateSectionUseCase = (
     sectionsRepository: ISectionsRepository
-) => async (data: SectionInsert) => {
-    return sectionsRepository.updateSection(data);
+) => async (sectionId: string, data: SectionInsert) => {
+    return sectionsRepository.updateSection(sectionId, data);
 }
