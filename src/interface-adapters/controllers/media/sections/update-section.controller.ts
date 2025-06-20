@@ -6,10 +6,12 @@ export type IUpdateSectionController = ReturnType<typeof updateSectionController
 
 export const updateSectionController = (
     updateSectionUseCase: IUpdateSectionUseCase
-) => async (data: Partial<SectionInsert>) => {
+) => async (sectionId: string | undefined, data: Partial<SectionInsert>) => {
+
+    if (!sectionId) throw new InputParseError("Invalid sectiondId!");
 
     const {data: parsedData, error} = sectionsInsertSchema.safeParse(data);
     if (error) throw new InputParseError(`Invalid data! ${error}`);
 
-    return updateSectionUseCase(parsedData);
+    return updateSectionUseCase(sectionId, parsedData);
 }
