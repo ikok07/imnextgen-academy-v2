@@ -1,23 +1,107 @@
 import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repository";
 import {ISectionsRepository} from "@/src/application/repositories/media/sections/sections.repository.interface";
-import {Section, sectionsTable} from "@/drizzle/schema/sections";
+import {Section, SectionInsert, sectionsTable} from "@/drizzle/schema/sections";
 import { DatabaseError } from "@/src/entities/errors/db/database";
-import {eq} from "drizzle-orm";
-import {modulesTable} from "@/drizzle/schema/modules";
+import {eq, gt, inArray, sql} from "drizzle-orm";
 
 export class SectionsRepository extends BaseRepository implements ISectionsRepository {
-    getSectionsForModule(moduleId: string): Promise<Section[]> {
+    getSectionById(sectionId: string) : Promise<Section> {
         try {
             return this.queryDB(async db => {
-                return (await db.select({sections: sectionsTable})
+                const res = await db.select()
+                        .from(sectionsTable)
+                        .where(eq(sectionsTable.id, sectionId));
+                if (res.length === 0) throw new Error("Section not found!");
+                return res[0];
+            })
+        } catch(e) {
+            throw new DatabaseError(`Failed to get section by id! ${e}`)
+        }
+    }
+
+    getSectionsForModule(moduleId: string): Promise<Section[]> {
+        try {
+            return this.queryDB(db => {
+                return db.select()
                     .from(sectionsTable)
-                    .innerJoin(modulesTable, eq(modulesTable.id, sectionsTable.module_id))
-                    .where(eq(modulesTable.id, moduleId))
-                    .execute()).map(r => r.sections);
+                    .where(eq(sectionsTable.module_id, moduleId));
             })
         } catch(e) {
             throw new DatabaseError(`Failed to get section for module! ${e}`)
         }
     }
 
+    createSection(data: SectionInsert) : Promise<Section> {
+        try {
+            return this.queryDB(async db => {
+                const res = await db.insert(sectionsTable).values(data).returning();
+                if (res.length === 0) throw new Error("Section not created!");
+                return res[0];
+            })
+        } catch(e) {
+            throw new DatabaseError(`Failed to create section! ${e}`)
+        }
+    }
+
+    updateSection(data: SectionInsert) : Promise<Section> {
+        try {
+            return this.queryDB(async db => {
+                return db.transaction(async tx => {
+                    // TODO: Reorder order numbers...
+                    const res = await tx.update(sectionsTable).set(data).returning();
+                    if (res.length === 0) throw new Error("Section not created!");
+                    return res[0];
+                })
+            })
+        } catch(e) {
+            throw new DatabaseError(`Failed to create section! ${e}`)
+        }
+    }
+
+    deleteSection(sectionId: string) : Promise<void> {
+        try {
+            return this.queryDB(async db => {
+                return db.transaction(async tx => {
+                    const sectionToDelete = await tx.select().from(sectionsTable).where(eq(sectionsTable.id, sectionId)).then(rows => rows[0]);
+
+                    if (!sectionToDelete) throw new Error("Section not found!");
+
+                    await tx.delete(sectionsTable).where(eq(sectionsTable.id, sectionId));
+
+                    await tx.update(sectionsTable)
+                        .set({
+                            order_number: sql`${sectionsTable.order_number} - 1`
+                        })
+                        .where(gt(sectionsTable.order_number, sectionToDelete.order_number));
+                })
+            })
+        } catch(e) {
+            throw new DatabaseError(`Failed to delete section! ${e}`)
+        }
+    }
+
+    deleteMultipleSections(sectionIds: string[]) : Promise<void> {
+        try {
+            return this.queryDB(async db => {
+                return db.transaction(async tx => {
+                    await tx.delete(sectionsTable).where(inArray(sectionsTable.id, sectionIds));
+
+                    const remainingSections = await tx.select().from(sectionsTable).then(rows => rows.sort((a, b) => a.order_number - b.order_number));
+
+                    const updates: Promise<any>[] = [];
+                    for (let i = 0; i < remainingSections.length; i++) {
+                        if (remainingSections[i].order_number !== i) {
+                            updates.push(
+                                tx.update(sectionsTable).set({order_number: i}).where(eq(sectionsTable.id, remainingSections[i].id))
+                            )
+                        }
+                    }
+
+                    await Promise.all(updates);
+                })
+            })
+        } catch(e) {
+            throw new DatabaseError(`Failed to delete multiple sections! ${e}`)
+        }
+    }
 }
