@@ -44,7 +44,8 @@ export default function AdminModulesTable() {
     const {mutate: deleteModulesMethod, isLoading: isDeletingModules} = useErrorMutation({
         mutationFn: (moduleIds: string[]) => deleteModules(moduleIds),
         onSuccess() {
-            queryClient.refetchQueries(["allModules"])
+            queryClient.refetchQueries(["allModules"]);
+            toast.success("Избраните модули са изтрити успешно!");
         },
         onError() {
             toast.error("Модулите не можаха да бъдат изтрити!");

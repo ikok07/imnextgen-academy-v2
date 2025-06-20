@@ -7,6 +7,10 @@ import {useAdminManageModule} from "@/app/_providers/AdminManageModuleProvider";
 import {Module} from "@/drizzle/schema/modules";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/app/_components/ui/shadcn/tooltip";
 import {useEffect, useState} from "react";
+import AdminModuleManageDetailsSkeleton
+    from "@/app/_components/dashboard/admin/media/modules/manage-page/skeletons/AdminModuleManageDetailsSkeleton";
+import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
+import {IoAlbums} from "react-icons/io5";
 
 type AdminModuleManageDetailsContainerProps = {
     allModules: Module[]
@@ -20,9 +24,16 @@ export default function AdminModuleManageDetailsContainer({allModules}: AdminMod
         if (!editMode) setImageSizeError(false);
     }, [editMode]);
 
-    if (!module) return;
+    if (isLoadingModule) return <AdminModuleManageDetailsSkeleton />
 
-    return <div className="grid grid-cols-[1fr_2fr] gap-x-4 mt-4">
+    if (!module) return <PrimaryErrorMessage
+        Icon={IoAlbums}
+        title="Възникна грешка"
+        message="Данните за модула не можаха да бъдат заредени"
+        className="my-5"
+    />;
+
+    return <div className="grid lg:grid-cols-[1fr_2fr] gap-4 mt-4">
         <div className="flex flex-col items-center">
             <div className="relative w-full aspect-video rounded-lg overflow-hidden">
                 {editMode &&

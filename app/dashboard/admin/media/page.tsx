@@ -3,11 +3,11 @@ import AdminModulesTable from "@/app/_components/dashboard/admin/media/modules/A
 
 // DONE: 1. Finish module creation
 // DONE: 2. Add delete module functionality
-// TODO: 3. Create module details page
+// DONE: 3. Create module details page
 // DONE: 3.1 Add update module's image option
-// TODO: 4. List sections for module
-// TODO: 5. Make design responsive
-// TODO: 6. Add skeletons to module details page
+// DONE: 4. List sections for module
+// DONE: 5. Make design responsive
+// DONE: 6. Add skeletons to module details page
 // TODO: 7. Add section creation and deletion functionality
 
 export default function Page() {
