@@ -81,13 +81,31 @@ export class ModulesRepository extends BaseRepository implements IModulesReposit
                     const moduleToUpdate = await tx.select().from(modulesTable).where(eq(modulesTable.id, moduleId)).then(rows => rows[0]);
                     if (!moduleToUpdate) throw new Error("Module not found!");
 
-                    const moduleToReorder = data.order_number !== undefined && data.order_number !== null ? await tx.select().from(modulesTable).where(eq(modulesTable.order_number, data.order_number)).then(rows => rows[0]) : undefined;
+                    const res = await tx.update(modulesTable).set(data).where(eq(modulesTable.id, moduleId)).returning();
+
                     if (data.order_number !== undefined && data.order_number !== null) {
-                        if (!moduleToReorder) throw new Error("The module on the target order number could not be found!");
-                        await tx.update(modulesTable).set({order_number: moduleToUpdate.order_number}).where(eq(modulesTable.id, moduleToReorder.id));
+                        const newNumberIsHigher = data.order_number > moduleToUpdate.order_number;
+                        // Sort the updated modules in the right order
+                        const updatedModules = await tx.select().from(modulesTable).then(rows => rows.sort((a, b) => {
+                            if (a.order_number === data.order_number && b.order_number === data.order_number) {
+                                if (newNumberIsHigher) {
+                                    // Updated module is in front of the other duplicate
+                                    return a.id === moduleId ? 1 : -1;
+                                } else {
+                                    // Updated module is behind the other duplicate
+                                    return a.id === moduleId ? -1 : 1;
+                                }
+                            }
+
+                            return a.order_number - b.order_number;
+                        }));
+
+                        for (let i = 0; i < updatedModules.length; i++) {
+                            await tx.update(modulesTable).set({order_number: i}).where(eq(modulesTable.id, updatedModules[i].id));
+                        }
                     }
 
-                    return tx.update(modulesTable).set(data).where(eq(modulesTable.id, moduleId)).returning();
+                    return res;
                 });
             });
             if (res.length === 0) throw new Error("Failed to update module in database!");
