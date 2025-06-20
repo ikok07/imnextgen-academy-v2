@@ -2,7 +2,7 @@ import {BaseRepository} from "@/src/infrastructure/repositories/base-class.repos
 import {ISectionsRepository} from "@/src/application/repositories/media/sections/sections.repository.interface";
 import {Section, SectionInsert, sectionsTable} from "@/drizzle/schema/sections";
 import { DatabaseError } from "@/src/entities/errors/db/database";
-import {eq, gt, inArray, sql} from "drizzle-orm";
+import {and, eq, gt, inArray, sql} from "drizzle-orm";
 
 export class SectionsRepository extends BaseRepository implements ISectionsRepository {
     getSectionById(sectionId: string) : Promise<Section> {
@@ -58,7 +58,7 @@ export class SectionsRepository extends BaseRepository implements ISectionsRepos
         }
     }
 
-    deleteSection(sectionId: string) : Promise<void> {
+    deleteSection(moduleId: string, sectionId: string) : Promise<void> {
         try {
             return this.queryDB(async db => {
                 return db.transaction(async tx => {
@@ -72,7 +72,7 @@ export class SectionsRepository extends BaseRepository implements ISectionsRepos
                         .set({
                             order_number: sql`${sectionsTable.order_number} - 1`
                         })
-                        .where(gt(sectionsTable.order_number, sectionToDelete.order_number));
+                        .where(and(eq(sectionsTable.module_id, moduleId), gt(sectionsTable.order_number, sectionToDelete.order_number)));
                 })
             })
         } catch(e) {
@@ -80,13 +80,13 @@ export class SectionsRepository extends BaseRepository implements ISectionsRepos
         }
     }
 
-    deleteMultipleSections(sectionIds: string[]) : Promise<void> {
+    deleteMultipleSections(moduleId: string, sectionIds: string[]) : Promise<void> {
         try {
             return this.queryDB(async db => {
                 return db.transaction(async tx => {
-                    await tx.delete(sectionsTable).where(inArray(sectionsTable.id, sectionIds));
+                    await tx.delete(sectionsTable).where(inArray(sectionsTable.id, sectionIds)).returning();
 
-                    const remainingSections = await tx.select().from(sectionsTable).then(rows => rows.sort((a, b) => a.order_number - b.order_number));
+                    const remainingSections = await tx.select().from(sectionsTable).where(eq(sectionsTable.module_id, moduleId)).then(rows => rows.sort((a, b) => a.order_number - b.order_number));
 
                     const updates: Promise<any>[] = [];
                     for (let i = 0; i < remainingSections.length; i++) {
@@ -98,7 +98,7 @@ export class SectionsRepository extends BaseRepository implements ISectionsRepos
                     }
 
                     await Promise.all(updates);
-                })
+                });
             })
         } catch(e) {
             throw new DatabaseError(`Failed to delete multiple sections! ${e}`)
