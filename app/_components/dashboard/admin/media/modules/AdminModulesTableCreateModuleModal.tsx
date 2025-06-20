@@ -5,7 +5,7 @@ import {moduleAccessEnum, moduleAccessEnumSchema} from "@/drizzle/schema/modules
 import PrimarySelect from "@/app/_components/ui/inputs/PrimarySelect";
 import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
 import {IoClose, IoCloudUpload} from "react-icons/io5";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {z} from "zod";
 import {handleParse, trackErrors} from "@/app/_utils/handleInputValidation";
 import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
@@ -26,8 +26,9 @@ export default function AdminModulesTableCreateModuleModal({onClose}: AdminModul
     const [title, setTitle] = useState<string | null>(null);
     const [description, setDescription] = useState<string | null>(null);
     const [accessLevel, setAccessLevel] = useState<z.infer<typeof moduleAccessEnumSchema> | null>(null);
-
     const [errors, setErrors] = useState<string[]>([]);
+
+    const [imageSizeError, setImageSizeError] = useState(false);
 
     const {mutate: uploadModuleMethod, isLoading: isUploadingModule} = useErrorMutation({
         mutationFn: async () => {
@@ -65,11 +66,16 @@ export default function AdminModulesTableCreateModuleModal({onClose}: AdminModul
             onChange={(e) => {
                 const file = e.target.files ? e.target.files[0] : null;
                 if (!file || !["image/png", "image/jpeg", "image/webp"].includes(file.type)) return;
-                setImageFile(file)
+                if (file.size > 300_000) {
+                    setImageSizeError(true)
+                } else {
+                    setImageSizeError(false);
+                    setImageFile(file);
+                }
             }}
         />
         <label htmlFor="image-upload">
-            <div className="cursor-pointer aspect-video rounded-lg my-4 hover:opacity-70 transition-all duration-200">
+            <div className="cursor-pointer aspect-video rounded-lg overflow-hidden my-4 hover:opacity-70 transition-all duration-200">
                 {imageFile ?
                     <img src={URL.createObjectURL(imageFile)} alt={imageFile.name} className="w-full h-full object-cover" />
                     :
@@ -82,6 +88,7 @@ export default function AdminModulesTableCreateModuleModal({onClose}: AdminModul
                         descriptionClassName="text-[0.85rem] xs:text-sm"
                     />}
             </div>
+            {imageSizeError && <p className="text-xs text-red-500" >Снимката не трябва да надвишава 300kb!</p>}
         </label>
         <div className="space-y-2 text-left">
             <PrimaryInput

@@ -11,6 +11,7 @@ export const uploadModule = createServerAction(async (opts:{imgFileBuffer: Uint8
     accessLevel: z.infer<typeof moduleAccessEnumSchema> | undefined | null
 }) => {
     try {
+        if (opts.imgFileBuffer && opts.imgFileBuffer.length > 300_000) throw new ServerActionError({id: "image-size", message: "Снимката не трябва да надвишава 300kb!"});
         const imgURI = await getInjection("IUploadSmallFileController")({
             bucket: process.env.R2_MODULES_IMAGES_BUCKET,
             key: opts.fileName ? `${Math.floor(Date.now() / 1000)}-${opts.fileName}` : undefined,
