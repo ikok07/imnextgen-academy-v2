@@ -4,6 +4,6 @@ export type IDeleteMultipleSectionsUseCase = ReturnType<typeof deleteMultipleSec
 
 export const deleteMultipleSectionsUseCase = (
     sectionsRepository: ISectionsRepository
-) => async (sectionIds: string[]) => {
-    return sectionsRepository.deleteMultipleSections(sectionIds)
+) => async (moduleId: string, sectionIds: string[]) => {
+    return sectionsRepository.deleteMultipleSections(moduleId, sectionIds)
 }

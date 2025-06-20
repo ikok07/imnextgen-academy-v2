@@ -5,6 +5,6 @@ export interface ISectionsRepository {
     getSectionsForModule(moduleId: string): Promise<Section[]>
     createSection(data: SectionInsert) : Promise<Section>
     updateSection(data: SectionInsert) : Promise<Section>
-    deleteSection(sectionId: string) : Promise<void>
-    deleteMultipleSections(sectionIds: string[]) : Promise<void>
+    deleteSection(moduleId: string, sectionId: string) : Promise<void>
+    deleteMultipleSections(moduleId: string, sectionIds: string[]) : Promise<void>
 }

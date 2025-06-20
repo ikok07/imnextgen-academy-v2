@@ -4,6 +4,6 @@ export type IDeleteSectionUseCase = ReturnType<typeof deleteSectionUseCase>;
 
 export const deleteSectionUseCase = (
     sectionsRepository: ISectionsRepository
-) => async (sectionId: string) => {
-    return sectionsRepository.deleteSection(sectionId);
+) => async (moduleId: string, sectionId: string) => {
+    return sectionsRepository.deleteSection(moduleId, sectionId);
 }
