@@ -11,7 +11,6 @@ import {
 } from "@/src/interface-adapters/controllers/media/videos/get-videos-for-section.controller";
 import {getVideoByIdUseCase} from "@/src/application/use-cases/media/videos/get-video-by-id.use-case";
 import {getVideoByIdController} from "@/src/interface-adapters/controllers/media/videos/get-video-by-id.controller";
-import {IVideosService} from "@/src/application/services/media/videos/videos.service.interface";
 import {MuxService} from "@/src/infrastructure/services/media/videos/mux.service";
 import {
     getSignedTokensController
@@ -52,6 +51,12 @@ import {deleteMultipleVideosUseCase} from "@/src/application/use-cases/media/vid
 import {
     deleteMultipleVideosController
 } from "@/src/interface-adapters/controllers/media/videos/delete-multiple-videos.controller";
+import {getUploadLinkUseCase} from "@/src/application/use-cases/media/videos/videos-service/get-upload-link.use-case";
+import {
+    getUploadLinkController
+} from "@/src/interface-adapters/controllers/media/videos/videos-service/get-upload-link.controller";
+import {deleteVideoUseCase as deleteVideoServiceVideoUseCase} from "@/src/application/use-cases/media/videos/videos-service/delete-video.use-case";
+import {deleteVideoController as deleteVideoServiceVideoController} from "@/src/interface-adapters/controllers/media/videos/videos-service/delete-video.controller";
 
 export function createVideosModule() {
     const videosModule = createModule();
@@ -127,6 +132,22 @@ export function createVideosModule() {
     videosModule
         .bind(DI_SYMBOLS.IGetSignedTokensController)
         .toHigherOrderFunction(getSignedTokensController, [DI_SYMBOLS.IGetSignedTokensUseCase]);
+
+    videosModule
+        .bind(DI_SYMBOLS.IGetUploadLinkUseCase)
+        .toHigherOrderFunction(getUploadLinkUseCase, [DI_SYMBOLS.IVideosService]);
+
+    videosModule
+        .bind(DI_SYMBOLS.IGetUploadLinkController)
+        .toHigherOrderFunction(getUploadLinkController, [DI_SYMBOLS.IGetUploadLinkUseCase]);
+
+    videosModule
+        .bind(DI_SYMBOLS.IDeleteVideoServiceVideoUseCase)
+        .toHigherOrderFunction(deleteVideoServiceVideoUseCase, [DI_SYMBOLS.IVideosService]);
+
+    videosModule
+        .bind(DI_SYMBOLS.IDeleteVideoServiceVideoController)
+        .toHigherOrderFunction(deleteVideoServiceVideoController, [DI_SYMBOLS.IDeleteVideoServiceVideoUseCase]);
 
     videosModule
         .bind(DI_SYMBOLS.IVideoProgressesRepository)
