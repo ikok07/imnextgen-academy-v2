@@ -41,6 +41,13 @@ import { IDeleteVideoController } from "@/src/interface-adapters/controllers/med
 import { IDeleteMultipleVideosUseCase } from "@/src/application/use-cases/media/videos/delete-multiple-videos.use-case";
 import { IDeleteMultipleVideosController } from "@/src/interface-adapters/controllers/media/videos/delete-multiple-videos.controller";
 import { ICreateVideoController } from "@/src/interface-adapters/controllers/media/videos/create-video.controller";
+import { IGetUploadLinkUseCase } from "@/src/application/use-cases/media/videos/videos-service/get-upload-link.use-case";
+import {
+    IGetUploadLinkController
+} from "@/src/interface-adapters/controllers/media/videos/videos-service/get-upload-link.controller";
+
+import { IDeleteVideoUseCase as IDeleteVideoServiceVideoUseCase } from "@/src/application/use-cases/media/videos/videos-service/delete-video.use-case";
+import { IDeleteVideoController as IDeleteVideoServiceVideoController } from "@/src/interface-adapters/controllers/media/videos/videos-service/delete-video.controller";
 
 export const CLASSROOM_VIDEOS_SYMBOLS = {
     IVideosService: Symbol.for("IVideosService"),
@@ -69,6 +76,12 @@ export const CLASSROOM_VIDEOS_SYMBOLS = {
 
     IGetSignedTokensUseCase: Symbol.for("IGetSignedTokensUseCase"),
     IGetSignedTokensController: Symbol.for("IGetSignedTokensController"),
+
+    IGetUploadLinkUseCase: Symbol.for("IGetUploadLinkUseCase"),
+    IGetUploadLinkController: Symbol.for("IGetUploadLinkController"),
+
+    IDeleteVideoServiceVideoUseCase: Symbol.for("IDeleteVideoServiceVideoUseCase"),
+    IDeleteVideoServiceVideoController: Symbol.for("IDeleteVideoServiceVideoController"),
 
     IVideoProgressesRepository: Symbol.for("IVideoProgressesRepository"),
 
@@ -112,6 +125,12 @@ export interface CLASSROOM_VIDEOS_RETURN_TYPES {
 
     IGetSignedTokensUseCase: IGetSignedTokensUseCase,
     IGetSignedTokensController: IGetSignedTokensController,
+
+    IGetUploadLinkUseCase: IGetUploadLinkUseCase,
+    IGetUploadLinkController: IGetUploadLinkController,
+
+    IDeleteVideoServiceVideoUseCase: IDeleteVideoServiceVideoUseCase,
+    IDeleteVideoServiceVideoController: IDeleteVideoServiceVideoController,
 
     IVideoProgressesRepository: IVideoProgressesRepository,
 
