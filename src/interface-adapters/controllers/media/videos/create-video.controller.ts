@@ -6,10 +6,12 @@ export type ICreateVideoController = ReturnType<typeof createVideoController>;
 
 export const createVideoController = (
     createVideoUseCase: ICreateVideoUseCase
-) => async (data: Partial<VideoInsert>) => {
+) => async (moduleId: string | undefined, data: Partial<VideoInsert>) => {
+
+    if (!moduleId) throw new InputParseError("Invalid moduleId!");
 
     const {data: parsedData, error} = videosInsertSchema.safeParse(data);
     if (error) throw new InputParseError(`Invalid options! ${error}`);
 
-    return createVideoUseCase(parsedData);
+    return createVideoUseCase(moduleId, parsedData);
 }
