@@ -67,6 +67,10 @@ import {getUploadDataUseCase} from "@/src/application/use-cases/media/videos/vid
 import {
     getUploadDataController
 } from "@/src/interface-adapters/controllers/media/videos/videos-service/get-upload-data.controller";
+import {getAssetByIdUseCase} from "@/src/application/use-cases/media/videos/videos-service/get-asset-by-id.use-case";
+import {
+    getAssetByIdController
+} from "@/src/interface-adapters/controllers/media/videos/videos-service/get-asset-by-id.controller";
 
 export function createVideosModule() {
     const videosModule = createModule();
@@ -144,14 +148,6 @@ export function createVideosModule() {
         .toHigherOrderFunction(getSignedTokensController, [DI_SYMBOLS.IGetSignedTokensUseCase]);
 
     videosModule
-        .bind(DI_SYMBOLS.IGetUploadDataUseCase)
-        .toHigherOrderFunction(getUploadDataUseCase, [DI_SYMBOLS.IVideosService]);
-
-    videosModule
-        .bind(DI_SYMBOLS.IGetUploadDataController)
-        .toHigherOrderFunction(getUploadDataController, [DI_SYMBOLS.IGetUploadDataUseCase]);
-
-    videosModule
         .bind(DI_SYMBOLS.IGetUploadLinkUseCase)
         .toHigherOrderFunction(getUploadLinkUseCase, [DI_SYMBOLS.IVideosService]);
 
@@ -160,8 +156,20 @@ export function createVideosModule() {
         .toHigherOrderFunction(getUploadLinkController, [DI_SYMBOLS.IGetUploadLinkUseCase]);
 
     videosModule
-        .bind(DI_SYMBOLS.IDeleteVideoServiceVideoUseCase)
-        .toHigherOrderFunction(deleteVideoServiceVideoUseCase, [DI_SYMBOLS.IVideosService]);
+        .bind(DI_SYMBOLS.IGetUploadDataUseCase)
+        .toHigherOrderFunction(getUploadDataUseCase, [DI_SYMBOLS.IVideosService]);
+
+    videosModule
+        .bind(DI_SYMBOLS.IGetUploadDataController)
+        .toHigherOrderFunction(getUploadDataController, [DI_SYMBOLS.IGetUploadDataUseCase]);
+
+    videosModule
+        .bind(DI_SYMBOLS.IGetAssetByIdUseCase)
+        .toHigherOrderFunction(getAssetByIdUseCase, [DI_SYMBOLS.IVideosService]);
+
+    videosModule
+        .bind(DI_SYMBOLS.IGetAssetByIdController)
+        .toHigherOrderFunction(getAssetByIdController, [DI_SYMBOLS.IGetAssetByIdUseCase]);
 
     videosModule
         .bind(DI_SYMBOLS.IUpdateAssetMetadataUseCase)
@@ -170,6 +178,10 @@ export function createVideosModule() {
     videosModule
         .bind(DI_SYMBOLS.IUpdateAssetMetadataController)
         .toHigherOrderFunction(updateAssetMetadataController, [DI_SYMBOLS.IUpdateAssetMetadataUseCase]);
+
+    videosModule
+        .bind(DI_SYMBOLS.IDeleteVideoServiceVideoUseCase)
+        .toHigherOrderFunction(deleteVideoServiceVideoUseCase, [DI_SYMBOLS.IVideosService]);
 
     videosModule
         .bind(DI_SYMBOLS.IDeleteVideoServiceVideoController)

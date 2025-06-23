@@ -25,8 +25,9 @@ export type AssetMetadata = z.infer<typeof assetMetadataSchema>;
 
 export interface IVideosService {
     getSignedTokens(playbackId: string, types: (keyof typeof TypeClaim)[]): Promise<Map<keyof typeof TypeClaim, string>>
-    getUploadData(uploadId: string): Promise<Mux.Video.Uploads.Upload>
     getUploadLink(opts: GetUploadLinkOptions): Promise<GetUploadLinkResponse>;
+    getUploadData(uploadId: string): Promise<Mux.Video.Uploads.Upload>
+    getAssetById(assetId: string): Promise<Mux.Video.Asset>
     updateAssetMetadata(assetId: string, options: AssetMetadata): Promise<void>
     deleteVideo(assetId: string): Promise<void>
 }

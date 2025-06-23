@@ -54,6 +54,10 @@ import { IGetUploadDataUseCase } from "@/src/application/use-cases/media/videos/
 import {
     IGetUploadDataController
 } from "@/src/interface-adapters/controllers/media/videos/videos-service/get-upload-data.controller";
+import {IGetAssetByIdUseCase} from "@/src/application/use-cases/media/videos/videos-service/get-asset-by-id.use-case";
+import {
+    IGetAssetByIdController
+} from "@/src/interface-adapters/controllers/media/videos/videos-service/get-asset-by-id.controller";
 
 export const CLASSROOM_VIDEOS_SYMBOLS = {
     IVideosService: Symbol.for("IVideosService"),
@@ -85,6 +89,9 @@ export const CLASSROOM_VIDEOS_SYMBOLS = {
 
     IGetUploadDataUseCase: Symbol.for("IGetUploadDataUseCase"),
     IGetUploadDataController: Symbol.for("IGetUploadDataController"),
+
+    IGetAssetByIdUseCase: Symbol.for("IGetAssetByIdUseCase"),
+    IGetAssetByIdController: Symbol.for('IGetAssetByIdController'),
 
     IGetUploadLinkUseCase: Symbol.for("IGetUploadLinkUseCase"),
     IGetUploadLinkController: Symbol.for("IGetUploadLinkController"),
@@ -138,11 +145,14 @@ export interface CLASSROOM_VIDEOS_RETURN_TYPES {
     IGetSignedTokensUseCase: IGetSignedTokensUseCase,
     IGetSignedTokensController: IGetSignedTokensController,
 
+    IGetUploadLinkUseCase: IGetUploadLinkUseCase,
+    IGetUploadLinkController: IGetUploadLinkController,
+
     IGetUploadDataUseCase: IGetUploadDataUseCase,
     IGetUploadDataController: IGetUploadDataController,
 
-    IGetUploadLinkUseCase: IGetUploadLinkUseCase,
-    IGetUploadLinkController: IGetUploadLinkController,
+    IGetAssetByIdUseCase: IGetAssetByIdUseCase,
+    IGetAssetByIdController: IGetAssetByIdController,
 
     IUpdateAssetMetadataUseCase: IUpdateAssetMetadataUseCase,
     IUpdateAssetMetadataController: IUpdateAssetMetadataController,
