@@ -44,7 +44,7 @@ export class SectionsRepository extends BaseRepository implements ISectionsRepos
         }
     }
 
-    updateSection(sectionId: string, data: Partial<SectionInsert>) : Promise<Section> {
+    updateSection(sectionId: string, moduleId: string, data: Partial<SectionInsert>) : Promise<Section> {
         try {
             return this.queryDB(async db => {
                 return db.transaction(async tx => {
@@ -57,7 +57,7 @@ export class SectionsRepository extends BaseRepository implements ISectionsRepos
                     if (data.order_number !== undefined && data.order_number !== null) {
                         const newNumberIsHigher = data.order_number > sectionToUpdate.order_number;
                         // Sort the updated modules in the right order
-                        const updatedSections = await tx.select().from(sectionsTable).then(rows => rows.sort((a, b) => {
+                        const updatedSections = await tx.select().from(sectionsTable).where(eq(sectionsTable.module_id, moduleId)).then(rows => rows.sort((a, b) => {
                             if (a.order_number === data.order_number && b.order_number === data.order_number) {
                                 if (newNumberIsHigher) {
                                     // Updated module is in front of the other duplicate
