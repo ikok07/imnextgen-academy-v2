@@ -3,7 +3,7 @@
 import {ReactNode, useEffect} from "react";
 import {useBreadcrumb} from "@/app/_providers/BreadcrumbProvider";
 import {Module} from "@/drizzle/schema/modules";
-import {AdminManageModuleProvider} from "@/app/_providers/AdminManageModuleProvider";
+import {AdminManageModuleProvider} from "@/app/_providers/admin/AdminManageModuleProvider";
 
 type AdminModuleManageClientWrapperProps = {
     module: Module,

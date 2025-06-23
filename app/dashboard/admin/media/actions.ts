@@ -49,4 +49,20 @@ export const deleteModules = createServerAction(async (moduleIds: string[]) => {
             keys: imagePaths
         });
     }
-})
+});
+
+export const getVideoDescriptions = createServerAction(() => {
+    return getInjection("IGetVideoDescriptionsController")();
+});
+
+export const getUploadVideoUrl = createServerAction(() => {
+    return getInjection("IGetUploadLinkController")({
+        maxResolutionTier: "1080p",
+        videoQuality: "basic",
+        playbackPolicy: ["signed"]
+    });
+});
+
+export const deleteVideo = createServerAction((assetId: string | undefined) => {
+    return getInjection("IDeleteVideoServiceVideoController")(assetId);
+});

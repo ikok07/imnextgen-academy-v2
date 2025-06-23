@@ -3,7 +3,7 @@
 import Image from "next/image";
 import AdminModulesManagePageProperties
     from "@/app/_components/dashboard/admin/media/modules/manage-page/AdminModulesManagePageProperties";
-import {useAdminManageModule} from "@/app/_providers/AdminManageModuleProvider";
+import {useAdminManageModule} from "@/app/_providers/admin/AdminManageModuleProvider";
 import {Module, moduleAccessEnumSchema} from "@/drizzle/schema/modules";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/app/_components/ui/shadcn/tooltip";
 import {ChangeEvent, useEffect, useState} from "react";

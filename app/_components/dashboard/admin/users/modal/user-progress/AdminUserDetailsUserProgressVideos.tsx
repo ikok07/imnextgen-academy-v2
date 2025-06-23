@@ -6,7 +6,7 @@ import AdminUserDetailsUserProgressSectionRowSkeleton
     from "@/app/_components/dashboard/admin/users/modal/user-progress/skeletons/AdminUserDetailsUserProgressSectionRowSkeleton";
 import AdminUserDetailsUserProgressVideoRow
     from "@/app/_components/dashboard/admin/users/modal/user-progress/AdminUserDetailsUserProgressVideoRow";
-import {useUserProgress} from "@/app/_providers/UserProgressProvider";
+import {useUserProgress} from "@/app/_providers/admin/UserProgressProvider";
 
 type AdminUserDetailsUserProgressVideosProps = {
     userId: string,

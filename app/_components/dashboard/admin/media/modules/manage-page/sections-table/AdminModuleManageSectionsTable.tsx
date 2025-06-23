@@ -76,7 +76,7 @@ export default function AdminModuleManageSectionsTable({moduleId, allSections}: 
         columnHelper.display({
             id: "open_btn",
             cell: ({row}) => {
-                return <div className="flex items-center justify-center"><SecondaryButton onClick={() => router.push(Routes.dashboard.admin.media())}>Управление</SecondaryButton></div>
+                return <div className="flex items-center justify-center"><SecondaryButton onClick={() => router.push(Routes.dashboard.admin.section(moduleId, row.original.id))}>Управление</SecondaryButton></div>
             },
             enableResizing: false
         })

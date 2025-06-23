@@ -6,7 +6,7 @@ import {getModuleAccessLabel} from "@/app/_utils/modules/getModuleAccessLabel";
 import {Module, moduleAccessEnumSchema} from "@/drizzle/schema/modules";
 import {ChangeEvent, useEffect, useState} from "react";
 import PrimarySelect from "@/app/_components/ui/inputs/PrimarySelect";
-import {useAdminManageModule} from "@/app/_providers/AdminManageModuleProvider";
+import {useAdminManageModule} from "@/app/_providers/admin/AdminManageModuleProvider";
 import PrimaryInput from "@/app/_components/ui/inputs/PrimaryInput";
 import {handleParse, trackErrors} from "@/app/_utils/handleInputValidation";
 import {z} from "zod";

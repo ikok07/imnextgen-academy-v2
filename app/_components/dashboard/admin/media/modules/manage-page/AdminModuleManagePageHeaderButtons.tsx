@@ -4,7 +4,7 @@ import SecondaryButton from "@/app/_components/ui/buttons/SecondaryButton";
 import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
 import {useRouter} from "next/navigation";
 import {Routes} from "@/app/_utils/nav/routes";
-import {useAdminManageModule} from "@/app/_providers/AdminManageModuleProvider";
+import {useAdminManageModule} from "@/app/_providers/admin/AdminManageModuleProvider";
 import useErrorMutation from "@/app/_hooks/useErrorMutation";
 import {updateModule} from "@/app/dashboard/admin/media/module/[id]/actions";
 import {z} from "zod";
