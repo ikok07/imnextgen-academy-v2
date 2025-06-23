@@ -5,6 +5,6 @@ export type ICreateVideoUseCase = ReturnType<typeof createVideoUseCase>;
 
 export const createVideoUseCase = (
     videosRepository: IVideosRepository
-) => async (data: VideoInsert) => {
-    return videosRepository.createVideo(data);
+) => async (moduleId: string, data: VideoInsert) => {
+    return videosRepository.createVideo(moduleId, data);
 }

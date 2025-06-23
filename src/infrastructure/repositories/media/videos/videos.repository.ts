@@ -6,7 +6,7 @@ import {
 import {Video, VideoInsert, videosTable} from "@/drizzle/schema/videos";
 import { DatabaseError } from "@/src/entities/errors/db/database";
 import {sectionsTable} from "@/drizzle/schema/sections";
-import {and, eq, exists, gt, inArray, sql} from "drizzle-orm";
+import {and, eq, exists, gt, gte, inArray, sql} from "drizzle-orm";
 import {modulesTable} from "@/drizzle/schema/modules";
 import {videoDescriptionsTable} from "@/drizzle/schema/video_descriptions";
 import {videoChaptersTable} from "@/drizzle/schema/video_chapters";
@@ -68,12 +68,32 @@ export class VideosRepository extends BaseRepository implements IVideosRepositor
         }
     }
 
-    createVideo(data: VideoInsert): Promise<Video> {
+    createVideo(moduleId: string, data: VideoInsert): Promise<Video> {
         try {
             return this.queryDB(async db => {
-                const res = await db.insert(videosTable).values(data).returning()
-                if (res.length === 0) throw new Error("Video not created!");
-                return res[0];
+                return db.transaction(async tx => {
+                    await tx.update(videosTable)
+                        .set({
+                            order_number: sql`${videosTable.order_number} + 1`
+                        })
+                        .where(
+                            and(
+                                exists(
+                                    tx.select().from(sectionsTable)
+                                        .where(and(
+                                            eq(sectionsTable.id, videosTable.section_id),
+                                            eq(sectionsTable.module_id, moduleId)
+                                        ))
+                                ),
+                                gte(videosTable.order_number, data.order_number)
+                            )
+                        );
+
+                    const res = await tx.insert(videosTable).values(data).returning()
+                    if (res.length === 0) throw new Error("Video not created!");
+
+                    return res[0];
+                })
             })
         } catch(e) {
             throw new DatabaseError(`Failed to create video! ${e}`)
