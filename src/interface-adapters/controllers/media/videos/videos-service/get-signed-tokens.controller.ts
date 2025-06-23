@@ -1,4 +1,4 @@
-import {IGetSignedTokensUseCase} from "@/src/application/use-cases/media/videos/get-signed-tokens.use-case";
+import {IGetSignedTokensUseCase} from "@/src/application/use-cases/media/videos/videos-service/get-signed-tokens.use-case";
 import {TypeClaim} from "@mux/mux-node/util/jwt-types";
 import {InputParseError} from "@/src/entities/errors/common";
 
