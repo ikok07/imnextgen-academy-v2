@@ -21,6 +21,7 @@ import {createCalendarModule} from "@/di/modules/calendar.module";
 import {createGoogleNotificationChannelsModule} from "@/di/modules/google-notification-channels.module";
 import {createAutomationsModule} from "@/di/modules/automations.module";
 import {createStorageModule} from "@/di/modules/storage.module";
+import {createVideoDescriptionsModule} from "@/di/modules/video-descriptions.module";
 
 function loadExternalModules(container: Container) {}
 
@@ -48,6 +49,7 @@ ApplicationContainer.load(Symbol("CalendarModule"), createCalendarModule());
 ApplicationContainer.load(Symbol("GoogleNotificationChannelsModule"), createGoogleNotificationChannelsModule());
 ApplicationContainer.load(Symbol("AutomationsModule"), createAutomationsModule());
 ApplicationContainer.load(Symbol("StorageModule"), createStorageModule());
+ApplicationContainer.load(Symbol("VideoDescriptions"), createVideoDescriptionsModule());
 
 export function getInjection<K extends keyof typeof DI_SYMBOLS>(symbol: K): DI_RETURN_TYPES[K] {
     return ApplicationContainer.get(DI_SYMBOLS[symbol]);
