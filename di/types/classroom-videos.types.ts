@@ -33,6 +33,14 @@ import {
 import {
     IGetVideoProgressByVideoIdController
 } from "@/src/interface-adapters/controllers/media/videos/video-progresses/get-video-progress-by-video-id.controller";
+import {ICreateVideoUseCase } from "@/src/application/use-cases/media/videos/create-video.use-case";
+import { IUpdateVideoUseCase } from "@/src/application/use-cases/media/videos/update-video-use-case";
+import { IUpdateVideoController } from "@/src/interface-adapters/controllers/media/videos/update-video.controller";
+import { IDeleteVideoUseCase } from "@/src/application/use-cases/media/videos/delete-video.use-case";
+import { IDeleteVideoController } from "@/src/interface-adapters/controllers/media/videos/delete-video.controller";
+import { IDeleteMultipleVideosUseCase } from "@/src/application/use-cases/media/videos/delete-multiple-videos.use-case";
+import { IDeleteMultipleVideosController } from "@/src/interface-adapters/controllers/media/videos/delete-multiple-videos.controller";
+import { ICreateVideoController } from "@/src/interface-adapters/controllers/media/videos/create-video.controller";
 
 export const CLASSROOM_VIDEOS_SYMBOLS = {
     IVideosService: Symbol.for("IVideosService"),
@@ -46,6 +54,18 @@ export const CLASSROOM_VIDEOS_SYMBOLS = {
 
     IGetVideoByIdUseCase: Symbol.for("IGetVideoByIdUseCase"),
     IGetVideoByIdController: Symbol.for("IGetVideoByIdController"),
+
+    ICreateVideoUseCase: Symbol.for("ICreateVideoUseCase"),
+    ICreateVideoController: Symbol.for("ICreateVideoController"),
+
+    IUpdateVideoUseCase: Symbol.for("IUpdateVideoUseCase"),
+    IUpdateVideoController: Symbol.for("IUpdateVideoController"),
+
+    IDeleteVideoUseCase: Symbol.for("IDeleteVideoUseCase"),
+    IDeleteVideoController: Symbol.for("IDeleteVideoController"),
+
+    IDeleteMultipleVideosUseCase: Symbol.for("IDeleteMultipleVideosUseCase"),
+    IDeleteMultipleVideosController: Symbol.for("IDeleteMultipleVideosController"),
 
     IGetSignedTokensUseCase: Symbol.for("IGetSignedTokensUseCase"),
     IGetSignedTokensController: Symbol.for("IGetSignedTokensController"),
@@ -77,6 +97,18 @@ export interface CLASSROOM_VIDEOS_RETURN_TYPES {
 
     IGetVideoByIdUseCase: IGetVideoByIdUseCase,
     IGetVideoByIdController: IGetVideoByIdController,
+
+    ICreateVideoUseCase: ICreateVideoUseCase,
+    ICreateVideoController: ICreateVideoController,
+
+    IUpdateVideoUseCase: IUpdateVideoUseCase,
+    IUpdateVideoController: IUpdateVideoController,
+
+    IDeleteVideoUseCase: IDeleteVideoUseCase,
+    IDeleteVideoController: IDeleteVideoController,
+
+    IDeleteMultipleVideosUseCase: IDeleteMultipleVideosUseCase,
+    IDeleteMultipleVideosController: IDeleteMultipleVideosController,
 
     IGetSignedTokensUseCase: IGetSignedTokensUseCase,
     IGetSignedTokensController: IGetSignedTokensController,
