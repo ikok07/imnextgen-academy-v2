@@ -44,7 +44,7 @@ export class SectionsRepository extends BaseRepository implements ISectionsRepos
         }
     }
 
-    updateSection(sectionId: string, data: SectionInsert) : Promise<Section> {
+    updateSection(sectionId: string, data: Partial<SectionInsert>) : Promise<Section> {
         try {
             return this.queryDB(async db => {
                 return db.transaction(async tx => {

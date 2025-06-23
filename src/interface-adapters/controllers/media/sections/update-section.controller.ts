@@ -10,8 +10,5 @@ export const updateSectionController = (
 
     if (!sectionId) throw new InputParseError("Invalid sectiondId!");
 
-    const {data: parsedData, error} = sectionsInsertSchema.safeParse(data);
-    if (error) throw new InputParseError(`Invalid data! ${error}`);
-
-    return updateSectionUseCase(sectionId, parsedData);
+    return updateSectionUseCase(sectionId, data);
 }
