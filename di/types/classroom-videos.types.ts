@@ -50,6 +50,10 @@ import { IDeleteVideoUseCase as IDeleteVideoServiceVideoUseCase } from "@/src/ap
 import { IDeleteVideoController as IDeleteVideoServiceVideoController } from "@/src/interface-adapters/controllers/media/videos/videos-service/delete-video.controller";
 import { IUpdateAssetMetadataUseCase } from "@/src/application/use-cases/media/videos/videos-service/update-asset-metadata.use-case";
 import { IUpdateAssetMetadataController } from "@/src/interface-adapters/controllers/media/videos/videos-service/update-asset-metadata.controller";
+import { IGetUploadDataUseCase } from "@/src/application/use-cases/media/videos/videos-service/get-upload-data.use-case";
+import {
+    IGetUploadDataController
+} from "@/src/interface-adapters/controllers/media/videos/videos-service/get-upload-data.controller";
 
 export const CLASSROOM_VIDEOS_SYMBOLS = {
     IVideosService: Symbol.for("IVideosService"),
@@ -78,6 +82,9 @@ export const CLASSROOM_VIDEOS_SYMBOLS = {
 
     IGetSignedTokensUseCase: Symbol.for("IGetSignedTokensUseCase"),
     IGetSignedTokensController: Symbol.for("IGetSignedTokensController"),
+
+    IGetUploadDataUseCase: Symbol.for("IGetUploadDataUseCase"),
+    IGetUploadDataController: Symbol.for("IGetUploadDataController"),
 
     IGetUploadLinkUseCase: Symbol.for("IGetUploadLinkUseCase"),
     IGetUploadLinkController: Symbol.for("IGetUploadLinkController"),
@@ -130,6 +137,9 @@ export interface CLASSROOM_VIDEOS_RETURN_TYPES {
 
     IGetSignedTokensUseCase: IGetSignedTokensUseCase,
     IGetSignedTokensController: IGetSignedTokensController,
+
+    IGetUploadDataUseCase: IGetUploadDataUseCase,
+    IGetUploadDataController: IGetUploadDataController,
 
     IGetUploadLinkUseCase: IGetUploadLinkUseCase,
     IGetUploadLinkController: IGetUploadLinkController,
