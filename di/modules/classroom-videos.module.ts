@@ -57,6 +57,12 @@ import {
 } from "@/src/interface-adapters/controllers/media/videos/videos-service/get-upload-link.controller";
 import {deleteVideoUseCase as deleteVideoServiceVideoUseCase} from "@/src/application/use-cases/media/videos/videos-service/delete-video.use-case";
 import {deleteVideoController as deleteVideoServiceVideoController} from "@/src/interface-adapters/controllers/media/videos/videos-service/delete-video.controller";
+import {
+    updateAssetMetadataUseCase
+} from "@/src/application/use-cases/media/videos/videos-service/update-asset-metadata.use-case";
+import {
+    updateAssetMetadataController
+} from "@/src/interface-adapters/controllers/media/videos/videos-service/update-asset-metadata.controller";
 
 export function createVideosModule() {
     const videosModule = createModule();
@@ -144,6 +150,14 @@ export function createVideosModule() {
     videosModule
         .bind(DI_SYMBOLS.IDeleteVideoServiceVideoUseCase)
         .toHigherOrderFunction(deleteVideoServiceVideoUseCase, [DI_SYMBOLS.IVideosService]);
+
+    videosModule
+        .bind(DI_SYMBOLS.IUpdateAssetMetadataUseCase)
+        .toHigherOrderFunction(updateAssetMetadataUseCase, [DI_SYMBOLS.IVideosService]);
+
+    videosModule
+        .bind(DI_SYMBOLS.IUpdateAssetMetadataController)
+        .toHigherOrderFunction(updateAssetMetadataController, [DI_SYMBOLS.IUpdateAssetMetadataUseCase]);
 
     videosModule
         .bind(DI_SYMBOLS.IDeleteVideoServiceVideoController)

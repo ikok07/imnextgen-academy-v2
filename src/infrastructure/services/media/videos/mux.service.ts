@@ -1,7 +1,12 @@
-import {GetUploadLinkOptions, IVideosService} from "@/src/application/services/media/videos/videos.service.interface";
+import {
+    AssetMetadata,
+    GetUploadLinkOptions,
+    IVideosService
+} from "@/src/application/services/media/videos/videos.service.interface";
 import {MediaVideoError} from "@/src/entities/errors/media/videos/media-videos";
 import Mux from "@mux/mux-node";
 import {TypeClaim} from "@mux/mux-node/util/jwt-types";
+import axios from "axios";
 
 export class MuxService implements IVideosService {
     mux = new Mux({tokenId: process.env.MUX_TOKEN_ID!, tokenSecret: process.env.MUX_API_TOKEN!});
@@ -36,7 +41,7 @@ export class MuxService implements IVideosService {
                 new_asset_settings: {
                     video_quality: opts.videoQuality,
                     playback_policy: opts.playbackPolicy,
-                    max_resolution_tier: opts.maxResolutionTier
+                    max_resolution_tier: opts.maxResolutionTier,
                 },
                 timeout: 60 * 60 * 3 // Valid 3 hours
             });
@@ -44,6 +49,24 @@ export class MuxService implements IVideosService {
             return res.url;
         } catch (e) {
             throw new MediaVideoError(`Failed to get upload link! ${e}`);
+        }
+    }
+
+    async updateAssetMetadata(assetId: string, {title, creator_id, external_id}: AssetMetadata): Promise<void> {
+        try {
+            await axios.patch(`https://api.mux.com/video/v1/assets/${assetId}`, {
+                meta: {
+                    title,
+                    creator_id,
+                    external_id
+                }
+            }, {
+                headers: {
+                    Authorization: `Basic ${btoa(`${process.env.MUX_TOKEN_ID!}:${process.env.MUX_API_TOKEN!}`)}`
+                }
+            });
+        } catch(e) {
+            throw new MediaVideoError(`Failed to update assets! ${e}`);
         }
     }
 

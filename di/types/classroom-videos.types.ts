@@ -48,6 +48,8 @@ import {
 
 import { IDeleteVideoUseCase as IDeleteVideoServiceVideoUseCase } from "@/src/application/use-cases/media/videos/videos-service/delete-video.use-case";
 import { IDeleteVideoController as IDeleteVideoServiceVideoController } from "@/src/interface-adapters/controllers/media/videos/videos-service/delete-video.controller";
+import { IUpdateAssetMetadataUseCase } from "@/src/application/use-cases/media/videos/videos-service/update-asset-metadata.use-case";
+import { IUpdateAssetMetadataController } from "@/src/interface-adapters/controllers/media/videos/videos-service/update-asset-metadata.controller";
 
 export const CLASSROOM_VIDEOS_SYMBOLS = {
     IVideosService: Symbol.for("IVideosService"),
@@ -79,6 +81,9 @@ export const CLASSROOM_VIDEOS_SYMBOLS = {
 
     IGetUploadLinkUseCase: Symbol.for("IGetUploadLinkUseCase"),
     IGetUploadLinkController: Symbol.for("IGetUploadLinkController"),
+
+    IUpdateAssetMetadataUseCase: Symbol.for("IUpdateAssetMetadataUseCase"),
+    IUpdateAssetMetadataController: Symbol.for("IUpdateAssetMetadataController"),
 
     IDeleteVideoServiceVideoUseCase: Symbol.for("IDeleteVideoServiceVideoUseCase"),
     IDeleteVideoServiceVideoController: Symbol.for("IDeleteVideoServiceVideoController"),
@@ -128,6 +133,9 @@ export interface CLASSROOM_VIDEOS_RETURN_TYPES {
 
     IGetUploadLinkUseCase: IGetUploadLinkUseCase,
     IGetUploadLinkController: IGetUploadLinkController,
+
+    IUpdateAssetMetadataUseCase: IUpdateAssetMetadataUseCase,
+    IUpdateAssetMetadataController: IUpdateAssetMetadataController,
 
     IDeleteVideoServiceVideoUseCase: IDeleteVideoServiceVideoUseCase,
     IDeleteVideoServiceVideoController: IDeleteVideoServiceVideoController,
