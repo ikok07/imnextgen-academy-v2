@@ -63,6 +63,10 @@ import {
 import {
     updateAssetMetadataController
 } from "@/src/interface-adapters/controllers/media/videos/videos-service/update-asset-metadata.controller";
+import {getUploadDataUseCase} from "@/src/application/use-cases/media/videos/videos-service/get-upload-data.use-case";
+import {
+    getUploadDataController
+} from "@/src/interface-adapters/controllers/media/videos/videos-service/get-upload-data.controller";
 
 export function createVideosModule() {
     const videosModule = createModule();
@@ -138,6 +142,14 @@ export function createVideosModule() {
     videosModule
         .bind(DI_SYMBOLS.IGetSignedTokensController)
         .toHigherOrderFunction(getSignedTokensController, [DI_SYMBOLS.IGetSignedTokensUseCase]);
+
+    videosModule
+        .bind(DI_SYMBOLS.IGetUploadDataUseCase)
+        .toHigherOrderFunction(getUploadDataUseCase, [DI_SYMBOLS.IVideosService]);
+
+    videosModule
+        .bind(DI_SYMBOLS.IGetUploadDataController)
+        .toHigherOrderFunction(getUploadDataController, [DI_SYMBOLS.IGetUploadDataUseCase]);
 
     videosModule
         .bind(DI_SYMBOLS.IGetUploadLinkUseCase)

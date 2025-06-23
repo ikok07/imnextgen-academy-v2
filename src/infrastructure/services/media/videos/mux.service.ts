@@ -1,6 +1,6 @@
 import {
     AssetMetadata,
-    GetUploadLinkOptions,
+    GetUploadLinkOptions, GetUploadLinkResponse,
     IVideosService
 } from "@/src/application/services/media/videos/videos.service.interface";
 import {MediaVideoError} from "@/src/entities/errors/media/videos/media-videos";
@@ -34,7 +34,7 @@ export class MuxService implements IVideosService {
         }
     }
 
-    async getUploadLink(opts: GetUploadLinkOptions): Promise<string> {
+    async getUploadLink(opts: GetUploadLinkOptions): Promise<GetUploadLinkResponse> {
         try {
             const res = await this.mux.video.uploads.create({
                 cors_origin: process.env.NEXT_PUBLIC_BASE_URL!,
@@ -46,9 +46,21 @@ export class MuxService implements IVideosService {
                 timeout: 60 * 60 * 3 // Valid 3 hours
             });
             if (res.status === "errored") throw new Error(`URL creation failed! ${JSON.stringify(res)}`);
-            return res.url;
+
+            return {
+                uploadId: res.id,
+                url: res.url
+            };
         } catch (e) {
             throw new MediaVideoError(`Failed to get upload link! ${e}`);
+        }
+    }
+
+    async getUploadData(uploadId: string): Promise<Mux.Video.Uploads.Upload> {
+        try {
+            return this.mux.video.uploads.retrieve(uploadId);
+        } catch (e) {
+            throw new MediaVideoError(`Failed to get upload data! ${e}`);
         }
     }
 
