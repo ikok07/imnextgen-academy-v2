@@ -52,7 +52,7 @@ export class SectionsRepository extends BaseRepository implements ISectionsRepos
                     if (!sectionToUpdate) throw new Error("Section not found!");
 
                     const res = await tx.update(sectionsTable).set(data).where(eq(sectionsTable.id, sectionId)).returning();
-                    if (res.length === 0) throw new Error("Section not created!");
+                    if (res.length === 0) throw new Error("Section not updated!");
 
                     if (data.order_number !== undefined && data.order_number !== null) {
                         const newNumberIsHigher = data.order_number > sectionToUpdate.order_number;
