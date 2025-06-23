@@ -64,6 +64,14 @@ export class MuxService implements IVideosService {
         }
     }
 
+    getAssetById(assetId: string): Promise<Mux.Video.Asset> {
+        try {
+            return this.mux.video.assets.retrieve(assetId);
+        } catch (e) {
+            throw new MediaVideoError(`Failed to get asset by id! ${e}`);
+        }
+    }
+
     async updateAssetMetadata(assetId: string, {title, creator_id, external_id}: AssetMetadata): Promise<void> {
         try {
             await axios.patch(`https://api.mux.com/video/v1/assets/${assetId}`, {
