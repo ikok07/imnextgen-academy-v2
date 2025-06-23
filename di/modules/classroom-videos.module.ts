@@ -15,8 +15,8 @@ import {IVideosService} from "@/src/application/services/media/videos/videos.ser
 import {MuxService} from "@/src/infrastructure/services/media/videos/mux.service";
 import {
     getSignedTokensController
-} from "@/src/interface-adapters/controllers/media/videos/get-signed-tokens.controller";
-import {getSignedTokensUrlUseCase} from "@/src/application/use-cases/media/videos/get-signed-tokens.use-case";
+} from "@/src/interface-adapters/controllers/media/videos/videos-service/get-signed-tokens.controller";
+import {getSignedTokensUrlUseCase} from "@/src/application/use-cases/media/videos/videos-service/get-signed-tokens.use-case";
 import {VideoProgressesRepository} from "@/src/infrastructure/repositories/media/videos/video-progresses.repository";
 import {
     getVideoProgressesForModuleUseCase

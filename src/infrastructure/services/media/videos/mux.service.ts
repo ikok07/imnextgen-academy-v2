@@ -1,4 +1,4 @@
-import {IVideosService} from "@/src/application/services/media/videos/videos.service.interface";
+import {GetUploadLinkOptions, IVideosService} from "@/src/application/services/media/videos/videos.service.interface";
 import {MediaVideoError} from "@/src/entities/errors/media/videos/media-videos";
 import Mux from "@mux/mux-node";
 import {TypeClaim} from "@mux/mux-node/util/jwt-types";
@@ -26,6 +26,32 @@ export class MuxService implements IVideosService {
             return tokens;
         } catch (e) {
             throw new MediaVideoError(`Failed to sign MUX video url: ${e}`);
+        }
+    }
+
+    async getUploadLink(opts: GetUploadLinkOptions): Promise<string> {
+        try {
+            const res = await this.mux.video.uploads.create({
+                cors_origin: process.env.NEXT_PUBLIC_BASE_URL!,
+                new_asset_settings: {
+                    video_quality: opts.videoQuality,
+                    playback_policy: opts.playbackPolicy,
+                    max_resolution_tier: opts.maxResolutionTier
+                },
+                timeout: 60 * 60 * 3 // Valid 3 hours
+            });
+            if (res.status === "errored") throw new Error(`URL creation failed! ${JSON.stringify(res)}`);
+            return res.url;
+        } catch (e) {
+            throw new MediaVideoError(`Failed to get upload link! ${e}`);
+        }
+    }
+
+    async deleteVideo(assetId: string): Promise<void> {
+        try {
+            await this.mux.video.assets.delete(assetId);
+        } catch (e) {
+            throw new MediaVideoError(`Failed to delete video! ${e}`);
         }
     }
 }

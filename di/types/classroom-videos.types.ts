@@ -5,8 +5,8 @@ import { IGetVideosForSectionUseCase } from "@/src/application/use-cases/media/v
 import { IGetVideosForModuleController } from "@/src/interface-adapters/controllers/media/videos/get-videos-for-module.controller";
 import { IGetVideosForSectionController } from "@/src/interface-adapters/controllers/media/videos/get-videos-for-section.controller";
 import {IGetVideoByIdController} from "@/src/interface-adapters/controllers/media/videos/get-video-by-id.controller";
-import {IGetSignedTokensController} from "@/src/interface-adapters/controllers/media/videos/get-signed-tokens.controller";
-import {IGetSignedTokensUseCase,} from "@/src/application/use-cases/media/videos/get-signed-tokens.use-case";
+import {IGetSignedTokensController} from "@/src/interface-adapters/controllers/media/videos/videos-service/get-signed-tokens.controller";
+import {IGetSignedTokensUseCase,} from "@/src/application/use-cases/media/videos/videos-service/get-signed-tokens.use-case";
 import {IVideosService} from "@/src/application/services/media/videos/videos.service.interface";
 import {
     IVideoProgressesRepository
