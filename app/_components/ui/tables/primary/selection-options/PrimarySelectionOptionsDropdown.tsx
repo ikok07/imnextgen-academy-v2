@@ -9,6 +9,7 @@ import {IoMenu, IoTrash} from "react-icons/io5";
 import {useTable} from "@/app/_components/ui/tables/provider/TableProvider";
 import PrimaryAlert from "../../../alerts/PrimaryAlert";
 import {useState} from "react";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/app/_components/ui/shadcn/tooltip";
 
 export default function PrimarySelectionOptionsDropdown() {
     const {table, selectionOptions} = useTable();
@@ -51,10 +52,24 @@ export default function PrimarySelectionOptionsDropdown() {
                 }
                 {selectionOptions.otherOptions?.map((option, index) => {
                     const Icon = option.Icon;
-                    return <DropdownMenuItem onClick={() => option.onClick(table.getSelectedRowModel().rows)} className={`cursor-pointer grid grid-cols-[auto_1fr] ${option.className ?? ""}`} key={index}>
-                        <Icon />
-                        {option.label}
-                    </DropdownMenuItem>
+                    return <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger className="w-full">
+                                <DropdownMenuItem
+                                    disabled={option.disabled}
+                                    onClick={() => option.onClick(table.getSelectedRowModel().rows)}
+                                    className={`${option.disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"} grid grid-cols-[auto_1fr] text-left ${option.className ?? ""}`}
+                                    key={index}
+                                >
+                                    <Icon />
+                                    {option.label}
+                                </DropdownMenuItem>
+                            </TooltipTrigger>
+                            {option.tooltipMessage && <TooltipContent>
+                                <p>{option.tooltipMessage}</p>
+                            </TooltipContent>}
+                        </Tooltip>
+                    </TooltipProvider>
                 })}
             </DropdownMenuContent>
         </DropdownMenu>

@@ -22,6 +22,8 @@ type SelectionEnabledOptions = {
         Icon: IconType,
         label: string,
         onClick: (rows: Row<any>[]) => void,
+        disabled?: boolean,
+        tooltipMessage?: string,
         className?: string
     }[]
 }
