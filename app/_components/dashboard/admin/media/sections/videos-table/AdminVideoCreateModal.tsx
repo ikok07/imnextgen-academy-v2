@@ -12,13 +12,15 @@ import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage
 import {Input} from "@/app/_components/ui/shadcn/input";
 import SelfHostedVideoPlayer from "@/app/_components/ui/players/SelfHostedVideoPlayer";
 import axios, {AxiosProgressEvent} from "axios";
-import {useMutation} from "react-query";
+import {useMutation, useQueryClient} from "react-query";
 import {getUploadVideoUrl} from "@/app/dashboard/admin/media/actions";
 import {uploadVideo} from "@/app/dashboard/admin/media/section/[id]/action";
 import {useAppUser} from "@/app/_hooks/auth/useAppUser";
 import PrimarySelect from "@/app/_components/ui/inputs/PrimarySelect";
 import {Video} from "@/drizzle/schema/videos";
 import {Section} from "@/drizzle/schema/sections";
+import {Progress} from "@/app/_components/ui/shadcn/progress";
+import {toast} from "sonner";
 
 type AdminVideoCreateModalProps = {
     moduleId: string,
@@ -36,6 +38,7 @@ async function uploadVideoFile(url: string, file: File, onUploadProgress: (e: Ax
 }
 
 export default function AdminVideoCreateModal({moduleId, sectionId, allSections, allVideos, onClose}: AdminVideoCreateModalProps) {
+    const queryClient = useQueryClient();
     const {userObject} = useAppUser();
     const [videoFile, setVideoFile] = useState<File | null>(null);
     const [title, setTitle] = useState<string | null>(null);
@@ -60,9 +63,9 @@ export default function AdminVideoCreateModal({moduleId, sectionId, allSections,
 
         if (nearestSectionVideos.length === 0) return [0];
         return nearestSectionVideos.map(v => v.order_number).concat(nearestSectionVideos[nearestSectionVideos.length - 1].order_number + 1)
-    }, [allSections, allVideos, sectionId])
+    }, [allSections, allVideos, sectionId]);
 
-    const {mutate: uploadVideoMethod, isLoading: isUploadingVideoFile} = useMutation({
+    const {mutate: uploadVideoMethod, isLoading: isUploadingVideoFile, isSuccess: videoUploaded} = useMutation({
         mutationFn: async () => {
             if (!videoFile) return;
             const res = await getUploadVideoUrl();
@@ -81,8 +84,26 @@ export default function AdminVideoCreateModal({moduleId, sectionId, allSections,
                 descriptionLabel: descriptionLabel ?? undefined,
                 descriptionMarkdown: descriptionMarkdown ?? undefined,
             });
+
+            await queryClient.refetchQueries(["allSections", moduleId]);
+        },
+        onSuccess() {
+          toast.success("Видеото е успешно качено!");
+          onClose();
+        },
+        onError() {
+            toast.error("Видеото не беше качено. Моля, опитай отново!");
         }
     });
+
+    const videoPlayer = useMemo(() => {
+        if (!videoFile) return;
+
+        return <div className="flex flex-col items-center justify-center">
+            <SelfHostedVideoPlayer url={URL.createObjectURL(videoFile)} />
+            <button className="text-primary/70 text-sm font-bold mt-3 hover:text-cta transition-all duration-200" onClick={() => setVideoFile(null)}>Премахване</button>
+        </div>
+    }, [videoFile]);
 
     function buttonDisabled() {
         let errorsPredicate: boolean;
@@ -91,7 +112,7 @@ export default function AdminVideoCreateModal({moduleId, sectionId, allSections,
         } else {
             errorsPredicate = errors.length > 0;
         }
-        return !videoFile || errorsPredicate;
+        return !videoFile || errorsPredicate || videoUploaded;
     }
 
     function handleSubmit(e: FormEvent) {
@@ -117,10 +138,7 @@ export default function AdminVideoCreateModal({moduleId, sectionId, allSections,
                     setVideoFile(file);
                 }}
             />
-            {videoFile && <div className="flex flex-col items-center justify-center">
-                <SelfHostedVideoPlayer url={URL.createObjectURL(videoFile)} />
-                <button className="text-primary/70 text-sm font-bold mt-3 hover:text-cta transition-all duration-200" onClick={() => setVideoFile(null)}>Премахване</button>
-            </div>}
+            {videoFile && videoPlayer}
             {!videoFile && <label htmlFor="video-upload">
                 <div
                     className="cursor-pointer aspect-video rounded-lg overflow-hidden my-4 hover:opacity-70 transition-all duration-200">
@@ -165,15 +183,23 @@ export default function AdminVideoCreateModal({moduleId, sectionId, allSections,
                 setErrors={setErrors}
             />
         </div>
-        <PrimaryButton
-            className="w-full mt-4"
-            type="submit"
-            disabled={buttonDisabled()}
-            loading={isUploadingVideoFile}
-        >
-            Създаване
-        </PrimaryButton>
-        {isUploadingVideoFile && <p className="text-center text-sm mt-2">Качване на видео: <span className="text-cta">{uploadProgress}%</span>
-        </p>}
+        {isUploadingVideoFile ?
+            <div className="grid gap-2 mt-4 animate-in slide-in-from-bottom-2 fade-in duration-200 transition-all">
+                <div className="flex items-center justify-between">
+                    <p className="text-sm">Видеото се качва...</p>
+                    <p className="text-sm font-bold text-cta dark:text-primary">{uploadProgress}%</p>
+                </div>
+                <Progress value={uploadProgress} />
+            </div>
+            :
+            <PrimaryButton
+                className="w-full mt-4 animate-out slide-out-to-top-2 fade-out duration-200 transition-all"
+                type="submit"
+                disabled={buttonDisabled()}
+                loading={isUploadingVideoFile}
+            >
+                Създаване
+            </PrimaryButton>
+        }
     </form>
 }

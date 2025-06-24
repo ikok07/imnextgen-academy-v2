@@ -44,6 +44,10 @@ export default function AdminSectionManageVideosTable({moduleId, sectionId, allS
         initialData: {success: true, value: allVideos}
     });
 
+    const createVideoDisabled = useMemo(() => {
+        return allSections.length > 0 && allVideos.length === 0 && allSections.find(s => s.id === sectionId)!.order_number != 0;
+    }, [allVideos.length]);
+
     const columns = useMemo(() => [
         columnHelper.accessor(row => row.title, {
             id: "title",
@@ -79,7 +83,7 @@ export default function AdminSectionManageVideosTable({moduleId, sectionId, allS
                 setCreateVideoModalOpened(v);
             }}
         >
-            <DialogContent className="[&>button:last-child]:hidden w-[95%] max-w-[30rem]">
+            <DialogContent className="[&>button:last-child]:hidden w-[95%] max-h-[95vh] max-w-[30rem] overflow-auto">
                 <AdminVideoCreateModal moduleId={moduleId} sectionId={sectionId} allSections={allSections} allVideos={data} onClose={() => setCreateVideoModalOpened(false)} />
             </DialogContent>
         </Dialog>}
@@ -114,6 +118,8 @@ export default function AdminSectionManageVideosTable({moduleId, sectionId, allS
                             {
                                 Icon: IoAddCircle,
                                 label: "Създаване",
+                                disabled: createVideoDisabled,
+                                tooltipMessage: createVideoDisabled ? "Няма видеа в нито една от предишните секции" : undefined,
                                 onClick: () => setCreateVideoModalOpened(true),
                                 className: "text-cta"
                             }

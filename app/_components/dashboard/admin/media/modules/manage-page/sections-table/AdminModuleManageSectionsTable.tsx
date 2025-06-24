@@ -9,7 +9,7 @@ import {useMemo, useState} from "react";
 import SecondaryButton from "@/app/_components/ui/buttons/SecondaryButton";
 import {Routes} from "@/app/_utils/nav/routes";
 import useErrorQuery from "@/app/_hooks/useErrorQuery";
-import {getSectionsForModule} from "@/app/dashboard/actions";
+import {getSectionsForModule, getVideosForModule} from "@/app/dashboard/actions";
 import {PaginationState} from "@tanstack/table-core";
 import AdminModuleManageSectionsTableWrapper
     from "@/app/_components/dashboard/admin/media/modules/manage-page/sections-table/AdminModuleManageSectionsTableWrapper";
@@ -21,15 +21,18 @@ import useErrorMutation from "@/app/_hooks/useErrorMutation";
 import {deleteMultipleSections} from "@/app/dashboard/admin/media/module/[id]/actions";
 import {toast} from "sonner";
 import {useQueryClient} from "react-query";
+import {Video} from "@/drizzle/schema/videos";
+import {VideosForModuleResponse} from "@/src/application/use-cases/media/videos/get-videos-for-module.use-case";
 
 const columnHelper = createColumnHelper<Section>();
 
 type AdminModuleManageSectionsTableProps = {
     moduleId: string,
-    allSections: Section[]
+    allSections: Section[],
+    allVideosForModule: VideosForModuleResponse
 }
 
-export default function AdminModuleManageSectionsTable({moduleId, allSections}: AdminModuleManageSectionsTableProps) {
+export default function AdminModuleManageSectionsTable({moduleId, allSections, allVideosForModule}: AdminModuleManageSectionsTableProps) {
     const router = useRouter();
     const queryClient = useQueryClient();
     const [createSectionModalOpened, setCreateSectionModalOpened] = useState(false);
@@ -46,6 +49,12 @@ export default function AdminModuleManageSectionsTable({moduleId, allSections}: 
         initialData: {success: true, value: allSections}
     });
 
+    const {data: allVideosQuery, isLoading: isLoadingAllVideos, isRefetching: isRefetchingAllVideos} = useErrorQuery({
+        queryFn: () => getVideosForModule(moduleId),
+        queryKey: ["allVideos", moduleId],
+        initialData: {success: true, value: allVideosForModule}
+    });
+
     const {mutate: deleteSectionsMethod, isLoading: isDeletingSections} = useErrorMutation({
         mutationFn: async (sectionIds: string[]) => {
             const res = await deleteMultipleSections(moduleId, sectionIds);
@@ -58,7 +67,18 @@ export default function AdminModuleManageSectionsTable({moduleId, allSections}: 
         onError() {
             toast.error("Секциите не можаха да бъдат изтрити!");
         }
-    })
+    });
+
+    const allVideos = useMemo(() => {
+        if (!allVideosQuery?.success) return [];
+
+        return allVideosQuery.value;
+        // @ts-ignore
+    }, [allVideosQuery?.value]);
+
+    const createSectionDisabled = useMemo(() => {
+        return allSections.length > 0 && allVideos.length === 0;
+    }, [allVideos.length]);
 
     const columns = useMemo(() => [
         columnHelper.accessor(row => row.title, {
@@ -130,6 +150,8 @@ export default function AdminModuleManageSectionsTable({moduleId, allSections}: 
                             {
                                 Icon: IoAddCircle,
                                 label: "Създаване",
+                                disabled: createSectionDisabled || isLoadingAllVideos,
+                                tooltipMessage: createSectionDisabled ? "Няма видеа в нито една секция" : undefined,
                                 onClick: () => setCreateSectionModalOpened(true),
                                 className: "text-cta"
                             }

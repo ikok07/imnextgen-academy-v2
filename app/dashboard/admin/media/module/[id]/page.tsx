@@ -1,6 +1,6 @@
 import AdminModuleManageClientWrapper
     from "@/app/_components/dashboard/admin/media/modules/manage-page/AdminModuleManageClientWrapper";
-import {getAllModules, getSectionsForModule} from "@/app/dashboard/actions";
+import {getAllModules, getSectionsForModule, getVideosForModule} from "@/app/dashboard/actions";
 import {z} from "zod";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/app/_components/ui/shadcn/card";
 import AdminModuleManagePageHeaderButtons
@@ -31,11 +31,13 @@ async function InnerContent(props: z.infer<typeof propsSchema>) {
     const {data: safeProps, error} = propsSchema.safeParse(props);
     if (error) throw new Error("Invalid page params!");
 
-    const [modulesResult, allSectionsResult] = await Promise.all([getAllModules(), getSectionsForModule(safeProps.params.id)]);
+    const [modulesResult, allSectionsResult, allVideosResult] = await Promise.all([getAllModules(), getSectionsForModule(safeProps.params.id), getVideosForModule(safeProps.params.id)]);
 
-    if (!modulesResult.success || !modulesResult.value.some(m => m.id === safeProps.params.id)) throw new Error("Module result wasn't successful!");
+    if (!modulesResult.success || !allSectionsResult.success || !allVideosResult.success || !modulesResult.value.some(m => m.id === safeProps.params.id)) throw new Error("Module result wasn't successful!");
 
     const allModules = modulesResult.value;
+    const allSections = allSectionsResult.value;
+    const allVideos = allVideosResult.value;
     const module = modulesResult.value.find(m => m.id === safeProps.params.id)!;
 
     if (!allSectionsResult.success) throw new Error("Could not fetch sections for this module!")
@@ -54,7 +56,7 @@ async function InnerContent(props: z.infer<typeof propsSchema>) {
                     <AdminModuleManageDetailsContainer allModules={allModules} />
                 </CardContent>
             </Card>
-            <AdminModuleManageSectionsTable moduleId={module.id} allSections={allSectionsResult.value} />
+            <AdminModuleManageSectionsTable moduleId={module.id} allSections={allSections} allVideosForModule={allVideos} />
         </div>
     </AdminModuleManageClientWrapper>
 }

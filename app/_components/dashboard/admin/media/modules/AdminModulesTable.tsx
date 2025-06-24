@@ -94,7 +94,7 @@ export default function AdminModulesTable() {
                 setCreateModuleModalOpened(v);
             }}
         >
-            <DialogContent className="[&>button:last-child]:hidden w-[95%] max-w-[30rem]">
+            <DialogContent className="[&>button:last-child]:hidden w-[95%] max-h-[95vh] max-w-[30rem] overflow-auto">
                 <AdminModulesTableCreateModuleModal onClose={() => setCreateModuleModalOpened(false)} />
             </DialogContent>
         </Dialog>}

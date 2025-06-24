@@ -22,11 +22,9 @@ export const uploadVideo = createServerAction(async (moduleId: string | undefine
             label: video.descriptionLabel,
             markdown: video.descriptionMarkdown
         });
-        console.log(newDescription);
         descriptionId = newDescription.id;
     }
 
-    console.log(descriptionId);
     const uploadData = await getInjection("IGetUploadDataController")(uploadId);
     const asset = await getInjection("IGetAssetByIdController")(uploadData.asset_id);
 
