@@ -57,7 +57,7 @@ export default function PrimarySelectionOptionsDropdown() {
                             <TooltipTrigger className="w-full">
                                 <DropdownMenuItem
                                     disabled={option.disabled}
-                                    onClick={() => option.onClick(table.getSelectedRowModel().rows)}
+                                    onClick={() => option.disabled ? {} : option.onClick(table.getSelectedRowModel().rows)}
                                     className={`${option.disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"} grid grid-cols-[auto_1fr] text-left ${option.className ?? ""}`}
                                     key={index}
                                 >
