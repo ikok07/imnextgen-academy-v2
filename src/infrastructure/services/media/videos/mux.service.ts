@@ -72,6 +72,27 @@ export class MuxService implements IVideosService {
         }
     }
 
+    async getAssetByPlaybackId(playbackId: string): Promise<Mux.Video.Asset> {
+        try {
+            let page = 1;
+            const limit = 100;
+            while (true) {
+                const allAssets = await this.mux.video.assets.list({
+                    page,
+                    limit
+                });
+
+                const targetAsset = allAssets.data.find(asset => asset.playback_ids?.some(obj => obj.id === playbackId));
+
+                if (targetAsset) return targetAsset;
+
+                if (allAssets.data.length < limit) throw new Error("Asset not found!");
+            }
+        } catch (e) {
+            throw new MediaVideoError(`Failed to get asset by playback id! ${e}`);
+        }
+    }
+
     async updateAssetMetadata(assetId: string, {title, creator_id, external_id}: AssetMetadata): Promise<void> {
         try {
             await axios.patch(`https://api.mux.com/video/v1/assets/${assetId}`, {

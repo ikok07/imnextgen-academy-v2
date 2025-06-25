@@ -28,6 +28,7 @@ export interface IVideosService {
     getUploadLink(opts: GetUploadLinkOptions): Promise<GetUploadLinkResponse>;
     getUploadData(uploadId: string): Promise<Mux.Video.Uploads.Upload>
     getAssetById(assetId: string): Promise<Mux.Video.Asset>
+    getAssetByPlaybackId(playbackId: string): Promise<Mux.Video.Asset>
     updateAssetMetadata(assetId: string, options: AssetMetadata): Promise<void>
     deleteVideo(assetId: string): Promise<void>
 }

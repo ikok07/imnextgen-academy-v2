@@ -71,6 +71,12 @@ import {getAssetByIdUseCase} from "@/src/application/use-cases/media/videos/vide
 import {
     getAssetByIdController
 } from "@/src/interface-adapters/controllers/media/videos/videos-service/get-asset-by-id.controller";
+import {
+    getAssetByPlaybackIdUseCase
+} from "@/src/application/use-cases/media/videos/videos-service/get-asset-by-playback-id.use-case";
+import {
+    getAssetByPlaybackIdController
+} from "@/src/interface-adapters/controllers/media/videos/videos-service/get-asset-by-playback-id.controller";
 
 export function createVideosModule() {
     const videosModule = createModule();
@@ -170,6 +176,14 @@ export function createVideosModule() {
     videosModule
         .bind(DI_SYMBOLS.IGetAssetByIdController)
         .toHigherOrderFunction(getAssetByIdController, [DI_SYMBOLS.IGetAssetByIdUseCase]);
+
+    videosModule
+        .bind(DI_SYMBOLS.IGetAssetByPlaybackIdUseCase)
+        .toHigherOrderFunction(getAssetByPlaybackIdUseCase, [DI_SYMBOLS.IVideosService]);
+
+    videosModule
+        .bind(DI_SYMBOLS.IGetAssetByPlaybackIdController)
+        .toHigherOrderFunction(getAssetByPlaybackIdController, [DI_SYMBOLS.IGetAssetByPlaybackIdUseCase]);
 
     videosModule
         .bind(DI_SYMBOLS.IUpdateAssetMetadataUseCase)

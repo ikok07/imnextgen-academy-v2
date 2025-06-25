@@ -5,7 +5,7 @@ export type IDeleteSectionController = ReturnType<typeof deleteSectionController
 
 export const deleteSectionController = (
     deleteSectionUseCase: IDeleteSectionUseCase
-) => async (moduleId: string, sectionId: string | undefined) => {
+) => async (moduleId: string | undefined, sectionId: string | undefined) => {
 
     if (!moduleId) throw new InputParseError("Invalid moduleId!");
     if (!sectionId) throw new InputParseError("Invalid sectionId!");
