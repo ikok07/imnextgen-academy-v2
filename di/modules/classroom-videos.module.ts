@@ -73,10 +73,10 @@ import {
 } from "@/src/interface-adapters/controllers/media/videos/videos-service/get-asset-by-id.controller";
 import {
     getAssetByPlaybackIdUseCase
-} from "@/src/application/use-cases/media/videos/videos-service/get-asset-by-playback-id.use-case";
+} from "@/src/application/use-cases/media/videos/videos-service/get-assets-by-playback-id.use-case";
 import {
     getAssetByPlaybackIdController
-} from "@/src/interface-adapters/controllers/media/videos/videos-service/get-asset-by-playback-id.controller";
+} from "@/src/interface-adapters/controllers/media/videos/videos-service/get-assets-by-playback-id.controller";
 
 export function createVideosModule() {
     const videosModule = createModule();
