@@ -6,7 +6,7 @@ import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
 import {useRouter} from "next/navigation";
 import {useManageSection} from "@/app/_providers/admin/AdminManageSectionProvider";
 import useErrorMutation from "@/app/_hooks/useErrorMutation";
-import {updateSection} from "@/app/dashboard/admin/media/section/[id]/action";
+import {updateSection} from "@/app/dashboard/admin/media/module/[moduleId]/section/[sectionId]/action";
 import {toast} from "sonner";
 import {useQueryClient} from "react-query";
 
@@ -57,7 +57,7 @@ export default function AdminSectionManagePageHeaderButtons({moduleId, sectionId
             loading={isUpdatingSection}
             disabled={editMode && (!hasChanges || errors.length > 0)}
         >
-            {!editMode ? "Редактиране" : "Запазване"}
+            {!(editMode && (!hasChanges || errors.length > 0)) ? "Редактиране" : "Запазване"}
         </PrimaryButton>
     </div>
 }

@@ -3,7 +3,7 @@
 import {useRouter} from "next/navigation";
 import {useQueryClient} from "react-query";
 import {useMemo, useState} from "react";
-import {createColumnHelper, RowSelectionState, SortingState} from "@tanstack/react-table";
+import {createColumnHelper, Row, RowSelectionState, SortingState} from "@tanstack/react-table";
 import {PaginationState} from "@tanstack/table-core";
 import {Video} from "@/drizzle/schema/videos";
 import SecondaryButton from "@/app/_components/ui/buttons/SecondaryButton";
@@ -17,6 +17,11 @@ import AdminSectionManageVideosTableWrapper
 import {Dialog, DialogContent} from "@/app/_components/ui/shadcn/dialog";
 import AdminVideoCreateModal from "@/app/_components/dashboard/admin/media/sections/videos-table/AdminVideoCreateModal";
 import {Section} from "@/drizzle/schema/sections";
+import useErrorMutation from "@/app/_hooks/useErrorMutation";
+import {
+    deleteMultipleVideos,
+} from "@/app/dashboard/admin/media/module/[moduleId]/section/[sectionId]/action";
+import {toast} from "sonner";
 
 const columnHelper = createColumnHelper<Video>();
 
@@ -42,6 +47,20 @@ export default function AdminSectionManageVideosTable({moduleId, sectionId, allS
         queryFn: () => getVideosForSection(sectionId),
         queryKey: ["allSections", moduleId],
         initialData: {success: true, value: allVideos}
+    });
+
+    const {mutate: deleteMultipleVideosMethod, isLoading: isDeletingVideos} = useErrorMutation({
+        mutationFn: async (videoObjs: { id: string, playbackId: string | undefined | null }[]) => {
+            const res = await deleteMultipleVideos(moduleId, videoObjs);
+            await queryClient.refetchQueries(["allSections", moduleId]);
+            return res;
+        },
+        onSuccess() {
+            toast.success("Избраните видеа бяха успешно изтрити");
+        },
+        onError() {
+            toast.error("Избраните видеа не можаха да бъдат изтрити!");
+        }
     });
 
     const createVideoDisabled = useMemo(() => {
@@ -113,7 +132,7 @@ export default function AdminSectionManageVideosTable({moduleId, sectionId, allS
                         selectedRows,
                         onRowSelected: setSelectedRows,
                         multipleSelection: true,
-                        onDelete: (rows) => {},
+                        onDelete: (rows: Row<Video>[]) => deleteMultipleVideosMethod(rows.map(r => ({id: r.original.id, playbackId: r.original.playbackId}))),
                         otherOptions: [
                             {
                                 Icon: IoAddCircle,
@@ -127,7 +146,7 @@ export default function AdminSectionManageVideosTable({moduleId, sectionId, allS
                     }}
                 >
                     <AdminSectionManageVideosTableWrapper
-                        isDeletingVideos={false}
+                        isDeletingVideos={isDeletingVideos}
                         isLoadingAllVideos={isLoadingAllVideos}
                         isRefetchingAlLVideos={isRefetchingAllVideos}
                     />

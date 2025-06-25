@@ -71,7 +71,7 @@ export class BaseRepository {
 
         const db = drizzle(pool, {
             schema: this.schema
-        })
+        });
 
         const result = await callback(db);
         await pool.end();

@@ -3,7 +3,7 @@
 import {createServerAction, ServerActionError} from "@/app/_utils/createServerAction";
 import {getInjection} from "@/di/container";
 import {SectionInsert} from "@/drizzle/schema/sections";
-import {VideoInsert} from "@/drizzle/schema/videos";
+import {Video, VideoInsert} from "@/drizzle/schema/videos";
 
 export const getSectionById = createServerAction((sectionId: string | undefined) => {
     return getInjection("IGetSectionByIdController")(sectionId);
@@ -40,4 +40,14 @@ export const uploadVideo = createServerAction(async (moduleId: string | undefine
         creator_id: userId,
         external_id: createdVideo.id
     });
-})
+});
+
+export const deleteMultipleVideos = createServerAction(async (moduleId: string | undefined, videoObjects: { id: string, playbackId: string | undefined | null }[]) => {
+    const videoAssets = await getInjection("IGetAssetsByPlaybackIdController")(videoObjects.filter(v => !!v.playbackId).map(v => v.playbackId!));
+
+    for (const videoAsset of videoAssets) {
+        await getInjection("IDeleteVideoServiceVideoController")(videoAsset.id);
+    }
+
+    return getInjection("IDeleteMultipleVideosController")(moduleId, videoObjects.map(v => v.id));
+});

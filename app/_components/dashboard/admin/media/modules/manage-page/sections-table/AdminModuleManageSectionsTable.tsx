@@ -18,10 +18,9 @@ import {Dialog, DialogContent} from "@/app/_components/ui/shadcn/dialog";
 import AdminSectionCreateModal
     from "@/app/_components/dashboard/admin/media/modules/manage-page/sections-table/AdminSectionCreateModal";
 import useErrorMutation from "@/app/_hooks/useErrorMutation";
-import {deleteMultipleSections} from "@/app/dashboard/admin/media/module/[id]/actions";
+import {deleteMultipleSections} from "@/app/dashboard/admin/media/module/[moduleId]/actions";
 import {toast} from "sonner";
 import {useQueryClient} from "react-query";
-import {Video} from "@/drizzle/schema/videos";
 import {VideosForModuleResponse} from "@/src/application/use-cases/media/videos/get-videos-for-module.use-case";
 
 const columnHelper = createColumnHelper<Section>();

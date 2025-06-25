@@ -14,7 +14,7 @@ import SelfHostedVideoPlayer from "@/app/_components/ui/players/SelfHostedVideoP
 import axios, {AxiosProgressEvent} from "axios";
 import {useMutation, useQueryClient} from "react-query";
 import {getUploadVideoUrl} from "@/app/dashboard/admin/media/actions";
-import {uploadVideo} from "@/app/dashboard/admin/media/section/[id]/action";
+import {uploadVideo} from "@/app/dashboard/admin/media/module/[moduleId]/section/[sectionId]/action";
 import {useAppUser} from "@/app/_hooks/auth/useAppUser";
 import PrimarySelect from "@/app/_components/ui/inputs/PrimarySelect";
 import {Video} from "@/drizzle/schema/videos";
@@ -183,13 +183,14 @@ export default function AdminVideoCreateModal({moduleId, sectionId, allSections,
                 setErrors={setErrors}
             />
         </div>
+
         {isUploadingVideoFile ?
             <div className="grid gap-2 mt-4 animate-in slide-in-from-bottom-2 fade-in duration-200 transition-all">
                 <div className="flex items-center justify-between">
                     <p className="text-sm">Видеото се качва...</p>
                     <p className="text-sm font-bold text-cta dark:text-primary">{uploadProgress}%</p>
                 </div>
-                <Progress value={uploadProgress} />
+                <Progress value={uploadProgress} sliderClassName="bg-cta dark:bg-primary" />
             </div>
             :
             <PrimaryButton

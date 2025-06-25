@@ -4,7 +4,7 @@ import {createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffec
 import {z} from "zod";
 import {Section, sectionsSchema} from "@/drizzle/schema/sections";
 import useErrorQuery from "@/app/_hooks/useErrorQuery";
-import {getSectionById} from "@/app/dashboard/admin/media/section/[id]/action";
+import {getSectionById} from "@/app/dashboard/admin/media/module/[moduleId]/section/[sectionId]/action";
 
 export const manageSectionStateSchema = z.object({
     section: sectionsSchema.optional(),

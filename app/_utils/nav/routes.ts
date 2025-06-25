@@ -28,7 +28,7 @@ export const Routes = {
             users: () => `${Routes.dashboard.admin.base()}/users`,
             media: () => `${Routes.dashboard.admin.base()}/media`,
             module: (moduleId: string) => `${Routes.dashboard.admin.media()}/module/${moduleId}`,
-            section: (moduleId: string, sectionId: string) => `${Routes.dashboard.admin.media()}/section/${sectionId}?moduleId=${moduleId}`,
+            section: (moduleId: string, sectionId: string) => `${Routes.dashboard.admin.module(moduleId)}/section/${sectionId}`,
             video: (moduleId: string, sectionId: string, videoId: string) => `${Routes.dashboard.admin.section(moduleId, sectionId)}/video/${videoId}`,
         }
     }

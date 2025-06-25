@@ -6,7 +6,7 @@ import {useRouter} from "next/navigation";
 import {Routes} from "@/app/_utils/nav/routes";
 import {useAdminManageModule} from "@/app/_providers/admin/AdminManageModuleProvider";
 import useErrorMutation from "@/app/_hooks/useErrorMutation";
-import {updateModule} from "@/app/dashboard/admin/media/module/[id]/actions";
+import {updateModule} from "@/app/dashboard/admin/media/module/[moduleId]/actions";
 import {z} from "zod";
 import {moduleAccessEnumSchema} from "@/drizzle/schema/modules";
 import {toast} from "sonner";

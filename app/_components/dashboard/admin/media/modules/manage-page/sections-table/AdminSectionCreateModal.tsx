@@ -7,7 +7,7 @@ import {handleParse, trackErrors} from "@/app/_utils/handleInputValidation";
 import {z} from "zod";
 import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
 import useErrorMutation from "@/app/_hooks/useErrorMutation";
-import {createSection} from "@/app/dashboard/admin/media/module/[id]/actions";
+import {createSection} from "@/app/dashboard/admin/media/module/[moduleId]/actions";
 import {toast} from "sonner";
 import {useQueryClient} from "react-query";
 

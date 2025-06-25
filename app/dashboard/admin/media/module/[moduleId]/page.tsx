@@ -17,7 +17,7 @@ export const revalidate = 0;
 
 const propsSchema = z.object({
     params: z.object({
-        id: z.string()
+        moduleId: z.string()
     })
 })
 
@@ -31,14 +31,14 @@ async function InnerContent(props: z.infer<typeof propsSchema>) {
     const {data: safeProps, error} = propsSchema.safeParse(props);
     if (error) throw new Error("Invalid page params!");
 
-    const [modulesResult, allSectionsResult, allVideosResult] = await Promise.all([getAllModules(), getSectionsForModule(safeProps.params.id), getVideosForModule(safeProps.params.id)]);
+    const [modulesResult, allSectionsResult, allVideosResult] = await Promise.all([getAllModules(), getSectionsForModule(safeProps.params.moduleId), getVideosForModule(safeProps.params.moduleId)]);
 
-    if (!modulesResult.success || !allSectionsResult.success || !allVideosResult.success || !modulesResult.value.some(m => m.id === safeProps.params.id)) throw new Error("Module result wasn't successful!");
+    if (!modulesResult.success || !allSectionsResult.success || !allVideosResult.success || !modulesResult.value.some(m => m.id === safeProps.params.moduleId)) throw new Error("Module result wasn't successful!");
 
     const allModules = modulesResult.value;
     const allSections = allSectionsResult.value;
     const allVideos = allVideosResult.value;
-    const module = modulesResult.value.find(m => m.id === safeProps.params.id)!;
+    const module = modulesResult.value.find(m => m.id === safeProps.params.moduleId)!;
 
     if (!allSectionsResult.success) throw new Error("Could not fetch sections for this module!")
 
