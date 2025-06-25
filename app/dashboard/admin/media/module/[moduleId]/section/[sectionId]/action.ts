@@ -25,21 +25,28 @@ export const uploadVideo = createServerAction(async (moduleId: string | undefine
         descriptionId = newDescription.id;
     }
 
-    const uploadData = await getInjection("IGetUploadDataController")(uploadId);
-    const asset = await getInjection("IGetAssetByIdController")(uploadData.asset_id);
+    let assetId: string | undefined;
+    let playbackId: string | undefined;
+    if (uploadId) {
+        const uploadData = await getInjection("IGetUploadDataController")(uploadId);
+        const asset = await getInjection("IGetAssetByIdController")(uploadData.asset_id);
+        assetId = asset.id;
+        playbackId = asset.playback_ids?.length ? asset.playback_ids[0].id : undefined;
+    }
 
     const createdVideo = await getInjection("ICreateVideoController")(moduleId, {
         ...video,
         description_id: descriptionId,
-        playbackId: asset.playback_ids?.length ? asset.playback_ids[0].id : undefined
+        playbackId
     });
-    console.log(createdVideo);
 
-    await getInjection("IUpdateAssetMetadataController")(uploadData.asset_id, {
-        title: createdVideo.title,
-        creator_id: userId,
-        external_id: createdVideo.id
-    });
+    if (assetId) {
+        await getInjection("IUpdateAssetMetadataController")(assetId, {
+            title: createdVideo.title,
+            creator_id: userId,
+            external_id: createdVideo.id
+        });
+    }
 });
 
 export const deleteMultipleVideos = createServerAction(async (moduleId: string | undefined, videoObjects: { id: string, playbackId: string | undefined | null }[]) => {

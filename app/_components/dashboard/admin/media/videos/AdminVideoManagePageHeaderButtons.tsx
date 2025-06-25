@@ -6,6 +6,7 @@ import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "react-query";
 import {useState} from "react";
+import {useManageVideo} from "@/app/_providers/admin/AdminManageVideoProvider";
 
 type AdminVideoManagePageHeaderButtonsProps = {
     moduleId: string,
@@ -16,7 +17,7 @@ export default function AdminVideoManagePageHeaderButtons({moduleId, sectionId}:
     const router = useRouter();
     const queryClient = useQueryClient();
 
-    const [editMode, setEditMode] = useState(false);
+    const {editMode, setEditMode, hasChanges, errors} = useManageVideo();
 
     function handleSaveChanges() {
     }
@@ -34,7 +35,7 @@ export default function AdminVideoManagePageHeaderButtons({moduleId, sectionId}:
         <PrimaryButton
             onClick={editMode ? handleSaveChanges : handleEnableEdit}
             loading={false}
-            disabled={editMode}
+            disabled={editMode && (!hasChanges || errors.length > 0)}
         >
             {!editMode ? "Редактиране" : "Запазване"}
         </PrimaryButton>

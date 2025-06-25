@@ -1,12 +1,14 @@
 import AdminVideoManageClientWrapper
     from "@/app/_components/dashboard/admin/media/videos/AdminVideoManageClientWrapper";
-import {getModuleById} from "@/app/dashboard/actions";
+import {getModuleById, getVideosForModule, getVideosForSection} from "@/app/dashboard/actions";
 import {getSectionById} from "@/app/dashboard/admin/media/module/[moduleId]/section/[sectionId]/action";
 import {getVideoById} from "@/app/dashboard/admin/media/module/[moduleId]/section/[sectionId]/video/[videoId]/actions";
 import {z} from "zod";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/app/_components/ui/shadcn/card";
 import AdminVideoManagePageHeaderButtons
     from "@/app/_components/dashboard/admin/media/videos/AdminVideoManagePageHeaderButtons";
+import AdminVideoManageDetailsContainer
+    from "@/app/_components/dashboard/admin/media/videos/AdminVideoManageDetailsContainer";
 
 const propsSchema = z.object({
     params: z.object({
@@ -21,14 +23,18 @@ export default async function Page(props: z.infer<typeof propsSchema>) {
     const {data: safeProps, error} = propsSchema.safeParse(props);
     if (error) throw new Error("Invalid page params!");
 
-    const [modulesResult, sectionResult, videoResult] = await Promise.all([getModuleById(props.params.moduleId), getSectionById(props.params.sectionId), getVideoById(safeProps.params.videoId)]);
+    const [modulesResult, sectionResult, videosResult] = await Promise.all([getModuleById(props.params.moduleId), getSectionById(props.params.sectionId), getVideosForSection(safeProps.params.sectionId)]);
     if (!modulesResult.success) throw new Error("Module result wasn't successful!");
     if (!sectionResult.success) throw new Error("Section result wasn't successful!");
-    if (!videoResult.success) throw new Error("Video result wasn't successful!");
+    if (!videosResult.success) throw new Error("Videos result wasn't successful!");
 
     const module = modulesResult.value;
     const section = sectionResult.value;
-    const video = videoResult.value;
+
+    const allVideos = videosResult.value;
+    const video = allVideos.find(v => v.id === safeProps.params.videoId);
+
+    if (!video) throw new Error("Video not found!");
 
     return <AdminVideoManageClientWrapper module={module} section={section} video={video}>
         <div className="grid grid-rows-[auto_1fr] w-[95%] h-full max-w-[50rem] mt-4 mx-auto">
@@ -41,6 +47,7 @@ export default async function Page(props: z.infer<typeof propsSchema>) {
                     <AdminVideoManagePageHeaderButtons moduleId={props.params.moduleId} sectionId={props.params.sectionId} />
                 </CardHeader>
                 <CardContent>
+                    <AdminVideoManageDetailsContainer allVideos={allVideos}/>
                 </CardContent>
             </Card>
         </div>

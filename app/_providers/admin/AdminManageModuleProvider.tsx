@@ -74,7 +74,7 @@ export function AdminManageModuleProvider({children, module}: AdminManageModuleP
             setStripeProductId(clientModule.stripe_product_id);
             setNonDiscountedPriceId(clientModule.non_discounted_price_id);
         }
-    }, [editMode]);
+    }, [editMode, clientModule]);
 
     useEffect(() => {
         if (clientModule) {

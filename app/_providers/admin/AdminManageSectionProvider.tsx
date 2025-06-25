@@ -56,6 +56,13 @@ export function ManageSectionProvider({section, children}: AdminManageSectionPro
         )
     }, [title, orderNumber]);
 
+    useEffect(() => {
+        if (!editMode && clientSection) {
+            setTitle(clientSection.title)
+            setOrderNumber(clientSection.order_number.toString());
+        }
+    }, [editMode, clientSection]);
+
     return <ManageSectionContext.Provider value={{
         section: clientSection,
         isLoadingSection,

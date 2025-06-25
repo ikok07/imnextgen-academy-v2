@@ -57,7 +57,7 @@ export default function AdminSectionManagePageHeaderButtons({moduleId, sectionId
             loading={isUpdatingSection}
             disabled={editMode && (!hasChanges || errors.length > 0)}
         >
-            {!(editMode && (!hasChanges || errors.length > 0)) ? "Редактиране" : "Запазване"}
+            {!editMode ? "Редактиране" : "Запазване"}
         </PrimaryButton>
     </div>
 }

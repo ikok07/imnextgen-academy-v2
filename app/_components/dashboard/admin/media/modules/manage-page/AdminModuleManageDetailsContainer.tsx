@@ -4,15 +4,13 @@ import Image from "next/image";
 import AdminModulesManagePageProperties
     from "@/app/_components/dashboard/admin/media/modules/manage-page/AdminModulesManagePageProperties";
 import {useAdminManageModule} from "@/app/_providers/admin/AdminManageModuleProvider";
-import {Module, moduleAccessEnumSchema} from "@/drizzle/schema/modules";
+import {Module} from "@/drizzle/schema/modules";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/app/_components/ui/shadcn/tooltip";
 import {ChangeEvent, useEffect, useState} from "react";
 import AdminModuleManageDetailsSkeleton
     from "@/app/_components/dashboard/admin/media/modules/manage-page/skeletons/AdminModuleManageDetailsSkeleton";
 import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
 import {IoAlbums} from "react-icons/io5";
-import {getModuleAccessLabel} from "@/app/_utils/modules/getModuleAccessLabel";
-import PrimarySelect from "@/app/_components/ui/inputs/PrimarySelect";
 import {handleParse, trackErrors} from "@/app/_utils/handleInputValidation";
 import {z} from "zod";
 import PrimaryInput from "@/app/_components/ui/inputs/PrimaryInput";

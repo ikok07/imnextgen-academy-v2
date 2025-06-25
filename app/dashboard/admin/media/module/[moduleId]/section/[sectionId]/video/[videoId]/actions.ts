@@ -6,3 +6,7 @@ import {getInjection} from "@/di/container";
 export const getVideoById = createServerAction((videoId: string) => {
     return getInjection("IGetVideoByIdController")(videoId);
 });
+
+export const getVideoDescriptionById = createServerAction((id: string | undefined) => {
+    return getInjection("IGetVideoDescriptionByIdController")(id);
+});

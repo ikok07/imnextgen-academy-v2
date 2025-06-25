@@ -21,6 +21,8 @@ import {Video} from "@/drizzle/schema/videos";
 import {Section} from "@/drizzle/schema/sections";
 import {Progress} from "@/app/_components/ui/shadcn/progress";
 import {toast} from "sonner";
+import {GetUploadLinkResponse} from "@/src/application/services/media/videos/videos.service.interface";
+import {ServerActionResult} from "@/app/_utils/createServerAction";
 
 type AdminVideoCreateModalProps = {
     moduleId: string,
@@ -67,16 +69,19 @@ export default function AdminVideoCreateModal({moduleId, sectionId, allSections,
 
     const {mutate: uploadVideoMethod, isLoading: isUploadingVideoFile, isSuccess: videoUploaded} = useMutation({
         mutationFn: async () => {
-            if (!videoFile) return;
-            const res = await getUploadVideoUrl();
-            if (!res.success) throw new Error("Failed to create upload url!");
+            let uploadId: string | undefined
             // Upload video file to mux on the client side
-            await uploadVideoFile(res.value.url, videoFile, (e) => {
-                if (!e.total) return;
-                setUploadProgress(Math.round((e.loaded * 100) / e.total));
-            });
+            if (videoFile) {
+                const res = await getUploadVideoUrl();
+                if (!res.success) throw new Error("Failed to create upload url!");
+                uploadId = res.value.uploadId;
+                await uploadVideoFile(res.value.url, videoFile, (e) => {
+                    if (!e.total) return;
+                    setUploadProgress(Math.round((e.loaded * 100) / e.total));
+                });
+            }
             // Database update
-            await uploadVideo(moduleId, res.value.uploadId, userObject.user?.id, {
+            await uploadVideo(moduleId, uploadId, userObject.user?.id, {
                 title: title ?? undefined,
                 section_id: sectionId,
                 order_number: orderNumber ? +orderNumber : undefined,
@@ -112,7 +117,7 @@ export default function AdminVideoCreateModal({moduleId, sectionId, allSections,
         } else {
             errorsPredicate = errors.length > 0;
         }
-        return !videoFile || errorsPredicate || videoUploaded;
+        return errorsPredicate || videoUploaded;
     }
 
     function handleSubmit(e: FormEvent) {

@@ -5,6 +5,7 @@ import {useBreadcrumb} from "@/app/_providers/BreadcrumbProvider";
 import {Module} from "@/drizzle/schema/modules";
 import {Section} from "@/drizzle/schema/sections";
 import {Video} from "@/drizzle/schema/videos";
+import { ManageVideoProvider } from "@/app/_providers/admin/AdminManageVideoProvider";
 
 type AdminVideoManageClientWrapperProps = {
     children: ReactNode,
@@ -29,5 +30,7 @@ export default function AdminVideoManageClientWrapper({module, section, video, c
         }
     }, [isLoaded]);
 
-    return children;
+    return <ManageVideoProvider video={video}>
+        {children}
+    </ManageVideoProvider>;
 }
