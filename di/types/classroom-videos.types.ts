@@ -58,10 +58,10 @@ import {IGetAssetByIdUseCase} from "@/src/application/use-cases/media/videos/vid
 import {
     IGetAssetByIdController
 } from "@/src/interface-adapters/controllers/media/videos/videos-service/get-asset-by-id.controller";
-import { IGetAssetByPlaybackIdUseCase } from "@/src/application/use-cases/media/videos/videos-service/get-asset-by-playback-id.use-case";
+import { IGetAssetsByPlaybackIdUseCase } from "@/src/application/use-cases/media/videos/videos-service/get-assets-by-playback-id.use-case";
 import {
-    IGetAssetByPlaybackIdController
-} from "@/src/interface-adapters/controllers/media/videos/videos-service/get-asset-by-playback-id.controller";
+    IGetAssetsByPlaybackIdController
+} from "@/src/interface-adapters/controllers/media/videos/videos-service/get-assets-by-playback-id.controller";
 
 export const CLASSROOM_VIDEOS_SYMBOLS = {
     IVideosService: Symbol.for("IVideosService"),
@@ -97,8 +97,8 @@ export const CLASSROOM_VIDEOS_SYMBOLS = {
     IGetAssetByIdUseCase: Symbol.for("IGetAssetByIdUseCase"),
     IGetAssetByIdController: Symbol.for('IGetAssetByIdController'),
 
-    IGetAssetByPlaybackIdUseCase: Symbol.for("IGetAssetByPlaybackIdUseCase"),
-    IGetAssetByPlaybackIdController: Symbol.for('IGetAssetByPlaybackIdController'),
+    IGetAssetsByPlaybackIdUseCase: Symbol.for("IGetAssetsByPlaybackIdUseCase"),
+    IGetAssetsByPlaybackIdController: Symbol.for('IGetAssetsByPlaybackIdController'),
 
     IGetUploadLinkUseCase: Symbol.for("IGetUploadLinkUseCase"),
     IGetUploadLinkController: Symbol.for("IGetUploadLinkController"),
@@ -161,8 +161,8 @@ export interface CLASSROOM_VIDEOS_RETURN_TYPES {
     IGetAssetByIdUseCase: IGetAssetByIdUseCase,
     IGetAssetByIdController: IGetAssetByIdController,
 
-    IGetAssetByPlaybackIdUseCase: IGetAssetByPlaybackIdUseCase,
-    IGetAssetByPlaybackIdController: IGetAssetByPlaybackIdController,
+    IGetAssetsByPlaybackIdUseCase: IGetAssetsByPlaybackIdUseCase,
+    IGetAssetsByPlaybackIdController: IGetAssetsByPlaybackIdController,
 
     IUpdateAssetMetadataUseCase: IUpdateAssetMetadataUseCase,
     IUpdateAssetMetadataController: IUpdateAssetMetadataController,
