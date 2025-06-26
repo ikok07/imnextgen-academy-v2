@@ -14,7 +14,7 @@ import AdminUserDetailsSalesMeetings
 import {Dispatch, SetStateAction} from "react";
 import AdminUserDetailsUserProgress
     from "@/app/_components/dashboard/admin/users/modal/user-progress/AdminUserDetailsUserProgress";
-import {UserProgressProvider} from "@/app/_providers/UserProgressProvider";
+import {UserProgressProvider} from "@/app/_providers/admin/UserProgressProvider";
 
 type AdminUserDetailsModalProps = {
     fullProfile: FullProfile,

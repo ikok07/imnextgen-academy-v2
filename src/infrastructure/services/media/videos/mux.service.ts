@@ -1,7 +1,12 @@
-import {IVideosService} from "@/src/application/services/media/videos/videos.service.interface";
+import {
+    AssetMetadata,
+    GetUploadLinkOptions, GetUploadLinkResponse,
+    IVideosService
+} from "@/src/application/services/media/videos/videos.service.interface";
 import {MediaVideoError} from "@/src/entities/errors/media/videos/media-videos";
 import Mux from "@mux/mux-node";
 import {TypeClaim} from "@mux/mux-node/util/jwt-types";
+import axios from "axios";
 
 export class MuxService implements IVideosService {
     mux = new Mux({tokenId: process.env.MUX_TOKEN_ID!, tokenSecret: process.env.MUX_API_TOKEN!});
@@ -26,6 +31,95 @@ export class MuxService implements IVideosService {
             return tokens;
         } catch (e) {
             throw new MediaVideoError(`Failed to sign MUX video url: ${e}`);
+        }
+    }
+
+    async getUploadLink(opts: GetUploadLinkOptions): Promise<GetUploadLinkResponse> {
+        try {
+            const res = await this.mux.video.uploads.create({
+                cors_origin: process.env.NEXT_PUBLIC_BASE_URL!,
+                new_asset_settings: {
+                    video_quality: opts.videoQuality,
+                    playback_policy: opts.playbackPolicy,
+                    max_resolution_tier: opts.maxResolutionTier,
+                },
+                timeout: 60 * 60 * 3 // Valid 3 hours
+            });
+            if (res.status === "errored") throw new Error(`URL creation failed! ${JSON.stringify(res)}`);
+
+            return {
+                uploadId: res.id,
+                url: res.url
+            };
+        } catch (e) {
+            throw new MediaVideoError(`Failed to get upload link! ${e}`);
+        }
+    }
+
+    async getUploadData(uploadId: string): Promise<Mux.Video.Uploads.Upload> {
+        try {
+            return this.mux.video.uploads.retrieve(uploadId);
+        } catch (e) {
+            throw new MediaVideoError(`Failed to get upload data! ${e}`);
+        }
+    }
+
+    getAssetById(assetId: string): Promise<Mux.Video.Asset> {
+        try {
+            return this.mux.video.assets.retrieve(assetId);
+        } catch (e) {
+            throw new MediaVideoError(`Failed to get asset by id! ${e}`);
+        }
+    }
+
+    async getAssetsByPlaybackId(playbackIds: string[]): Promise<Mux.Video.Asset[]> {
+        try {
+            let page = 1;
+            const limit = 100;
+            const assets: Mux.Video.Asset[] = [];
+            while (true) {
+                const allAssets = await this.mux.video.assets.list({
+                    page,
+                    limit
+                });
+
+                const targetAssets = allAssets.data.filter(asset => playbackIds.some(id => asset.playback_ids?.some(obj => obj.id === id)));
+
+                if (targetAssets.length !== 0) assets.push(...targetAssets);
+
+                if (assets.length === playbackIds.length) break;
+                if (allAssets.data.length < limit) throw new Error("Asset not found!");
+            }
+
+            return assets;
+        } catch (e) {
+            throw new MediaVideoError(`Failed to get asset by playback id! ${e}`);
+        }
+    }
+
+    async updateAssetMetadata(assetId: string, {title, creator_id, external_id}: AssetMetadata): Promise<void> {
+        try {
+            await axios.patch(`https://api.mux.com/video/v1/assets/${assetId}`, {
+                meta: {
+                    title,
+                    creator_id,
+                    external_id
+                }
+            }, {
+                headers: {
+                    Authorization: `Basic ${btoa(`${process.env.MUX_TOKEN_ID!}:${process.env.MUX_API_TOKEN!}`)}`
+                }
+            });
+        } catch(e) {
+            throw new MediaVideoError(`Failed to update assets! ${e}`);
+        }
+    }
+
+    async deleteVideo(assetId: string): Promise<void> {
+        try {
+            await this.mux.video.assets.delete(assetId);
+        } catch (e) {
+            throw new MediaVideoError(`Failed to delete video! ${e}`);
         }
     }
 }

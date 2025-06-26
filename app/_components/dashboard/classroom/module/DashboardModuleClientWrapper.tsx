@@ -46,7 +46,7 @@ function InnerContent({module, videosForModule, finishedVideos, children}: Dashb
         if (isLoaded) {
             if (hydrationLabels.some(l => l.segmentId === "module")) return;
 
-            setHydrationLabels([...hydrationLabels, {segmentId: "module", label: module.title}])
+            setHydrationLabels([...hydrationLabels, {segmentId: "module", label: module.title}]);
 
             return () => {
                 setHydrationLabels([]);

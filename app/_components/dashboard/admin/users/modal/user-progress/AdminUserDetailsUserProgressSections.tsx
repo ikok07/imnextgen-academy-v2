@@ -6,7 +6,7 @@ import AdminUserDetailsUserProgressSectionRowSkeleton
     from "@/app/_components/dashboard/admin/users/modal/user-progress/skeletons/AdminUserDetailsUserProgressSectionRowSkeleton";
 import AdminUserDetailsUserProgressSectionRow
     from "@/app/_components/dashboard/admin/users/modal/user-progress/AdminUserDetailsUserProgressSectionRow";
-import {useUserProgress} from "@/app/_providers/UserProgressProvider";
+import {useUserProgress} from "@/app/_providers/admin/UserProgressProvider";
 
 export default function AdminUserDetailsUserProgressSections() {
     const {sectionsForModule, selectedModuleId, isLoadingModuleSections, isLoadingFinishedVideosForAllSectionInModule} = useUserProgress()

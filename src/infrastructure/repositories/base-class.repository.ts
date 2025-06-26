@@ -4,6 +4,7 @@ import * as userSetupQuestions from "../../../drizzle/schema/user_setup_question
 import * as modules from "../../../drizzle/schema/modules"
 import * as sections from "../../../drizzle/schema/sections"
 import * as videos from "../../../drizzle/schema/videos"
+import * as videoDescriptions from "../../../drizzle/schema/video_descriptions"
 import * as finishedVideos from "../../../drizzle/schema/finished_videos"
 import * as userSubscription from "../../../drizzle/schema/user_subscriptions"
 import * as userBoughtModules from "../../../drizzle/schema/user_bought_modules"
@@ -37,6 +38,7 @@ export class BaseRepository {
         ...modules,
         ...sections,
         ...videos,
+        ...videoDescriptions,
         ...finishedVideos,
         ...userSubscription,
         ...userBoughtModules,
@@ -69,7 +71,7 @@ export class BaseRepository {
 
         const db = drizzle(pool, {
             schema: this.schema
-        })
+        });
 
         const result = await callback(db);
         await pool.end();

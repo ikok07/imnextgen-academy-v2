@@ -17,6 +17,11 @@ const nextConfig = {
             }
         ]
     },
+    experimental: {
+        serverActions: {
+            bodySizeLimit: '2mb',
+        },
+    },
     transpilePackages: ['@mep-agency/next-iubenda'],
 };
 

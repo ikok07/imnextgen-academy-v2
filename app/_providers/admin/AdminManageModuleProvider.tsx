@@ -1,0 +1,122 @@
+"use client"
+
+import {createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useMemo, useState} from "react";
+import {z} from "zod";
+import {Module, modulesTableSchema} from "@/drizzle/schema/modules";
+import useErrorQuery from "@/app/_hooks/useErrorQuery";
+import {getModuleById} from "@/app/dashboard/actions";
+
+export const adminManageModuleStateSchema = z.object({
+    module: modulesTableSchema.optional(),
+    isLoadingModule: z.boolean(),
+    editMode: z.boolean(),
+    setEditMode: z.custom<Dispatch<SetStateAction<boolean>>>(),
+    errors: z.array(z.string()),
+    setErrors: z.custom<Dispatch<SetStateAction<string[]>>>(),
+    hasChanges: z.boolean(),
+    setHasChanges: z.custom<Dispatch<SetStateAction<boolean>>>(),
+    newProfileImage: z.custom<File>().nullable(),
+    setNewProfileImage: z.custom<Dispatch<SetStateAction<File | null>>>(),
+    title: z.string().nullable(),
+    setTitle: z.custom<Dispatch<SetStateAction<string | null>>>(),
+    description: z.string().nullable(),
+    setDescription: z.custom<Dispatch<SetStateAction<string | null>>>(),
+    access: z.string().nullable(),
+    setAccess: z.custom<Dispatch<SetStateAction<string | null>>>(),
+    orderNumber: z.string().nullable(),
+    setOrderNumber: z.custom<Dispatch<SetStateAction<string | null>>>(),
+    stripeProductId: z.string().nullable(),
+    setStripeProductId: z.custom<Dispatch<SetStateAction<string | null>>>(),
+    nonDiscountedPriceId: z.string().nullable(),
+    setNonDiscountedPriceId: z.custom<Dispatch<SetStateAction<string | null>>>()
+});
+
+export type AdminManageModuleState = z.infer<typeof adminManageModuleStateSchema>;
+
+const AdminManageModuleContext = createContext<AdminManageModuleState | null>(null);
+
+type AdminManageModuleProviderProps = {
+    children: ReactNode,
+    module: Module
+}
+
+export function AdminManageModuleProvider({children, module}: AdminManageModuleProviderProps) {
+    const [editMode, setEditMode] = useState(false);
+    const [errors, setErrors] = useState<string[]>([]);
+    const [hasChanges, setHasChanges] = useState(false);
+
+    const [newProfileImage, setNewProfileImage] = useState<File | null>(null);
+    const [title, setTitle] = useState<string | null>(module.title);
+    const [description, setDescription] = useState<string | null>(module.description);
+    const [access, setAccess] = useState<string | null>(module.description);
+    const [orderNumber, setOrderNumber] = useState<string | null>(module.order_number.toString());
+    const [stripeProductId, setStripeProductId] = useState<string | null>(module.stripe_product_id);
+    const [nonDiscountedPriceId, setNonDiscountedPriceId] = useState<string | null>(module.non_discounted_price_id);
+
+    const {data: moduleQuery, isLoading: isLoadingModule, isRefetching: isRefetchingModule} = useErrorQuery({
+        queryFn: () => getModuleById(module.id),
+        queryKey: ["module", module.id],
+        initialData: {success: true, value: module}
+    });
+
+    const clientModule = useMemo(() => {
+        if (moduleQuery?.success) return moduleQuery.value;
+        // @ts-ignore
+    }, [moduleQuery?.value, isLoadingModule, isRefetchingModule]);
+
+    useEffect(() => {
+        if (!editMode && clientModule) {
+            setNewProfileImage(null);
+            setTitle(clientModule.title)
+            setDescription(clientModule.description)
+            setAccess(clientModule.access);
+            setOrderNumber(clientModule.order_number.toString());
+            setStripeProductId(clientModule.stripe_product_id);
+            setNonDiscountedPriceId(clientModule.non_discounted_price_id);
+        }
+    }, [editMode, clientModule]);
+
+    useEffect(() => {
+        if (clientModule) {
+            const customStripeProductId = stripeProductId === "" ? null : stripeProductId;
+            const customNonDiscountedPrice = nonDiscountedPriceId === "" ? null : nonDiscountedPriceId;
+            setHasChanges(
+                !!newProfileImage ||
+                title != clientModule.title ||
+                description != clientModule.description ||
+                access != clientModule.access ||
+                Number(orderNumber) != clientModule.order_number ||
+                customStripeProductId != clientModule.stripe_product_id ||
+                customNonDiscountedPrice != clientModule.non_discounted_price_id
+            );
+        }
+    }, [newProfileImage, title, description, access, orderNumber, stripeProductId, nonDiscountedPriceId, clientModule]);
+
+    return <AdminManageModuleContext.Provider value={{
+        module: clientModule,
+        isLoadingModule,
+        editMode,
+        setEditMode,
+        errors,
+        setErrors,
+        hasChanges,
+        setHasChanges,
+        newProfileImage, setNewProfileImage,
+        title, setTitle,
+        description, setDescription,
+        access, setAccess,
+        orderNumber, setOrderNumber,
+        stripeProductId, setStripeProductId,
+        nonDiscountedPriceId, setNonDiscountedPriceId
+    }}>
+        {children}
+    </AdminManageModuleContext.Provider>
+}
+
+export function useAdminManageModule() {
+    const context = useContext(AdminManageModuleContext);
+    if (!context) {
+        throw new Error("useAdminManageModule() must be used inside AdminManageModuleProvider!")
+    }
+    return context;
+}

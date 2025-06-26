@@ -9,6 +9,7 @@ import {IoMenu, IoTrash} from "react-icons/io5";
 import {useTable} from "@/app/_components/ui/tables/provider/TableProvider";
 import PrimaryAlert from "../../../alerts/PrimaryAlert";
 import {useState} from "react";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/app/_components/ui/shadcn/tooltip";
 
 export default function PrimarySelectionOptionsDropdown() {
     const {table, selectionOptions} = useTable();
@@ -37,11 +38,11 @@ export default function PrimarySelectionOptionsDropdown() {
             acceptClassName="bg-red-500 hover:bg-red-600"
         />
         <DropdownMenu>
-            <DropdownMenuTrigger disabled={Object.keys(selectionOptions.selectedRows).length === 0}>
-                <SecondaryButton className={`${Object.keys(selectionOptions.selectedRows).length > 0 ? "visible animate-in slide-in-from-left-2 fade-in" : "invisible animate-out slide-out-to-right-2 fade-out"} transition-all duration-200 ease-in-out px-2`}><IoMenu /></SecondaryButton>
+            <DropdownMenuTrigger disabled={Object.keys(selectionOptions.selectedRows).length === 0 && !selectionOptions.showWhenNoSelection}>
+                <SecondaryButton className={`${Object.keys(selectionOptions.selectedRows).length > 0 || selectionOptions.showWhenNoSelection ? "visible animate-in slide-in-from-left-2 fade-in" : "invisible animate-out slide-out-to-right-2 fade-out"} transition-all duration-200 ease-in-out px-2`}><IoMenu /></SecondaryButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-                {selectionOptions.onDelete &&
+                {selectionOptions.onDelete && Object.keys(selectionOptions.selectedRows).length > 0 &&
                     <>
                         <DropdownMenuItem onClick={() => setCloseAlertOpened(true)} className="cursor-pointer grid grid-cols-[auto_1fr] text-red-500">
                             <IoTrash />
@@ -51,10 +52,24 @@ export default function PrimarySelectionOptionsDropdown() {
                 }
                 {selectionOptions.otherOptions?.map((option, index) => {
                     const Icon = option.Icon;
-                    return <DropdownMenuItem onClick={() => option.onClick(table.getSelectedRowModel().rows)} className={`cursor-pointer grid grid-cols-[auto_1fr] ${option.className ?? ""}`} key={index}>
-                        <Icon />
-                        {option.label}
-                    </DropdownMenuItem>
+                    return <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger className="w-full">
+                                <DropdownMenuItem
+                                    disabled={option.disabled}
+                                    onClick={() => option.disabled ? {} : option.onClick(table.getSelectedRowModel().rows)}
+                                    className={`${option.disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"} grid grid-cols-[auto_1fr] text-left ${option.className ?? ""}`}
+                                    key={index}
+                                >
+                                    <Icon />
+                                    {option.label}
+                                </DropdownMenuItem>
+                            </TooltipTrigger>
+                            {option.tooltipMessage && <TooltipContent>
+                                <p>{option.tooltipMessage}</p>
+                            </TooltipContent>}
+                        </Tooltip>
+                    </TooltipProvider>
                 })}
             </DropdownMenuContent>
         </DropdownMenu>

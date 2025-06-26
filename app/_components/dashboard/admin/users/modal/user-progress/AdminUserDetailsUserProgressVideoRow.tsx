@@ -5,7 +5,7 @@ import {Video} from "@/drizzle/schema/videos";
 import {IoCheckmarkCircle, IoEllipseOutline} from "react-icons/io5";
 import {Progress} from "@/app/_components/ui/shadcn/progress";
 import {Card} from "@/app/_components/ui/shadcn/card";
-import {useUserProgress} from "@/app/_providers/UserProgressProvider";
+import {useUserProgress} from "@/app/_providers/admin/UserProgressProvider";
 
 type AdminUserDetailsUserProgressVideoRowProps = {
     video: Video,

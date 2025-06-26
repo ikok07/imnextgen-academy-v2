@@ -1,6 +1,6 @@
 "use client"
 
-import {createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useMemo, useState} from "react";
+import {createContext, Dispatch, ReactNode, SetStateAction, useContext, useMemo, useState} from "react";
 import {
     AccessorFnColumnDef,
     AccessorKeyColumnDef,
