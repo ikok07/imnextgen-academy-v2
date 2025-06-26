@@ -3,12 +3,18 @@ resourcePolicy:
   resource: module
   version: default
   rules:
-    - name: give_full_access_to_non_users
-      actions: ["select", "insert", "update", "delete"]
+    - name: give_full_select_access_to_non_users
+      actions: ["select"]
       roles:
         - admin
         - mentor
         - moderator
+      effect: EFFECT_ALLOW
+
+    - name: give_full_access_to_admins
+      actions: [ "select", "insert", "update", "delete" ]
+      roles:
+        - admin
       effect: EFFECT_ALLOW
 
     - name: allow_free_modules_to_everyone
