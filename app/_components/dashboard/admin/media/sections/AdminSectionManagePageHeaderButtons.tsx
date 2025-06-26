@@ -27,6 +27,7 @@ export default function AdminSectionManagePageHeaderButtons({moduleId, sectionId
                 order_number: orderNumber ? +orderNumber : undefined
             });
             await queryClient.refetchQueries(["section", sectionId]);
+            await queryClient.refetchQueries(["videos", sectionId]);
             return res;
         },
         onSuccess() {

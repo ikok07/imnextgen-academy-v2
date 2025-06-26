@@ -94,7 +94,7 @@ export default function AdminVideoCreateModal({moduleId, sectionId, allSections,
                 descriptionMarkdown: descriptionMarkdown ?? undefined,
             });
 
-            await queryClient.refetchQueries(["allSections", moduleId]);
+            await queryClient.refetchQueries(["videos", sectionId]);
         },
         onSuccess() {
           toast.success("Видеото е успешно качено!");

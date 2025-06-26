@@ -46,14 +46,14 @@ export default function AdminSectionManageVideosTable({moduleId, sectionId, allS
 
     const {data: allVideosQuery, isLoading: isLoadingAllVideos, isRefetching: isRefetchingAllVideos} = useErrorQuery({
         queryFn: () => getVideosForSection(sectionId),
-        queryKey: ["allSections", moduleId],
+        queryKey: ["videos", sectionId],
         initialData: {success: true, value: allVideos}
     });
 
     const {mutate: deleteMultipleVideosMethod, isLoading: isDeletingVideos} = useErrorMutation({
         mutationFn: async (videoObjs: { id: string, playbackId: string | undefined | null }[]) => {
             const res = await deleteMultipleVideos(moduleId, videoObjs);
-            await queryClient.refetchQueries(["allSections", moduleId]);
+            await queryClient.refetchQueries(["videos", sectionId]);
             return res;
         },
         onSuccess() {
