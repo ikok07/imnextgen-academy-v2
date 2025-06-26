@@ -40,6 +40,9 @@ async function uploadVideoFile(url: string, file: File, onUploadProgress: (e: Ax
     });
 }
 
+// DONE: 1. Refresh available order numbers on creation
+// TODO: 2. Button active when order number not entered
+
 export default function AdminVideoCreateModal({moduleId, sectionId, allSections, allVideos, allVideosForModule, onClose}: AdminVideoCreateModalProps) {
     const queryClient = useQueryClient();
     const {userObject} = useAppUser();
@@ -53,24 +56,6 @@ export default function AdminVideoCreateModal({moduleId, sectionId, allSections,
     const [errors, setErrors] = useState<string[]>([]);
 
     const [uploadProgress, setUploadProgress] = useState(0);
-
-    const validOrderNumbers = useMemo(() => {
-        const currSection = allSections.find(s => s.id === sectionId)!;
-        const currSectionVideos = allVideosForModule.filter(v => v.section_id === sectionId).sort((a, b) => a.order_number - b.order_number);
-        let currSectionOrderNumber = currSection.order_number;
-
-        let nearestSectionVideos = currSectionVideos;
-
-        while (nearestSectionVideos.length === 0 && currSectionOrderNumber > 0) {
-            const iteratedSection = allSections.find(s => s.order_number === --currSectionOrderNumber)!;
-            nearestSectionVideos = allVideosForModule.filter(v => v.section_id === iteratedSection.id).sort((a, b) => a.order_number - b.order_number);
-        }
-
-        if (nearestSectionVideos.length === 0) return [0];
-
-        const nextAvailableNumber = nearestSectionVideos[nearestSectionVideos.length - 1].order_number + 1;
-        return currSectionVideos.length > 0 ? [...currSectionVideos.map(v => v.order_number), nextAvailableNumber] : [nextAvailableNumber];
-    }, [allSections, allVideosForModule, sectionId]);
 
     const {mutate: uploadVideoMethod, isLoading: isUploadingVideoFile, isSuccess: videoUploaded} = useMutation({
         mutationFn: async () => {
@@ -115,6 +100,24 @@ export default function AdminVideoCreateModal({moduleId, sectionId, allSections,
         </div>
     }, [videoFile]);
 
+    const validOrderNumbers = useMemo(() => {
+        const currSection = allSections.find(s => s.id === sectionId)!;
+        const currSectionVideos = allVideosForModule.filter(v => v.section_id === sectionId).sort((a, b) => a.order_number - b.order_number);
+        let currSectionOrderNumber = currSection.order_number;
+
+        let nearestSectionVideos = currSectionVideos;
+
+        while (nearestSectionVideos.length === 0 && currSectionOrderNumber > 0) {
+            const iteratedSection = allSections.find(s => s.order_number === --currSectionOrderNumber)!;
+            nearestSectionVideos = allVideosForModule.filter(v => v.section_id === iteratedSection.id).sort((a, b) => a.order_number - b.order_number);
+        }
+
+        if (nearestSectionVideos.length === 0) return [0];
+
+        const nextAvailableNumber = nearestSectionVideos[nearestSectionVideos.length - 1].order_number + 1;
+        return currSectionVideos.length > 0 ? [...currSectionVideos.map(v => v.order_number), nextAvailableNumber] : [nextAvailableNumber];
+    }, [allSections, allVideosForModule, sectionId, isUploadingVideoFile]);
+
     function buttonDisabled() {
         let errorsPredicate: boolean;
         if (descriptionId != null && descriptionId != "new") {
@@ -122,7 +125,7 @@ export default function AdminVideoCreateModal({moduleId, sectionId, allSections,
         } else {
             errorsPredicate = errors.length > 0;
         }
-        return errorsPredicate || videoUploaded;
+        return errorsPredicate || !orderNumber || videoUploaded;
     }
 
     function handleSubmit(e: FormEvent) {

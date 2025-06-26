@@ -33,7 +33,8 @@ export default function AdminVideoManagePageProperties({sectionId, sectionsForMo
 
         if (nearestSectionVideos.length === 0) return [0];
 
-        return currSectionVideos.length > 0 ? currSectionVideos.map(v => v.order_number) : [nearestSectionVideos[nearestSectionVideos.length - 1].order_number + 1];
+        const nextAvailableNumber = nearestSectionVideos[nearestSectionVideos.length - 1].order_number + 1;
+        return currSectionVideos.length > 0 ? [...currSectionVideos.map(v => v.order_number), nextAvailableNumber] : [nextAvailableNumber];
     }, [sectionId, sectionsForModule.length, videosForModule.length]);
 
     return <div className={`grid ${!editMode ? "grid-cols-2" : "sm:grid-cols-2"} items-center gap-5 mt-4`}>
