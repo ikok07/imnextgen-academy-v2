@@ -20,7 +20,6 @@ const propsSchema = z.object({
 });
 
 export default async function Page(props: z.infer<typeof propsSchema>) {
-
     const {data: safeProps, error} = propsSchema.safeParse(props);
     if (error) throw new Error("Invalid page params!");
 
