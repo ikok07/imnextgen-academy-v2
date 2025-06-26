@@ -68,7 +68,8 @@ export default function AdminVideoCreateModal({moduleId, sectionId, allSections,
 
         if (nearestSectionVideos.length === 0) return [0];
 
-        return currSectionVideos.length > 0 ? currSectionVideos.map(v => v.order_number) : [nearestSectionVideos[nearestSectionVideos.length - 1].order_number + 1];
+        const nextAvailableNumber = nearestSectionVideos[nearestSectionVideos.length - 1].order_number + 1;
+        return currSectionVideos.length > 0 ? [...currSectionVideos.map(v => v.order_number), nextAvailableNumber] : [nextAvailableNumber];
     }, [allSections, allVideosForModule, sectionId]);
 
     const {mutate: uploadVideoMethod, isLoading: isUploadingVideoFile, isSuccess: videoUploaded} = useMutation({
