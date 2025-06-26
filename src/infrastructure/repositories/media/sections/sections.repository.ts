@@ -3,6 +3,10 @@ import {ISectionsRepository} from "@/src/application/repositories/media/sections
 import {Section, SectionInsert, sectionsTable} from "@/drizzle/schema/sections";
 import { DatabaseError } from "@/src/entities/errors/db/database";
 import {and, eq, gt, inArray, sql} from "drizzle-orm";
+import {videosTable} from "@/drizzle/schema/videos";
+import {videoDescriptionsTable} from "@/drizzle/schema/video_descriptions";
+import {videoChaptersTable} from "@/drizzle/schema/video_chapters";
+import {videoResourceTable} from "@/drizzle/schema/video_resources";
 import {modulesTable} from "@/drizzle/schema/modules";
 
 export class SectionsRepository extends BaseRepository implements ISectionsRepository {
@@ -73,6 +77,20 @@ export class SectionsRepository extends BaseRepository implements ISectionsRepos
 
                         for (let i = 0; i < updatedSections.length; i++) {
                             await tx.update(sectionsTable).set({order_number: i}).where(eq(sectionsTable.id, updatedSections[i].id));
+                        }
+
+                        // Recalculate the videos order numbers
+                        let videoOrderCounter = 0;
+                        for (const section of updatedSections) {
+                            const videosForSection = await tx
+                                .select()
+                                .from(videosTable)
+                                .where(eq(videosTable.section_id, section.id))
+                                .then(rows => rows.sort((a, b) => a.order_number - b.order_number));
+
+                            for (const video of videosForSection) {
+                                await tx.update(videosTable).set({order_number: videoOrderCounter++}).where(eq(videosTable.id, video.id))
+                            }
                         }
                     }
 

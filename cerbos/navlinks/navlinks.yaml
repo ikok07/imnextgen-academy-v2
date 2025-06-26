@@ -8,6 +8,7 @@ resourcePolicy:
       roles:
         - user
         - mentor
+        - moderator
         - admin
       condition:
         match:
