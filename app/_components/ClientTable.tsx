@@ -40,6 +40,7 @@ export default function ClientTable() {
             selectionOptions={{
                 enabled: true,
                 multipleSelection: true,
+                showWhenNoSelection: true,
                 selectedRows,
                 onRowSelected: setSelectedRows,
                 onDelete: () => console.log("DELETED")

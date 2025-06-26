@@ -7,7 +7,7 @@ import {videoDescriptionsTable} from "@/drizzle/schema/video_descriptions";
 
 export const videosTable = pgTable("videos", {
     id: text("id").notNull().primaryKey().default(sql`gen_random_uuid()`),
-    section_id: text("section_id").references(() => sectionsTable.id, {
+    section_id: text("section_id").notNull().references(() => sectionsTable.id, {
         onUpdate: "cascade",
         onDelete: "set null"
     }),

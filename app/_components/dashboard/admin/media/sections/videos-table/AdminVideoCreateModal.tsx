@@ -1,0 +1,215 @@
+"use client"
+
+import {IoClose, IoVideocam} from "react-icons/io5";
+import PrimaryInput from "@/app/_components/ui/inputs/PrimaryInput";
+import {handleParse, trackErrors} from "@/app/_utils/handleInputValidation";
+import {z} from "zod";
+import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
+import {FormEvent, useMemo, useState} from "react";
+import AdminVideoCreateModalDescriptionFields
+    from "@/app/_components/dashboard/admin/media/sections/videos-table/AdminVideoCreateModalDescriptionFields";
+import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
+import {Input} from "@/app/_components/ui/shadcn/input";
+import SelfHostedVideoPlayer from "@/app/_components/ui/players/SelfHostedVideoPlayer";
+import axios, {AxiosProgressEvent} from "axios";
+import {useMutation, useQueryClient} from "react-query";
+import {getUploadVideoUrl} from "@/app/dashboard/admin/media/actions";
+import {uploadVideo} from "@/app/dashboard/admin/media/module/[moduleId]/section/[sectionId]/action";
+import {useAppUser} from "@/app/_hooks/auth/useAppUser";
+import PrimarySelect from "@/app/_components/ui/inputs/PrimarySelect";
+import {Video} from "@/drizzle/schema/videos";
+import {Section} from "@/drizzle/schema/sections";
+import {Progress} from "@/app/_components/ui/shadcn/progress";
+import {toast} from "sonner";
+import {GetUploadLinkResponse} from "@/src/application/services/media/videos/videos.service.interface";
+import {ServerActionResult} from "@/app/_utils/createServerAction";
+
+type AdminVideoCreateModalProps = {
+    moduleId: string,
+    sectionId: string,
+    allSections: Section[],
+    allVideos: Video[],
+    allVideosForModule: Video[],
+    onClose: () => void
+}
+
+async function uploadVideoFile(url: string, file: File, onUploadProgress: (e: AxiosProgressEvent) => void) {
+    await axios.put(url, file, {
+        headers: {"Content-Type": file.type},
+        onUploadProgress
+    });
+}
+
+export default function AdminVideoCreateModal({moduleId, sectionId, allSections, allVideos, allVideosForModule, onClose}: AdminVideoCreateModalProps) {
+    const queryClient = useQueryClient();
+    const {userObject} = useAppUser();
+    const [videoFile, setVideoFile] = useState<File | null>(null);
+    const [title, setTitle] = useState<string | null>(null);
+    const [orderNumber, setOrderNumber] = useState<string | null>(null);
+    const [descriptionId, setDescriptionId] = useState<string | null>(null);
+    const [descriptionLabel, setDescriptionLabel] = useState<string | null>(null);
+    const [descriptionMarkdown, setDescriptionMarkdown] = useState<string | null>(null);
+
+    const [errors, setErrors] = useState<string[]>([]);
+
+    const [uploadProgress, setUploadProgress] = useState(0);
+
+    const validOrderNumbers = useMemo(() => {
+        const currSection = allSections.find(s => s.id === sectionId)!;
+        const currSectionVideos = allVideosForModule.filter(v => v.section_id === sectionId).sort((a, b) => a.order_number - b.order_number);
+        let currSectionOrderNumber = currSection.order_number;
+
+        let nearestSectionVideos = currSectionVideos;
+
+        while (nearestSectionVideos.length === 0 && currSectionOrderNumber > 0) {
+            const iteratedSection = allSections.find(s => s.order_number === --currSectionOrderNumber)!;
+            nearestSectionVideos = allVideosForModule.filter(v => v.section_id === iteratedSection.id).sort((a, b) => a.order_number - b.order_number);
+        }
+
+        if (nearestSectionVideos.length === 0) return [0];
+
+        return currSectionVideos.length > 0 ? currSectionVideos.map(v => v.order_number) : [nearestSectionVideos[nearestSectionVideos.length - 1].order_number + 1];
+    }, [allSections, allVideosForModule, sectionId]);
+
+    const {mutate: uploadVideoMethod, isLoading: isUploadingVideoFile, isSuccess: videoUploaded} = useMutation({
+        mutationFn: async () => {
+            let uploadId: string | undefined;
+            // Upload video file to mux on the client side
+            if (videoFile) {
+                const res = await getUploadVideoUrl();
+                if (!res.success) throw new Error("Failed to create upload url!");
+                uploadId = res.value.uploadId;
+                await uploadVideoFile(res.value.url, videoFile, (e) => {
+                    if (!e.total) return;
+                    setUploadProgress(Math.round((e.loaded * 100) / e.total));
+                });
+            }
+            // Database update
+            await uploadVideo(moduleId, uploadId, userObject.user?.id, {
+                title: title ?? undefined,
+                section_id: sectionId,
+                order_number: orderNumber ? +orderNumber : undefined,
+                descriptionId: descriptionId != null && descriptionId != "new" ? descriptionId : undefined,
+                descriptionLabel: descriptionLabel ?? undefined,
+                descriptionMarkdown: descriptionMarkdown ?? undefined,
+            });
+
+            await queryClient.refetchQueries(["videos", sectionId]);
+        },
+        onSuccess() {
+          toast.success("Видеото е успешно качено!");
+          onClose();
+        },
+        onError() {
+            toast.error("Видеото не беше качено. Моля, опитай отново!");
+        }
+    });
+
+    const videoPlayer = useMemo(() => {
+        if (!videoFile) return;
+
+        return <div className="flex flex-col items-center justify-center">
+            <SelfHostedVideoPlayer url={URL.createObjectURL(videoFile)} />
+            <button className="text-primary/70 text-sm font-bold mt-3 hover:text-cta transition-all duration-200" onClick={() => setVideoFile(null)}>Премахване</button>
+        </div>
+    }, [videoFile]);
+
+    function buttonDisabled() {
+        let errorsPredicate: boolean;
+        if (descriptionId != null && descriptionId != "new") {
+            errorsPredicate = errors.filter(v => v !== "descriptionTitle" && v !== "descriptionMarkdown").length > 0;
+        } else {
+            errorsPredicate = errors.length > 0;
+        }
+        return errorsPredicate || videoUploaded;
+    }
+
+    function handleSubmit(e: FormEvent) {
+        e.preventDefault();
+        if (buttonDisabled()) return;
+        uploadVideoMethod();
+    }
+
+    return <form onSubmit={handleSubmit}>
+        <div className="flex items-center justify-between pb-2 border-b border-border">
+            <h4 className="text-lg">Създаване на видео</h4>
+            <button onClick={onClose}><IoClose className="text-2xl hover:text-cta transition-all duration-200"/></button>
+        </div>
+        <div className="grid gap-y-2 text-left mt-4">
+            <Input
+                type="file"
+                accept=".mp4,.mpeg"
+                id="video-upload"
+                className="hidden"
+                onChange={(e) => {
+                    const file = e.target.files ? e.target.files[0] : null;
+                    if (!file || !["video/mp4", "video/mpeg"].includes(file.type)) return;
+                    setVideoFile(file);
+                }}
+            />
+            {videoFile && videoPlayer}
+            {!videoFile && <label htmlFor="video-upload">
+                <div
+                    className="cursor-pointer aspect-video rounded-lg overflow-hidden my-4 hover:opacity-70 transition-all duration-200">
+                    <PrimaryErrorMessage
+                        Icon={IoVideocam}
+                        title="Качване на видео"
+                        message="Натисни тук, за да качиш видеото"
+                        className="border border-border h-full"
+                        titleClassName="text-[1rem] xs:text-2xl"
+                        descriptionClassName="text-[0.85rem] xs:text-sm"
+                    />
+                </div>
+            </label>}
+            <PrimaryInput
+                label="Заглавие"
+                placeholder="Секция..."
+                value={title ?? ""}
+                onChange={(e: any) => setTitle(e.target.value)}
+                error={handleParse({
+                    type: "ignoreNull",
+                    value: title,
+                    validateCb: () => z.string().min(1, {message: "Невалидно заглавие"}).parse(title),
+                    trackErrorsFunc: (id, action) => trackErrors(id, action, errors, setErrors),
+                    errorId: "title"
+                })}
+            />
+            <PrimarySelect
+                label="Поредност"
+                placeholder="Номер на видео"
+                value={orderNumber ?? ""}
+                onValueChange={v => setOrderNumber(v)}
+                options={validOrderNumbers.map(number => ({value: number.toString()}))}
+            />
+            <AdminVideoCreateModalDescriptionFields
+                descriptionId={descriptionId}
+                setDescriptionId={setDescriptionId}
+                descriptionTitle={descriptionLabel}
+                setDescriptionTitle={setDescriptionLabel}
+                descriptionMarkdown={descriptionMarkdown}
+                setDescriptionMarkdown={setDescriptionMarkdown}
+                errors={errors}
+                setErrors={setErrors}
+            />
+        </div>
+
+        {isUploadingVideoFile ?
+            <div className="grid gap-2 mt-4 animate-in slide-in-from-bottom-2 fade-in duration-200 transition-all">
+                <div className="flex items-center justify-between">
+                    <p className="text-sm">Видеото се качва...</p>
+                    <p className="text-sm font-bold text-cta dark:text-primary">{uploadProgress}%</p>
+                </div>
+                <Progress value={uploadProgress} sliderClassName="bg-cta dark:bg-primary" />
+            </div>
+            :
+            <PrimaryButton
+                className="w-full mt-4 animate-out slide-out-to-top-2 fade-out duration-200 transition-all"
+                type="submit"
+                disabled={buttonDisabled()}
+                loading={isUploadingVideoFile}
+            >
+                Създаване
+            </PrimaryButton>
+        }
+    </form>
+}

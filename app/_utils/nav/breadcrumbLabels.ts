@@ -6,5 +6,6 @@ export const BREADCRUMB_LABELS: Record<string, string> = {
     "payment-success": "Успешно плащане",
     "credit-success": "Успешна заявка",
     admin: "Администрация",
-    users: "Потребители"
+    users: "Потребители",
+    media: "Медия"
 }

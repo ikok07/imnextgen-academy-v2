@@ -498,6 +498,13 @@
       "when": 1750168177187,
       "tag": "0070_add-finished-videos-unique-constraint",
       "breakpoints": true
+    },
+    {
+      "idx": 71,
+      "version": "7",
+      "when": 1750429932736,
+      "tag": "0071_add-not-null-constraints-to-sections-and-videos",
+      "breakpoints": true
     }
   ]
 }

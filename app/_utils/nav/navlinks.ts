@@ -1,11 +1,11 @@
 import {IconType} from "react-icons";
-import {IoCalendar, IoCart, IoDocumentText, IoPeople, IoSchool} from "react-icons/io5";
+import {IoCalendar, IoCart, IoDocumentText, IoFilm, IoPeople, IoSchool} from "react-icons/io5";
 import {Routes} from "@/app/_utils/nav/routes";
 
 export type NavGroup = {
     id: string,
     label: string,
-    items: NavSubGroup[] | NavLink[],
+    items: (NavSubGroup | NavLink)[],
     disallowedRoles?: string[]
 }
 
@@ -83,10 +83,18 @@ export function getNavLinks(): NavGroup[] {
                             type: "link",
                             id: "allUsers",
                             Icon: IoDocumentText,
-                            label: "Всички потребители",
+                            label: "Всички",
                             href: "/dashboard/admin/users",
                         }
                     ]
+                },
+                {
+                    type: "link",
+                    id: "media",
+                    Icon: IoFilm,
+                    label: "Медия",
+                    href: Routes.dashboard.admin.media(),
+                    disallowedRoles: ["user", "mentor", "moderator"]
                 }
             ]
         }

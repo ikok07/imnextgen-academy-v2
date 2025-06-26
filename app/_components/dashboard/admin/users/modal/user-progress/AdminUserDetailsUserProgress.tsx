@@ -6,7 +6,7 @@ import AdminUserDetailsUserProgressSections
     from "@/app/_components/dashboard/admin/users/modal/user-progress/AdminUserDetailsUserProgressSections";
 import AdminUserDetailsUserProgressVideos
     from "@/app/_components/dashboard/admin/users/modal/user-progress/AdminUserDetailsUserProgressVideos";
-import {useUserProgress} from "@/app/_providers/UserProgressProvider";
+import {useUserProgress} from "@/app/_providers/admin/UserProgressProvider";
 
 type AdminUserDetailsUserProgressProps = {
     fullProfile: FullProfile

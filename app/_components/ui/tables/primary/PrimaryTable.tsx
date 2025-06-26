@@ -37,13 +37,13 @@ export default function PrimaryTable<TData>({isLoading, isRefetching, rowSize}: 
     }, [table.getState().columnSizing]);
 
     return <div className="grid grid-rows-[auto_1fr] space-y-3 w-full max-w-max h-full">
-        <div className="flex items-center justify-between">
-            {filterOptions?.enabled && <PrimaryTableFilterSelector />}
+        {!isLoading && <div className="flex items-center justify-between">
+            {filterOptions?.enabled && <PrimaryTableFilterSelector/>}
             <div className="flex items-center gap-3">
-                {isRefetching && <PrimaryLoader className="w-5 aspect-square" />}
-                <PrimarySelectionOptionsDropdown />
+                {isRefetching && <PrimaryLoader className="w-5 aspect-square"/>}
+                <PrimarySelectionOptionsDropdown/>
             </div>
-        </div>
+        </div>}
         <div className="grid grid-rows-[auto_1fr] overflow-auto border border-border rounded-lg">
             <div style={{width: `${totalTableWidth}px`}}>
                 <div className="overflow-hidden">

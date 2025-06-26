@@ -5,7 +5,7 @@ import {Progress} from "@/app/_components/ui/shadcn/progress";
 import {Card} from "@/app/_components/ui/shadcn/card";
 import {Section} from "@/drizzle/schema/sections";
 import {useMemo} from "react";
-import {useUserProgress} from "@/app/_providers/UserProgressProvider";
+import {useUserProgress} from "@/app/_providers/admin/UserProgressProvider";
 
 type AdminUserDetailsUserProgressSectionRowProps = {
     section: Section

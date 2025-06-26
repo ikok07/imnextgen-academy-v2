@@ -23,7 +23,7 @@ async function InnerContent() {
             roles: dbProfile.roles
         },
         resources: getNavlinkAuthResources(),
-    })
+    });
 
     return <DashboardSidebarClient results={results} />
 }
