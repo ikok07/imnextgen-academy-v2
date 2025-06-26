@@ -5,9 +5,18 @@ import {z} from "zod";
 import {Section, sectionsSchema} from "@/drizzle/schema/sections";
 import useErrorQuery from "@/app/_hooks/useErrorQuery";
 import {getSectionById} from "@/app/dashboard/admin/media/module/[moduleId]/section/[sectionId]/action";
+import {VideosForModuleResults} from "@/src/application/repositories/media/videos/videos.repository.interface";
+import {VideosForModuleResponse} from "@/src/application/use-cases/media/videos/get-videos-for-module.use-case";
+import {getSectionsForModule, getVideosForModule} from "@/app/dashboard/actions";
+import {Module} from "@/drizzle/schema/modules";
+import {videosSchema} from "@/drizzle/schema/videos";
 
 export const manageSectionStateSchema = z.object({
     section: sectionsSchema.optional(),
+    allSections: z.array(sectionsSchema).optional(),
+    allVideosForModule: z.array(videosSchema).optional(),
+    isLoadingAllVideosForModule: z.boolean(),
+    isRefetchingAllVideosForModule: z.boolean(),
     isLoadingSection: z.boolean(),
     editMode: z.boolean(),
     setEditMode: z.custom<Dispatch<SetStateAction<boolean>>>(),
@@ -25,26 +34,44 @@ export type ManageSectionState = z.infer<typeof manageSectionStateSchema>;
 const ManageSectionContext = createContext<ManageSectionState | null>(null);
 
 type AdminManageSectionProviderProps = {
+    module: Module,
     section: Section,
+    allSections: Section[],
+    allVideosForModule: VideosForModuleResponse,
     children: ReactNode
 }
 
-export function ManageSectionProvider({section, children}: AdminManageSectionProviderProps) {
+export function ManageSectionProvider({section, module, allSections, allVideosForModule, children}: AdminManageSectionProviderProps) {
 
     const [editMode, setEditMode] = useState(false);
     const [errors, setErrors] = useState<string[]>([]);
     const [hasChanges, setHasChanges] = useState(false);
 
-    const {data: sectionQuery, isLoading: isLoadingSection, isRefetching: isRefetchingModule} = useErrorQuery({
-        queryFn: () => getSectionById(section.id),
-        queryKey: ["section", section.id],
-        initialData: {success: true, value: section}
+    const {data: allSectionsQuery, isLoading: isLoadingAllSections} = useErrorQuery({
+        queryFn: () => getSectionsForModule(module.id),
+        queryKey: ["sections", module.id],
+        initialData: {success: true, value: allSections}
     });
 
-    const clientSection = useMemo(() => {
-        if (sectionQuery?.success) return sectionQuery.value;
+    const {data: allVideosForModuleQuery, isLoading: isLoadingAllVideosForModule, isRefetching: isRefetchingAllVideosForModule} = useErrorQuery({
+        queryFn: () => getVideosForModule(module.id),
+        queryKey: ["videos", module.id],
+        initialData: {success: true, value: allVideosForModule}
+    })
+
+    const clientAllSections = useMemo(() => {
+        if (allSectionsQuery?.success) return allSectionsQuery.value;
         // @ts-ignore
-    }, [sectionQuery?.value, isLoadingSection, isRefetchingModule]);
+    }, [allSectionsQuery?.value, isLoadingAllSections]);
+
+    const clientAllVideosForModule = useMemo(() => {
+        if (allVideosForModuleQuery?.success) return allVideosForModuleQuery.value;
+        // @ts-ignore
+    }, [allVideosForModuleQuery?.value, isLoadingAllSections])
+
+    const clientSection = useMemo(() => {
+        return clientAllSections?.find(s => s.id === section.id);
+    }, [clientAllSections]);
 
     const [title, setTitle] = useState<string | null>(clientSection?.title ?? section.title);
     const [orderNumber, setOrderNumber] = useState<string | null>(clientSection?.order_number.toString() ?? section.order_number.toString());
@@ -65,7 +92,10 @@ export function ManageSectionProvider({section, children}: AdminManageSectionPro
 
     return <ManageSectionContext.Provider value={{
         section: clientSection,
-        isLoadingSection,
+        allSections,
+        allVideosForModule: clientAllVideosForModule?.flatMap(obj => obj.videos),
+        isLoadingAllVideosForModule, isRefetchingAllVideosForModule,
+        isLoadingSection: isLoadingAllSections,
         editMode, setEditMode,
         errors, setErrors,
         hasChanges,

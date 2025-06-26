@@ -22,20 +22,19 @@ import {
     deleteMultipleVideos,
 } from "@/app/dashboard/admin/media/module/[moduleId]/section/[sectionId]/action";
 import {toast} from "sonner";
+import {useManageSection} from "@/app/_providers/admin/AdminManageSectionProvider";
 
 const columnHelper = createColumnHelper<Video>();
 
 type AdminSectionManageVideosTableProps = {
     moduleId: string,
     sectionId: string,
-    allSections: Section[]
-    allVideos: Video[],
-    allVideosForModule: Video[]
 }
 
-export default function AdminSectionManageVideosTable({moduleId, sectionId, allSections, allVideos, allVideosForModule}: AdminSectionManageVideosTableProps) {
+export default function AdminSectionManageVideosTable({moduleId, sectionId}: AdminSectionManageVideosTableProps) {
     const router = useRouter();
     const queryClient = useQueryClient();
+    const {allSections, allVideosForModule, isLoadingAllVideosForModule, isRefetchingAllVideosForModule} = useManageSection();
     const [createVideoModalOpened, setCreateVideoModalOpened] = useState(false);
     const [selectedRows, setSelectedRows] = useState<RowSelectionState>({});
     const [pagination, setPagination] = useState<PaginationState>({
@@ -44,16 +43,16 @@ export default function AdminSectionManageVideosTable({moduleId, sectionId, allS
     });
     const [sortedFields, setSortedFields] = useState<SortingState>([]);
 
-    const {data: allVideosQuery, isLoading: isLoadingAllVideos, isRefetching: isRefetchingAllVideos} = useErrorQuery({
-        queryFn: () => getVideosForSection(sectionId),
-        queryKey: ["videos", sectionId],
-        initialData: {success: true, value: allVideos}
-    });
+    const allVideos = useMemo(() => {
+        return allVideosForModule?.filter(v => v.section_id === sectionId);
+    }, [allVideosForModule]);
 
     const {mutate: deleteMultipleVideosMethod, isLoading: isDeletingVideos} = useErrorMutation({
         mutationFn: async (videoObjs: { id: string, playbackId: string | undefined | null }[]) => {
             const res = await deleteMultipleVideos(moduleId, videoObjs);
-            await queryClient.refetchQueries(["videos", sectionId]);
+            await queryClient.refetchQueries(["sections", moduleId]);
+            await queryClient.refetchQueries(["videos", moduleId]);
+            setSelectedRows({});
             return res;
         },
         onSuccess() {
@@ -65,8 +64,9 @@ export default function AdminSectionManageVideosTable({moduleId, sectionId, allS
     });
 
     const createVideoDisabled = useMemo(() => {
+        if (!allSections || !allVideosForModule) return true;
         return allSections.length > 0 && allVideosForModule.length === 0 && allSections.find(s => s.id === sectionId)!.order_number != 0;
-    }, [allVideos.length]);
+    }, [allVideos]);
 
     const columns = useMemo(() => [
         columnHelper.accessor(row => row.title, {
@@ -91,10 +91,10 @@ export default function AdminSectionManageVideosTable({moduleId, sectionId, allS
     ], []);
 
     const data = useMemo(() => {
-        if (!allVideosQuery?.success || isLoadingAllVideos) return [];
-        return allVideosQuery.value.sort((a, b) => a.order_number - b.order_number);
+        if (!allVideos || isLoadingAllVideosForModule) return [];
+        return allVideos.sort((a, b) => a.order_number - b.order_number);
         // @ts-ignore
-    }, [allVideosQuery?.value, isLoadingAllVideos]);
+    }, [allVideos?.length, isLoadingAllVideosForModule, isRefetchingAllVideosForModule]);
 
     return <>
         {<Dialog
@@ -104,7 +104,7 @@ export default function AdminSectionManageVideosTable({moduleId, sectionId, allS
             }}
         >
             <DialogContent className="[&>button:last-child]:hidden w-[95%] max-h-[95vh] max-w-[30rem] overflow-auto">
-                <AdminVideoCreateModal moduleId={moduleId} sectionId={sectionId} allSections={allSections} allVideos={data} allVideosForModule={allVideosForModule} onClose={() => setCreateVideoModalOpened(false)} />
+                <AdminVideoCreateModal moduleId={moduleId} sectionId={sectionId} onClose={() => setCreateVideoModalOpened(false)} />
             </DialogContent>
         </Dialog>}
         <div className="grid grid-rows-[auto_1fr] mt-4 gap-6">
@@ -148,8 +148,6 @@ export default function AdminSectionManageVideosTable({moduleId, sectionId, allS
                 >
                     <AdminSectionManageVideosTableWrapper
                         isDeletingVideos={isDeletingVideos}
-                        isLoadingAllVideos={isLoadingAllVideos}
-                        isRefetchingAlLVideos={isRefetchingAllVideos}
                     />
                 </TableProvider>
             </div>
