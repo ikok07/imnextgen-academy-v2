@@ -38,10 +38,10 @@ export class VideoDescriptionsRepository extends BaseRepository implements IVide
             throw new DatabaseError(`Failed to create video description! ${e}`);
         }
     }
-    updateVideoDescription(videoId: string, data: Partial<VideoDescriptionInsert>): Promise<VideoDescription> {
+    updateVideoDescription(descriptionId: string, data: Partial<VideoDescriptionInsert>): Promise<VideoDescription> {
         try {
             return this.queryDB(async db => {
-                const res = await db.update(videoDescriptionsTable).set(data).where(eq(videoDescriptionsTable.id, videoId)).returning();
+                const res = await db.update(videoDescriptionsTable).set(data).where(eq(videoDescriptionsTable.id, descriptionId)).returning();
                 if (res.length === 0) throw new Error("Video description could not be update!");
                 return res[0];
             })

@@ -8,9 +8,9 @@ export type IUpdateVideoDescriptionController = ReturnType<typeof updateVideoDes
 
 export const updateVideoDescriptionController = (
     updateVideoDescriptionUseCase: IUpdateVideoDescriptionUseCase
-) => async (videoId: string | undefined, data: Partial<VideoDescriptionInsert>) => {
+) => async (descriptionId: string | undefined, data: Partial<VideoDescriptionInsert>) => {
 
-    if (!videoId) throw new InputParseError("Invalid videoId!");
+    if (!descriptionId) throw new InputParseError("Invalid descriptionId!");
 
-    return updateVideoDescriptionUseCase(videoId, data);
+    return updateVideoDescriptionUseCase(descriptionId, data);
 }
