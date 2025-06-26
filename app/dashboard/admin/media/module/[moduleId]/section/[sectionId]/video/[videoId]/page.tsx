@@ -1,14 +1,15 @@
 import AdminVideoManageClientWrapper
     from "@/app/_components/dashboard/admin/media/videos/AdminVideoManageClientWrapper";
-import {getModuleById, getVideosForModule, getVideosForSection} from "@/app/dashboard/actions";
+import {getModuleById, getVideosForSection} from "@/app/dashboard/actions";
 import {getSectionById} from "@/app/dashboard/admin/media/module/[moduleId]/section/[sectionId]/action";
-import {getVideoById} from "@/app/dashboard/admin/media/module/[moduleId]/section/[sectionId]/video/[videoId]/actions";
 import {z} from "zod";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/app/_components/ui/shadcn/card";
 import AdminVideoManagePageHeaderButtons
     from "@/app/_components/dashboard/admin/media/videos/AdminVideoManagePageHeaderButtons";
 import AdminVideoManageDetailsContainer
     from "@/app/_components/dashboard/admin/media/videos/AdminVideoManageDetailsContainer";
+
+export const revalidate = 0;
 
 const propsSchema = z.object({
     params: z.object({

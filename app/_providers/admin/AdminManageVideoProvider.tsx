@@ -8,6 +8,7 @@ import {
 } from "@/app/dashboard/admin/media/module/[moduleId]/section/[sectionId]/video/[videoId]/actions";
 import {videoDescriptionsSchema} from "@/drizzle/schema/video_descriptions";
 import {getSignedTokens} from "@/app/dashboard/actions";
+import {getVideoDescriptions} from "@/app/dashboard/admin/media/actions";
 
 export const manageVideoState = z.object({
     video: videosSchema.optional(),
@@ -23,8 +24,9 @@ export const manageVideoState = z.object({
     setTitle: z.custom<Dispatch<SetStateAction<string | null>>>(),
     orderNumber: z.string().nullable(),
     setOrderNumber: z.custom<Dispatch<SetStateAction<string | null>>>(),
+    allDescriptions: z.array(videoDescriptionsSchema).optional(),
     videoDescription: videoDescriptionsSchema.optional(),
-    isLoadingDescription: z.boolean(),
+    isLoadingDescriptions: z.boolean(),
     descriptionId: z.string().nullable(),
     setDescriptionId: z.custom<Dispatch<SetStateAction<string | null>>>(),
     descriptionLabel: z.string().nullable(),
@@ -68,29 +70,47 @@ export function ManageVideoProvider({video, children}: AdminManageVideoProviderP
         // @ts-ignore
     }, [videoQuery?.value]);
 
-    const {data: descriptionQuery, isLoading: isLoadingDescription} = useErrorQuery({
-        queryFn: () => getVideoDescriptionById(clientVideo!.description_id),
-        queryKey: ["description", clientVideo?.id],
+    const {data: descriptionsQuery, isLoading: isLoadingDescriptions} = useErrorQuery({
+        queryFn: () => getVideoDescriptions(),
+        queryKey: ["descriptions"],
         enabled: !!clientVideo
     });
 
-    const videoDescription = useMemo(() => {
-        if (!descriptionQuery?.success) return;
-
-        return descriptionQuery.value;
+    const allDescriptions = useMemo(() => {
+        if (!descriptionsQuery?.success) return;
+        return descriptionsQuery.value;
         // @ts-ignore
-    }, [descriptionQuery?.value]);
+    }, [descriptionsQuery?.value])
+
+    const videoDescription = useMemo(() => {
+        if (!allDescriptions || !clientVideo) return;
+
+        return allDescriptions.find(d => d.id === descriptionId);
+    }, [allDescriptions, descriptionId]);
+
+    useEffect(() => {
+        setHasChanges(
+            !!videoFile ||
+            title != clientVideo?.title ||
+            !orderNumber || +orderNumber != clientVideo?.order_number ||
+            descriptionId != clientVideo.description_id ||
+            descriptionLabel != videoDescription?.label ||
+            descriptionMarkdown != videoDescription?.markdown
+        )
+    }, [videoFile, title, orderNumber, descriptionId, descriptionLabel, descriptionMarkdown]);
 
     useEffect(() => {
         if (!editMode && clientVideo) {
             setTitle(clientVideo.title)
             setOrderNumber(clientVideo.order_number.toString());
-            if (videoDescription) {
-                setDescriptionLabel(videoDescription.label);
-                setDescriptionMarkdown(videoDescription.markdown);
-            }
+            setDescriptionId(clientVideo?.description_id);
         }
     }, [editMode, clientVideo, videoDescription]);
+
+    useEffect(() => {
+        setDescriptionLabel(videoDescription?.label ?? null);
+        setDescriptionMarkdown(videoDescription?.markdown ?? null);
+    }, [videoDescription]);
 
     return <ManageVideoContext.Provider value={{
         video: clientVideo,
@@ -101,7 +121,7 @@ export function ManageVideoProvider({video, children}: AdminManageVideoProviderP
         videoFile, setVideoFile,
         title, setTitle,
         orderNumber, setOrderNumber,
-        videoDescription, isLoadingDescription,
+        allDescriptions, videoDescription, isLoadingDescriptions,
         descriptionId, setDescriptionId,
         descriptionLabel, setDescriptionLabel,
         descriptionMarkdown, setDescriptionMarkdown,

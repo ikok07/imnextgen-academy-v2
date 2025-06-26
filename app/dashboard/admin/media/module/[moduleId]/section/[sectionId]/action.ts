@@ -17,7 +17,7 @@ export const uploadVideo = createServerAction(async (moduleId: string | undefine
     let descriptionId = video?.descriptionId;
 
     if (!descriptionId) {
-        if (!video.descriptionLabel || !video.descriptionMarkdown) throw new ServerActionError("No description title or markdown provided!");
+        if (!video.descriptionLabel || !video.descriptionMarkdown) throw new ServerActionError("No description label or markdown provided!");
         const newDescription = await getInjection("ICreateVideoDescriptionController")({
             label: video.descriptionLabel,
             markdown: video.descriptionMarkdown

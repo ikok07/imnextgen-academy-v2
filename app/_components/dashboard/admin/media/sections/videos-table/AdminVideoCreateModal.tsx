@@ -69,7 +69,7 @@ export default function AdminVideoCreateModal({moduleId, sectionId, allSections,
 
     const {mutate: uploadVideoMethod, isLoading: isUploadingVideoFile, isSuccess: videoUploaded} = useMutation({
         mutationFn: async () => {
-            let uploadId: string | undefined
+            let uploadId: string | undefined;
             // Upload video file to mux on the client side
             if (videoFile) {
                 const res = await getUploadVideoUrl();

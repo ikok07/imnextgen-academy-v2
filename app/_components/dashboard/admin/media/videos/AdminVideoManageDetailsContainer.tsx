@@ -11,26 +11,26 @@ import AdminVideoManagePageProperties
 import DashboardModuleVideoDescription
     from "@/app/_components/dashboard/classroom/module/video/DashboardModuleVideoDescription";
 import AdminVideoManagePlayer from "@/app/_components/dashboard/admin/media/videos/AdminVideoManagePlayer";
+import PrimarySelect from "@/app/_components/ui/inputs/PrimarySelect";
+import { Skeleton } from "@/app/_components/ui/shadcn/skeleton";
+import AdminVideoManageDetailsDescription
+    from "@/app/_components/dashboard/admin/media/videos/AdminVideoManageDetailsDescription";
 
 type AdminVideoManageDetailsContainerProps = {
     allVideos: Video[]
 }
 
-// TODO: 1. Add loading skeletons
-// TODO: 2. Implement update functionality
+// DONE: 1. Add loading skeletons
+// DONE: 2. Implement update functionality
 // TODO: 3. Configure access policies
 
 export default function AdminVideoManageDetailsContainer({allVideos}: AdminVideoManageDetailsContainerProps) {
     const {
-        video,
+        video, isLoadingVideo,
         editMode,
         errors,
         setErrors,
-        videoFile, setVideoFile,
-        title, setTitle,
-        videoDescription,
-        descriptionLabel, setDescriptionLabel,
-        descriptionMarkdown, setDescriptionMarkdown
+        title, setTitle
     } = useManageVideo();
 
 
@@ -52,33 +52,11 @@ export default function AdminVideoManageDetailsContainer({allVideos}: AdminVideo
                     })}
                 />
                 :
-                <h1 className="text-xl font-extrabold">{video?.title}</h1>
+                isLoadingVideo ? <Skeleton className="w-[40%] h-[1.4rem]" /> : <h1 className="text-xl font-extrabold">{video?.title}</h1>
             }
 
             <AdminVideoManagePageProperties allVideos={allVideos} />
-
-            <h4 className="my-3 text-lg font-semibold">Описание</h4>
-            {editMode ?
-                <div className="flex flex-col gap-4">
-                    <PrimaryInput
-                        label="Име на шаблон"
-                        placeholder="Шаблон 1"
-                        value={descriptionLabel ?? videoDescription?.label ?? ""}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => setDescriptionLabel(e.target.value)}
-                    />
-                    <PrimaryInput
-                        label="Шаблон"
-                        placeholder="# Заглавие..."
-                        multiline={true}
-                        rows={7}
-                        value={descriptionMarkdown ?? videoDescription?.markdown ?? ""}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => setDescriptionMarkdown(e.target.value)}
-                        className="resize-none"
-                    />
-                </div>
-                :
-                <DashboardModuleVideoDescription description={videoDescription?.markdown ?? ""}/>
-            }
+            <AdminVideoManageDetailsDescription />
         </div>
     </div>
 }

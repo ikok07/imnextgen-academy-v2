@@ -9,8 +9,11 @@ import {useManageVideo} from "@/app/_providers/admin/AdminManageVideoProvider";
 import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
 import {IoVideocam, IoVideocamOff} from "react-icons/io5";
 import SelfHostedVideoPlayer from "@/app/_components/ui/players/SelfHostedVideoPlayer";
+import {useViewLoaded} from "@/app/_hooks/useViewLoaded";
+import {Skeleton} from "@/app/_components/ui/shadcn/skeleton";
 
 export default function AdminVideoManagePlayer() {
+    const {viewLoaded} = useViewLoaded();
     const {video, editMode, videoFile, setVideoFile} = useManageVideo();
 
     const {data: signedTokensQuery, isLoading: isGettingSignedTokens} = useErrorQuery({
@@ -32,6 +35,10 @@ export default function AdminVideoManagePlayer() {
         if (!videoFile) return;
         return <SelfHostedVideoPlayer url={URL.createObjectURL(videoFile)} className="w-full aspect-video" />
     }, [videoFile]);
+
+    if (!viewLoaded) {
+        return <Skeleton className="w-full aspect-video" />
+    }
 
     if (editMode) {
         return <div className="w-full h-full grid grid-rows-[1fr_auto] items-center gap-3">
@@ -62,8 +69,8 @@ export default function AdminVideoManagePlayer() {
         </div>
     }
 
-    if (video?.playbackId && tokens) {
-        return <MuxVideoPlayer streamType="on-demand" playbackId={video.playbackId} tokens={tokens} chapters={[]} className="w-full aspect-video"/>
+    if ((video?.playbackId && tokens) || isGettingSignedTokens) {
+        return <MuxVideoPlayer streamType="on-demand" playbackId={video?.playbackId ?? ""} tokens={tokens} isLoading={isGettingSignedTokens} chapters={[]} className="w-full aspect-video"/>
     } else {
         return <div className="w-full aspect-video grid place-content-center border border-border rounded-lg">
             <PrimaryErrorMessage

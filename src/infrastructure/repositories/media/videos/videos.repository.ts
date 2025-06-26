@@ -104,6 +104,7 @@ export class VideosRepository extends BaseRepository implements IVideosRepositor
         try {
             return this.queryDB(async db => {
                 return db.transaction(async tx => {
+
                     const videoToUpdate = await tx.select().from(videosTable).where(eq(videosTable.id, videoId)).then(rows => rows[0]);
                     if (!videoToUpdate) throw new Error("Video not found!");
 

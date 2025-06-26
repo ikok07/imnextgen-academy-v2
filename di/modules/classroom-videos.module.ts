@@ -127,7 +127,7 @@ export function createVideosModule() {
 
     videosModule
         .bind(DI_SYMBOLS.IUpdateVideoController)
-        .toHigherOrderFunction(updateVideoController, [DI_SYMBOLS.ICreateVideoUseCase]);
+        .toHigherOrderFunction(updateVideoController, [DI_SYMBOLS.IUpdateVideoUseCase]);
 
     videosModule
         .bind(DI_SYMBOLS.IDeleteVideoUseCase)
