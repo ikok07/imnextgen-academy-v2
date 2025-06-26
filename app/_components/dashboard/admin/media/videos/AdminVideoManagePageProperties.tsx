@@ -27,8 +27,9 @@ export default function AdminVideoManagePageProperties({sectionId, sectionsForMo
         let nearestSectionVideos = currSectionVideos;
 
         while (nearestSectionVideos.length === 0 && currSectionOrderNumber > 0) {
-            const iteratedSection = sectionsForModule.find(s => s.order_number === --currSectionOrderNumber)!;
+            const iteratedSection = sectionsForModule.find(s => s.order_number === currSectionOrderNumber)!;
             nearestSectionVideos = videosForModule.filter(v => v.section_id === iteratedSection.id).sort((a, b) => a.order_number - b.order_number);
+            currSectionOrderNumber--;
         }
 
         if (nearestSectionVideos.length === 0) return [0];
