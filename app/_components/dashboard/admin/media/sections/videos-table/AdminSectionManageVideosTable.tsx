@@ -29,10 +29,11 @@ type AdminSectionManageVideosTableProps = {
     moduleId: string,
     sectionId: string,
     allSections: Section[]
-    allVideos: Video[]
+    allVideos: Video[],
+    allVideosForModule: Video[]
 }
 
-export default function AdminSectionManageVideosTable({moduleId, sectionId, allSections, allVideos}: AdminSectionManageVideosTableProps) {
+export default function AdminSectionManageVideosTable({moduleId, sectionId, allSections, allVideos, allVideosForModule}: AdminSectionManageVideosTableProps) {
     const router = useRouter();
     const queryClient = useQueryClient();
     const [createVideoModalOpened, setCreateVideoModalOpened] = useState(false);
@@ -64,7 +65,7 @@ export default function AdminSectionManageVideosTable({moduleId, sectionId, allS
     });
 
     const createVideoDisabled = useMemo(() => {
-        return allSections.length > 0 && allVideos.length === 0 && allSections.find(s => s.id === sectionId)!.order_number != 0;
+        return allSections.length > 0 && allVideosForModule.length === 0 && allSections.find(s => s.id === sectionId)!.order_number != 0;
     }, [allVideos.length]);
 
     const columns = useMemo(() => [
@@ -103,7 +104,7 @@ export default function AdminSectionManageVideosTable({moduleId, sectionId, allS
             }}
         >
             <DialogContent className="[&>button:last-child]:hidden w-[95%] max-h-[95vh] max-w-[30rem] overflow-auto">
-                <AdminVideoCreateModal moduleId={moduleId} sectionId={sectionId} allSections={allSections} allVideos={data} onClose={() => setCreateVideoModalOpened(false)} />
+                <AdminVideoCreateModal moduleId={moduleId} sectionId={sectionId} allSections={allSections} allVideos={data} allVideosForModule={allVideosForModule} onClose={() => setCreateVideoModalOpened(false)} />
             </DialogContent>
         </Dialog>}
         <div className="grid grid-rows-[auto_1fr] mt-4 gap-6">

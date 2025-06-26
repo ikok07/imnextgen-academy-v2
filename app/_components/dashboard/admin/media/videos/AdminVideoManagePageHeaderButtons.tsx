@@ -89,7 +89,7 @@ export default function AdminVideoManagePageHeaderButtons({moduleId, sectionId}:
             :
             <SecondaryButton onClick={() => router.push(Routes.dashboard.admin.section(moduleId, sectionId))}>Назад</SecondaryButton>
         }
-        {isUpdatingVideo ?
+        {isUpdatingVideo && !!videoFile ?
             <div className="flex items-center gap-2 text-sm animate-in slide-in-from-bottom-2 fade-in duration-200">
                 <LoadingSpinner className="text-cta" />
                 <p>Качване: {uploadProgress}%</p>
@@ -97,6 +97,7 @@ export default function AdminVideoManagePageHeaderButtons({moduleId, sectionId}:
             :
             <PrimaryButton
                 onClick={editMode ? handleSaveChanges : handleEnableEdit}
+                loading={isUpdatingVideo}
                 disabled={editMode && (!hasChanges || errors.length > 0)}
             >
                 {!editMode ? "Редактиране" : "Запазване"}

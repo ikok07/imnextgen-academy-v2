@@ -94,7 +94,7 @@ export function getNavLinks(): NavGroup[] {
                     Icon: IoFilm,
                     label: "Медия",
                     href: Routes.dashboard.admin.media(),
-                    disallowedRoles: ["mentor", "moderator"]
+                    disallowedRoles: ["user", "mentor", "moderator"]
                 }
             ]
         }

@@ -75,10 +75,6 @@ export default function AdminModuleManageSectionsTable({moduleId, allSections, a
         // @ts-ignore
     }, [allVideosQuery?.value]);
 
-    const createSectionDisabled = useMemo(() => {
-        return allSections.length > 0 && allVideos.length === 0;
-    }, [allVideos.length]);
-
     const columns = useMemo(() => [
         columnHelper.accessor(row => row.title, {
             id: "title",
@@ -106,6 +102,10 @@ export default function AdminModuleManageSectionsTable({moduleId, allSections, a
         return allSectionsQuery.value.sort((a, b) => a.order_number - b.order_number);
         // @ts-ignore
     }, [allSectionsQuery?.value, isLoadingAllSections]);
+
+    const createSectionDisabled = useMemo(() => {
+        return data.length > 0 && allVideos.length === 0;
+    }, [data.length, allVideos.length]);
 
     return <>
         {<Dialog

@@ -1,5 +1,7 @@
 import {ReactNode} from "react";
 import {checkAccess, checkMultipleResourcesAccess, getUser} from "@/app/actions";
+import RedirectComponent from "@/app/_components/ui/RedirectComponent";
+import {Routes} from "@/app/_utils/nav/routes";
 
 type LayoutProps = {
     children: ReactNode
@@ -25,8 +27,10 @@ export default async function Layout({children}: LayoutProps) {
     });
 
     if (!accessResult.success || accessResult.value.length === 0) throw new Error("Could not determine if the user has access to this functionality!");
-    console.log(userResult.value.dbProfile.roles, accessResult.value[0].actions)
+
     const hasAccess = !Object.values(accessResult.value[0].actions).some(val => val !== "EFFECT_ALLOW");
-    console.log(hasAccess)
+
+    if (!hasAccess) return <RedirectComponent path={Routes.dashboard.classroom.base} />
+
     return children;
 }

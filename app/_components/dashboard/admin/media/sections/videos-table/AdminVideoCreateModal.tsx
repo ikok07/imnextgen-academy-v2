@@ -29,6 +29,7 @@ type AdminVideoCreateModalProps = {
     sectionId: string,
     allSections: Section[],
     allVideos: Video[],
+    allVideosForModule: Video[],
     onClose: () => void
 }
 
@@ -39,7 +40,7 @@ async function uploadVideoFile(url: string, file: File, onUploadProgress: (e: Ax
     });
 }
 
-export default function AdminVideoCreateModal({moduleId, sectionId, allSections, allVideos, onClose}: AdminVideoCreateModalProps) {
+export default function AdminVideoCreateModal({moduleId, sectionId, allSections, allVideos, allVideosForModule, onClose}: AdminVideoCreateModalProps) {
     const queryClient = useQueryClient();
     const {userObject} = useAppUser();
     const [videoFile, setVideoFile] = useState<File | null>(null);
@@ -55,17 +56,20 @@ export default function AdminVideoCreateModal({moduleId, sectionId, allSections,
 
     const validOrderNumbers = useMemo(() => {
         const currSection = allSections.find(s => s.id === sectionId)!;
+        const currSectionVideos = allVideosForModule.filter(v => v.section_id === sectionId).sort((a, b) => a.order_number - b.order_number);
         let currSectionOrderNumber = currSection.order_number;
 
-        let nearestSectionVideos = allVideos.filter(v => v.section_id === sectionId);
+        let nearestSectionVideos = currSectionVideos;
+
         while (nearestSectionVideos.length === 0 && currSectionOrderNumber > 0) {
             const iteratedSection = allSections.find(s => s.order_number === --currSectionOrderNumber)!;
-            nearestSectionVideos = allVideos.filter(v => v.section_id === iteratedSection.id);
+            nearestSectionVideos = allVideosForModule.filter(v => v.section_id === iteratedSection.id).sort((a, b) => a.order_number - b.order_number);
         }
 
         if (nearestSectionVideos.length === 0) return [0];
-        return nearestSectionVideos.map(v => v.order_number).concat(nearestSectionVideos[nearestSectionVideos.length - 1].order_number + 1)
-    }, [allSections, allVideos, sectionId]);
+
+        return currSectionVideos.length > 0 ? currSectionVideos.map(v => v.order_number) : [nearestSectionVideos[nearestSectionVideos.length - 1].order_number + 1];
+    }, [allSections, allVideosForModule, sectionId]);
 
     const {mutate: uploadVideoMethod, isLoading: isUploadingVideoFile, isSuccess: videoUploaded} = useMutation({
         mutationFn: async () => {

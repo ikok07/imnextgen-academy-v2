@@ -5,7 +5,7 @@ import {moduleAccessEnum, moduleAccessEnumSchema} from "@/drizzle/schema/modules
 import PrimarySelect from "@/app/_components/ui/inputs/PrimarySelect";
 import PrimaryButton from "@/app/_components/ui/buttons/PrimaryButton";
 import {IoClose, IoCloudUpload} from "react-icons/io5";
-import {FormEvent, useEffect, useMemo, useState} from "react";
+import {FormEvent, useMemo, useState} from "react";
 import {z} from "zod";
 import {handleParse, trackErrors} from "@/app/_utils/handleInputValidation";
 import PrimaryErrorMessage from "@/app/_components/ui/errors/PrimaryErrorMessage";
@@ -119,7 +119,7 @@ export default function AdminModulesTableCreateModuleModal({onClose}: AdminModul
                 error={handleParse({
                     type: "ignoreNull",
                     value: description,
-                    validateCb: () => z.string().min(1, {message: "Невалидно описание"}).parse(description),
+                    validateCb: () => z.string().min(10, {message: "Минимум 10 символа"}).parse(description),
                     trackErrorsFunc: (id, action) => trackErrors(id, action, errors, setErrors),
                     errorId: "description"
                 })}
