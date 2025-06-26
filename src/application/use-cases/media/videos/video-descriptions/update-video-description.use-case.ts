@@ -7,6 +7,6 @@ export type IUpdateVideoDescriptionUseCase = ReturnType<typeof updateVideoDescri
 
 export const updateVideoDescriptionUseCase = (
     videoDescriptionsRepository: IVideoDescriptionsRepository
-) => async (videoId: string, data: Partial<VideoDescriptionInsert>) => {
-    return videoDescriptionsRepository.updateVideoDescription(videoId, data);
+) => async (descriptionId: string, data: Partial<VideoDescriptionInsert>) => {
+    return videoDescriptionsRepository.updateVideoDescription(descriptionId, data);
 }
