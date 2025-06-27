@@ -7,6 +7,12 @@ import { deleteResourceUseCase } from "@/src/application/use-cases/media/videos/
 import {
     deleteResourceController
 } from "@/src/interface-adapters/controllers/media/videos/video-resources/delete-resource.controller";
+import {
+    deleteMultipleResourcesUseCase
+} from "@/src/application/use-cases/media/videos/video-resources/delete-multiple-resource.use-case";
+import {
+    deleteMultipleResourcesController
+} from "@/src/interface-adapters/controllers/media/videos/video-resources/delete-multiple-resources.controller";
 
 export function createVideoResourcesModule() {
     const videoResourcesModule = createModule();
@@ -30,6 +36,14 @@ export function createVideoResourcesModule() {
     videoResourcesModule
         .bind(DI_SYMBOLS.IDeleteResourceController)
         .toHigherOrderFunction(deleteResourceController, [DI_SYMBOLS.IDeleteResourceUseCase]);
+
+    videoResourcesModule
+        .bind(DI_SYMBOLS.IDeleteMultipleResourcesUseCase)
+        .toHigherOrderFunction(deleteMultipleResourcesUseCase, [DI_SYMBOLS.IVideoResourcesRepository]);
+
+    videoResourcesModule
+        .bind(DI_SYMBOLS.IDeleteMultipleResourcesController)
+        .toHigherOrderFunction(deleteMultipleResourcesController, [DI_SYMBOLS.IDeleteMultipleResourcesUseCase]);
 
     return videoResourcesModule;
 }

@@ -4,7 +4,7 @@ import {
 } from "@/src/application/repositories/media/videos/video-resources.repository.interface";
 import {VideoResourceInsert, VideoResource, videoResourceTable} from "@/drizzle/schema/video_resources";
 import { DatabaseError } from "@/src/entities/errors/db/database";
-import {eq} from "drizzle-orm";
+import {eq, inArray} from "drizzle-orm";
 
 export class VideoResourcesRepository extends BaseRepository implements IVideoResourcesRepository {
     createResource(data: VideoResourceInsert): Promise<VideoResource> {
@@ -18,6 +18,7 @@ export class VideoResourcesRepository extends BaseRepository implements IVideoRe
             throw new DatabaseError(`Failed to create video resource! ${e}`);
         }
     }
+
     async deleteResource(resourceId: string): Promise<void> {
         try {
             await this.queryDB(db => {
@@ -25,6 +26,16 @@ export class VideoResourcesRepository extends BaseRepository implements IVideoRe
             });
         } catch (e) {
             throw new DatabaseError(`Failed to delete video resource! ${e}`);
+        }
+    }
+
+    async deleteMultipleResources(resourceIds: string[]): Promise<void> {
+        try {
+            await this.queryDB(db => {
+                return db.delete(videoResourceTable).where(inArray(videoResourceTable.id, resourceIds));
+            });
+        } catch (e) {
+            throw new DatabaseError(`Failed to delete multiple video resource! ${e}`);
         }
     }
 }
