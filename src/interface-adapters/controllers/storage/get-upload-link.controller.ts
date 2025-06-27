@@ -10,7 +10,6 @@ export type IGetUploadLinkController = ReturnType<typeof getUploadLinkController
 export const getUploadLinkController = (
     getUploadLinkUseCase: IGetUploadLinkUseCase
 ) => async (data: Partial<GetUploadLinkOptions>) => {
-
     const {data: parsedData, error} = getUploadLinkOptionsSchema.safeParse(data);
     if (error) throw new InputParseError(`Invalid data! ${error}`);
 

@@ -38,7 +38,7 @@ export default async function Page(props: z.infer<typeof propsSchema>) {
     const video = videosForModule.filter(obj => obj.section.id === safeProps.params.sectionId).flatMap(obj => obj.videos).find(v => v.id === safeProps.params.videoId);
     if (!video) throw new Error("Video not found!");
 
-    return <AdminVideoManageClientWrapper module={module} section={section} video={video}>
+    return <AdminVideoManageClientWrapper module={module} section={section} video={video} videosForModule={videosForModule}>
         <div className="grid grid-rows-[auto_1fr] w-[95%] h-full max-w-[50rem] mt-4 mx-auto">
             <Card>
                 <CardHeader className="pb-2 pt-3 border-b border-border grid sm:grid-cols-[1fr_auto] items-start gap-x-6 gap-y-3">
@@ -49,7 +49,7 @@ export default async function Page(props: z.infer<typeof propsSchema>) {
                     <AdminVideoManagePageHeaderButtons moduleId={safeProps.params.moduleId} sectionId={props.params.sectionId} />
                 </CardHeader>
                 <CardContent>
-                    <AdminVideoManageDetailsContainer sectionId={safeProps.params.sectionId} sectionsForModule={sectionsForModule} videosForModule={videosForModule.flatMap(obj => obj.videos)} />
+                    <AdminVideoManageDetailsContainer sectionId={safeProps.params.sectionId} sectionsForModule={sectionsForModule} />
                 </CardContent>
             </Card>
         </div>

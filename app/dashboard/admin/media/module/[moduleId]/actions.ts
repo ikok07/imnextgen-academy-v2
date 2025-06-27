@@ -11,7 +11,7 @@ export const updateModule = createServerAction(async (moduleId: string | undefin
       if (image.new.length > 300_000) throw new ServerActionError({id: "image-size", message: "Снимката не трябва да надвишава 300kb!"});
 
       newImageUrl = await getInjection("IUploadSmallFileController")({
-         bucket: process.env.R2_MODULES_IMAGES_BUCKET,
+         bucket: process.env.NEXT_PUBLIC_R2_MODULES_IMAGES_BUCKET,
          key: `${Math.floor(Date.now() / 1000)}-${image.fileName}`,
          body: Buffer.from(image.new),
          contentType: image.fileType
@@ -19,7 +19,7 @@ export const updateModule = createServerAction(async (moduleId: string | undefin
 
       if (image.oldURI) {
          await getInjection("IDeleteFileController")({
-            bucket: process.env.R2_MODULES_IMAGES_BUCKET,
+            bucket: process.env.NEXT_PUBLIC_R2_MODULES_IMAGES_BUCKET,
             key: new URLSearchParams(image.oldURI).get("path") ?? undefined
          });
       }
