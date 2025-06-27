@@ -11,6 +11,12 @@ import {
 import {
     IVideoResourcesRepository
 } from "@/src/application/repositories/media/videos/video-resources.repository.interface";
+import {
+    IDeleteMultipleResourcesUseCase
+} from "@/src/application/use-cases/media/videos/video-resources/delete-multiple-resource.use-case";
+import {
+    IDeleteMultipleResourcesController
+} from "@/src/interface-adapters/controllers/media/videos/video-resources/delete-multiple-resources.controller";
 
 export const VIDEO_RESOURCES_SYMBOLS = {
     IVideoResourcesRepository: Symbol.for("IVideoResourcesRepository"),
@@ -20,6 +26,9 @@ export const VIDEO_RESOURCES_SYMBOLS = {
 
     IDeleteResourceUseCase: Symbol.for("IDeleteResourceUseCase"),
     IDeleteResourceController: Symbol.for("IDeleteResourceController"),
+
+    IDeleteMultipleResourcesUseCase: Symbol.for("IDeleteMultipleResourcesUseCase"),
+    IDeleteMultipleResourcesController: Symbol.for("IDeleteMultipleResourcesController")
 }
 
 export interface VIDEO_RESOURCES_RETURN_TYPES {
@@ -29,7 +38,10 @@ export interface VIDEO_RESOURCES_RETURN_TYPES {
     ICreateResourceController: ICreateResourceController
 
     IDeleteResourceUseCase: IDeleteResourceUseCase,
-    IDeleteResourceController: IDeleteResourceController
+    IDeleteResourceController: IDeleteResourceController,
+
+    IDeleteMultipleResourcesUseCase: IDeleteMultipleResourcesUseCase,
+    IDeleteMultipleResourcesController: IDeleteMultipleResourcesController
 }
 
 
