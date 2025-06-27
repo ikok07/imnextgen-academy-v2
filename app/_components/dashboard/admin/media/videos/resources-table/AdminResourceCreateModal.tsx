@@ -127,7 +127,7 @@ export default function AdminResourceCreateModal({onClose}: AdminResourceCreateM
             <PrimaryButton
                 className="w-full mt-4 animate-out slide-out-to-top-2 fade-out duration-200 transition-all"
                 type="submit"
-                disabled={errors.length > 0 && !!file}
+                disabled={errors.length > 0 || !file}
                 loading={isUploadingResource}
             >
                 Създаване
