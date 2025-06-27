@@ -5,9 +5,14 @@ import { IUploadSmallFileController } from "@/src/interface-adapters/controllers
 import {IDeleteFileUseCase} from "@/src/application/use-cases/storage/delete-file.use-case";
 import { IDeleteMultipleFilesController } from "@/src/interface-adapters/controllers/storage/delete-multiple-files.controller";
 import {IDeleteMultipleFilesUseCase} from "@/src/application/use-cases/storage/delete-multiple-files.use-case";
+import {IGetUploadLinkUseCase} from "@/src/application/use-cases/storage/get-upload-link.use-case";
+import {IGetUploadLinkController} from "@/src/interface-adapters/controllers/storage/get-upload-link.controller";
 
 export const STORAGE_SYMBOLS = {
     IS3StorageService: Symbol.for("IS3StorageService"),
+
+    IGetFileUploadLinkUseCase: Symbol.for("IGetFileUploadLinkUseCase"),
+    IGetFileUploadLinkController: Symbol.for("IGetFileUploadLinkController"),
 
     IUploadSmallFileUseCase: Symbol.for("IUploadSmallFileUseCase"),
     IUploadSmallFileController: Symbol.for("IUploadSmallFileController"),
@@ -22,6 +27,9 @@ export const STORAGE_SYMBOLS = {
 
 export interface STORAGE_RETURN_TYPES {
     IS3StorageService: IS3StorageService,
+
+    IGetFileUploadLinkUseCase: IGetUploadLinkUseCase,
+    IGetFileUploadLinkController: IGetUploadLinkController,
 
     IUploadSmallFileUseCase: IUploadSmallFileUseCase,
     IUploadSmallFileController: IUploadSmallFileController,

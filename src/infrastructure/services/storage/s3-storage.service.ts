@@ -1,10 +1,11 @@
 import {
-    DeleteFileOptions, DeleteMultipleFilesOptions,
+    DeleteFileOptions, DeleteMultipleFilesOptions, GetUploadLinkOptions,
     IS3StorageService,
     UploadFileOptions
 } from "@/src/application/services/storage/s3-storage.service.interface";
 import {DeleteObjectCommand, DeleteObjectsCommand, PutObjectCommand, S3Client} from "@aws-sdk/client-s3";
 import {S3StorageError} from "@/src/entities/errors/storage/s3-storage";
+import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
 
 export class S3StorageService implements IS3StorageService {
 
@@ -19,6 +20,22 @@ export class S3StorageService implements IS3StorageService {
         useArnRegion: true,
         tls: true
     });
+
+    async getUploadLink({bucket, key, contentType, expiresInSeconds}: GetUploadLinkOptions): Promise<string> {
+        try {
+            const command = new PutObjectCommand({
+                Bucket: bucket,
+                Key: key,
+                ContentType: contentType
+            });
+
+            return await getSignedUrl(this.client, command, {
+                expiresIn: expiresInSeconds
+            });
+        } catch (e) {
+            throw new S3StorageError("Failed to get upload link!");
+        }
+    }
 
     /**
      * @brief Uploads the file server side if the size is not that big
