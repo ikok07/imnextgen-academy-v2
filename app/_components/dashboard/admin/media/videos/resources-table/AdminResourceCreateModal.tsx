@@ -57,7 +57,7 @@ export default function AdminResourceCreateModal({onClose}: AdminResourceCreateM
             });
 
             if (!uploadUrlResult.success) throw new Error("Upload link not generated!");
-            console.log(uploadUrlResult.value);
+
             await uploadFile(uploadUrlResult.value, file, (e) => {
                 setUploadProgress(Math.round((e.loaded * 100) / (e.total || 1)));
             });
@@ -66,7 +66,7 @@ export default function AdminResourceCreateModal({onClose}: AdminResourceCreateM
                 label: label ?? undefined,
                 type: "file",
                 video_id: video?.id,
-                url: `/api/v1/assets?bucket=${process.env.R2_VIDEO_RESOURCES_BUCKET!}&path=${file?.name}`
+                url: `${process.env.NEXT_PUBLIC_BASE_URL!}/api/v1/assets?bucket=${process.env.NEXT_PUBLIC_R2_VIDEO_RESOURCES_BUCKET!}&path=${file?.name}`
             });
             await queryClient.refetchQueries(["videos", module.id]);
             return res;
@@ -127,7 +127,7 @@ export default function AdminResourceCreateModal({onClose}: AdminResourceCreateM
             <PrimaryButton
                 className="w-full mt-4 animate-out slide-out-to-top-2 fade-out duration-200 transition-all"
                 type="submit"
-                disabled={errors.length > 0 && !!file}
+                disabled={errors.length > 0 || !file}
                 loading={isUploadingResource}
             >
                 Създаване
