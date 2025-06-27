@@ -10,7 +10,7 @@ import {useManageVideo} from "@/app/_providers/admin/AdminManageVideoProvider";
 
 export default function AdminVideoManageDetailsDescription() {
     const {
-        isLoadingVideo,
+        isLoadingVideosForModule,
         editMode,
         allDescriptions, videoDescription, isLoadingDescriptions,
         descriptionId, setDescriptionId,
@@ -45,7 +45,7 @@ export default function AdminVideoManageDetailsDescription() {
                 />
             </div>
             :
-            isLoadingVideo || isLoadingDescriptions ?
+            isLoadingVideosForModule || isLoadingDescriptions ?
                 <div className="space-y-2">
                     <Skeleton className="w-full h-[0.7rem]" />
                     <Skeleton className="w-full h-[0.7rem]" />
