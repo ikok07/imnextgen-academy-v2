@@ -23,13 +23,11 @@ import {Progress} from "@/app/_components/ui/shadcn/progress";
 import {toast} from "sonner";
 import {GetUploadLinkResponse} from "@/src/application/services/media/videos/videos.service.interface";
 import {ServerActionResult} from "@/app/_utils/createServerAction";
+import {useManageSection} from "@/app/_providers/admin/AdminManageSectionProvider";
 
 type AdminVideoCreateModalProps = {
     moduleId: string,
     sectionId: string,
-    allSections: Section[],
-    allVideos: Video[],
-    allVideosForModule: Video[],
     onClose: () => void
 }
 
@@ -40,9 +38,13 @@ async function uploadVideoFile(url: string, file: File, onUploadProgress: (e: Ax
     });
 }
 
-export default function AdminVideoCreateModal({moduleId, sectionId, allSections, allVideos, allVideosForModule, onClose}: AdminVideoCreateModalProps) {
+// DONE: 1. Refresh available order numbers on creation
+// TODO: 2. Button active when order number not entered
+
+export default function AdminVideoCreateModal({moduleId, sectionId, onClose}: AdminVideoCreateModalProps) {
     const queryClient = useQueryClient();
     const {userObject} = useAppUser();
+    const {allSections, allVideosForModule} = useManageSection();
     const [videoFile, setVideoFile] = useState<File | null>(null);
     const [title, setTitle] = useState<string | null>(null);
     const [orderNumber, setOrderNumber] = useState<string | null>(null);
@@ -53,23 +55,6 @@ export default function AdminVideoCreateModal({moduleId, sectionId, allSections,
     const [errors, setErrors] = useState<string[]>([]);
 
     const [uploadProgress, setUploadProgress] = useState(0);
-
-    const validOrderNumbers = useMemo(() => {
-        const currSection = allSections.find(s => s.id === sectionId)!;
-        const currSectionVideos = allVideosForModule.filter(v => v.section_id === sectionId).sort((a, b) => a.order_number - b.order_number);
-        let currSectionOrderNumber = currSection.order_number;
-
-        let nearestSectionVideos = currSectionVideos;
-
-        while (nearestSectionVideos.length === 0 && currSectionOrderNumber > 0) {
-            const iteratedSection = allSections.find(s => s.order_number === --currSectionOrderNumber)!;
-            nearestSectionVideos = allVideosForModule.filter(v => v.section_id === iteratedSection.id).sort((a, b) => a.order_number - b.order_number);
-        }
-
-        if (nearestSectionVideos.length === 0) return [0];
-
-        return currSectionVideos.length > 0 ? currSectionVideos.map(v => v.order_number) : [nearestSectionVideos[nearestSectionVideos.length - 1].order_number + 1];
-    }, [allSections, allVideosForModule, sectionId]);
 
     const {mutate: uploadVideoMethod, isLoading: isUploadingVideoFile, isSuccess: videoUploaded} = useMutation({
         mutationFn: async () => {
@@ -94,7 +79,8 @@ export default function AdminVideoCreateModal({moduleId, sectionId, allSections,
                 descriptionMarkdown: descriptionMarkdown ?? undefined,
             });
 
-            await queryClient.refetchQueries(["videos", sectionId]);
+            await queryClient.refetchQueries(["sections", moduleId]);
+            await queryClient.refetchQueries(["videos", moduleId]);
         },
         onSuccess() {
           toast.success("Видеото е успешно качено!");
@@ -114,6 +100,25 @@ export default function AdminVideoCreateModal({moduleId, sectionId, allSections,
         </div>
     }, [videoFile]);
 
+    const validOrderNumbers = useMemo(() => {
+        if (!allSections || !allVideosForModule) return [];
+        const currSection = allSections.find(s => s.id === sectionId)!;
+        const currSectionVideos = allVideosForModule.filter(v => v.section_id === sectionId).sort((a, b) => a.order_number - b.order_number);
+        let currSectionOrderNumber = currSection.order_number;
+
+        let nearestSectionVideos = currSectionVideos;
+        while (nearestSectionVideos.length === 0 && currSectionOrderNumber > 0) {
+            const iteratedSection = allSections.find(s => s.order_number === currSectionOrderNumber)!;
+            nearestSectionVideos = allVideosForModule.filter(v => v.section_id === iteratedSection.id).sort((a, b) => a.order_number - b.order_number);
+            currSectionOrderNumber--;
+        }
+
+        if (nearestSectionVideos.length === 0) return [0];
+
+        const nextAvailableNumber = nearestSectionVideos[nearestSectionVideos.length - 1].order_number + 1;
+        return currSectionVideos.length > 0 ? [...currSectionVideos.map(v => v.order_number), nextAvailableNumber] : [nextAvailableNumber];
+    }, [allSections?.length, allVideosForModule?.length, sectionId]);
+
     function buttonDisabled() {
         let errorsPredicate: boolean;
         if (descriptionId != null && descriptionId != "new") {
@@ -121,7 +126,7 @@ export default function AdminVideoCreateModal({moduleId, sectionId, allSections,
         } else {
             errorsPredicate = errors.length > 0;
         }
-        return errorsPredicate || videoUploaded;
+        return errorsPredicate || !orderNumber || videoUploaded;
     }
 
     function handleSubmit(e: FormEvent) {

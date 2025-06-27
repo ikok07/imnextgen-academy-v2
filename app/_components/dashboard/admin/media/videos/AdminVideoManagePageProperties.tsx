@@ -12,32 +12,38 @@ import {Section} from "@/drizzle/schema/sections";
 
 type AdminVideoManagePagePropertiesProps = {
     sectionId: string,
-    sectionsForModule: Section[],
-    videosForModule: Video[]
+    sectionsForModule: Section[]
 }
 
-export default function AdminVideoManagePageProperties({sectionId, sectionsForModule, videosForModule}: AdminVideoManagePagePropertiesProps) {
-    const {video, isLoadingVideo, editMode, orderNumber, setOrderNumber} = useManageVideo();
+export default function AdminVideoManagePageProperties({sectionId, sectionsForModule}: AdminVideoManagePagePropertiesProps) {
+    const {video, videosForModule, isLoadingVideosForModule, editMode, orderNumber, setOrderNumber} = useManageVideo();
+
+    const videos = useMemo(() => {
+        return videosForModule?.flatMap(obj => obj.videos);
+    }, [videosForModule]);
 
     const availableOrderNumberOptions = useMemo(() => {
+        if (!videos) return [];
         const currSection = sectionsForModule.find(s => s.id === sectionId)!;
-        const currSectionVideos = videosForModule.filter(v => v.section_id === sectionId).sort((a, b) => a.order_number - b.order_number);
+        const currSectionVideos = videos.filter(v => v.section_id === sectionId).sort((a, b) => a.order_number - b.order_number);
         let currSectionOrderNumber = currSection.order_number;
 
         let nearestSectionVideos = currSectionVideos;
 
         while (nearestSectionVideos.length === 0 && currSectionOrderNumber > 0) {
-            const iteratedSection = sectionsForModule.find(s => s.order_number === --currSectionOrderNumber)!;
-            nearestSectionVideos = videosForModule.filter(v => v.section_id === iteratedSection.id).sort((a, b) => a.order_number - b.order_number);
+            const iteratedSection = sectionsForModule.find(s => s.order_number === currSectionOrderNumber)!;
+            nearestSectionVideos = videos.filter(v => v.section_id === iteratedSection.id).sort((a, b) => a.order_number - b.order_number);
+            currSectionOrderNumber--;
         }
 
         if (nearestSectionVideos.length === 0) return [0];
 
-        return currSectionVideos.length > 0 ? currSectionVideos.map(v => v.order_number) : [nearestSectionVideos[nearestSectionVideos.length - 1].order_number + 1];
-    }, [sectionId, sectionsForModule.length, videosForModule.length]);
+        const nextAvailableNumber = nearestSectionVideos[nearestSectionVideos.length - 1].order_number + 1;
+        return currSectionVideos.length > 0 ? [...currSectionVideos.map(v => v.order_number), nextAvailableNumber] : [nextAvailableNumber];
+    }, [sectionId, sectionsForModule.length, videos?.length]);
 
     return <div className={`grid ${!editMode ? "grid-cols-2" : "sm:grid-cols-2"} items-center gap-5 mt-4`}>
-        {isLoadingVideo ?
+        {isLoadingVideosForModule ?
             <>
                 <AdminMediaItemPropertyBoxSkeleton />
             </>

@@ -9,7 +9,7 @@ import {createServerAction} from "@/app/_utils/createServerAction";
 import {GetAllUsersForRoleOptions} from "@/src/application/services/auth/authentication.service.interface";
 import {UserRoleType} from "@/drizzle/schema/user_roles";
 import {GetAllProfilesOptions} from "@/src/application/repositories/auth/profiles.repository.interface";
-import {UploadFileOptions} from "@/src/application/services/storage/s3-storage.service.interface";
+import {GetUploadLinkOptions, UploadFileOptions} from "@/src/application/services/storage/s3-storage.service.interface";
 
 export const getUser = createServerAction((opts?: {excludeDbProfile?: boolean, dbUserNullOnError?: boolean}) => {
     return getInjection("IGetUserController")(opts);
@@ -64,4 +64,8 @@ export const validateJwtToken = createServerAction(async (token: string) => {
 
 export const uploadSmallFile = createServerAction(async (opts: Partial<UploadFileOptions>) => {
     return getInjection("IUploadSmallFileController")(opts);
+});
+
+export const getUploadFileLink = createServerAction((data: Partial<GetUploadLinkOptions>) => {
+    return getInjection("IGetFileUploadLinkController")(data);
 })

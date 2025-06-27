@@ -6,15 +6,17 @@ import {Module} from "@/drizzle/schema/modules";
 import {Section} from "@/drizzle/schema/sections";
 import {Video} from "@/drizzle/schema/videos";
 import { ManageVideoProvider } from "@/app/_providers/admin/AdminManageVideoProvider";
+import {VideosForModuleResponse} from "@/src/application/use-cases/media/videos/get-videos-for-module.use-case";
 
 type AdminVideoManageClientWrapperProps = {
-    children: ReactNode,
     module: Module,
     section: Section,
-    video: Video
+    video: Video,
+    videosForModule: VideosForModuleResponse,
+    children: ReactNode
 }
 
-export default function AdminVideoManageClientWrapper({module, section, video, children}: AdminVideoManageClientWrapperProps) {
+export default function AdminVideoManageClientWrapper({module, section, video, videosForModule, children}: AdminVideoManageClientWrapperProps) {
 
     const {hydrationLabels, setHydrationLabels, isLoaded} = useBreadcrumb();
 
@@ -30,7 +32,7 @@ export default function AdminVideoManageClientWrapper({module, section, video, c
         }
     }, [isLoaded]);
 
-    return <ManageVideoProvider video={video}>
+    return <ManageVideoProvider module={module} videosForModule={videosForModule} video={video}>
         {children}
     </ManageVideoProvider>;
 }

@@ -34,7 +34,7 @@ export default async function Page(props: z.infer<typeof propsSchema>) {
     const allVideosForModule = allVideosForModuleResult.value;
     const allVideos = allVideosForModule.filter(obj => obj.section.id === safeProps.params.sectionId).flatMap(obj => obj.videos);
 
-    return <AdminSectionsManageClientWrapper module={module} section={section}>
+    return <AdminSectionsManageClientWrapper module={module} section={section} allSections={allSections} allVideosForModule={allVideosForModule}>
         <div className="grid grid-rows-[auto_1fr] w-[95%] h-full max-w-[50rem] mt-4 mx-auto">
             <Card>
                 <CardHeader className="pb-2 pt-3 border-b border-border grid sm:grid-cols-[1fr_auto] items-start gap-x-6 gap-y-3">
@@ -48,7 +48,7 @@ export default async function Page(props: z.infer<typeof propsSchema>) {
                     <AdminSectionManageDetailsContainer allSections={allSections} />
                 </CardContent>
             </Card>
-            <AdminSectionManageVideosTable moduleId={safeProps.params.moduleId} sectionId={safeProps.params.sectionId} allSections={allSections} allVideos={allVideos} allVideosForModule={allVideosForModule.flatMap(obj => obj.videos)} />
+            <AdminSectionManageVideosTable moduleId={safeProps.params.moduleId} sectionId={safeProps.params.sectionId} />
         </div>
     </AdminSectionsManageClientWrapper>
 }

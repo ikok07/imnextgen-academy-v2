@@ -2,17 +2,18 @@ import {createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffec
 import {z} from "zod";
 import {Video, videosSchema} from "@/drizzle/schema/videos";
 import useErrorQuery from "@/app/_hooks/useErrorQuery";
-import {
-    getVideoById,
-    getVideoDescriptionById
-} from "@/app/dashboard/admin/media/module/[moduleId]/section/[sectionId]/video/[videoId]/actions";
+import {getVideoById} from "@/app/dashboard/admin/media/module/[moduleId]/section/[sectionId]/video/[videoId]/actions";
 import {videoDescriptionsSchema} from "@/drizzle/schema/video_descriptions";
-import {getSignedTokens} from "@/app/dashboard/actions";
 import {getVideoDescriptions} from "@/app/dashboard/admin/media/actions";
+import {VideosForModuleResponse} from "@/src/application/use-cases/media/videos/get-videos-for-module.use-case";
+import {getVideosForModule} from "@/app/dashboard/actions";
+import {Module, modulesTableSchema} from "@/drizzle/schema/modules";
 
 export const manageVideoState = z.object({
+    module: modulesTableSchema,
     video: videosSchema.optional(),
-    isLoadingVideo: z.boolean(),
+    videosForModule: z.custom<VideosForModuleResponse>().optional(),
+    isLoadingVideosForModule: z.boolean(),
     editMode: z.boolean(),
     setEditMode: z.custom<Dispatch<SetStateAction<boolean>>>(),
     errors: z.array(z.string()),
@@ -40,11 +41,13 @@ export type ManageVideoState = z.infer<typeof manageVideoState>;
 const ManageVideoContext = createContext<ManageVideoState | null>(null);
 
 type AdminManageVideoProviderProps = {
+    module: Module,
     video: Video,
+    videosForModule: VideosForModuleResponse,
     children: ReactNode
 }
 
-export function ManageVideoProvider({video, children}: AdminManageVideoProviderProps) {
+export function ManageVideoProvider({module, video, videosForModule, children}: AdminManageVideoProviderProps) {
 
     const [editMode, setEditMode] = useState(false);
     const [errors, setErrors] = useState<string[]>([]);
@@ -57,18 +60,22 @@ export function ManageVideoProvider({video, children}: AdminManageVideoProviderP
     const [descriptionLabel, setDescriptionLabel] = useState<string | null>(null);
     const [descriptionMarkdown, setDescriptionMarkdown] = useState<string | null>(null);
 
-    const {data: videoQuery, isLoading: isLoadingVideo} = useErrorQuery({
-        queryFn: () => getVideoById(video.id),
-        queryKey: ["video", video.id],
-        enabled: !!video
+    const {data: videosForModuleQuery, isLoading: isLoadingVideosForModule} = useErrorQuery({
+        queryFn: () => getVideosForModule(module.id),
+        queryKey: ["videos", module.id],
+        initialData: {success: true, value: videosForModule}
     });
 
-    const clientVideo = useMemo(() => {
-        if (!videoQuery?.success) return;
-
-        return videoQuery.value;
+    const clientVideosForModule = useMemo(() => {
+        if (videosForModuleQuery?.success) return videosForModuleQuery.value;
         // @ts-ignore
-    }, [videoQuery?.value]);
+    }, [videosForModuleQuery?.value])
+
+    const clientVideo = useMemo(() => {
+        if (clientVideosForModule) return clientVideosForModule
+            .flatMap(obj => obj.videos)
+            .find(v => v.id === video.id);
+    }, [clientVideosForModule])
 
     const {data: descriptionsQuery, isLoading: isLoadingDescriptions} = useErrorQuery({
         queryFn: () => getVideoDescriptions(),
@@ -113,8 +120,10 @@ export function ManageVideoProvider({video, children}: AdminManageVideoProviderP
     }, [videoDescription]);
 
     return <ManageVideoContext.Provider value={{
+        module,
         video: clientVideo,
-        isLoadingVideo,
+        videosForModule: clientVideosForModule,
+        isLoadingVideosForModule,
         editMode, setEditMode,
         errors, setErrors,
         hasChanges,

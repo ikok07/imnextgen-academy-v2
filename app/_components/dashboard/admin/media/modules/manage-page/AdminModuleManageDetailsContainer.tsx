@@ -60,7 +60,7 @@ export default function AdminModuleManageDetailsContainer({allModules}: AdminMod
                     <Tooltip>
                         <TooltipTrigger>
                             <label htmlFor="module-image" className={`${editMode ? "cursor-pointer hover:opacity-80" : ""} transition-all duration-200`}>
-                                {module.image_url && !newProfileImage && <Image alt={module.title} src={module.image_url} fill className="object-cover" />}
+                                {module.image_url && !newProfileImage && <img alt={module.title} src={module.image_url} className="absolute inset-0 object-cover" />}
                                 {editMode && newProfileImage && <img src={URL.createObjectURL(newProfileImage)} alt={newProfileImage.name} className="w-full h-full object-cover" />}
                             </label>
                         </TooltipTrigger>

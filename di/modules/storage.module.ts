@@ -9,6 +9,8 @@ import {
     deleteMultipleFilesController
 } from "@/src/interface-adapters/controllers/storage/delete-multiple-files.controller";
 import {deleteMultipleFilesUseCase} from "@/src/application/use-cases/storage/delete-multiple-files.use-case";
+import {getUploadLinkUseCase} from "@/src/application/use-cases/storage/get-upload-link.use-case";
+import {getUploadLinkController} from "@/src/interface-adapters/controllers/storage/get-upload-link.controller";
 
 export function createStorageModule() {
     const storageModule = createModule();
@@ -16,6 +18,14 @@ export function createStorageModule() {
     storageModule
         .bind(DI_SYMBOLS.IS3StorageService)
         .toClass(S3StorageService);
+
+    storageModule
+        .bind(DI_SYMBOLS.IGetFileUploadLinkUseCase)
+        .toHigherOrderFunction(getUploadLinkUseCase, [DI_SYMBOLS.IS3StorageService]);
+
+    storageModule
+        .bind(DI_SYMBOLS.IGetFileUploadLinkController)
+        .toHigherOrderFunction(getUploadLinkController, [DI_SYMBOLS.IGetFileUploadLinkUseCase]);
 
     storageModule
         .bind(DI_SYMBOLS.IUploadSmallFileUseCase)
