@@ -66,7 +66,7 @@ export default function AdminResourceCreateModal({onClose}: AdminResourceCreateM
                 label: label ?? undefined,
                 type: "file",
                 video_id: video?.id,
-                url: `/api/v1/assets?bucket=${process.env.NEXT_PUBLIC_R2_VIDEO_RESOURCES_BUCKET!}&path=${file?.name}`
+                url: `${process.env.NEXT_PUBLIC_BASE_URL!}/api/v1/assets?bucket=${process.env.NEXT_PUBLIC_R2_VIDEO_RESOURCES_BUCKET!}&path=${file?.name}`
             });
             await queryClient.refetchQueries(["videos", module.id]);
             return res;
