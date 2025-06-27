@@ -3,6 +3,7 @@
 import {createServerAction, ServerActionError} from "@/app/_utils/createServerAction";
 import {getInjection} from "@/di/container";
 import {VideoInsert} from "@/drizzle/schema/videos";
+import {VideoResourceInsert} from "@/drizzle/schema/video_resources";
 
 export const getVideoById = createServerAction((videoId: string) => {
     return getInjection("IGetVideoByIdController")(videoId);
@@ -57,4 +58,20 @@ export const updateVideo = createServerAction(async (
             external_id: updatedVideo.id
         });
     }
-})
+});
+
+export const uploadResource = createServerAction(async (data: Partial<VideoResourceInsert>) => {
+   await getInjection("ICreateResourceController")(data);
+});
+
+export const deleteMultipleResources = createServerAction(async (resourceIds: string[], urls: string[]) => {
+    await getInjection("IDeleteMultipleResourcesController")(resourceIds);
+
+    for (const url of urls) {
+        const searchParams = new URLSearchParams(`${process.env.NEXT_PUBLIC_BASE_URL}${url}`);
+        await getInjection("IDeleteFileController")({
+            bucket: process.env.NEXT_PUBLIC_R2_VIDEO_RESOURCES_BUCKET!,
+            key: searchParams.get("path") ?? undefined
+        });
+    }
+});

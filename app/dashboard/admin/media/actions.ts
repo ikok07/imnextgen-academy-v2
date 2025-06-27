@@ -13,7 +13,7 @@ export const uploadModule = createServerAction(async (opts:{imgFileBuffer: Uint8
     try {
         if (opts.imgFileBuffer && opts.imgFileBuffer.length > 300_000) throw new ServerActionError({id: "image-size", message: "Снимката не трябва да надвишава 300kb!"});
         const imgURI = await getInjection("IUploadSmallFileController")({
-            bucket: process.env.R2_MODULES_IMAGES_BUCKET,
+            bucket: process.env.NEXT_PUBLIC_R2_MODULES_IMAGES_BUCKET,
             key: opts.fileName ? `${Math.floor(Date.now() / 1000)}-${opts.fileName}` : undefined,
             body: opts.imgFileBuffer ? Buffer.from(opts.imgFileBuffer) : undefined,
             contentType: opts.fileType ?? undefined
@@ -45,7 +45,7 @@ export const deleteModules = createServerAction(async (moduleIds: string[]) => {
 
     if (imagePaths.length > 0) {
         await getInjection("IDeleteMultipleFilesController")({
-            bucket: process.env.R2_MODULES_IMAGES_BUCKET,
+            bucket: process.env.NEXT_PUBLIC_R2_MODULES_IMAGES_BUCKET,
             keys: imagePaths
         });
     }
@@ -61,8 +61,4 @@ export const getUploadVideoUrl = createServerAction(() => {
         videoQuality: "basic",
         playbackPolicy: ["signed"]
     });
-});
-
-export const deleteVideo = createServerAction((assetId: string | undefined) => {
-    return getInjection("IDeleteVideoServiceVideoController")(assetId);
 });

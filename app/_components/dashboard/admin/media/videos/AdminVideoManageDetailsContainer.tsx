@@ -13,16 +13,17 @@ import { Skeleton } from "@/app/_components/ui/shadcn/skeleton";
 import AdminVideoManageDetailsDescription
     from "@/app/_components/dashboard/admin/media/videos/AdminVideoManageDetailsDescription";
 import {Section} from "@/drizzle/schema/sections";
+import AdminVideoManageDetailsResourcesTable
+    from "@/app/_components/dashboard/admin/media/videos/resources-table/AdminVideoManageDetailsResourcesTable";
 
 type AdminVideoManageDetailsContainerProps = {
     sectionId: string,
-    sectionsForModule: Section[],
-    videosForModule: Video[]
+    sectionsForModule: Section[]
 }
 
-export default function AdminVideoManageDetailsContainer({sectionId, sectionsForModule, videosForModule}: AdminVideoManageDetailsContainerProps) {
+export default function AdminVideoManageDetailsContainer({sectionId, sectionsForModule}: AdminVideoManageDetailsContainerProps) {
     const {
-        video, isLoadingVideo,
+        video, isLoadingVideosForModule,
         editMode,
         errors,
         setErrors,
@@ -47,11 +48,12 @@ export default function AdminVideoManageDetailsContainer({sectionId, sectionsFor
                     })}
                 />
                 :
-                isLoadingVideo ? <Skeleton className="w-[40%] h-[1.4rem]" /> : <h1 className="text-xl font-extrabold">{video?.title}</h1>
+                isLoadingVideosForModule ? <Skeleton className="w-[40%] h-[1.4rem]" /> : <h1 className="text-xl font-extrabold">{video?.title}</h1>
             }
 
-            <AdminVideoManagePageProperties sectionId={sectionId} sectionsForModule={sectionsForModule} videosForModule={videosForModule} />
+            <AdminVideoManagePageProperties sectionId={sectionId} sectionsForModule={sectionsForModule} />
             <AdminVideoManageDetailsDescription />
+            <AdminVideoManageDetailsResourcesTable />
         </div>
     </div>
 }
