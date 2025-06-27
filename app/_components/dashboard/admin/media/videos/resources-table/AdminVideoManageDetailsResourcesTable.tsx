@@ -22,7 +22,7 @@ const columnHelper = createColumnHelper<VideoResource>();
 
 export default function AdminVideoManageDetailsResourcesTable() {
     const queryClient = useQueryClient();
-    const {module, videosForModule} = useManageVideo();
+    const {module, video, videosForModule} = useManageVideo();
     const [createResourceModalOpened, setCreateResourceModalOpened] = useState(false);
     const [selectedRows, setSelectedRows] = useState<RowSelectionState>({});
     const [pagination, setPagination] = useState<PaginationState>({
@@ -66,7 +66,10 @@ export default function AdminVideoManageDetailsResourcesTable() {
     ], []);
 
     const data: VideoResource[] = useMemo(() => {
-        return videosForModule?.flatMap(obj => obj.resources) ?? [];
+        if (!videosForModule || !video) return [];
+        return videosForModule
+            .flatMap(obj => obj.resources)
+            .filter(r => r.video_id === video.id);
     }, [videosForModule]);
 
     return <>
