@@ -53,6 +53,10 @@ export default function MuxVideoPlayer({className, skeletonClassName, onTimeUpda
                     player.current.addChapters(chapters);
                 }
             }}
+            _hlsConfig={{
+                maxBufferLength: 30,        // 30 seconds
+                maxMaxBufferLength: 60      // 60 seconds max
+            }}
         />
     </div>
 }
