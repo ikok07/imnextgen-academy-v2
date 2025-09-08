@@ -63,7 +63,7 @@ export const payDirectController = (
     const fullOptions: SendDirectPayOptions = {...data, orderId: order.id, items};
     // console.log(fullOptions);
     try {
-        return await payDirectUseCase(fullOptions);
+        // return await payDirectUseCase(fullOptions);
     } catch(e) {
         await deleteOrderUseCase(order.id);
         throw e;
