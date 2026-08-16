@@ -1,6 +1,6 @@
 import {createModule} from "@evyweb/ioctopus";
 import {DI_SYMBOLS} from "@/di/types/types";
-import {CerbosService} from "@/src/infrastructure/services/auth/cerbos.service";
+import {LocalAuthorizationService} from "@/src/infrastructure/services/auth/local-authorization.service";
 import {checkAccessUseCase} from "@/src/application/use-cases/auth/check-access.use-case";
 import {checkAccessController} from "@/src/interface-adapters/controllers/auth/check-access.controller";
 import {
@@ -13,7 +13,7 @@ export function createAuthorizationModule() {
 
     authorizationModule
         .bind(DI_SYMBOLS.IAuthorizationService)
-        .toClass(CerbosService)
+        .toClass(LocalAuthorizationService)
 
     authorizationModule
         .bind(DI_SYMBOLS.ICheckAccessUseCase)

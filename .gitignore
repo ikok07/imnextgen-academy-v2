@@ -3,3 +3,6 @@ node_modules
 .env.local
 
 /modules/academy-admin-panel-module
+.vercel
+.env*.local
+public/_next-video
