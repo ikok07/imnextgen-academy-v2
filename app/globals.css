@@ -197,6 +197,86 @@ button {
     }
   }
 
+  /* Типография за уроците-статии. Правилата важат само за елементите, които
+     markdown-to-jsx слага директно в контейнера, за да не засягат интерактивните блокове. */
+  .lesson-prose {
+    @apply text-[0.98rem] leading-[1.75] text-foreground/90;
+
+    > h1 {
+      @apply text-[1.6rem] font-bold mt-8 mb-3 leading-snug text-foreground
+    }
+    > h2 {
+      @apply text-[1.3rem] font-bold mt-8 mb-3 leading-snug text-foreground
+    }
+    > h3 {
+      @apply text-[1.1rem] font-semibold mt-6 mb-2 leading-snug text-foreground
+    }
+    > h4 {
+      @apply text-[1rem] font-semibold mt-5 mb-2 text-foreground
+    }
+    > p {
+      @apply my-4
+    }
+    > ul {
+      @apply list-disc pl-6 my-4 space-y-1.5
+    }
+    > ol {
+      @apply list-decimal pl-6 my-4 space-y-1.5
+    }
+    > ul ul, > ol ol, > ul ol, > ol ul {
+      @apply my-1.5 pl-5
+    }
+    > blockquote {
+      @apply border-l-4 border-cta/50 pl-4 my-5 italic text-foreground/75
+    }
+    > hr {
+      @apply my-8 border-border
+    }
+    > table {
+      @apply w-full my-5 text-[0.9rem] border-collapse
+    }
+    > table th {
+      @apply text-left font-semibold border-b-2 border-border py-2 px-2
+    }
+    > table td {
+      @apply border-b border-border py-2 px-2 align-top
+    }
+    > p img, > img {
+      @apply rounded-lg my-4
+    }
+    strong {
+      @apply font-semibold text-foreground
+    }
+    > p code, > ul code, > ol code, > table code, > h2 code, > h3 code, > blockquote code {
+      @apply bg-secondary text-cta rounded px-1.5 py-0.5 text-[0.85em] font-mono
+    }
+  }
+
+  /* Markdown вътре в интерактивните блокове - по-стегнати отстояния. */
+  .markdown-inner {
+    p {
+      @apply my-1.5
+    }
+    p:first-child {
+      @apply mt-0
+    }
+    p:last-child {
+      @apply mb-0
+    }
+    ul {
+      @apply list-disc pl-5 my-2 space-y-1
+    }
+    ol {
+      @apply list-decimal pl-5 my-2 space-y-1
+    }
+    code {
+      @apply bg-black/10 dark:bg-white/10 rounded px-1 py-0.5 text-[0.85em] font-mono
+    }
+    strong {
+      @apply font-semibold
+    }
+  }
+
   .video-column-width {
     @apply md:h-[calc(100vh-3.2rem)]
   }
