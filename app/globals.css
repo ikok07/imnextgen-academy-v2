@@ -280,4 +280,52 @@ button {
   .video-column-width {
     @apply md:h-[calc(100vh-3.2rem)]
   }
+
+  /* Правни страници: политика за поверителност и за бисквитки */
+  .legal-page {
+    @apply text-[0.97rem] leading-[1.75] text-foreground/85;
+
+    h1 {
+      @apply text-[1.8rem] font-bold mt-10 mb-2 leading-tight text-foreground
+    }
+    h2 {
+      @apply text-[1.25rem] font-bold mt-9 mb-3 leading-snug text-foreground
+    }
+    h3 {
+      @apply text-[1.05rem] font-semibold mt-6 mb-2 text-foreground
+    }
+    p {
+      @apply my-4
+    }
+    ul, ol {
+      @apply my-4 pl-6 space-y-1.5
+    }
+    ul {
+      @apply list-disc
+    }
+    ol {
+      @apply list-decimal
+    }
+    a {
+      @apply text-cta hover:opacity-80 transition-all duration-200
+    }
+    strong {
+      @apply font-semibold text-foreground
+    }
+    table {
+      @apply w-full my-5 text-[0.88rem] border-collapse
+    }
+    th {
+      @apply text-left font-semibold border-b-2 border-border py-2 pr-4 align-top
+    }
+    td {
+      @apply border-b border-border py-2 pr-4 align-top
+    }
+    .lead {
+      @apply text-foreground/60 text-[0.88rem]
+    }
+    .fill-in {
+      @apply text-amber-500 font-medium
+    }
+  }
 }

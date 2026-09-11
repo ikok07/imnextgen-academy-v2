@@ -15,8 +15,8 @@ function redirectMiddleware(req: NextRequest) {
 // В продукция страницата не съществува (notFound).
 const isPublicRoute = createRouteMatcher(
     process.env.NODE_ENV === "development"
-        ? ["/", "/auth(.*)", "/api(.*)", "/dev(.*)"]
-        : ["/", "/auth(.*)", "/api(.*)"]
+        ? ["/", "/auth(.*)", "/api(.*)", "/privacy", "/cookies", "/dev(.*)"]
+        : ["/", "/auth(.*)", "/api(.*)", "/privacy", "/cookies"]
 )
 
 export default clerkMiddleware(async (auth, req) => {
