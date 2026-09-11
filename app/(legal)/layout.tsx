@@ -2,10 +2,7 @@ import {ReactNode} from "react";
 import HomepageNavbar from "@/app/_components/home/nav/HomepageNavbar";
 import Footer from "@/app/_components/home/footer/Footer";
 
-/**
- * Общ изглед за правните страници. Съзнателно НЕ ползва HomepageClientWrapper,
- * за да не се зарежда рекламният пиксел върху политиките.
- */
+/** Общ изглед за правните страници: същата навигация и подвал като началната. */
 export default function LegalLayout({children}: {children: ReactNode}) {
     return <main className="homepage space-y-10">
         <HomepageNavbar />
