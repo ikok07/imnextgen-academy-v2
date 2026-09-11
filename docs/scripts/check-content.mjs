@@ -126,6 +126,11 @@ for (const file of files) {
 
         const {config, parts} = parsed;
 
+        if (["callout", "reveal", "takeaways", "steps"].includes(block.type)) {
+            const nested = block.body.split("\n").some(line => line.trimStart().startsWith("```"));
+            if (nested) problems.push(`${relative} :: блок "${block.type}" съдържа вложен код блок - това прекъсва външния блок при рендиране`);
+        }
+
         if (["quiz", "task", "submit"].includes(block.type)) {
             if (!config.id) {
                 problems.push(`${relative} :: блок "${block.type}" няма id`);
