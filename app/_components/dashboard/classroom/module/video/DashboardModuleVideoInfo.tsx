@@ -36,10 +36,16 @@ type DashboardModuleVideoInfoProps = {
     onAddFinishVideo: () => void
 }
 
-/** Груба оценка за време за четене - само за уроци-статии. */
+/**
+ * Груба оценка за време за четене - само за уроци-статии.
+ * Текстът се чете бързо, кодът и задачите - бавно, затова се броят отделно.
+ */
 function readingMinutes(markdown: string) {
+    const blocks = markdown.match(/```[\s\S]*?```/g) ?? [];
+    const blockLines = blocks.reduce((sum, block) => sum + block.split("\n").length, 0);
     const words = markdown.replace(/```[\s\S]*?```/g, " ").split(/\s+/).filter(Boolean).length;
-    return Math.max(1, Math.round(words / 180));
+
+    return Math.max(2, Math.round(words / 180 + blockLines / 14));
 }
 
 export default function DashboardModuleVideoInfo({videoId, moduleId, title, descriptionMarkdown, userId, resources, isArticle, finishedVideosResult, isAddingFinishedVideo, onAddFinishVideo}: DashboardModuleVideoInfoProps) {
