@@ -16,22 +16,25 @@ const Sandpack = dynamic(
 
 type SandboxConfig = {
     title: string,
+    template: "react" | "vanilla",
     height: number,
     showConsole: boolean,
     dependencies: Record<string, string>
 }
 
 const DEFAULT_FILE = "/App.js";
+const DEFAULT_VANILLA_FILE = "/index.js";
 
 /** Всяка част на блока може да започва с "// file: /Име.js", иначе е /App.js */
-function partsToFiles(parts: string[]): Record<string, string> {
+function partsToFiles(parts: string[], template: SandboxConfig["template"]): Record<string, string> {
+    const entryFile = template === "vanilla" ? DEFAULT_VANILLA_FILE : DEFAULT_FILE;
     const files: Record<string, string> = {};
     parts.forEach((part, index) => {
         const match = part.match(/^\/\/\s*file:\s*(\S+)\s*\n/);
         if (match) {
             files[match[1]] = part.slice(match[0].length);
         } else {
-            files[index === 0 ? DEFAULT_FILE : `/File${index}.js`] = part;
+            files[index === 0 ? entryFile : `/file-${index}.js`] = part;
         }
     });
     return files;
@@ -40,12 +43,12 @@ function partsToFiles(parts: string[]): Record<string, string> {
 export default function ReactSandbox({raw}: {raw: string}) {
     const {config, parts} = readInteractiveBlock<SandboxConfig>(raw);
     const {resolvedTheme} = useTheme();
-    const files = partsToFiles(parts);
+    const files = partsToFiles(parts, config.template ?? "react");
 
     return <div className="not-prose my-7">
         {config.title && <p className="text-[0.8rem] uppercase tracking-wider text-muted-foreground mb-2">{config.title}</p>}
         <Sandpack
-            template="react"
+            template={config.template === "vanilla" ? "vanilla" : "react"}
             theme={resolvedTheme === "dark" ? "dark" : "light"}
             files={files}
             customSetup={config.dependencies ? {dependencies: config.dependencies} : undefined}
