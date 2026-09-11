@@ -86,7 +86,7 @@ export default function Quiz({raw}: {raw: string}) {
                         )}>
                             {String.fromCharCode(1040 + index)}
                         </span>
-                        <span className="min-w-0">{option}</span>
+                        <span className="min-w-0 markdown-inner"><MarkdownText>{option}</MarkdownText></span>
                         {showCorrect && <IoCheckmarkCircle className="ml-auto text-green-500 shrink-0 mt-0.5" />}
                         {showWrong && <IoCloseCircle className="ml-auto text-red-500 shrink-0 mt-0.5" />}
                     </button>

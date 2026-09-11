@@ -19,7 +19,8 @@ type SandboxConfig = {
     template: "react" | "vanilla",
     height: number,
     showConsole: boolean,
-    dependencies: Record<string, string>
+    dependencies: Record<string, string>,
+    editorWidth: number
 }
 
 const DEFAULT_FILE = "/App.js";
@@ -45,7 +46,8 @@ export default function ReactSandbox({raw}: {raw: string}) {
     const {resolvedTheme} = useTheme();
     const files = partsToFiles(parts, config.template ?? "react");
 
-    return <div className="not-prose my-7">
+    // На широк екран блокът излиза извън колоната на статията, за да има място за редактора и прегледа.
+    return <div className="not-prose my-7 lg:-mx-10 xl:-mx-24">
         {config.title && <p className="text-[0.8rem] uppercase tracking-wider text-muted-foreground mb-2">{config.title}</p>}
         <Sandpack
             template={config.template === "vanilla" ? "vanilla" : "react"}
@@ -56,7 +58,8 @@ export default function ReactSandbox({raw}: {raw: string}) {
                 editorHeight: config.height ?? 380,
                 showLineNumbers: true,
                 showTabs: Object.keys(files).length > 1,
-                showConsole: config.showConsole ?? false
+                showConsole: config.showConsole ?? false,
+                editorWidthPercentage: config.editorWidth ?? 58
             }}
         />
     </div>

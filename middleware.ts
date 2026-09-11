@@ -11,7 +11,13 @@ function redirectMiddleware(req: NextRequest) {
     }
 }
 
-const isPublicRoute = createRouteMatcher(["/", "/auth(.*)", "/api(.*)"])
+// В режим на разработка /dev/lesson-preview е отворен, за да се преглеждат статиите.
+// В продукция страницата не съществува (notFound).
+const isPublicRoute = createRouteMatcher(
+    process.env.NODE_ENV === "development"
+        ? ["/", "/auth(.*)", "/api(.*)", "/dev(.*)"]
+        : ["/", "/auth(.*)", "/api(.*)"]
+)
 
 export default clerkMiddleware(async (auth, req) => {
     if (!isPublicRoute(req)) {
