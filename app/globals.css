@@ -281,6 +281,23 @@ button {
     @apply md:h-[calc(100vh-3.2rem)]
   }
 
+  /* Песъчникът стои в колоната на урока: редактор отгоре, преглед отдолу.
+     Sandpack подрежда хоризонтално според ширината на екрана, а не на контейнера,
+     и в тясната колона на статията двете панели се смачкват. */
+  .lesson-sandbox .sp-layout {
+    @apply flex-col
+  }
+  .lesson-sandbox .sp-layout > .sp-stack {
+    width: 100% !important;
+    flex: none !important;
+  }
+  .lesson-sandbox .sp-preview-container {
+    @apply min-h-[14rem]
+  }
+  .lesson-sandbox .sp-layout > .sp-stack + .sp-stack {
+    @apply border-t border-l-0
+  }
+
   /* Правни страници: политика за поверителност и за бисквитки */
   .legal-page {
     @apply text-[0.97rem] leading-[1.75] text-foreground/85;
