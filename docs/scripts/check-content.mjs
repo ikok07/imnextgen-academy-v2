@@ -17,6 +17,7 @@ function walk(dir) {
     return fs.readdirSync(dir, {withFileTypes: true}).flatMap(entry => {
         const full = path.join(dir, entry.name);
         if (entry.isDirectory()) return walk(full);
+        if (entry.name === "README.md" || entry.name.startsWith("_")) return [];
         return entry.name.endsWith(".md") ? [full] : [];
     });
 }

@@ -69,7 +69,7 @@ function collectLessons(): Lesson[] {
         fs.readdirSync(dir, {withFileTypes: true}).forEach(entry => {
             const full = path.join(dir, entry.name);
             if (entry.isDirectory()) return walk(full);
-            if (!entry.name.endsWith(".md")) return;
+            if (!entry.name.endsWith(".md") || entry.name === "README.md" || entry.name.startsWith("_")) return;
 
             const relative = path.relative(CONTENT_ROOT, full);
             if (ONLY && !relative.startsWith(ONLY)) return;
