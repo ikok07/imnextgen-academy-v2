@@ -1,7 +1,7 @@
 ---
 module: "Модул 3: React & NextJS"
 section: "Оттук нататък"
-sectionOrder: 8
+sectionOrder: 9
 title: "Портфолио, първа работа и какво да учиш после"
 label: "react-9-02-career"
 ---

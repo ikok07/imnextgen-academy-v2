@@ -1,7 +1,7 @@
 ---
 module: "Модул 3: React & NextJS"
 section: "Финален проект"
-sectionOrder: 7
+sectionOrder: 8
 title: "Пускане на живо във Vercel"
 label: "react-8-07-deploy"
 ---

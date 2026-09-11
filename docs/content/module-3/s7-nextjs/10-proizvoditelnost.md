@@ -1,7 +1,7 @@
 ---
 module: "Модул 3: React & NextJS"
 section: "Next.js: App Router"
-sectionOrder: 6
+sectionOrder: 7
 title: "Изображения, шрифтове и производителност"
 label: "react-7-10-performance"
 ---

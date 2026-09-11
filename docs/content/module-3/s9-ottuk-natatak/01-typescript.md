@@ -1,7 +1,7 @@
 ---
 module: "Модул 3: React & NextJS"
 section: "Оттук нататък"
-sectionOrder: 8
+sectionOrder: 9
 title: "TypeScript: какво е и защо ще го срещнеш веднага"
 label: "react-9-01-typescript"
 ---

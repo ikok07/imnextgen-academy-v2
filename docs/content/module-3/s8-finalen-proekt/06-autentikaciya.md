@@ -1,7 +1,7 @@
 ---
 module: "Модул 3: React & NextJS"
 section: "Финален проект"
-sectionOrder: 7
+sectionOrder: 8
 title: "Вход и защитена част"
 label: "react-8-06-auth"
 ---

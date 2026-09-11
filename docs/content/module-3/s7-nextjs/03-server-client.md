@@ -1,7 +1,7 @@
 ---
 module: "Модул 3: React & NextJS"
 section: "Next.js: App Router"
-sectionOrder: 6
+sectionOrder: 7
 title: "Сървърни и клиентски компоненти"
 label: "react-7-03-server-client"
 ---

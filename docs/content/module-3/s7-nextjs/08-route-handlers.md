@@ -1,7 +1,7 @@
 ---
 module: "Модул 3: React & NextJS"
 section: "Next.js: App Router"
-sectionOrder: 6
+sectionOrder: 7
 title: "Route Handlers: истинско API"
 label: "react-7-08-route-handlers"
 ---

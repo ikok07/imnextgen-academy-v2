@@ -1,7 +1,7 @@
 ---
 module: "Модул 3: React & NextJS"
 section: "Next.js: App Router"
-sectionOrder: 6
+sectionOrder: 7
 title: "Метаданни и видимост в търсачките"
 label: "react-7-09-metadata"
 ---

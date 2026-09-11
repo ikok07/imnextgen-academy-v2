@@ -142,10 +142,17 @@ async function main() {
             if (!module) throw new Error(`Няма модул с заглавие "${moduleTitle}" в базата.`);
 
             const moduleLessons = lessons.filter(lesson => lesson.front.module === moduleTitle);
+
+            // Редът се определя от файловете. Уроците, които НЕ идват от docs/content
+            // (старите видеа), запазват номерата си и статиите започват след тях.
+            const labels = moduleLessons.map(lesson => lesson.front.label);
             const [{max}] = await sql`
                 select coalesce(max(v.order_number), -1) as max
-                from videos v join sections s on s.id = v.section_id
+                from videos v
+                join sections s on s.id = v.section_id
+                left join video_descriptions d on d.id = v.description_id
                 where s.module_id = ${module.id}
+                  and (d.label is null or d.label not in ${sql(labels)})
             `;
             let nextOrder = Number(max) + 1;
 
@@ -172,9 +179,12 @@ async function main() {
                     } else {
                         section = {id: `(нова секция ${sectionTitle})`, title: sectionTitle};
                     }
-                } else if (section.title !== sectionTitle) {
-                    console.log(`  ~ секция преименувана: "${section.title}" -> "${sectionTitle}"`);
-                    if (APPLY) await sql`update sections set title = ${sectionTitle}, order_number = ${sectionOrder} where id = ${section.id}`;
+                } else {
+                    const [current] = await sql`select title, order_number from sections where id = ${section.id}`;
+                    if (current.title !== sectionTitle || Number(current.order_number) !== sectionOrder) {
+                        console.log(`  ~ секция: "${current.title}" (ред ${current.order_number}) -> "${sectionTitle}" (ред ${sectionOrder})`);
+                        if (APPLY) await sql`update sections set title = ${sectionTitle}, order_number = ${sectionOrder} where id = ${section.id}`;
+                    }
                 }
 
                 for (const lesson of sectionLessons) {
@@ -200,10 +210,16 @@ async function main() {
 
                     if (existingVideo) {
                         updated.push(lesson.front.label);
-                        console.log(`  ~ ${lesson.front.title}`);
-                        if (APPLY && existingVideo.title !== lesson.front.title) {
-                            await sql`update videos set title = ${lesson.front.title} where id = ${existingVideo.id}`;
+                        const moved = Number(existingVideo.order_number) !== nextOrder;
+                        console.log(`  ~ ${lesson.front.title}${moved ? ` (ред ${existingVideo.order_number} -> ${nextOrder})` : ""}`);
+                        if (APPLY) {
+                            await sql`
+                                update videos
+                                set title = ${lesson.front.title}, order_number = ${nextOrder}, section_id = ${section.id}
+                                where id = ${existingVideo.id}
+                            `;
                         }
+                        nextOrder++;
                     } else {
                         created.push(lesson.front.label);
                         console.log(`  + ${lesson.front.title} (order ${nextOrder})`);

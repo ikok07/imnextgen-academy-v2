@@ -1,7 +1,7 @@
 ---
 module: "Модул 3: React & NextJS"
 section: "Финален проект"
-sectionOrder: 7
+sectionOrder: 8
 title: "Страница на обявата"
 label: "react-8-04-detail"
 ---

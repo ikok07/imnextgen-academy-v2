@@ -1,7 +1,7 @@
 ---
 module: "Модул 3: React & NextJS"
 section: "Next.js: App Router"
-sectionOrder: 6
+sectionOrder: 7
 title: "Динамични страници и предварително сглобяване"
 label: "react-7-06-dynamic"
 ---
