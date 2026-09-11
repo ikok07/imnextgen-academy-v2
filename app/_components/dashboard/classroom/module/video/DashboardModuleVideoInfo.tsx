@@ -17,6 +17,11 @@ import {FinishedVideosResponse} from "@/src/application/repositories/media/video
 import {VideoResource} from "@/drizzle/schema/video_resources";
 import DashboardModuleVideoResources
     from "@/app/_components/dashboard/classroom/module/video/DashboardModuleVideoResources";
+import LessonInteractivityProvider
+    from "@/app/_components/dashboard/classroom/module/video/interactive/LessonInteractivityProvider";
+import LessonProgressBar
+    from "@/app/_components/dashboard/classroom/module/video/interactive/LessonProgressBar";
+import {IoDocumentTextOutline} from "react-icons/io5";
 
 type DashboardModuleVideoInfoProps = {
     title: string
@@ -25,12 +30,19 @@ type DashboardModuleVideoInfoProps = {
     moduleId: string,
     userId: string,
     resources: VideoResource[],
+    isArticle?: boolean,
     finishedVideosResult: ServerActionResult<FinishedVideosResponse>,
     isAddingFinishedVideo: boolean,
     onAddFinishVideo: () => void
 }
 
-export default function DashboardModuleVideoInfo({videoId, moduleId, title, descriptionMarkdown, userId, resources, finishedVideosResult, isAddingFinishedVideo, onAddFinishVideo}: DashboardModuleVideoInfoProps) {
+/** Груба оценка за време за четене - само за уроци-статии. */
+function readingMinutes(markdown: string) {
+    const words = markdown.replace(/```[\s\S]*?```/g, " ").split(/\s+/).filter(Boolean).length;
+    return Math.max(1, Math.round(words / 180));
+}
+
+export default function DashboardModuleVideoInfo({videoId, moduleId, title, descriptionMarkdown, userId, resources, isArticle, finishedVideosResult, isAddingFinishedVideo, onAddFinishVideo}: DashboardModuleVideoInfoProps) {
     const queryClient = useQueryClient();
     const {data: finishedVideosQuery, isLoading: isLoadingFinishedVideos} = useErrorQuery({
         queryFn: () => getFinishedVideos(moduleId, userId),
@@ -56,8 +68,10 @@ export default function DashboardModuleVideoInfo({videoId, moduleId, title, desc
                 <CardTitle className="text-2xl">
                     {title}
                 </CardTitle>
-                <CardDescription>
-                    Допълнителна информация
+                <CardDescription className="flex items-center gap-1.5">
+                    {isArticle
+                        ? <><IoDocumentTextOutline /> Статия · около {readingMinutes(descriptionMarkdown)} мин четене</>
+                        : "Допълнителна информация"}
                 </CardDescription>
             </div>
             {isLoadingFinishedVideos ?
@@ -81,7 +95,14 @@ export default function DashboardModuleVideoInfo({videoId, moduleId, title, desc
         </CardHeader>
         <CardContent className="space-y-4">
             <DashboardModuleVideoResources resources={resources} />
-            <DashboardModuleVideoDescription description={descriptionMarkdown}/>
+            <LessonInteractivityProvider
+                lessonId={videoId}
+                alreadyFinished={videoFinished}
+                onAllCheckpointsDone={onAddFinishVideo}
+            >
+                <LessonProgressBar />
+                <DashboardModuleVideoDescription description={descriptionMarkdown}/>
+            </LessonInteractivityProvider>
         </CardContent>
     </Card>
 }

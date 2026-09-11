@@ -1,5 +1,5 @@
 import {IconType} from "react-icons";
-import {IoCalendar, IoCart, IoDocumentText, IoFilm, IoPeople, IoSchool} from "react-icons/io5";
+import {IoCalendar, IoCart, IoClipboard, IoDocumentText, IoFilm, IoPeople, IoSchool} from "react-icons/io5";
 import {Routes} from "@/app/_utils/nav/routes";
 
 export type NavGroup = {
@@ -87,6 +87,14 @@ export function getNavLinks(): NavGroup[] {
                             href: "/dashboard/admin/users",
                         }
                     ]
+                },
+                {
+                    type: "link",
+                    id: "submissions",
+                    Icon: IoClipboard,
+                    label: "Предадени задачи",
+                    href: Routes.dashboard.admin.submissions(),
+                    disallowedRoles: ["user"]
                 },
                 {
                     type: "link",

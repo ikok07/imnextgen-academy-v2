@@ -21,6 +21,7 @@ import * as userCalendarIds from "../../../drizzle/schema/user_calendar_ids"
 import * as googleNotificationChannels from "../../../drizzle/schema/google_notification_channels"
 import * as automations from "../../../drizzle/schema/automations"
 import * as videoProgresses from "../../../drizzle/schema/video_progresses"
+import * as taskSubmissions from "../../../drizzle/schema/task_submissions"
 
 import ws from "ws"
 
@@ -54,7 +55,8 @@ export class BaseRepository {
         ...userCalendarIds,
         ...googleNotificationChannels,
         ...automations,
-        ...videoProgresses
+        ...videoProgresses,
+        ...taskSubmissions
     };
     constructor(authenticationService: IAuthenticationService) {
         this.authService = authenticationService;

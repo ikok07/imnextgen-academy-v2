@@ -505,6 +505,13 @@
       "when": 1750429932736,
       "tag": "0071_add-not-null-constraints-to-sections-and-videos",
       "breakpoints": true
+    },
+    {
+      "idx": 72,
+      "version": "7",
+      "when": 1789113873969,
+      "tag": "0072_add-task-submissions",
+      "breakpoints": true
     }
   ]
 }

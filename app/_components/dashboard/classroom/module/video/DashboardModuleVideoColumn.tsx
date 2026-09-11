@@ -111,6 +111,7 @@ export default function DashboardModuleVideoColumn({moduleId, userId, videos, fi
             moduleId={moduleId}
             videoId={activeVideo.id}
             resources={videos.flatMap(obj => obj.resources).filter(r => r.video_id === activeVideoId)}
+            isArticle={!activeVideo.playbackId}
             finishedVideosResult={finishedVideosResult}
             isAddingFinishedVideo={isAddingFinishedVideo}
             onAddFinishVideo={addFinishedVideoMethod}

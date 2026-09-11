@@ -23,6 +23,7 @@ import {createAutomationsModule} from "@/di/modules/automations.module";
 import {createStorageModule} from "@/di/modules/storage.module";
 import {createVideoDescriptionsModule} from "@/di/modules/video-descriptions.module";
 import {createVideoResourcesModule} from "@/di/modules/video-resources.module";
+import {createTaskSubmissionsModule} from "@/di/modules/task-submissions.module";
 
 function loadExternalModules(container: Container) {}
 
@@ -52,6 +53,7 @@ ApplicationContainer.load(Symbol("AutomationsModule"), createAutomationsModule()
 ApplicationContainer.load(Symbol("StorageModule"), createStorageModule());
 ApplicationContainer.load(Symbol("VideoDescriptions"), createVideoDescriptionsModule());
 ApplicationContainer.load(Symbol("VideoResources"), createVideoResourcesModule());
+ApplicationContainer.load(Symbol("TaskSubmissions"), createTaskSubmissionsModule());
 
 export function getInjection<K extends keyof typeof DI_SYMBOLS>(symbol: K): DI_RETURN_TYPES[K] {
     return ApplicationContainer.get(DI_SYMBOLS[symbol]);

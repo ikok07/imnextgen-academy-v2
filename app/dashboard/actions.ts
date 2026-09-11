@@ -57,3 +57,12 @@ export const removeFinishedVideo = createServerAction((videoId: string | undefin
 export const getSignedTokens = createServerAction((playbackId: string | undefined, types: (keyof typeof TypeClaim)[] | undefined) => {
     return getInjection("IGetSignedTokensController")(playbackId, types);
 });
+export const getTaskSubmissionsForVideo = createServerAction(async (videoId: string | undefined) => {
+    const {user} = await getInjection("IGetUserController")({excludeDbProfile: true});
+    return getInjection("IGetSubmissionsForVideoController")(videoId, user?.id);
+});
+
+export const submitTask = createServerAction(async (opts: {videoId?: string, taskId?: string, taskTitle?: string, content?: string, link?: string}) => {
+    const {user} = await getInjection("IGetUserController")({excludeDbProfile: true});
+    return getInjection("ISubmitTaskController")({...opts, userId: user?.id});
+});
