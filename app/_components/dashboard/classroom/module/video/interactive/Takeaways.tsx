@@ -17,7 +17,7 @@ export default function Takeaways({raw}: {raw: string}) {
             {config.title ?? "Какво да запомниш"}
         </p>
         <div className="markdown-inner text-[0.95rem] leading-relaxed">
-            <MarkdownText>{parts.join("\n\n")}</MarkdownText>
+            <MarkdownText>{parts.filter(part => part.trim().length > 0).join("\n\n")}</MarkdownText>
         </div>
     </div>
 }

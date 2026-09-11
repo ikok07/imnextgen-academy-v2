@@ -4,6 +4,7 @@
  *   npx tsx docs/scripts/sync-content.ts            # само показва какво би направил
  *   npx tsx docs/scripts/sync-content.ts --apply    # записва в базата
  *   npx tsx docs/scripts/sync-content.ts --apply --only=module-3
+ *   npx tsx docs/scripts/sync-content.ts --apply --remove --only=module-3   # маха ги от базата
  *
  * Всеки файл е един урок. Съответствието с базата е по "label" на описанието,
  * затова преименуване на урок не създава дубликат.
@@ -18,6 +19,7 @@ config({path: ".env.local"});
 
 const CONTENT_ROOT = path.join(process.cwd(), "docs", "content");
 const APPLY = process.argv.includes("--apply");
+const REMOVE = process.argv.includes("--remove");
 const ONLY = process.argv.find(arg => arg.startsWith("--only="))?.slice("--only=".length);
 
 type Frontmatter = {
@@ -88,12 +90,45 @@ function collectLessons(): Lesson[] {
     });
 }
 
+async function removeLessons(lessons: Lesson[]) {
+    const sql = postgres(process.env.DATABASE_URL!, {ssl: "require"});
+    let removed = 0;
+
+    try {
+        for (const lesson of lessons) {
+            const [description] = await sql`select id from video_descriptions where label = ${lesson.front.label}`;
+            if (!description) continue;
+
+            const videos = await sql`select id, title from videos where description_id = ${description.id}`;
+            for (const video of videos) {
+                console.log(`  - ${video.title}`);
+                if (APPLY) {
+                    await sql`delete from finished_videos where video_id = ${video.id}`;
+                    await sql`delete from video_progresses where video_id = ${video.id}`;
+                    await sql`delete from task_submissions where video_id = ${video.id}`;
+                    await sql`delete from videos where id = ${video.id}`;
+                }
+                removed++;
+            }
+
+            if (APPLY) await sql`delete from video_descriptions where id = ${description.id}`;
+        }
+
+        console.log(`\n${APPLY ? "Премахнати" : "Проба - биха се премахнали"}: ${removed} урока.`);
+        if (!APPLY) console.log("Пусни със --apply, за да влезе в базата.");
+    } finally {
+        await sql.end();
+    }
+}
+
 async function main() {
     const lessons = collectLessons();
     if (lessons.length === 0) {
         console.log("Няма намерени уроци.");
         return;
     }
+
+    if (REMOVE) return removeLessons(lessons);
 
     const sql = postgres(process.env.DATABASE_URL!, {ssl: "require"});
     const created: string[] = [];

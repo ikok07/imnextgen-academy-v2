@@ -10,11 +10,12 @@ type StepsConfig = {
 /** Всяка част на блока (разделена с ---) е една стъпка. */
 export default function Steps({raw}: {raw: string}) {
     const {config, parts} = readInteractiveBlock<StepsConfig>(raw);
+    const steps = parts.filter(part => part.trim().length > 0);
 
     return <div className="not-prose my-7">
         {config.title && <p className="font-semibold mb-3">{config.title}</p>}
         <ol className="space-y-3">
-            {parts.map((part, index) => (
+            {steps.map((part, index) => (
                 <li key={index} className="flex gap-3">
                     <span className="shrink-0 w-7 h-7 rounded-full bg-main-gradient text-white flex items-center justify-center text-[0.8rem] font-semibold">
                         {index + 1}
